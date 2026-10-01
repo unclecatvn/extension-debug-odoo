@@ -9,7 +9,7 @@
   --warn: light-dark(#b06000, #fdd663); --warn-soft: light-dark(#fef3e0, #3a3020);
   --err: light-dark(#c5221f, #f28b82); --err-soft: light-dark(#fce8e6, #3c2020);
   --info: light-dark(#1a5fb4, #8ab4f8); --info-soft: light-dark(#e8f0fe, #1f2a3d);
-  --kw: light-dark(#a626a4, #d6a0e8);
+  --kw: light-dark(#a626a4, #d6a0e8); --on-accent: #fff;
   --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --hover: color-mix(in srgb, var(--fg) 5%, transparent); /* neutral hover, every theme */
   --ring: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); /* focus ring */
@@ -26,21 +26,21 @@
 :root[data-theme=github-light] { color-scheme: light; --bg: #f6f8fa; --surface: #ffffff; --fg: #1f2328; --muted: #59636e; --line: #d1d9e0;
   --accent: #0969da; --ok: #1a7f37; --warn: #9a6700; --err: #d1242f; --info: #8250df; --kw: #cf222e; }
 :root[data-theme=solarized-light] { color-scheme: light; --bg: #eee8d5; --surface: #fdf6e3; --fg: #073642; --muted: #657b83; --line: #e0d9c3;
-  --accent: #268bd2; --ok: #859900; --warn: #b58900; --err: #dc322f; --info: #2aa198; --kw: #6c71c4; }
+  --accent: #268bd2; --ok: #859900; --warn: #b58900; --err: #dc322f; --info: #2aa198; --kw: #6c71c4; --on-accent: #fdf6e3; }
 :root[data-theme=github-dark] { color-scheme: dark; --bg: #010409; --surface: #0d1117; --fg: #e6edf3; --muted: #8d96a0; --line: #30363d;
-  --accent: #58a6ff; --ok: #3fb950; --warn: #d29922; --err: #f85149; --info: #d2a8ff; --kw: #ff7b72; }
+  --accent: #58a6ff; --ok: #3fb950; --warn: #d29922; --err: #f85149; --info: #d2a8ff; --kw: #ff7b72; --on-accent: #0d1117; }
 :root[data-theme=dracula] { color-scheme: dark; --bg: #21222c; --surface: #282a36; --fg: #f8f8f2; --muted: #8b95c2; --line: #44475a;
-  --accent: #bd93f9; --ok: #50fa7b; --warn: #ffb86c; --err: #ff5555; --info: #8be9fd; --kw: #ff79c6; }
+  --accent: #bd93f9; --ok: #50fa7b; --warn: #ffb86c; --err: #ff5555; --info: #8be9fd; --kw: #ff79c6; --on-accent: #282a36; }
 :root[data-theme=monokai] { color-scheme: dark; --bg: #1e1f1c; --surface: #272822; --fg: #f8f8f2; --muted: #9d9b8a; --line: #3e3d32;
-  --accent: #ae81ff; --ok: #a6e22e; --warn: #fd971f; --err: #ff4a6b; --info: #66d9ef; --kw: #f92672; }
+  --accent: #ae81ff; --ok: #a6e22e; --warn: #fd971f; --err: #ff4a6b; --info: #66d9ef; --kw: #f92672; --on-accent: #272822; }
 :root[data-theme=one-dark] { color-scheme: dark; --bg: #21252b; --surface: #282c34; --fg: #abb2bf; --muted: #7f848e; --line: #3e4451;
-  --accent: #61afef; --ok: #98c379; --warn: #d19a66; --err: #e06c75; --info: #56b6c2; --kw: #c678dd; }
+  --accent: #61afef; --ok: #98c379; --warn: #d19a66; --err: #e06c75; --info: #56b6c2; --kw: #c678dd; --on-accent: #282c34; }
 :root[data-theme=nord] { color-scheme: dark; --bg: #2a303b; --surface: #2e3440; --fg: #eceff4; --muted: #9aa3b5; --line: #434c5e;
-  --accent: #88c0d0; --ok: #a3be8c; --warn: #ebcb8b; --err: #bf616a; --info: #81a1c1; --kw: #b48ead; }
+  --accent: #88c0d0; --ok: #a3be8c; --warn: #ebcb8b; --err: #bf616a; --info: #81a1c1; --kw: #b48ead; --on-accent: #2e3440; }
 :root[data-theme=solarized-dark] { color-scheme: dark; --bg: #00212b; --surface: #002b36; --fg: #93a1a1; --muted: #6f8a90; --line: #0d4250;
-  --accent: #268bd2; --ok: #859900; --warn: #b58900; --err: #dc322f; --info: #2aa198; --kw: #6c71c4; }
+  --accent: #268bd2; --ok: #859900; --warn: #b58900; --err: #dc322f; --info: #2aa198; --kw: #6c71c4; --on-accent: #fdf6e3; }
 :root[data-theme=catppuccin] { color-scheme: dark; --bg: #181825; --surface: #1e1e2e; --fg: #cdd6f4; --muted: #9399b2; --line: #313244;
-  --accent: #cba6f7; --ok: #a6e3a1; --warn: #fab387; --err: #f38ba8; --info: #89b4fa; --kw: #f5c2e7; }
+  --accent: #cba6f7; --ok: #a6e3a1; --warn: #fab387; --err: #f38ba8; --info: #89b4fa; --kw: #f5c2e7; --on-accent: #1e1e2e; }
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; overflow: hidden; } /* only <main> scrolls: the header never scrolls away */
@@ -144,7 +144,7 @@ main { flex: 1; min-height: 0; overflow: auto; container-type: inline-size; } /*
 .card .toolbar:has(input[type=search]) { margin: 0; padding: 8px 10px; background: var(--surface); border-bottom: 1px solid var(--line); }
 .toolbar input, .card input[type=search] { flex: 1; min-width: 0; }
 input[type=search], select { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 5px 10px; transition: border-color .15s, box-shadow .15s; }
-input[type=search]:focus, select:focus { outline: 0; box-shadow: var(--ring); border-color: var(--accent); }
+input[type=search]:focus, select:focus { outline: 0; border-color: var(--accent); } /* fields: the border only, no ring around them */
 .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
 .chip[aria-pressed=true] { background: var(--fg); color: var(--surface); border-color: var(--fg); }
 .btn { border: 1px solid var(--line); background: var(--surface); color: var(--accent); border-radius: var(--r); padding: 3px 10px; text-decoration: none; font-weight: 500; }
@@ -254,7 +254,7 @@ summary:hover { color: var(--fg); }
 /* forms (Translations, Apps) */
 .form label { display: flex; flex-direction: column; gap: 3px; font-weight: 600; }
 .form input[type=text] { font-weight: normal; font-family: var(--mono); font-size: 11px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; }
-.form input[type=text]:focus { outline: 0; box-shadow: var(--ring); border-color: var(--accent); }
+.form input[type=text]:focus { outline: 0; border-color: var(--accent); }
 .form .note { margin-top: 3px; }
 .btn:disabled { opacity: .5; cursor: progress; }
 .steps { list-style: none; margin: 10px 0 0; padding: 0; }
@@ -328,7 +328,7 @@ body.popup { width: 320px; height: auto; display: block; padding-bottom: 14px; b
 /* Editor: a transparent textarea over a <pre> with the same text in colours. Lines wrap: both layers must break them at
    the same places, so they share font, padding, wrapping and the scrollbar's room. Line numbers: ::before of each line. */
 .editor { display: flex; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); }
-.editor:focus-within { box-shadow: var(--ring); border-color: var(--accent); }
+.editor:focus-within { border-color: var(--accent); }
 .writes-on .editor { border-color: var(--warn); }
 .editor-body { --gut: calc(var(--digits, 2) * 1ch + 14px); position: relative; flex: 1; min-width: 0; font: 11px/1.5 var(--mono);
   background: linear-gradient(to right, var(--surface) var(--gut), var(--line) var(--gut) calc(var(--gut) + 1px), transparent 0);
@@ -386,7 +386,7 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .suggest li[aria-selected=true] { background: var(--accent-soft); }
 /* Translations, Apps: installed modules to tick, scrolling inside the form */
 .module-picker { margin-top: 4px; }
-.picker-head { flex-wrap: nowrap; align-items: center; gap: 8px; }
+.picker-head { flex-direction: column; align-items: stretch; gap: 4px; } /* the input (or search bar) its whole width, the count under it */
 .row.fill { flex-wrap: nowrap; gap: 8px; }
 .row.fill > .btn { flex: 1; text-align: center; padding: 8px 10px; font-size: 13px; font-weight: 600; } /* the whole width, easy to hit */
 /* Apps, Translations: the module list takes the height the panel has left, the buttons stay at its bottom (short panel: main scrolls) */
@@ -400,15 +400,23 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .chip:disabled { cursor: default; opacity: .85; } /* Translations: the template chip, always on */
 /* Translations: many active languages scroll inside two rows of chips instead of squeezing the module list */
 .langs { max-height: 58px; overflow-y: auto; align-items: center; }
-/* Apps: Odoo's search bar, the filters as facets inside it and ▾ opening them */
-.searchbar { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 2px 2px 2px 6px;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
-.searchbar:focus-within { box-shadow: var(--ring); border-color: var(--accent); }
+/* Apps: Odoo's search bar, the filters as facets inside it and ▾ opening them. It wraps as Odoo's does: the facets first,
+   the input on the next line when they fill one; ▾ on the right, as tall as the bar. */
+.searchbar { position: relative; display: flex; align-items: stretch; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.search-main { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 3px 4px; }
+.searchbar:focus-within { border-color: var(--accent); }
 .searchbar .facets { display: contents; }
-.facet { display: inline-flex; align-items: center; gap: 2px; padding: 1px 2px 1px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-size: 11px; font-weight: 600; white-space: nowrap; }
-.facet-x { border: 0; background: none; color: inherit; padding: 0 3px; line-height: 1; cursor: pointer; }
-.form .searchbar input[type=text] { flex: 1; min-width: 90px; border: 0; background: none; outline: none; padding: 4px 2px; }
-.search-toggle { align-self: stretch; min-height: 26px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--muted); padding: 0 10px; cursor: pointer; } /* ▾: easy to hit */
+/* a facet: coloured label (field name, or a funnel for a filter) | values joined by an italic "or" | × */
+.facet { display: inline-flex; align-items: stretch; max-width: 100%; border: 1px solid var(--line); border-radius: 4px; background: var(--surface);
+  color: var(--fg); font-size: 11px; line-height: 20px; white-space: nowrap; overflow: hidden; }
+.facet-label { flex: none; display: grid; place-items: center; min-width: 22px; padding: 0 6px; background: var(--accent); color: var(--on-accent); font-weight: 600; }
+.facet-label.filter::before { content: ''; width: 11px; height: 11px; background: currentColor; mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 4h18l-7 8.5V19l-4 2v-8.5z' fill='black'/></svg>") center / contain no-repeat; }
+.facet-values { min-width: 0; overflow: hidden; text-overflow: ellipsis; padding-left: 8px; }
+.facet-values em { margin: 0 4px; color: var(--muted); }
+.facet-x { flex: none; border: 0; background: none; color: var(--muted); padding: 0 8px; line-height: 1; cursor: pointer; }
+.facet-x:hover { color: var(--fg); }
+.form .searchbar input[type=text] { flex: 1; min-width: 120px; border: 0; background: none; outline: none; padding: 4px 2px; }
+.search-toggle { flex: none; min-height: 28px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--muted); padding: 0 10px; cursor: pointer; } /* ▾: easy to hit */
 .search-toggle[aria-expanded=true] { color: var(--accent); background: var(--accent-soft); }
 .search-panel { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 3; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   padding: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
@@ -421,13 +429,18 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .search-item:hover { background: var(--hover); }
 .search-item[aria-pressed=true] { color: var(--accent); font-weight: 600; }
 .search-item[aria-pressed=true]::before { content: '✓ '; }
-.picker-head > input { flex: 1; min-width: 0; }
-.count-note { font-weight: normal; }
-.searchbar .count-note { font-size: 11px; white-space: nowrap; }
+/* a filter's count (n/total): on its own line under the input, on the right, so the input gets the whole width */
+.count-note { font-size: 11px; font-weight: normal; }
+.picker-head > .count-note { align-self: flex-end; }
+/* Apps: ⟳ Update Apps List on the left of the count */
+.picker-head > .count-line { align-self: flex-end; display: flex; align-items: center; gap: 8px; }
+.chip.update-list { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; font-size: 11px; line-height: 18px; }
+.chip.update-list::before { content: ''; width: 11px; height: 11px; background: currentColor; mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8'/><path d='M21 3v5h-5'/></svg>") center / contain no-repeat; }
+.toolbar > .count-note { flex-basis: 100%; margin-top: -2px; text-align: right; }
 .module-picker .list { max-height: 240px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
 .module-picker label.pick { flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 6px; cursor: pointer; font-weight: normal; }
-.module-picker label.pick > .name { flex: none; }
-.module-picker label.pick > .muted { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* one line per module */
+.module-picker label.pick > .name { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* a long name: cut, whole on hover (title); the title beside it gives way first */
+.module-picker label.pick > .muted { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* one line per module */
 .module-picker .list > li:not([hidden]) { display: block; } /* one line even in the wide 2-column layout */
 
 /* masterDetail() (RPC, Perf): the pane beside the list only exists on a wide panel; narrow, rows unfold in place */

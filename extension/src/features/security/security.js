@@ -246,7 +246,7 @@ async function groupsBlock(t, origin, tryGroup, rerender) {
   const rank = (g) => (realIds.has(g.id) ? 0 : groupIds.has(g.id) ? 1 : 2);
   const rows = [...all].sort((a, b) => rank(a) - rank(b)).map(row);
   const shown = rows.filter((r) => r.shown).length;
-  const count = el('span', { class: 'muted' }, _t('%s groups', shown));
+  const count = el('span', { class: 'muted count-note' }, _t('%s groups', shown));
   const input = el('input', {
     type: 'search', placeholder: _t('Filter or try a group…'), 'aria-label': _t('Filter or try a group…'),
     oninput: () => {

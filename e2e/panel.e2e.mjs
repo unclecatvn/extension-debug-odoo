@@ -306,7 +306,7 @@ test('Apps tab: Odoo\'s filters (Installed by default), the word being typed sea
     if (bar.querySelector('.search-panel').hidden) bar.querySelector('.search-toggle').click();
     [...bar.querySelectorAll('.search-item')].find((b) => b.textContent.replace('✓ ', '') === label).click();
   }, label);
-  const facets = () => panel.$$eval('#apps .searchbar .facet', (fs) => fs.map((f) => f.firstChild.textContent));
+  const facets = () => panel.$$eval('#apps .searchbar .facet-values', (fs) => fs.map((f) => [...f.childNodes].map((n) => n.textContent).join(' ')));
 
   await type('');
   const installed = await shown();
@@ -328,6 +328,15 @@ test('Apps tab: Odoo\'s filters (Installed by default), the word being typed sea
   await facet('Not Installed'); // back to the default filters
   assert.deepEqual(await facets(), ['Installed']);
   assert.ok((await shown()).some((m) => m.name === 'crm_sms'), 'a ticked module shows whatever the filters');
+});
+
+test('Apps tab: ⟳ Update Apps List beside the count draws the list again, the filters kept', async () => {
+  await click('.tabs [data-tab="apps"]');
+  await panel.waitForSelector('#apps .count-line .update-list');
+  await panel.$eval('#apps .update-list', (b) => b.click());
+  await panel.waitForFunction(() => /updated/.test(document.querySelector('#apps .steps .pill.ok')?.textContent || ''), { timeout: 120_000 });
+  assert.equal(await panel.$eval('#apps .steps li', (li) => li.firstChild.textContent), 'Update Apps List');
+  assert.deepEqual(await panel.$$eval('#apps .facet', (fs) => fs.map((f) => f.title)), ['Installed'], 'the filters are kept');
 });
 
 test('every tab is in sight: the tab strip wraps instead of scrolling', async () => {

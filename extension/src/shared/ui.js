@@ -130,7 +130,7 @@ export function copyable(text, cls = 'name', label = text) {
 
 /** Filterable list with a count. items: <li> with data-q. total / visible: N_ msgids with %s and %s/%s. head: listHead(). */
 export function filteredList(items, placeholder, total, visible, head) {
-  const count = el('span', { class: 'muted' }, _t(total, items.length));
+  const count = el('span', { class: 'muted count-note' }, _t(total, items.length));
   return el('div', {},
     el('div', { class: 'toolbar' }, filterBox(items, placeholder, (n) => { count.textContent = _t(visible, n, items.length); }), count, head),
     el('ul', { class: 'list' }, items));

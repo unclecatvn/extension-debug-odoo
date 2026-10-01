@@ -16,26 +16,38 @@ msgstr ""
 msgid "Needs Settings rights (base.group_system)."
 msgstr ""
 
-#: src/features/apps/apps.js:22
+#: src/features/apps/apps.js:26
 #: src/features/translations/translations.js:86
 msgid "Search or type: sale; stock; my_module"
 msgstr ""
 
-#: src/features/apps/apps.js:22
+#: src/features/apps/apps.js:26
 msgid "Modules"
 msgstr ""
 
-#: src/features/apps/apps.js:34
+#: src/features/apps/apps.js:31
+#: src/features/apps/apps.js:58
+#: src/features/apps/apps.js:62
+#: src/features/apps/apps.js:99
+msgid "Update Apps List"
+msgstr ""
+
+#: src/features/apps/apps.js:31
+#: src/features/apps/apps.js:101
+msgid "%s updated · %s added"
+msgstr ""
+
+#: src/features/apps/apps.js:39
 msgid "%s/%s modules"
 msgstr ""
 
-#: src/features/apps/apps.js:46
+#: src/features/apps/apps.js:51
 #: src/features/code/code.js:36
 #: src/features/translations/translations.js:65
 msgid "Running…"
 msgstr ""
 
-#: src/features/apps/apps.js:48
+#: src/features/apps/apps.js:53
 #: src/features/code/code.js:134
 #: src/features/code/code.js:173
 #: src/features/rpc/rpc.js:51
@@ -45,124 +57,121 @@ msgstr ""
 msgid "error"
 msgstr ""
 
-#: src/features/apps/apps.js:50
+#: src/features/apps/apps.js:55
 msgid "Reloading the Odoo page…"
 msgstr ""
 
 #: src/features/apps/apps.js:58
-msgid "Enter at least one module."
-msgstr ""
-
-#: src/features/apps/apps.js:75
-msgid "Activate"
-msgstr ""
-
-#: src/features/apps/apps.js:75
-msgid "Update Apps List, then install every module (with its dependencies)"
-msgstr ""
-
-#: src/features/apps/apps.js:76
-msgid "Update Apps List"
-msgstr ""
-
-#: src/features/apps/apps.js:78
-msgid "%s updated · %s added"
+msgid "Read the addons paths again: new modules join the list"
 msgstr ""
 
 #: src/features/apps/apps.js:81
+msgid "Enter at least one module."
+msgstr ""
+
+#: src/features/apps/apps.js:98
+msgid "Activate"
+msgstr ""
+
+#: src/features/apps/apps.js:98
+msgid "Update Apps List, then install every module (with its dependencies)"
+msgstr ""
+
+#: src/features/apps/apps.js:104
 msgid "Not found, even after Update Apps List: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:82
+#: src/features/apps/apps.js:105
 msgid "Not installable: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:83
+#: src/features/apps/apps.js:106
 msgid "Waiting to be uninstalled: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:84
+#: src/features/apps/apps.js:107
 msgid "Already installed: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:86
+#: src/features/apps/apps.js:109
 msgid "Install %s"
 msgstr ""
 
-#: src/features/apps/apps.js:92
+#: src/features/apps/apps.js:115
 msgid "Upgrade"
 msgstr ""
 
-#: src/features/apps/apps.js:92
+#: src/features/apps/apps.js:115
 msgid "Upgrade every module (they must be installed)"
 msgstr ""
 
-#: src/features/apps/apps.js:95
+#: src/features/apps/apps.js:118
 msgid "Not found: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:96
+#: src/features/apps/apps.js:119
 msgid "Not installed (use Activate): %s"
 msgstr ""
 
-#: src/features/apps/apps.js:97
+#: src/features/apps/apps.js:120
 msgid "Upgrade %s"
 msgstr ""
 
-#: src/features/apps/apps.js:103
+#: src/features/apps/apps.js:126
 msgid "Open Forms ↗"
 msgstr ""
 
-#: src/features/apps/apps.js:103
+#: src/features/apps/apps.js:126
 msgid "Open the form of every module in a new tab"
 msgstr ""
 
-#: src/features/apps/apps.js:110
+#: src/features/apps/apps.js:133
 msgid "Opened %s tab(s): %s"
 msgstr ""
 
-#: src/features/apps/apps.js:112
+#: src/features/apps/apps.js:135
 msgid "Not found: %s (Activate runs Update Apps List first)"
 msgstr ""
 
-#: src/features/apps/searchbar.js:10
+#: src/features/apps/searchbar.js:11
 msgid "Installed"
 msgstr ""
 
-#: src/features/apps/searchbar.js:10
+#: src/features/apps/searchbar.js:11
 msgid "Not Installed"
 msgstr ""
 
-#: src/features/apps/searchbar.js:11
+#: src/features/apps/searchbar.js:12
 #: src/panel/panel.html:27
 msgid "Apps"
 msgstr ""
 
-#: src/features/apps/searchbar.js:11
+#: src/features/apps/searchbar.js:12
 msgid "Extra"
 msgstr ""
 
-#: src/features/apps/searchbar.js:15
-#: src/features/apps/searchbar.js:15
-#: src/features/apps/searchbar.js:27
+#: src/features/apps/searchbar.js:16
+#: src/features/apps/searchbar.js:16
+#: src/features/apps/searchbar.js:28
 msgid "Filters"
 msgstr ""
 
-#: src/features/apps/searchbar.js:23
-msgid " or "
-msgstr ""
-
-#: src/features/apps/searchbar.js:24
-#: src/features/apps/searchbar.js:29
+#: src/features/apps/searchbar.js:25
+#: src/features/apps/searchbar.js:30
 msgid "Category"
 msgstr ""
 
-#: src/features/apps/searchbar.js:30
+#: src/features/apps/searchbar.js:31
 msgid "All Categories"
 msgstr ""
 
-#: src/features/apps/searchbar.js:34
-#: src/features/apps/searchbar.js:34
+#: src/features/apps/searchbar.js:35
+#: src/features/apps/searchbar.js:37
+msgid "or"
+msgstr ""
+
+#: src/features/apps/searchbar.js:38
+#: src/features/apps/searchbar.js:38
 #: src/features/security/security.js:236
 msgid "Remove"
 msgstr ""

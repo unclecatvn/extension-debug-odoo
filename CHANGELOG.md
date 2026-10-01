@@ -13,6 +13,11 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - **Toolbar popup**: "This page" shows the Odoo version and database next to the host (one line, an icon each), and the debug mode switch reads Off / Debug / Assets.
 - **Card titles stay short**; what they used to spell out goes in an ⓘ after the title, shown on hover or keyboard focus: ACL (`ir.model.access`, the rows in green apply to the user), System parameters (`ir.config_parameter`, secrets masked), View › Form fields (invisible / readonly / required, evaluated on the record shown), Perf › Repeated queries (N+1 suspects). Long titles are shorter, their detail in the ⓘ: Identity (was Identity & metadata), Hidden fields (Fields hidden from the user), Model audit (Model configuration audit), Inherited views (Inherited views — <type>), Translations › Languages (Activate / Update Languages). Titles are in Title Case, like Odoo's labels (Context & Domain, User Risks, Why Allowed / Blocked…).
 - **Security**: plainer labels than `groups=` in the model part ("Hidden fields", "Allowed groups", "not restricted to any group").
+- Text fields show focus with their border only, no ring around them.
+- **Apps › search bar like Odoo's**: each facet has a coloured label (a funnel for a filter, the field name for the category), its values joined by an italic *or*, and ×; when they fill a line the input goes to the next one and ▾ stays as tall as the bar. The filters start at Installed each time the panel opens (they used to be remembered, so a cleared filter stayed cleared).
+- **Apps › ⟳ Update Apps List** beside the count: Odoo's Update Apps List on its own, the new modules join the list at once (no page reload), the typed modules and the filters kept.
+- **Filter counts on their own line** under their input, on the right (Apps, Translations, Record › Fields, Security › Groups and System Parameters, Perf): the input gets the whole width.
+- **Apps / Translations lists**: a long module name is cut with … (the title beside it gives way first); hovering it shows it whole.
 
 ### Removed
 

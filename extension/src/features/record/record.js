@@ -46,7 +46,7 @@ export function renderRecord(s, state) {
       li.dataset.q = [name, f.string, f.type, ir[name]?.modules, shown].join(' ').toLowerCase();
       return expandable(li, () => has && pre(typeof v === 'string' ? v : JSON.stringify(v, null, 2)));
     });
-    const count = el('span', { class: 'muted' }, _t('%s fields', items.length));
+    const count = el('span', { class: 'muted count-note' }, _t('%s fields', items.length));
     const filter = filterBox(items, _t('Filter name / label / value / type / module'),
       (n) => { count.textContent = _t('%s/%s fields', n, items.length); });
     return el('div', {},

@@ -14,18 +14,23 @@ const read = (names) => call('ir.module.module', 'search_read', [[['name', 'in',
 const formPath = (id) => `action-base.open_module_tree/${id}`; // the Apps action: its breadcrumb leads back to Apps
 const names = (list) => list.map((m) => m.name).join(', ');
 const needsAdmin = () => empty(_t('Needs Settings rights (base.group_system).'));
+// Odoo's Apps filters: Installed when the panel opens (as the Apps menu opens on its default filter), then kept while it
+// stays open (⟳, tab changes); not across page loads
+let filters = null;
+let listUpdated = null; // [updated, added] of the last ⟳ Update Apps List, shown once the card is drawn again
 
 export function renderApps(s, state) {
   card(s, async () => { // the tab's only card: no title to open it by
     if (!(await sessionInfo()).is_system) return needsAdmin();
     const last = formValues('apps');
     const input = el('input', { type: 'text', placeholder: _t('Search or type: sale; stock; my_module'), 'aria-label': _t('Modules'), value: last.modules || '', spellcheck: false });
-    // Odoo's Apps filters, kept across reloads (the list opens on the installed modules, as the Apps menu opens on Apps)
-    const f = last.filters || { installed: true };
-    const save = () => saveForm('apps', { modules: input.value, filters: f });
+    const f = filters ??= { installed: true };
+    const save = () => saveForm('apps', { modules: input.value });
     const count = el('span', { class: 'muted count-note' });
-    const log = el('ul', { class: 'steps' });
-    // every module (Update Apps List adds the new ones: they show after the page reloads); latest_version = the version
+    const log = el('ul', { class: 'steps' }, listUpdated && el('li', { class: 'row' },
+      el('span', { class: 'grow' }, _t('Update Apps List')), pill(_t('%s updated · %s added', ...listUpdated), 'ok')));
+    listUpdated = null;
+    // every module (Update Apps List adds the new ones: ⟳ draws the list again); latest_version = the version
     // installed in the DB (installed_version is computed from the manifest on disk: slow)
     const mods = await call('ir.module.module', 'search_read', [[]], { fields: ['name', 'shortdesc', 'state', 'latest_version', 'author', 'application', 'category_id'], order: 'name' });
     let keep = moduleFilter(f);
@@ -39,7 +44,7 @@ export function renderApps(s, state) {
     const refilter = () => { keep = moduleFilter(f); save(); bar.redraw(); input.dispatchEvent(new Event('input')); }; // the list redraws on input
     // by name: Odoo has several categories of one name under different parents (Point of Sale, Delivery…)
     const cats = [...new Set(mods.filter((m) => m.category_id).map((m) => m.category_id[1]))].sort((a, b) => a.localeCompare(b));
-    const bar = searchBar(input, count, f, cats, refilter);
+    const bar = searchBar(input, f, cats, refilter);
 
     /** A log line with its outcome on the right. */
     const step = (text) => {
@@ -48,6 +53,24 @@ export function renderApps(s, state) {
       return { done: (label = '✓', kind = 'ok') => outcome.replaceWith(pill(label, kind)), fail: () => outcome.replaceWith(pill(_t('error'), 'err')) };
     };
     const reloadPage = () => { step(_t('Reloading the Odoo page…')); setTimeout(() => exec(() => location.reload()), 800); };
+
+    // ⟳ Update Apps List on its own, as Odoo's menu: the addons paths read again, the new modules join the list
+    const updateBtn = el('button', { class: 'chip update-list', type: 'button', title: _t('Read the addons paths again: new modules join the list') }, _t('Update Apps List'));
+    updateBtn.addEventListener('click', async () => {
+      for (const x of [updateBtn, ...buttons]) x.disabled = true;
+      log.replaceChildren();
+      const st = step(_t('Update Apps List'));
+      try {
+        listUpdated = await call('ir.module.module', 'update_list');
+        save();
+        s.replaceChildren(); // the card again, with the new modules (the typed ones and the filters are kept)
+        renderApps(s, state);
+      } catch (e) {
+        st.fail();
+        log.append(el('li', {}, errBox(e)));
+        for (const x of [updateBtn, ...buttons]) x.disabled = false;
+      }
+    });
 
     const buttons = [];
     const action = (label, title, fn) => {
@@ -113,7 +136,7 @@ export function renderApps(s, state) {
     });
 
     const form = el('div', { class: 'form' },
-      bar.el,
+      el('div', { class: 'row picker-head' }, bar.el, el('div', { class: 'count-line' }, updateBtn, count)), // under the bar, on the right
       list,
       el('div', { class: 'row mt fill' }, activate, upgrade, open),
       log);
