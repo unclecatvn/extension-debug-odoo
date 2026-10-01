@@ -221,6 +221,8 @@ Cũng lần chạy đó tải file zip lên [Chrome Web Store](https://chromeweb
 2. `npx chrome-webstore-upload-keys` với ID và secret của client đó, đăng nhập bằng tài khoản Google đang sở hữu extension: lệnh in ra một refresh token.
 3. Repository → Settings → Secrets and variables → Actions: `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`. Không có chúng thì bản phát hành bỏ qua bước tải lên.
 
+Nếu store từ chối một lần gửi duyệt (ví dụ còn thiếu khai báo quyền riêng tư hay thông tin trang store), sửa trong Developer Dashboard rồi vào **Actions → Release → Run workflow**: bản đã phát hành được gửi lại.
+
 ## Đóng góp
 
 Rất hoan nghênh issue và pull request. Trước khi mở PR:

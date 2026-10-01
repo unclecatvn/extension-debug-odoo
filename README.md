@@ -237,6 +237,8 @@ The same run uploads the zip to the [Chrome Web Store](https://chromewebstore.go
 2. `npx chrome-webstore-upload-keys` with that client's ID and secret, signed in with the Google account that owns the item: it prints a refresh token.
 3. Repository → Settings → Secrets and variables → Actions: `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`. Without them the release skips the upload.
 
+If the store refuses a submission (privacy practices or listing to complete, say), fix it in the Developer Dashboard, then **Actions → Release → Run workflow**: it sends the released version again.
+
 ## Contributing
 
 Issues and pull requests are welcome. Before opening a PR:
