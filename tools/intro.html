@@ -1,0 +1,308 @@
+<!doctype html>
+<!-- The intro film's stage, rendered frame by frame by tools/intro.mjs (served from the repository root): every frame is a
+     pure function of the time t, window.renderAt(t). Three acts: a black rack emerging from the dark (three.js), the
+     features as a keynote (the screenshots of website/screenshots/), the rack again with the name. 1920×1080 CSS px. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Odoo Debug · intro</title>
+<style>
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; color: #f5f5f7;
+    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .layer { position: absolute; inset: 0; }
+  #gl { width: 1920px; height: 1080px; display: block; }
+  .rise { will-change: opacity, transform, filter; }
+
+  /* act 1 and 3: words over the rack */
+  #open { text-align: center; }
+  #open h1 { position: absolute; left: 0; right: 0; top: 210px; margin: 0; font-size: 92px; font-weight: 700; letter-spacing: -.045em; }
+  #open p { position: absolute; left: 0; right: 0; top: 330px; margin: 0; font-size: 34px; font-weight: 500; color: #a1a1a6; letter-spacing: -.01em; }
+  #end .brand { position: absolute; left: 150px; top: 330px; display: flex; align-items: center; gap: 30px; }
+  #end .brand img { width: 112px; height: 112px; }
+  #end h1 { margin: 0; font-size: 110px; font-weight: 700; letter-spacing: -.045em; }
+  #end .tag { position: absolute; left: 150px; top: 500px; margin: 0; font-size: 46px; font-weight: 600; letter-spacing: -.025em; line-height: 1.2; }
+  #end .tag span { background: linear-gradient(90deg, #e3b8f0, #b47cd0 60%, #8f6bd8); -webkit-background-clip: text; color: transparent; }
+  #end .meta { position: absolute; left: 150px; top: 640px; margin: 0; font-size: 28px; color: #86868b; letter-spacing: -.005em; }
+  #end .url { position: absolute; left: 150px; top: 700px; margin: 0; font: 500 24px ui-monospace, 'SF Mono', Menlo, monospace; color: #6e6e73; }
+
+  /* act 2: one feature at a time, words on the left, the screen on the right */
+  #features { background: radial-gradient(1400px 900px at 66% 46%, #17121a 0%, #060507 55%, #000 100%); perspective: 2600px; perspective-origin: 62% 45%; }
+  .feat { position: absolute; inset: 0; opacity: 0; }
+  .feat .glow { position: absolute; left: 640px; top: 120px; width: 1200px; height: 840px; border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(180, 124, 208, .22), rgba(180, 124, 208, 0)); filter: blur(40px); }
+  .feat .words { position: absolute; left: 130px; top: 360px; width: 480px; }
+  .feat h2 { margin: 0; font-size: 104px; font-weight: 700; letter-spacing: -.05em; line-height: 1; }
+  .feat p { margin: 26px 0 0; font-size: 36px; line-height: 1.22; font-weight: 500; letter-spacing: -.015em; color: #a1a1a6; }
+  .feat .kicker { margin: 0 0 18px; font-size: 22px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #b47cd0; }
+  /* the "device": a screenshot (or the panel cut from one), rim-lit, its reflection on the floor */
+  .screen { position: absolute; overflow: hidden; border-radius: 20px; transform-style: preserve-3d; background: #111;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .14), 0 0 0 2px rgba(0, 0, 0, .9), 0 50px 140px rgba(0, 0, 0, .85), 0 0 120px rgba(180, 124, 208, .14);
+    -webkit-box-reflect: below 26px linear-gradient(transparent 72%, rgba(255, 255, 255, .13)); }
+  .screen img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .screen::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; /* a sheen across the glass */
+    background: linear-gradient(115deg, rgba(255, 255, 255, .10) 0%, rgba(255, 255, 255, 0) 28%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, .05) 100%); }
+
+  #vignette { pointer-events: none; background: radial-gradient(ellipse 80% 75% at 50% 48%, transparent 58%, rgba(0, 0, 0, .72) 100%); }
+  #fade { background: #000; pointer-events: none; }
+</style>
+<script type="importmap">{ "imports": { "three": "/node_modules/three/build/three.module.js", "three/addons/": "/node_modules/three/examples/jsm/" } }</script>
+</head>
+<body>
+<canvas id="gl" class="layer"></canvas>
+<div id="open" class="layer"><h1 class="rise">Odoo Debug</h1><p class="rise">See why Odoo does what it does.</p></div>
+<div id="features" class="layer"></div>
+<div id="end" class="layer">
+  <div class="brand rise"><img src="/extension/icons/icon.svg" alt=""><h1>Odoo Debug</h1></div>
+  <p class="tag rise">A debug panel,<br><span>right on the Odoo page.</span></p>
+  <p class="meta rise">Free and open source · Odoo 18 and 19 · Chrome, Edge, Brave</p>
+  <p class="url rise">unclecatvn.github.io/extension-debug-odoo</p>
+</div>
+<div id="vignette" class="layer"></div>
+<div id="fade" class="layer"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { Reflector } from 'three/addons/objects/Reflector.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+// ---------- timing helpers ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const smooth = (a, b, t) => { const k = clamp((t - a) / (b - a)); return k * k * (3 - 2 * k); };
+const ease = (k) => (k < .5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2); // in-out cubic
+const out = (k) => 1 - (1 - clamp(k)) ** 3; // out cubic
+/** Words coming in (from below, out of a blur) at `t0`, leaving at `t1`. */
+function rise(n, t, t0, t1 = Infinity, dist = 26) {
+  const a = out((t - t0) / .8), b = t1 === Infinity ? 0 : smooth(t1, t1 + .45, t);
+  n.style.opacity = a * (1 - b);
+  n.style.transform = `translateY(${(1 - a) * dist - b * 10}px)`;
+  n.style.filter = `blur(${(1 - a) * 12 + b * 6}px)`;
+}
+
+// ---------- the film's plan (seconds) ----------
+const OPEN_END = 9.6; // the rack, then the features
+const FEAT = 3.4, FEAT_START = 9.2;
+// crop: the part of a 2880×1800 shot shown, in its px (side shots: the panel only, a tall card); focus: where the slow
+// push-in heads (0..1 of the crop); zoom: at the end of the feature.
+const PANEL = { x: 1906, y: 338, w: 846, h: 1452 };
+const FEATURES = [
+  { kicker: 'Record', title: 'Every field.', text: 'Its type, its module, its value. Filtered as you type.', img: 'full-record', zoom: 1.18, focus: [.4, .3] },
+  { kicker: 'View', title: 'Inherited.', text: 'Which view changed the form, and the arch they build together.', img: 'side-view', crop: PANEL, zoom: 1.08, focus: [.5, .4] },
+  { kicker: 'RPC', title: 'Resend.', text: 'Edit any call, send it again, copy it as cURL.', img: 'side-rpc', crop: PANEL, zoom: 1.08, focus: [.5, .7] },
+  { kicker: 'Code', title: 'The ORM.', text: 'In JavaScript, as the logged-in user. Writes off by default.', img: 'side-code', crop: PANEL, zoom: 1.08, focus: [.5, .5] },
+  { kicker: 'Security', title: 'Why.', text: 'Why an operation is allowed, or blocked. Rule by rule.', img: 'full-security', zoom: 1.2, focus: [.45, .35] },
+  { kicker: 'Perf', title: 'N+1, found.', text: 'Every request profiled. The repeated queries, first.', img: 'full-perf', zoom: 1.22, focus: [.75, .4] },
+];
+const END_START = FEAT_START + FEATURES.length * FEAT; // 29.6
+const DURATION = END_START + 6.6;
+
+// ---------- act 2: the features ----------
+const feats = FEATURES.map((f) => {
+  const n = document.createElement('div');
+  n.className = 'feat';
+  const c = f.crop || { x: 0, y: 0, w: 2880, h: 1800 };
+  // the screen: landscape for a full screen shot, a tall card for the panel alone
+  const box = f.crop ? { w: 470, h: Math.round(470 * c.h / c.w) } : { w: 1180, h: Math.round(1180 * c.h / c.w) };
+  box.left = f.crop ? 1010 : 650;
+  box.top = Math.round((1080 - box.h) / 2) - 30;
+  n.innerHTML = `<div class="glow"></div><div class="words"><p class="kicker rise"></p><h2 class="rise"></h2><p class="text rise"></p></div>
+    <div class="screen" style="left:${box.left}px;top:${box.top}px;width:${box.w}px;height:${box.h}px"><img src="/website/screenshots/${f.img}.png" alt=""></div>`;
+  n.querySelector('.kicker').textContent = f.kicker;
+  n.querySelector('h2').textContent = f.title;
+  n.querySelector('.text').textContent = f.text;
+  const img = n.querySelector('img');
+  const k = box.w / c.w; // CSS px per screenshot px
+  Object.assign(img.style, { width: `${2880 * k}px`, height: `${1800 * k}px` });
+  document.getElementById('features').append(n);
+  return { ...f, n, img, box, k, c };
+});
+
+function features(t) {
+  const layer = document.getElementById('features');
+  layer.style.opacity = smooth(FEAT_START - .3, FEAT_START + .5, t) * (1 - smooth(END_START - .2, END_START + .6, t));
+  if (layer.style.opacity === '0') return;
+  feats.forEach((f, i) => {
+    const s = FEAT_START + i * FEAT, u = t - s;
+    const on = smooth(-.05, .5, u) * (1 - smooth(FEAT - .35, FEAT + .15, u));
+    f.n.style.opacity = on;
+    if (!on) return;
+    const [kicker, h2, text] = f.n.querySelectorAll('.rise');
+    rise(kicker, u, .05, FEAT - .55, 18);
+    rise(h2, u, .15, FEAT - .5);
+    rise(text, u, .35, FEAT - .45);
+    // the screen: comes forward and turns toward the words, all along the feature
+    const p = clamp(u / FEAT), arrive = out(u / 1.1);
+    const screen = f.n.querySelector('.screen');
+    screen.style.transform = `translateZ(${lerp(-260, 0, arrive) + p * 40}px) rotateY(${lerp(f.crop ? -16 : 15, f.crop ? -7 : 6, ease(p))}deg) rotateX(${lerp(4, 1.5, p)}deg)`;
+    // slow push-in toward the focus point (img px = screenshot px × k)
+    const z = lerp(1, f.zoom, ease(p));
+    const fx = (f.c.x + f.focus[0] * f.c.w) * f.k, fy = (f.c.y + f.focus[1] * f.c.h) * f.k; // the focus, in the img's CSS px
+    const cx = f.focus[0] * f.box.w, cy = f.focus[1] * f.box.h; // where it sits in the screen
+    f.img.style.transform = `translate(${cx - fx * z}px, ${cy - fy * z}px) scale(${z})`;
+    f.n.querySelector('.glow').style.opacity = .75 + .25 * Math.sin(u * 2);
+  });
+}
+
+// ---------- act 1 and 3: the rack, three.js ----------
+const canvas = document.getElementById('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(1920, 1080, false);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+RectAreaLightUniformsLib.init();
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+scene.fog = new THREE.FogExp2(0x000000, .055);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), .04).texture;
+scene.environmentIntensity = .12; // reflections without lighting the room
+
+/** A canvas texture drawn by `draw(ctx, w, h)`. */
+function tex(w, h, draw, srgb = false) {
+  const c = Object.assign(document.createElement('canvas'), { width: w, height: h });
+  draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.anisotropy = 8;
+  if (srgb) t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+let seed = 7;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647); // deterministic: the same film every time
+// anodized aluminium: fine vertical brushing in the roughness
+const brushed = tex(1024, 1024, (g, w, h) => {
+  g.fillStyle = '#7a7a7a'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 2600; i++) {
+    const v = 95 + rnd() * 70 | 0;
+    g.fillStyle = `rgba(${v},${v},${v},${.25 + rnd() * .35})`;
+    g.fillRect(rnd() * w, 0, .6 + rnd() * 1.4, h);
+  }
+});
+brushed.repeat.set(1, 3);
+const metal = (color, roughness) => new THREE.MeshPhysicalMaterial({
+  color, metalness: 1, roughness, roughnessMap: brushed, clearcoat: .35, clearcoatRoughness: .22, envMapIntensity: 1,
+});
+
+const rack = new THREE.Group();
+scene.add(rack);
+const W = 1.3, H = 3.9, D = 1.15;
+const body = new THREE.Mesh(new RoundedBoxGeometry(W, H, D, 8, .07), metal(0x0d0d10, .24)); // smooth: the rims stay thin lines
+body.position.y = H / 2;
+rack.add(body);
+// the front: a slightly recessed panel cut by a few hairline seams, one per module
+const seams = tex(256, 2048, (g, w, h) => {
+  g.fillStyle = '#fff'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#000';
+  for (let i = 1; i < 7; i++) g.fillRect(0, Math.round(h * i / 7), w, 3);
+});
+const front = new THREE.Mesh(new THREE.BoxGeometry(W - .12, H - .14, .02),
+  Object.assign(metal(0x0a0a0c, .32), { bumpMap: seams, bumpScale: 1.4 }));
+front.position.set(0, H / 2, D / 2 + .002);
+rack.add(front);
+// the light strip: thin, vertical, left of centre; values above 1 so the bloom picks it up
+const stripColor = new THREE.Color(0xc48ae0);
+const strip = new THREE.Mesh(new THREE.BoxGeometry(.016, H - .5, .012), new THREE.MeshBasicMaterial({ color: stripColor.clone(), toneMapped: false }));
+strip.position.set(-W / 2 + .2, H / 2, D / 2 + .016);
+rack.add(strip);
+const stripLight = new THREE.RectAreaLight(0xc48ae0, 0, .05, H - .5); // its glow on the floor and the front
+stripLight.position.copy(strip.position).add(new THREE.Vector3(0, 0, .03));
+stripLight.lookAt(stripLight.position.clone().add(new THREE.Vector3(0, -.15, 1)));
+rack.add(stripLight);
+
+// rim lights: tall soft boxes behind the rack, outlining its edges; a narrow top light for the upper edge
+const rims = [-1, 1].map((side) => {
+  const l = new THREE.RectAreaLight(0xdfe6ff, 0, .14, 6);
+  l.position.set(side * 1.25, 2.2, -2.6); // behind, nearly in line with the sides: they graze the edges
+  l.lookAt(side * .5, 2, 1);
+  scene.add(l);
+  return l;
+});
+const top = new THREE.SpotLight(0xffffff, 0, 14, .32, .9, 1.5);
+top.position.set(0, 9, 1.2);
+top.target.position.set(0, H, 0);
+scene.add(top, top.target);
+const key = new THREE.RectAreaLight(0xffffff, 0, 3, 1.2); // a faint fill from the front, low
+key.position.set(-2.5, 1, 5);
+key.lookAt(0, 1.8, 0);
+scene.add(key);
+
+// a dark glossy floor: a mirror under a black veil that thickens with distance
+const mirror = new Reflector(new THREE.PlaneGeometry(60, 60), { textureWidth: 1920, textureHeight: 1080, color: 0x8a8a8a });
+mirror.rotation.x = -Math.PI / 2;
+scene.add(mirror);
+const veilAlpha = tex(512, 512, (g, w, h) => {
+  const r = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+  r.addColorStop(0, '#b0b0b0'); r.addColorStop(.12, '#d8d8d8'); r.addColorStop(.45, '#fff');
+  g.fillStyle = r; g.fillRect(0, 0, w, h);
+});
+const veil = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, alphaMap: veilAlpha, opacity: 1 }));
+veil.rotation.x = -Math.PI / 2;
+veil.position.y = .002;
+scene.add(veil);
+
+const camera = new THREE.PerspectiveCamera(30, 1920 / 1080, .1, 100);
+const composer = new EffectComposer(renderer);
+composer.setPixelRatio(devicePixelRatio);
+composer.setSize(1920, 1080);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(1920, 1080), .9, .55, .8);
+composer.addPass(bloom);
+composer.addPass(new OutputPass());
+
+function stage(t) {
+  const end = t >= END_START - .8; // act 3: the same rack, framed on the right, the words on the left
+  const lit = end ? 1 : smooth(.4, 4.6, t);
+  const pulse = .86 + .14 * Math.sin(t * 1.7); // a slow breath, not a flicker
+  const strength = (end ? 1 : smooth(1.2, 3.4, t)) * pulse * (1 + 2.2 * smooth(7.6, 8.9, t) * (end ? 0 : 1)); // act 1 ends on a flare
+  strip.material.color.copy(stripColor).multiplyScalar(.25 + 3.2 * strength);
+  stripLight.intensity = 6 * strength;
+  for (const l of rims) l.intensity = 14 * lit;
+  top.intensity = 16 * lit;
+  key.intensity = .35 * lit;
+  renderer.toneMappingExposure = .4 + .65 * lit;
+  if (!end) {
+    // pedestal up: from a low angle, the rack towering, up to its top
+    // pedestal up: from the floor, the rack towering, up past its top, where the name appears in the dark above it
+    const k = ease(clamp(t / 9.4));
+    camera.position.set(lerp(.25, 0, k), lerp(.22, 5.2, k), lerp(12.5, 8.2, k));
+    camera.lookAt(0, lerp(1.7, 4.5, k), 0); // at the end: the rack's top on the lower third
+    rack.rotation.y = lerp(-.12, -.035, k);
+  } else {
+    const k = ease(clamp((t - (END_START - .8)) / 7));
+    camera.position.set(-2.15, lerp(2.9, 2.05, k), lerp(8.6, 8.1, k)); // the rack on the right third, a slow pedestal down
+    camera.lookAt(-2.15 + .25, lerp(2.2, 1.95, k), 0);
+    rack.rotation.y = lerp(-.42, -.34, k);
+  }
+  composer.render();
+}
+
+// ---------- the frame at time t ----------
+window.renderAt = (t) => {
+  const glOn = t < OPEN_END + .2 || t >= END_START - .8;
+  canvas.style.opacity = glOn ? 1 : 0;
+  if (glOn) stage(t);
+  const [h1, p] = document.querySelectorAll('#open .rise');
+  rise(h1, t, 4.9, 8.2, 30);
+  rise(p, t, 5.7, 8.25, 30);
+  features(t);
+  const e = END_START + .5;
+  document.querySelectorAll('#end .rise').forEach((n, i) => rise(n, t, e + i * .45, Infinity, 30));
+  // from black at the start, a dip to black between the acts, back to black at the end
+  document.getElementById('fade').style.opacity = Math.max(1 - smooth(0, 1.2, t), smooth(8.7, 9.25, t) * (1 - smooth(9.25, 9.9, t)),
+    smooth(END_START - .9, END_START - .45, t) * (1 - smooth(END_START - .45, END_START + .4, t)), smooth(DURATION - .9, DURATION, t));
+};
+window.DURATION = DURATION;
+await Promise.all([...document.images].map((i) => i.decode().catch(() => {})));
+await document.fonts.ready;
+window.ready = true;
+</script>
+</body>
+</html>

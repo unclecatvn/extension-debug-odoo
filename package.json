@@ -9,6 +9,7 @@
     "intro": "node tools/intro.mjs"
   },
   "devDependencies": {
-    "puppeteer": "^25.12.0"
+    "puppeteer": "^25.12.0",
+    "three": "^0.186.1"
   }
 }

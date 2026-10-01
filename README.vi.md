@@ -17,7 +17,9 @@ Soi record, view, lời gọi RPC, quyền truy cập và hiệu năng server m�
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Cài đặt](#cài-đặt) · [Tính năng](#tính-năng) · [Sử dụng](#sử-dụng) · [Quyền riêng tư](#quyền-riêng-tư--quyền-hạn) · [Phát triển](#phát-triển) · [Changelog](CHANGELOG.md)
 
-<img src="website/intro.gif" alt="Giới thiệu 15 giây: bảng Odoo Debug mở trên một đơn bán hàng, các field, một lời gọi RPC được sửa và gửi lại, ORM console, Security toàn màn hình" width="100%">
+<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="Phim 36 giây: một khối server đen sáng lên trong bóng tối, rồi các tính năng (Record, View, RPC, Code, Security, Perf) trên ảnh chụp thật. Bấm để xem trên website." width="100%"></a>
+
+▶ [Xem phim giới thiệu 36 giây](https://unclecatvn.github.io/extension-debug-odoo/)
 
 </div>
 
@@ -154,7 +156,7 @@ ODOO_VERSION=18 ODOO_MODULES=sale_management,crm ODOO_ARGS= docker compose -f e2
 npm run screenshots
 ```
 
-Video giới thiệu 15 giây (`website/intro.mp4` cho website, `website/intro.gif` cho README này) quay theo cách tương tự, cần ffmpeg:
+Phim giới thiệu (`tools/intro.html`: three.js và các ảnh chụp ở trên, render từng khung hình ở 4K, không cần Odoo) cho ra `website/intro.mp4` và poster `website/intro-poster.jpg`, kèm bản master 4K trong `store/`; cần ffmpeg:
 
 ```bash
 npm run intro
@@ -184,7 +186,7 @@ tests/                     *.test.mjs, mỗi module logic một file
 e2e/                       panel.e2e.mjs (Puppeteer) + compose.yml (Odoo 18 / 19 + PostgreSQL) + odoo.mjs (đăng nhập, mở panel)
 tools/i18n.mjs             npm run i18n: trích chuỗi → .pot, gộp vào mọi .po
 tools/screenshots.mjs      npm run screenshots: chụp lại website/screenshots/*.png từ Odoo thật
-tools/intro.mjs            npm run intro: quay video giới thiệu 15 giây (website/intro.mp4, website/intro.gif)
+tools/intro.mjs            npm run intro: render phim giới thiệu (tools/intro.html) ra website/intro.mp4
 ```
 
 Các đường dẫn bên dưới tính từ `extension/`.
