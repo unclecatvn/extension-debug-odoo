@@ -16,6 +16,7 @@ import { tmpdir } from 'node:os';
 import puppeteer from 'puppeteer';
 import { ODOO, EXT, rpc, openForm } from '../e2e/odoo.mjs';
 import { score } from './score.mjs';
+import { sqlSummary, diagnose } from '../extension/src/features/perf/logic.js';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const TAKE = join(tmpdir(), 'odoo-debug-take'); // frames/NNNNN.jpg + take.json
@@ -195,7 +196,7 @@ async function record() {
   await sleep(1800);
 
   // 5. RPC: the calls live, one edited and sent again, copied as cURL
-  caption('RPC', 'Every call, live: edit one, send it again, copy it as cURL.');
+  caption('RPC', 'Every call, live: edit it right there, send it again, copy it as cURL.');
   await clickIn('.tabs [data-tab="rpc"]');
   cam(null);
   // back to the list, then the order again: their calls show up in the log as they happen
@@ -283,10 +284,14 @@ async function record() {
   await sleep(2600);
 
   // 8. Perf: a request profiled, its repeated queries
-  caption('Perf', 'Every request profiled. The N+1 queries, found.');
+  caption('Perf', 'A diagnosis for every request: N+1, slow SQL or Python, and where.');
   cam(null);
   await clickIn('.tabs [data-tab="perf"]', null, { ms: 900 });
   await wait(panel.waitForSelector('#perf .card .btn', { timeout: 15_000 }));
+  // a cold start, as after a deployment: writing a system parameter clears Odoo's caches, so the profiled reload below
+  // shows the queries a warm server would skip (the repeated ones the diagnosis calls N+1). Before profiling starts: out
+  // of the list. The demo database only.
+  await rpc(page, '/web/dataset/call_kw/ir.config_parameter/set_param', { model: 'ir.config_parameter', method: 'set_param', args: ['odoo_debug.film', String(Date.now())], kwargs: {} });
   await clickIn('#perf .card .btn', null, { after: 200 }); // Start profiling (the dialog is accepted)
   await wait(panel.waitForFunction(() => document.querySelector('#perf .pill.ok'), { timeout: 15_000 }));
   // the page reloads (cut from the film): its requests are profiled; the panel comes back, full screen, on this tab
@@ -298,19 +303,28 @@ async function record() {
     await sleep(1500); // the chatter's requests
   })());
   await clickIn('#refresh', null, { after: 0 });
-  // the request with the most queries
+  // the request worth showing: the one the panel will diagnose as an N+1 (its most repeated query), else the slowest.
+  // Read here with the panel's own logic; through /ir.profile/ in the route, so the panel leaves this read out of its list.
   await wait(panel.waitForFunction(() => document.querySelectorAll('#perf .list > li').length > 3, { timeout: 20_000 }));
-  await panel.$$eval('#perf .list > li', (lis) => {
-    const sql = (li) => +(li.textContent.match(/(\d+) SQL/)?.[1] || 0);
-    lis.reduce((a, b) => (sql(b) > sql(a) ? b : a)).classList.add('film-pick');
+  const ids = await panel.$$eval('#perf .list > li', (lis) => lis.map((li) => +li.title.match(/^#(\d+)/)?.[1]).filter(Boolean));
+  const profiles = await rpc(page, '/web/dataset/call_kw/ir.profile/read', { model: 'ir.profile', method: 'read', args: [ids, ['duration', 'sql']], kwargs: {} });
+  const rated = profiles.map((p) => {
+    const sum = sqlSummary(JSON.parse(p.sql || '[]'));
+    return { id: p.id, kind: diagnose(p.duration, sum), n: sum.dups[0]?.count || 0, duration: p.duration };
   });
+  const best = rated.filter((r) => r.kind === 'n1').sort((a, b) => b.n - a.n)[0] || rated.sort((a, b) => b.duration - a.duration)[0];
+  console.log('perf pick:', JSON.stringify(best));
+  await panel.$$eval('#perf .list > li', (lis, id) => lis.find((li) => li.title.startsWith(`#${id} `) || li.title === `#${id}`)?.classList.add('film-pick'), best.id);
   const r1 = await boxOf('#perf .list > li.film-pick .name');
   cam({ x: r1.x - 40, y: r1.y - 120, w: 1300, h: 720 });
   await click(...at(r1, .3), { ms: 900, after: 0 });
-  await wait(panel.waitForFunction(() => document.querySelector('#perf .pane .detail details'), { timeout: 15_000 }));
-  await panel.$$eval('#perf .pane .detail > div > details', (ds) => ds.forEach((d) => { d.open = true; }));
+  await wait(panel.waitForSelector('#perf .pane .perf-detail', { timeout: 15_000 }));
   const pane = await boxOf('#perf .pane');
-  cam({ x: pane.x - 30, y: pane.y - 20, w: Math.min(pane.w + 60, 1000), h: 600 });
+  cam({ x: pane.x - 30, y: pane.y - 20, w: Math.min(pane.w + 60, 1000), h: 600 }); // the diagnosis, the SQL / Python split
+  await sleep(2200);
+  if (await panel.$('#perf .pane .perf-detail .seg button')) { // the repeated queries: the N+1, in words
+    await clickIn('#perf .pane .perf-detail .seg button', 'Repeated Queries', { ms: 800 });
+  }
   highlight({ x: pane.x, y: pane.y, w: Math.min(pane.w, 900), h: 520 }, 1);
   await sleep(2600);
 
@@ -339,7 +353,7 @@ async function record() {
   log.frames = frames;
   await writeFile(join(TAKE, 'take.json'), JSON.stringify(log));
   console.log(`take: ${frames.length} frames, ${(log.end - log.start).toFixed(1)} s, ${log.cuts.length} cuts → ${TAKE}`);
-  await panel.$eval('#perf .card .btn', (b) => /Stop/.test(b.textContent) && b.click()).catch(() => {}); // the profiler off again
+  await panel.$$eval('#perf .btn', (bs) => bs.find((b) => /Stop Profiling/.test(b.textContent))?.click()).catch(() => {}); // the profiler off again
   await sleep(500);
   await browser.close();
 }
