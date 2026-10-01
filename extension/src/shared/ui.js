@@ -15,7 +15,7 @@ export function clearForms() {
 export function el(tag, props = {}, ...kids) {
   const n = document.createElement(tag);
   for (const [k, v] of Object.entries(props)) {
-    if (v == null || v === false) continue;
+    if (v == null || (v === false && k !== 'spellcheck')) continue; // spellcheck: the one property on by default
     if (k === 'class') n.className = v;
     else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
     else if (k.startsWith('data-') || k.startsWith('aria-') || k === 'role') n.setAttribute(k, v);

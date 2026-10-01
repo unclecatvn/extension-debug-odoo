@@ -17,9 +17,9 @@ Soi record, view, lời gọi RPC, quyền truy cập và hiệu năng server m�
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Cài đặt](#cài-đặt) · [Tính năng](#tính-năng) · [Sử dụng](#sử-dụng) · [Quyền riêng tư](#quyền-riêng-tư--quyền-hạn) · [Phát triển](#phát-triển) · [Changelog](CHANGELOG.md)
 
-<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="Phim 36 giây: một khối server đen sáng lên trong bóng tối, rồi các tính năng (Record, View, RPC, Code, Security, Perf) trên ảnh chụp thật. Bấm để xem trên website." width="100%"></a>
+<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="Phim 74 giây: extension được dùng thật trên Odoo, mở panel cạnh một đơn bán hàng, lọc field, sửa và gửi lại một lời gọi RPC, gõ và chạy code ORM, giải thích quyền của một user, các câu SQL N+1 của một request. Bấm để xem trên website." width="100%"></a>
 
-▶ [Xem phim giới thiệu 36 giây](https://unclecatvn.github.io/extension-debug-odoo/)
+▶ [Xem phim giới thiệu 74 giây](https://unclecatvn.github.io/extension-debug-odoo/)
 
 </div>
 
@@ -156,7 +156,7 @@ ODOO_VERSION=18 ODOO_MODULES=sale_management,crm ODOO_ARGS= docker compose -f e2
 npm run screenshots
 ```
 
-Phim giới thiệu (`tools/intro.html`: three.js và các ảnh chụp ở trên, render từng khung hình ở 4K, không cần Odoo) cho ra `website/intro.mp4` và poster `website/intro-poster.jpg`, kèm bản master 4K trong `store/`; cần ffmpeg:
+Phim giới thiệu được quay từ cùng bộ dựng đó: một phiên dùng extension thật, giữ mọi khung hình Chrome vẽ, rồi dựng trong `tools/intro.html` (cửa sổ trên sân khấu tối, máy quay đi theo thao tác, chú thích). Kết quả là `website/intro.mp4`, poster `website/intro-poster.jpg` và bản master 1440p trong `store/`; cần ffmpeg:
 
 ```bash
 npm run intro
@@ -186,7 +186,7 @@ tests/                     *.test.mjs, mỗi module logic một file
 e2e/                       panel.e2e.mjs (Puppeteer) + compose.yml (Odoo 18 / 19 + PostgreSQL) + odoo.mjs (đăng nhập, mở panel)
 tools/i18n.mjs             npm run i18n: trích chuỗi → .pot, gộp vào mọi .po
 tools/screenshots.mjs      npm run screenshots: chụp lại website/screenshots/*.png từ Odoo thật
-tools/intro.mjs            npm run intro: render phim giới thiệu (tools/intro.html) ra website/intro.mp4
+tools/intro.mjs            npm run intro: quay một phiên dùng thật, dựng trong tools/intro.html → website/intro.mp4
 ```
 
 Các đường dẫn bên dưới tính từ `extension/`.

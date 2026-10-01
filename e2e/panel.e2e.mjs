@@ -114,6 +114,7 @@ test('RPC tab: a call is edited and sent again, a new request is sent, the answe
   await panel.$eval('#rpc .detail .btn', (b) => b.click()); // Edit & Resend
   const body = JSON.parse(await panel.$eval('#rpc .detail .composer textarea', (t) => t.value));
   assert.equal(body.params.method, 'web_read', 'the body as sent');
+  assert.equal(await panel.$eval('#rpc .detail .composer textarea', (t) => t.spellcheck), false, 'no spelling squiggles under JSON');
   assert.equal(await panel.$eval('#rpc .list > li:has(.composer)', (li) => li.classList.contains('open')), true, 'the row stays open');
   assert.deepEqual(await panel.$$eval('#rpc .detail:has(.composer) summary', (ss) => ss.map((n) => n.textContent)), ['Result'], 'the editor replaces the parameters');
   body.params.kwargs.specification = { login: {} };

@@ -17,9 +17,9 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
-<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="36-second film: a black server rack lit in the dark, then the features (Record, View, RPC, Code, Security, Perf) on real screenshots. Click to watch it on the website." width="100%"></a>
+<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="74-second film: the extension used on a real Odoo, the panel opened beside a sales order, fields filtered, an RPC call edited and sent again, ORM code typed and run, a user's access explained, a request's N+1 queries. Click to watch it on the website." width="100%"></a>
 
-▶ [Watch the 36-second film](https://unclecatvn.github.io/extension-debug-odoo/)
+▶ [Watch the 74-second film](https://unclecatvn.github.io/extension-debug-odoo/)
 
 </div>
 
@@ -169,7 +169,7 @@ ODOO_VERSION=18 ODOO_MODULES=sale_management,crm ODOO_ARGS= docker compose -f e2
 npm run screenshots
 ```
 
-The intro film (`tools/intro.html`: three.js and the screenshots above, rendered frame by frame in 4K, no Odoo needed) gives `website/intro.mp4` and its poster `website/intro-poster.jpg`, plus a 4K master in `store/`; ffmpeg needed:
+The intro film is recorded from the same setup: a real session with the extension, every frame Chrome paints, then edited in `tools/intro.html` (the window on a dark stage, a camera following the action, captions). It gives `website/intro.mp4`, its poster `website/intro-poster.jpg` and a 1440p master in `store/`; ffmpeg needed:
 
 ```bash
 npm run intro
@@ -199,7 +199,7 @@ tests/                     *.test.mjs, one per logic module
 e2e/                       panel.e2e.mjs (Puppeteer) + compose.yml (Odoo 18 / 19 + PostgreSQL) + odoo.mjs (login, open the panel)
 tools/i18n.mjs             npm run i18n: extract strings → .pot, merge into every .po
 tools/screenshots.mjs      npm run screenshots: retake website/screenshots/*.png from a real Odoo
-tools/intro.mjs            npm run intro: render the intro film (tools/intro.html) to website/intro.mp4
+tools/intro.mjs            npm run intro: record a real session, edit it in tools/intro.html → website/intro.mp4
 ```
 
 Paths below are relative to `extension/`.
