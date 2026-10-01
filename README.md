@@ -235,6 +235,12 @@ fallbacks stay inline. If one spot grows past a couple of branches, that is the 
 Bump `version` in `extension/manifest.json`, add its section to [CHANGELOG.md](CHANGELOG.md) and push to `main`: CI tags
 `v<version>` and publishes the zip with that section as release notes. Keep each CHANGELOG bullet on one line: GitHub release notes turn every newline into a line break.
 
+The same run uploads the zip to the [Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) and submits it for review (live once Google approves it; the version must be higher than the store's). The store listing itself (description, images) is still edited in the [Developer Dashboard](https://chrome.google.com/webstore/devconsole). This needs three repository secrets, set once:
+
+1. In the [Google Cloud Console](https://console.cloud.google.com/), a project with the **Chrome Web Store API** enabled; its OAuth consent screen *External* and **In production** (in *Testing*, the token below expires after 7 days); an OAuth client ID of type **Desktop app**.
+2. `npx chrome-webstore-upload-keys` with that client's ID and secret, signed in with the Google account that owns the item: it prints a refresh token.
+3. Repository → Settings → Secrets and variables → Actions: `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`. Without them the release skips the upload.
+
 ## Contributing
 
 Issues and pull requests are welcome. Before opening a PR:
@@ -246,13 +252,13 @@ Issues and pull requests are welcome. Before opening a PR:
 Found a bug? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) with your Odoo version, the
 page you were on and, if relevant, the RPC tab's error.
 
+Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement): UncleCat may license your contribution on any terms (as n8n's).
+
 ## Support the project
 
 If Odoo Debug saves you time, ⭐ [star it on GitHub](https://github.com/unclecatvn/extension-debug-odoo): it helps other Odoo developers find it.
 
 ## Author
-
-Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement): UncleCat may license your contribution on any terms (as n8n's).
 
 Made by **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
 

@@ -1,6 +1,9 @@
 name: Release
 # Bump "version" in extension/manifest.json (+ a CHANGELOG.md section) and push to main: CI runs, then tag v<version> + GitHub release (zip + notes).
 # Pushes that keep the same version only run CI.
+# A new version also goes to the Chrome Web Store (uploaded, submitted for review: it goes live once Google approves it),
+# with the repository secrets CWS_CLIENT_ID, CWS_CLIENT_SECRET, CWS_REFRESH_TOKEN (an OAuth client allowed to use the
+# Chrome Web Store API, see README › Releasing); without them that step is skipped.
 on:
   push:
     branches: [main]
@@ -19,6 +22,7 @@ jobs:
         with:
           fetch-depth: 0 # full history + tags for the changelog
       - name: Tag + release if the manifest version is new
+        id: release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -30,3 +34,36 @@ jobs:
           [ -s notes.md ] || { echo "## Changes${PREV:+ since $PREV}"; git log --no-merges --pretty='- %s (%h)' ${PREV:+$PREV..}HEAD; } > notes.md
           (cd extension && zip -r "../odoo-debug-$VER.zip" . -x "*.DS_Store" "icons/icon.svg" "icons/make-icons.sh")
           gh release create "$VER" "odoo-debug-$VER.zip" --target "$GITHUB_SHA" --title "$VER" --notes-file notes.md
+          echo "zip=odoo-debug-$VER.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Chrome Web Store — upload the new version, submit it for review
+        if: steps.release.outputs.zip
+        env:
+          ZIP: ${{ steps.release.outputs.zip }}
+          ITEM: mfmamdbagelffoedimmjpolhalmngcjk
+          CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+        run: |
+          if [ -z "$CWS_CLIENT_ID" ] || [ -z "$CWS_CLIENT_SECRET" ] || [ -z "$CWS_REFRESH_TOKEN" ]; then
+            echo "::notice::Chrome Web Store secrets not set: $ZIP not uploaded (upload it by hand, or see README › Releasing)"; exit 0
+          fi
+          TOKEN=$(curl -fsS https://oauth2.googleapis.com/token -d grant_type=refresh_token -d client_id="$CWS_CLIENT_ID" \
+            -d client_secret="$CWS_CLIENT_SECRET" -d refresh_token="$CWS_REFRESH_TOKEN" | jq -r .access_token)
+          echo "::add-mask::$TOKEN"
+          API=https://www.googleapis.com/chromewebstore/v1.1/items/$ITEM
+          AUTH="Authorization: Bearer $TOKEN"
+          UP=$(curl -sS -X PUT -H "$AUTH" -T "$ZIP" "https://www.googleapis.com/upload/chromewebstore/v1.1/items/$ITEM")
+          echo "upload: $UP"
+          STATE=$(jq -r '.uploadState // "FAILURE"' <<< "$UP")
+          for _ in $(seq 30); do # a big package is processed after the request: wait for it
+            [ "$STATE" = IN_PROGRESS ] || break
+            sleep 5
+            STATE=$(curl -sS -H "$AUTH" "$API?projection=DRAFT" | jq -r '.uploadState // "FAILURE"')
+          done
+          [ "$STATE" = SUCCESS ] || { echo "::error::Chrome Web Store upload: $STATE $(jq -c '.itemError // .error // empty' <<< "$UP")"; exit 1; }
+          PUB=$(curl -sS -X POST -H "$AUTH" -H "Content-Length: 0" "$API/publish")
+          echo "publish: $PUB"
+          jq -e '.status // [] | any(. == "OK" or . == "ITEM_PENDING_REVIEW")' <<< "$PUB" > /dev/null \
+            || { echo "::error::Chrome Web Store publish: $(jq -c '.statusDetail // .error // .' <<< "$PUB")"; exit 1; }
+          echo "::notice::$ZIP uploaded to the Chrome Web Store and submitted for review"

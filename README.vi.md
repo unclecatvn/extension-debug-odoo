@@ -218,6 +218,12 @@ Fallback thuần đặt trong `shared/odoo.js` (test ở `tests/odoo.test.mjs` t
 
 Tăng `version` trong `extension/manifest.json`, thêm section tương ứng vào [CHANGELOG.md](CHANGELOG.md) rồi push lên `main`: CI tạo tag `v<version>` và đăng file zip với section đó làm release notes. Mỗi gạch đầu dòng trong CHANGELOG viết trên một dòng: release notes của GitHub coi mỗi lần xuống dòng là ngắt dòng thật.
 
+Cũng lần chạy đó tải file zip lên [Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) và gửi duyệt (lên store khi Google duyệt xong; version phải lớn hơn bản đang có trên store). Trang store (mô tả, hình ảnh) vẫn sửa trong [Developer Dashboard](https://chrome.google.com/webstore/devconsole). Cần ba secret của repo, đặt một lần:
+
+1. Trong [Google Cloud Console](https://console.cloud.google.com/): một project bật **Chrome Web Store API**; OAuth consent screen loại *External* và ở trạng thái **In production** (để *Testing* thì token bên dưới hết hạn sau 7 ngày); một OAuth client ID loại **Desktop app**.
+2. `npx chrome-webstore-upload-keys` với ID và secret của client đó, đăng nhập bằng tài khoản Google đang sở hữu extension: lệnh in ra một refresh token.
+3. Repository → Settings → Secrets and variables → Actions: `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`. Không có chúng thì bản phát hành bỏ qua bước tải lên.
+
 ## Đóng góp
 
 Rất hoan nghênh issue và pull request. Trước khi mở PR:
@@ -228,13 +234,13 @@ Rất hoan nghênh issue và pull request. Trước khi mở PR:
 
 Gặp lỗi? [Mở issue](https://github.com/unclecatvn/extension-debug-odoo/issues) kèm phiên bản Odoo, trang bạn đang mở và, nếu có, lỗi trong tab RPC.
 
+Mở pull request nghĩa là đồng ý với [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement) một câu: UncleCat được cấp license cho phần đóng góp của bạn theo bất kỳ điều khoản nào (giống n8n).
+
 ## Ủng hộ dự án
 
 Nếu Odoo Debug giúp bạn tiết kiệm thời gian, hãy ⭐ [star trên GitHub](https://github.com/unclecatvn/extension-debug-odoo): nó giúp các lập trình viên Odoo khác tìm thấy dự án.
 
 ## Tác giả
-
-Mở pull request nghĩa là đồng ý với [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement) một câu: UncleCat được cấp license cho phần đóng góp của bạn theo bất kỳ điều khoản nào (giống n8n).
 
 Phát triển bởi **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
 

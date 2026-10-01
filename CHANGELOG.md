@@ -2,6 +2,17 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
+## [Unreleased]
+
+### Added
+
+- **Releases go to the Chrome Web Store by themselves**: a new version pushed to `main` is uploaded to the store and submitted for review by the same CI run that makes the GitHub release (three repository secrets to set once, see README › Releasing).
+
+### Changed
+
+- **License: the Sustainable Use License**, the one n8n uses ("fair-code"): free to use and modify for personal or non-commercial use or a company's own internal work, free to share only free of charge and for non-commercial purposes, not to sell; a commercial license can be asked for. Pull requests come with [CONTRIBUTING.md](CONTRIBUTING.md)'s one-sentence Contributor License Agreement: UncleCat may license a contribution on any terms.
+- **"Open source" becomes "source available"** on the website, the README and the intro film, the project being restricted from selling.
+
 ## [1.3.0] - 2026-10-01
 
 Thanks to [@anhbtit](https://github.com/anhbtit) (AnhBT) for the Menus tab, i18n › Languages and the many improvements and fixes of [#10](https://github.com/unclecatvn/extension-debug-odoo/pull/10), marked (#10) below.
