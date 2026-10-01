@@ -131,7 +131,7 @@ export function renderSecurity(s, state) {
       out);
   });
   block(s, 'groups', _t('Groups'), () => groupsBlock(t, origin, tryGroup, rerender));
-  block(s, 'user-risks', _t('User risks'), async () => {
+  block(s, 'user-risks', _t('User Risks'), async () => {
     const { u, has } = await t;
     return findings(userRisks(u, has));
   });
@@ -140,18 +140,18 @@ export function renderSecurity(s, state) {
     section(s, `${model}${resId ? ` #${resId}` : ''}`);
     const modelSec = Promise.all([readAcls(model), readRules(model), fieldsOf(model)]);
 
-    block(s, 'why', _t('Why allowed / blocked'), () => whyBlock(model, resId, t, modelSec, tryGroup));
+    block(s, 'why', _t('Why Allowed / Blocked'), () => whyBlock(model, resId, t, modelSec, tryGroup));
 
-    block(s, 'acl', _t('ACL (ir.model.access) — green = applies to the user'), async () => {
+    block(s, 'acl', _t('ACL'), async () => {
       const [{ groupIds }, [rows]] = await Promise.all([t, modelSec]);
       if (!rows.length) return empty(_t('No ACL.'));
       return el('table', {}, el('thead', {}, el('tr', {}, el('th', {}, _t('ACL / group')), MODES.map((m) => el('th', { class: 'c' }, LETTER[m])))),
         el('tbody', {}, rows.map((a) => el('tr', { class: !a.group_id || groupIds.has(a.group_id[0]) ? 'mine' : '' },
           el('td', {}, a.name, el('div', { class: 'muted' }, a.group_id ? a.group_id[1] : _t('(all users)'))),
           MODES.map((m) => el('td', { class: 'c' }, a[`perm_${m}`] ? '✓' : ''))))));
-    });
+    }, _t('ir.model.access: the rows in green apply to the user.'));
 
-    block(s, 'hidden-fields', _t('Fields hidden from the user'), async () => {
+    block(s, 'hidden-fields', _t('Hidden Fields'), async () => {
       const [{ uid, tried }, [, , fields]] = await Promise.all([t, modelSec]);
       const restricted = Object.entries(fields).filter(([, f]) => f.groups);
       if (!restricted.length) return empty(_t('No field is restricted to groups.'));
@@ -164,12 +164,12 @@ export function renderSecurity(s, state) {
         el('div', { class: 'row' }, copyable(name), el('span', { class: 'grow muted' }, f.string),
           triPill(ok.get(f.groups), [_t('visible'), _t('hidden'), '?'])),
         el('div', { class: 'meta' }, f.groups))))));
-    });
+    }, _t('Fields restricted to groups, and whether the selected user can see each one.'));
 
-    block(s, 'model-audit', _t('Model configuration audit'), async () => {
+    block(s, 'model-audit', _t('Model Audit'), async () => {
       const [{ groupXml }, [acls, rules, fields]] = await Promise.all([t, modelSec]);
       return findings(auditModel({ fields, acls, rules, groupXml }));
-    });
+    }, _t('The model\'s security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user.'));
   }
 
   // ---------- this Odoo: the logged-in session, whoever is picked above ----------
@@ -189,7 +189,7 @@ export function renderSecurity(s, state) {
   });
 
   // base.group_system only: say so instead of showing an AccessError.
-  block(s, 'params', _t('System parameters (ir.config_parameter)'), async () => {
+  block(s, 'params', _t('System Parameters'), async () => {
     if (!(await sessionInfo()).is_system) return empty(_t('Needs Settings rights (base.group_system).'));
     const rows = await call('ir.config_parameter', 'search_read', [[]], { fields: ['key', 'value'], order: 'key' }); // not cached: edited while debugging
     const items = rows.map((p) => {
@@ -201,9 +201,9 @@ export function renderSecurity(s, state) {
       return expandable(li, () => pre(p.value));
     });
     return items.length ? filteredList(items, _t('Filter key / value'), N_('%s parameters'), N_('%s/%s parameters'), listHead(_t('Key'), _t('Value'))) : empty(_t('No parameter.'));
-  });
+  }, _t('ir.config_parameter: secret-looking values are masked, a click on one still copies it.'));
 
-  block(s, 'instance', _t('Instance check'), async () => {
+  block(s, 'instance', _t('Instance Check'), async () => {
     const [probe, cookie] = await cached('probe', async () => {
       const r = await Promise.all([exec(pageProbe), cookieFlags(state.url)]);
       if (!r[0] || r[0].error) throw new Error(r[0]?.error || _t('Check failed'));
@@ -211,7 +211,7 @@ export function renderSecurity(s, state) {
     });
     return el('div', {}, findings(checkInstance(probe, cookie)),
       el('div', { class: 'pad-bottom' },
-        details(_t('Raw data'), pre({ ...probe, cookie })),
+        details(_t('Raw Data'), pre({ ...probe, cookie })),
         el('button', { class: 'chip mt', onclick: () => { uncache('probe'); rerender(); } }, _t('Check Again'))));
   });
 }

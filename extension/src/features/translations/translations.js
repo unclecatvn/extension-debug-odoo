@@ -32,10 +32,10 @@ function activeChips(langs, input, onChange) {
 }
 
 export function renderTranslations(s) {
-  block(s, 'add-langs', _t('Activate / Update Languages'), async () => {
+  block(s, 'add-langs', _t('Languages'), async () => {
     if (!(await sessionInfo()).is_system) return empty(_t('Needs Settings rights (base.group_system).')); // the wizard's ACL
     const all = await allLangs();
-    const input = el('input', { type: 'text', placeholder: 'fr_BE; de_DE', value: formValues('translations-add').langs || '', spellcheck: false });
+    const input = el('input', { type: 'text', placeholder: 'fr_BE; de_DE', 'aria-label': _t('Languages'), value: formValues('translations-add').langs || '', spellcheck: false });
     const keep = () => saveForm('translations-add', { langs: input.value });
     input.addEventListener('input', keep);
     const overwrite = el('input', { type: 'checkbox', checked: true }); // the wizard's default
@@ -43,7 +43,7 @@ export function renderTranslations(s) {
     const log = el('ul', { class: 'steps' }, done && el('li', { class: 'row' }, el('span', { class: 'grow' }, done), pill('✓', 'ok')));
     done = null;
     const form = el('form', { class: 'form' },
-      el('label', {}, _t('Languages'), input),
+      input, // no label: the card's title says it
       activeChips(all.filter((l) => l.active), input, keep),
       el('div', { class: 'note' }, _t('Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps.')),
       el('label', { class: 'check mt' }, overwrite, _t('Overwrite Existing Terms')),
@@ -78,7 +78,7 @@ export function renderTranslations(s) {
       }
     });
     return el('div', { class: 'pad' }, form);
-  });
+  }, _t('Activate languages and load, or reload, their terms for every installed app (Odoo\'s Add Languages wizard).'));
 
   card(s, async () => { // the export, what the tab is for: no title to open it by
     const langs = (await allLangs()).filter((l) => l.active);

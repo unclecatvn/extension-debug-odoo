@@ -65,7 +65,7 @@ await settings({ theme: 'light' });
 await writeFile(new URL('overview.png', OUT), await diagonal(light, dark, await panelBox()));
 console.log('overview');
 
-await show('view', ['Inherited views'], ['Combined arch']);
+await show('view', ['Inherited Views'], ['Combined Arch']);
 await shot('side-view');
 await show('rpc'); // the form's web_read, edited and sent again: its answer under the editor
 await panel.$$eval('#rpc .list > li', (lis) => lis.find((li) => li.dataset.q === 'sale.order web_read').click());
@@ -95,7 +95,7 @@ await panel.waitForFunction(() => document.querySelector('#code .output table'),
 await shot('side-code');
 
 await settings({ theme: 'dark' });
-await show('security', ['User risks', 'Why allowed']);
+await show('security', ['User Risks', 'Why Allowed']);
 await shot('side-security-dark');
 await settings({ theme: 'light' });
 
@@ -103,7 +103,7 @@ await settings({ theme: 'light' });
 await full(true);
 await show('record', ['Identity', 'Fields']);
 await shot('full-record');
-await show('security', ['Groups', 'User risks', 'Why allowed']); // Groups | User risks side by side
+await show('security', ['Groups', 'User Risks', 'Why Allowed']); // Groups | User risks side by side
 await panel.$eval('#security .toolbar:has(+ .groups) input', (i) => { i.value = 'sales'; i.dispatchEvent(new Event('input')); }); // a few groups, with some to add
 await shot('full-security');
 

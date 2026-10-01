@@ -2,7 +2,7 @@
 import { sqlSummary, appFrame } from './logic.js';
 import { pageFetch } from '../../shared/page.js';
 import { execOrThrow, rpc, call, fieldsOf } from '../../shared/bridge.js';
-import { el, pre, pill, details, empty, card, errBox, expandable, filteredList, listHead, splitRow, masterDetail } from '../../shared/ui.js';
+import { el, pre, pill, details, empty, card, errBox, expandable, filteredList, listHead, splitRow, masterDetail, infoTip } from '../../shared/ui.js';
 import { _t, N_ } from '../../shared/i18n.js';
 
 const COLLECTORS = 'sql,traces_async';
@@ -95,12 +95,12 @@ function sqlDetail(r, [p]) {
   const q = (e, extra) => expandable(el('li', {},
     el('div', { class: 'row' }, extra, el('span', { class: 'grow meta' }, frame(appFrame(e.stack))), el('span', { class: 'ms' }, ms(e.time))),
     el('div', { class: 'mono muted' }, e.query.length > 200 ? `${e.query.slice(0, 200)}…` : e.query),
-    details(_t('Full SQL + stack'), pre(e.full_query || e.query), e.stack?.length ? pre(e.stack.map(frame).join('\n')) : null)));
+    details(_t('Full SQL + Stack'), pre(e.full_query || e.query), e.stack?.length ? pre(e.stack.map(frame).join('\n')) : null)));
   return el('div', {},
     el('div', { class: 'muted' }, _t('%s queries · SQL %s / total %s · Python ≈ %s', sum.count, ms(sum.time), ms(r.duration), ms(Math.max(0, r.duration - sum.time)))),
     sum.dups.length
-      ? details(_t('Repeated queries — N+1 suspects (%s)', sum.dups.length), listHead(_t('Count · caller · time'), _t('Query')), el('ul', { class: 'list' },
+      ? details(el('span', {}, _t('Repeated Queries (%s)', sum.dups.length), ' ', infoTip(_t('The same query run several times: N+1 suspects.'))), listHead(_t('Count · caller · time'), _t('Query')), el('ul', { class: 'list' },
         sum.dups.map((g) => q({ ...g.first, time: g.time }, pill(`${g.count}×`, g.count >= 5 ? 'err' : 'med')))))
       : el('div', { class: 'okline' }, _t('✓ No repeated query.')),
-    details(_t('Slowest queries (%s)', sum.slow.length), listHead(_t('Caller · time'), _t('Query')), el('ul', { class: 'list' }, sum.slow.map((e) => q(e, null)))));
+    details(_t('Slowest Queries (%s)', sum.slow.length), listHead(_t('Caller · time'), _t('Query')), el('ul', { class: 'list' }, sum.slow.map((e) => q(e, null)))));
 }

@@ -6,12 +6,13 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 ### Added
 
-- **Translations › Activate / Update Languages**: activates one or more languages and loads, or reloads, their terms for every installed app, with Odoo's Add Languages wizard (Overwrite Existing Terms optional). Needs Settings rights; the active languages are chips that toggle their code in the field. The export below lists the new languages right away.
+- **Translations › Languages**: activates one or more languages and loads, or reloads, their terms for every installed app, with Odoo's Add Languages wizard (Overwrite Existing Terms optional). Needs Settings rights; the active languages are chips that toggle their code in the field. The export below lists the new languages right away.
 
 ### Changed
 
 - **Toolbar popup**: "This page" shows the Odoo version and database next to the host (one line, an icon each), and the debug mode switch reads Off / Debug / Assets.
-- **Security**: plainer labels than `groups=` in the model part ("Fields hidden from the user", "Allowed groups", "not restricted to any group").
+- **Card titles stay short**; what they used to spell out goes in an ⓘ after the title, shown on hover or keyboard focus: ACL (`ir.model.access`, the rows in green apply to the user), System parameters (`ir.config_parameter`, secrets masked), View › Form fields (invisible / readonly / required, evaluated on the record shown), Perf › Repeated queries (N+1 suspects). Long titles are shorter, their detail in the ⓘ: Identity (was Identity & metadata), Hidden fields (Fields hidden from the user), Model audit (Model configuration audit), Inherited views (Inherited views — <type>), Translations › Languages (Activate / Update Languages). Titles are in Title Case, like Odoo's labels (Context & Domain, User Risks, Why Allowed / Blocked…).
+- **Security**: plainer labels than `groups=` in the model part ("Hidden fields", "Allowed groups", "not restricted to any group").
 
 ### Removed
 

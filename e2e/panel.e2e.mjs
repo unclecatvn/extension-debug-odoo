@@ -245,7 +245,7 @@ test('Code tab: a pick replaces the word, also after a skipped closer and under 
 test('Translations tab: one input searches the installed modules and holds the ticked ones', async () => {
   await click('.tabs [data-tab="translations"]');
   await panel.waitForSelector('#translations .module-picker li');
-  const EXPORT = '#translations > div.card'; // the untitled export card, not Activate / Update Languages above it
+  const EXPORT = '#translations > div.card'; // the untitled export card, not the Languages card above it
   const state = () => panel.$eval(EXPORT, (s) => ({
     apps: s.querySelector('form input[type=text]').value,
     shown: [...s.querySelectorAll('.module-picker li:not([hidden])')].map((li) => li.dataset.name),
@@ -280,7 +280,7 @@ test('Translations tab: one input searches the installed modules and holds the t
   await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.click()); // back off
 });
 
-test('Translations tab: Activate / Update Languages, the active languages as chips that toggle their code in the field', async () => {
+test('Translations tab: Languages card, the active languages as chips that toggle their code in the field', async () => {
   const CARD = '#translations details.card[data-key="add-langs"]';
   await panel.$eval(CARD, (d) => { d.open = true; }); // opened by an earlier test, and remembered: open it anyway
   await panel.waitForSelector(`${CARD} form input[type=text]`);

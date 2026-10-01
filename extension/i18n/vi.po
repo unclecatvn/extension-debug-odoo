@@ -303,7 +303,7 @@ msgid "Copied"
 msgstr "Đã sao chép"
 
 #: src/features/code/help.js:41
-msgid "Available variables:"
+msgid "Available Variables:"
 msgstr "Các biến có sẵn:"
 
 #: src/features/code/help.js:43
@@ -529,7 +529,7 @@ msgid "No SQL recorded."
 msgstr "Không có SQL nào được ghi."
 
 #: src/features/perf/perf.js:98
-msgid "Full SQL + stack"
+msgid "Full SQL + Stack"
 msgstr "SQL đầy đủ + stack"
 
 #: src/features/perf/perf.js:100
@@ -537,8 +537,12 @@ msgid "%s queries · SQL %s / total %s · Python ≈ %s"
 msgstr "%s query · SQL %s / tổng %s · Python ≈ %s"
 
 #: src/features/perf/perf.js:102
-msgid "Repeated queries — N+1 suspects (%s)"
-msgstr "Query lặp lại — nghi N+1 (%s)"
+msgid "Repeated Queries (%s)"
+msgstr "Query lặp lại (%s)"
+
+#: src/features/perf/perf.js:102
+msgid "The same query run several times: N+1 suspects."
+msgstr "Cùng một query chạy nhiều lần: nghi N+1."
 
 #: src/features/perf/perf.js:102
 msgid "Count · caller · time"
@@ -554,7 +558,7 @@ msgid "✓ No repeated query."
 msgstr "✓ Không có query lặp lại."
 
 #: src/features/perf/perf.js:105
-msgid "Slowest queries (%s)"
+msgid "Slowest Queries (%s)"
 msgstr "Query chậm nhất (%s)"
 
 #: src/features/perf/perf.js:105
@@ -566,8 +570,8 @@ msgid "This screen is not bound to a model."
 msgstr "Màn hình này không gắn với model nào."
 
 #: src/features/record/record.js:11
-msgid "Identity & metadata"
-msgstr "Định danh & metadata"
+msgid "Identity"
+msgstr "Định danh"
 
 #: src/features/record/record.js:16
 msgid "(none / several records)"
@@ -580,6 +584,10 @@ msgstr "tạo bởi"
 #: src/features/record/record.js:18
 msgid "last updated by"
 msgstr "sửa bởi"
+
+#: src/features/record/record.js:20
+msgid "Model and id, xmlids (noupdate flagged), who created and last updated the record, and when."
+msgstr "Model và id, xmlid (đánh dấu noupdate), ai tạo và ai sửa record lần cuối, lúc nào."
 
 #: src/features/record/record.js:22
 msgid "Fields"
@@ -684,8 +692,8 @@ msgid "Invalid JSON: %s"
 msgstr "JSON không hợp lệ: %s"
 
 #: src/features/rpc/rpc.js:91
-#: src/shared/ui.js:87
-#: src/shared/ui.js:149
+#: src/shared/ui.js:104
+#: src/shared/ui.js:166
 msgid "Loading…"
 msgstr "Đang tải…"
 
@@ -903,16 +911,16 @@ msgid "Groups"
 msgstr "Group"
 
 #: src/features/security/security.js:134
-msgid "User risks"
+msgid "User Risks"
 msgstr "Rủi ro của user"
 
 #: src/features/security/security.js:143
-msgid "Why allowed / blocked"
+msgid "Why Allowed / Blocked"
 msgstr "Vì sao được / bị chặn"
 
 #: src/features/security/security.js:145
-msgid "ACL (ir.model.access) — green = applies to the user"
-msgstr "ACL (ir.model.access) — nền xanh = áp dụng cho user này"
+msgid "ACL"
+msgstr "ACL"
 
 #: src/features/security/security.js:147
 msgid "No ACL."
@@ -926,9 +934,13 @@ msgstr "ACL / group"
 msgid "(all users)"
 msgstr "(mọi user)"
 
+#: src/features/security/security.js:152
+msgid "ir.model.access: the rows in green apply to the user."
+msgstr "ir.model.access: các dòng nền xanh áp dụng cho user này."
+
 #: src/features/security/security.js:154
-msgid "Fields hidden from the user"
-msgstr "Field bị ẩn với user"
+msgid "Hidden Fields"
+msgstr "Field bị ẩn"
 
 #: src/features/security/security.js:157
 msgid "No field is restricted to groups."
@@ -951,13 +963,21 @@ msgid "visible"
 msgstr "thấy"
 
 #: src/features/security/security.js:165
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "hidden"
 msgstr "ẩn"
 
+#: src/features/security/security.js:167
+msgid "Fields restricted to groups, and whether the selected user can see each one."
+msgstr "Các field chỉ dành cho một số group, và user đang chọn có thấy từng field hay không."
+
 #: src/features/security/security.js:169
-msgid "Model configuration audit"
-msgstr "Audit cấu hình model"
+msgid "Model Audit"
+msgstr "Kiểm tra model"
+
+#: src/features/security/security.js:172
+msgid "The model's security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user."
+msgstr "Cấu hình bảo mật của model: ACL không có group hoặc cấp cho user portal / public, thiếu rule đa công ty, field có vẻ nhạy cảm mà user nào cũng xem được."
 
 #: src/features/security/security.js:176
 msgid "Instance"
@@ -984,8 +1004,8 @@ msgid "Become Superuser"
 msgstr "Chuyển sang superuser"
 
 #: src/features/security/security.js:192
-msgid "System parameters (ir.config_parameter)"
-msgstr "Tham số hệ thống (ir.config_parameter)"
+msgid "System Parameters"
+msgstr "Tham số hệ thống"
 
 #: src/features/security/security.js:203
 msgid "Filter key / value"
@@ -1011,8 +1031,12 @@ msgstr "Giá trị"
 msgid "No parameter."
 msgstr "Không có tham số."
 
+#: src/features/security/security.js:204
+msgid "ir.config_parameter: secret-looking values are masked, a click on one still copies it."
+msgstr "ir.config_parameter: giá trị có vẻ bí mật được che, bấm vào vẫn copy được giá trị thật."
+
 #: src/features/security/security.js:206
-msgid "Instance check"
+msgid "Instance Check"
 msgstr "Kiểm tra instance"
 
 #: src/features/security/security.js:209
@@ -1020,7 +1044,7 @@ msgid "Check failed"
 msgstr "Không kiểm tra được"
 
 #: src/features/security/security.js:214
-msgid "Raw data"
+msgid "Raw Data"
 msgstr "Dữ liệu thô"
 
 #: src/features/security/security.js:215
@@ -1163,16 +1187,13 @@ msgid "Active:"
 msgstr "Đang bật:"
 
 #: src/features/translations/translations.js:35
-msgid "Activate / Update Languages"
-msgstr "Kích hoạt / cập nhật ngôn ngữ"
+#: src/features/translations/translations.js:38
+msgid "Languages"
+msgstr "Ngôn ngữ"
 
 #: src/features/translations/translations.js:42
 msgid "Activate / Update"
 msgstr "Kích hoạt / cập nhật"
-
-#: src/features/translations/translations.js:46
-msgid "Languages"
-msgstr "Ngôn ngữ"
 
 #: src/features/translations/translations.js:48
 msgid "Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps."
@@ -1201,6 +1222,10 @@ msgstr "kích hoạt %s"
 #: src/features/translations/translations.js:64
 msgid "update %s"
 msgstr "cập nhật %s"
+
+#: src/features/translations/translations.js:81
+msgid "Activate languages and load, or reload, their terms for every installed app (Odoo's Add Languages wizard)."
+msgstr "Bật ngôn ngữ và tải (hoặc tải lại) bản dịch của mọi app đã cài (wizard Add Languages của Odoo)."
 
 #: src/features/translations/translations.js:86
 msgid "Apps To Export"
@@ -1272,8 +1297,8 @@ msgid "No form view is open."
 msgstr "Không có form view đang mở."
 
 #: src/features/view/view.js:16
-msgid "Inherited views — %s"
-msgstr "View kế thừa — %s"
+msgid "Inherited Views"
+msgstr "View kế thừa"
 
 #: src/features/view/view.js:30
 msgid "inactive"
@@ -1288,8 +1313,12 @@ msgid "Name · id · file"
 msgstr "Tên · id · file"
 
 #: src/features/view/view.js:32
-msgid "Combined arch (view #%s)"
+msgid "Combined Arch (View #%s)"
 msgstr "Arch đã gộp (view #%s)"
+
+#: src/features/view/view.js:33
+msgid "Every %s view of this model as an inheritance tree (the one shown highlighted, inactive ones included), and the combined arch."
+msgstr "Mọi view %s của model này dạng cây kế thừa (view đang hiển thị được tô sáng, có cả view không active), và arch đã gộp."
 
 #: src/features/view/view.js:37
 msgid "Action"
@@ -1300,70 +1329,74 @@ msgid "Open Action Record ↗"
 msgstr "Mở bản ghi action ↗"
 
 #: src/features/view/view.js:47
-msgid "Full action (JSON)"
+msgid "Full Action (JSON)"
 msgstr "Action đầy đủ (JSON)"
 
 #: src/features/view/view.js:51
-msgid "Form fields — invisible / readonly / required"
-msgstr "Field trên form — invisible / readonly / required"
+msgid "Form Fields"
+msgstr "Field trên form"
 
-#: src/features/view/view.js:53
-msgid "Context & domain"
+#: src/features/view/view.js:52
+msgid "invisible / readonly / required of every field of the form, evaluated on the record shown."
+msgstr "invisible / readonly / required của mọi field trên form, tính theo record đang hiển thị."
+
+#: src/features/view/view.js:54
+msgid "Context & Domain"
 msgstr "Context & domain"
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
 msgid "Context"
 msgstr "Context"
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
 msgid "Domain"
 msgstr "Domain"
 
-#: src/features/view/view.js:59
+#: src/features/view/view.js:60
 msgid "Cannot read the form."
 msgstr "Không đọc được form."
 
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "not shown"
 msgstr "không hiển thị"
 
-#: src/features/view/view.js:71
+#: src/features/view/view.js:72
 msgid "The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible."
 msgstr "Field không tự ẩn nhưng không có trên màn hình: nằm trong tab notebook khác hoặc node cha (group/page/div) bị invisible."
 
-#: src/features/view/view.js:73
-msgid "Values used in the expressions"
-msgstr "Giá trị dùng trong biểu thức"
-
 #: src/features/view/view.js:74
-msgid "Full node"
+msgid "Expression Values"
+msgstr "Giá trị trong biểu thức"
+
+#: src/features/view/view.js:75
+msgid "Full Node"
 msgstr "Node đầy đủ"
 
-#: src/features/view/view.js:77
+#: src/features/view/view.js:78
 msgid "Filter name / label / widget"
 msgstr "Lọc tên / nhãn / widget"
 
-#: src/features/view/view.js:79
+#: src/features/view/view.js:80
 msgid "Click a field on the Odoo page (Esc to cancel)"
 msgstr "Click vào một field trên trang Odoo (Esc để huỷ)"
 
-#: src/features/view/view.js:80
+#: src/features/view/view.js:81
 msgid "Picking… (Esc to cancel)"
 msgstr "Đang chọn… (Esc để huỷ)"
 
-#: src/features/view/view.js:81
+#: src/features/view/view.js:82
 msgid "⌖ Pick on Page"
 msgstr "⌖ Chọn trên trang"
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Field · widget · label · state"
 msgstr "Field · widget · nhãn · trạng thái"
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Modifier expressions"
 msgstr "Biểu thức modifier"
 
-#: src/features/view/view.js:89
+#: src/features/view/view.js:90
 msgid "The form is read-only: every field is readonly."
 msgstr "Form đang ở chế độ chỉ đọc: mọi field đều readonly."
 
@@ -1506,6 +1539,6 @@ msgstr "Không có tab đang mở."
 msgid "Open /odoo/%s"
 msgstr "Mở /odoo/%s"
 
-#: src/shared/ui.js:104
+#: src/shared/ui.js:121
 msgid "Click to copy"
 msgstr "Bấm để copy"

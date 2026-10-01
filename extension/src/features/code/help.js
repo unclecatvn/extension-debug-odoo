@@ -38,7 +38,7 @@ function copyButton(text) {
 export function help() {
   const list = (items) => el('ul', { class: 'help-list' }, items.map(([name, desc]) => el('li', {}, el('code', {}, name), ': ', desc)));
   return el('div', { class: 'code-help' },
-    el('div', { class: 'help-title' }, _t('Available variables:')),
+    el('div', { class: 'help-title' }, _t('Available Variables:')),
     list([
       ['env', _t("environment of the logged-in user, with their access rights and record rules; env['res.partner'] is a void recordset")],
       ['env.user, env.company, env.companies', _t('current user, current company, active companies')],

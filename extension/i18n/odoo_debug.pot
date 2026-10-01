@@ -303,7 +303,7 @@ msgid "Copied"
 msgstr ""
 
 #: src/features/code/help.js:41
-msgid "Available variables:"
+msgid "Available Variables:"
 msgstr ""
 
 #: src/features/code/help.js:43
@@ -529,7 +529,7 @@ msgid "No SQL recorded."
 msgstr ""
 
 #: src/features/perf/perf.js:98
-msgid "Full SQL + stack"
+msgid "Full SQL + Stack"
 msgstr ""
 
 #: src/features/perf/perf.js:100
@@ -537,7 +537,11 @@ msgid "%s queries · SQL %s / total %s · Python ≈ %s"
 msgstr ""
 
 #: src/features/perf/perf.js:102
-msgid "Repeated queries — N+1 suspects (%s)"
+msgid "Repeated Queries (%s)"
+msgstr ""
+
+#: src/features/perf/perf.js:102
+msgid "The same query run several times: N+1 suspects."
 msgstr ""
 
 #: src/features/perf/perf.js:102
@@ -554,7 +558,7 @@ msgid "✓ No repeated query."
 msgstr ""
 
 #: src/features/perf/perf.js:105
-msgid "Slowest queries (%s)"
+msgid "Slowest Queries (%s)"
 msgstr ""
 
 #: src/features/perf/perf.js:105
@@ -566,7 +570,7 @@ msgid "This screen is not bound to a model."
 msgstr ""
 
 #: src/features/record/record.js:11
-msgid "Identity & metadata"
+msgid "Identity"
 msgstr ""
 
 #: src/features/record/record.js:16
@@ -579,6 +583,10 @@ msgstr ""
 
 #: src/features/record/record.js:18
 msgid "last updated by"
+msgstr ""
+
+#: src/features/record/record.js:20
+msgid "Model and id, xmlids (noupdate flagged), who created and last updated the record, and when."
 msgstr ""
 
 #: src/features/record/record.js:22
@@ -684,8 +692,8 @@ msgid "Invalid JSON: %s"
 msgstr ""
 
 #: src/features/rpc/rpc.js:91
-#: src/shared/ui.js:87
-#: src/shared/ui.js:149
+#: src/shared/ui.js:104
+#: src/shared/ui.js:166
 msgid "Loading…"
 msgstr ""
 
@@ -903,15 +911,15 @@ msgid "Groups"
 msgstr ""
 
 #: src/features/security/security.js:134
-msgid "User risks"
+msgid "User Risks"
 msgstr ""
 
 #: src/features/security/security.js:143
-msgid "Why allowed / blocked"
+msgid "Why Allowed / Blocked"
 msgstr ""
 
 #: src/features/security/security.js:145
-msgid "ACL (ir.model.access) — green = applies to the user"
+msgid "ACL"
 msgstr ""
 
 #: src/features/security/security.js:147
@@ -926,8 +934,12 @@ msgstr ""
 msgid "(all users)"
 msgstr ""
 
+#: src/features/security/security.js:152
+msgid "ir.model.access: the rows in green apply to the user."
+msgstr ""
+
 #: src/features/security/security.js:154
-msgid "Fields hidden from the user"
+msgid "Hidden Fields"
 msgstr ""
 
 #: src/features/security/security.js:157
@@ -951,12 +963,20 @@ msgid "visible"
 msgstr ""
 
 #: src/features/security/security.js:165
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "hidden"
 msgstr ""
 
+#: src/features/security/security.js:167
+msgid "Fields restricted to groups, and whether the selected user can see each one."
+msgstr ""
+
 #: src/features/security/security.js:169
-msgid "Model configuration audit"
+msgid "Model Audit"
+msgstr ""
+
+#: src/features/security/security.js:172
+msgid "The model's security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user."
 msgstr ""
 
 #: src/features/security/security.js:176
@@ -984,7 +1004,7 @@ msgid "Become Superuser"
 msgstr ""
 
 #: src/features/security/security.js:192
-msgid "System parameters (ir.config_parameter)"
+msgid "System Parameters"
 msgstr ""
 
 #: src/features/security/security.js:203
@@ -1011,8 +1031,12 @@ msgstr ""
 msgid "No parameter."
 msgstr ""
 
+#: src/features/security/security.js:204
+msgid "ir.config_parameter: secret-looking values are masked, a click on one still copies it."
+msgstr ""
+
 #: src/features/security/security.js:206
-msgid "Instance check"
+msgid "Instance Check"
 msgstr ""
 
 #: src/features/security/security.js:209
@@ -1020,7 +1044,7 @@ msgid "Check failed"
 msgstr ""
 
 #: src/features/security/security.js:214
-msgid "Raw data"
+msgid "Raw Data"
 msgstr ""
 
 #: src/features/security/security.js:215
@@ -1163,15 +1187,12 @@ msgid "Active:"
 msgstr ""
 
 #: src/features/translations/translations.js:35
-msgid "Activate / Update Languages"
+#: src/features/translations/translations.js:38
+msgid "Languages"
 msgstr ""
 
 #: src/features/translations/translations.js:42
 msgid "Activate / Update"
-msgstr ""
-
-#: src/features/translations/translations.js:46
-msgid "Languages"
 msgstr ""
 
 #: src/features/translations/translations.js:48
@@ -1200,6 +1221,10 @@ msgstr ""
 
 #: src/features/translations/translations.js:64
 msgid "update %s"
+msgstr ""
+
+#: src/features/translations/translations.js:81
+msgid "Activate languages and load, or reload, their terms for every installed app (Odoo's Add Languages wizard)."
 msgstr ""
 
 #: src/features/translations/translations.js:86
@@ -1272,7 +1297,7 @@ msgid "No form view is open."
 msgstr ""
 
 #: src/features/view/view.js:16
-msgid "Inherited views — %s"
+msgid "Inherited Views"
 msgstr ""
 
 #: src/features/view/view.js:30
@@ -1288,7 +1313,11 @@ msgid "Name · id · file"
 msgstr ""
 
 #: src/features/view/view.js:32
-msgid "Combined arch (view #%s)"
+msgid "Combined Arch (View #%s)"
+msgstr ""
+
+#: src/features/view/view.js:33
+msgid "Every %s view of this model as an inheritance tree (the one shown highlighted, inactive ones included), and the combined arch."
 msgstr ""
 
 #: src/features/view/view.js:37
@@ -1300,70 +1329,74 @@ msgid "Open Action Record ↗"
 msgstr ""
 
 #: src/features/view/view.js:47
-msgid "Full action (JSON)"
+msgid "Full Action (JSON)"
 msgstr ""
 
 #: src/features/view/view.js:51
-msgid "Form fields — invisible / readonly / required"
+msgid "Form Fields"
 msgstr ""
 
-#: src/features/view/view.js:53
-msgid "Context & domain"
+#: src/features/view/view.js:52
+msgid "invisible / readonly / required of every field of the form, evaluated on the record shown."
 msgstr ""
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
+msgid "Context & Domain"
+msgstr ""
+
+#: src/features/view/view.js:54
 msgid "Context"
 msgstr ""
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
 msgid "Domain"
 msgstr ""
 
-#: src/features/view/view.js:59
+#: src/features/view/view.js:60
 msgid "Cannot read the form."
 msgstr ""
 
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "not shown"
 msgstr ""
 
-#: src/features/view/view.js:71
+#: src/features/view/view.js:72
 msgid "The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible."
 msgstr ""
 
-#: src/features/view/view.js:73
-msgid "Values used in the expressions"
-msgstr ""
-
 #: src/features/view/view.js:74
-msgid "Full node"
+msgid "Expression Values"
 msgstr ""
 
-#: src/features/view/view.js:77
+#: src/features/view/view.js:75
+msgid "Full Node"
+msgstr ""
+
+#: src/features/view/view.js:78
 msgid "Filter name / label / widget"
 msgstr ""
 
-#: src/features/view/view.js:79
+#: src/features/view/view.js:80
 msgid "Click a field on the Odoo page (Esc to cancel)"
 msgstr ""
 
-#: src/features/view/view.js:80
+#: src/features/view/view.js:81
 msgid "Picking… (Esc to cancel)"
 msgstr ""
 
-#: src/features/view/view.js:81
+#: src/features/view/view.js:82
 msgid "⌖ Pick on Page"
 msgstr ""
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Field · widget · label · state"
 msgstr ""
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Modifier expressions"
 msgstr ""
 
-#: src/features/view/view.js:89
+#: src/features/view/view.js:90
 msgid "The form is read-only: every field is readonly."
 msgstr ""
 
@@ -1506,6 +1539,6 @@ msgstr ""
 msgid "Open /odoo/%s"
 msgstr ""
 
-#: src/shared/ui.js:104
+#: src/shared/ui.js:121
 msgid "Click to copy"
 msgstr ""
