@@ -2,7 +2,7 @@
 // the current model for that user (why allowed / blocked, ACLs, hidden fields, audit), and this Odoo (session, system
 // parameters, instance check).
 // odoo.conf itself is never exposed over HTTP by Odoo: it holds admin_passwd and db_password.
-import { rulesFor, modeVerdict, unblockers, ruleEvalContext, auditModel, checkInstance, userRisks } from './logic.js';
+import { rulesFor, modeVerdict, unblockers, ruleEvalContext, auditModel, checkInstance, userRisks, groupTree } from './logic.js';
 import { pageEvalDomains, pageProbe } from './page.js';
 import { MODES, pickGroupField } from '../../shared/odoo.js';
 import { pageGo } from '../../shared/page.js';
@@ -17,16 +17,17 @@ const LETTER = { read: 'R', write: 'W', create: 'C', unlink: 'D' };
 const SECRET = /secret|passw|token|api_?key|private_?key/i;
 const targets = new Map(); // origin → simulated uid (none = the logged-in user); the panel moves between instances
 const trials = new Map(); // origin → Set of group ids being tried on that user: simulated only, written on Apply
+const unfolded = new Set(); // branches opened in the Groups tree (paths of group ids): kept across re-renders (Try, Apply…)
 
 const findings = (list) => list.length
   ? el('ul', { class: 'findings' }, list.map((f) => el('li', { class: f.level }, pill(_t(LABEL[f.level]), f.level), el('span', {}, f.msg))))
   : el('div', { class: 'okline' }, _t('✓ No issue found.'));
 
-/** Every group, with closure(id) → Set of the group + all it implies. */
+/** Every group (direct `implied_ids` too), with closure(id) → Set of the group + all it implies. */
 const groupGraph = () => cached('group graph', async () => {
   const gfields = await fieldsOf('res.groups');
   const impf = ['all_implied_ids', 'trans_implied_ids'].find((f) => f in gfields); // 19 / 18
-  const all = await call('res.groups', 'search_read', [[]], { fields: ['full_name', impf], order: 'full_name' });
+  const all = await call('res.groups', 'search_read', [[]], { fields: ['full_name', 'implied_ids', impf], order: 'full_name' });
   const byId = new Map(all.map((g) => [g.id, g]));
   return { all, impf, byId, closure: (id) => new Set([id, ...(byId.get(id)?.[impf] || [])]) }; // 19 counts the group itself
 });
@@ -216,9 +217,10 @@ export function renderSecurity(s, state) {
   });
 }
 
-/** The user's groups, implied included, the groups being tried, then (while filtering) the groups they don't have:
- * try one (every card below is then simulated with it, nothing written until Apply), or remove a group nothing else
- * implies (removing an implied one is undone by Odoo). Writing needs Access Rights (base.group_erp_manager). */
+/** The user's groups as a tree: the ones given to them at the top (Remove), each group they imply nested inside it (▸ opens
+ * it, a click on the row too; Odoo adds an implied group back if removed, so no Remove there), the groups being tried among them. Typing turns
+ * it into a flat list of every matching group, the ones the user doesn't have too: Try one (every card below is then
+ * simulated with it, nothing written until Apply). Writing needs Access Rights (base.group_erp_manager). */
 async function groupsBlock(t, origin, tryGroup, rerender) {
   const { uid, u, wf, realIds, tried, groupIds } = await t;
   const { all, impf, byId } = await groupGraph();
@@ -227,40 +229,99 @@ async function groupsBlock(t, origin, tryGroup, rerender) {
     if (!realIds.has(g.id)) continue;
     for (const h of g[impf]) if (h !== g.id) impliedBy.set(h, [...(impliedBy.get(h) || []), g.full_name]); // 19 counts the group itself
   }
-  const box = el('div', {});
+  const box = el('div', { class: 'groups-box' });
   const write = (cmds) => call('res.users', 'write', [[uid], { [wf]: cmds }]).then(() => { trials.delete(origin); rerender(); }, (e) => box.append(errBox(e)));
   const names = (ids) => [...ids].map((id) => byId.get(id)?.full_name || id).join(', ');
+  // "Sales / Administrator": the category quiet, the group itself in front (textContent stays the full name)
+  const gname = (id) => {
+    const full = byId.get(id)?.full_name || String(id);
+    const at = full.lastIndexOf(' / ');
+    return el('span', { class: 'gname' }, at > 0 ? el('span', { class: 'cat' }, full.slice(0, at + 3)) : null, full.slice(at > 0 ? at + 3 : 0));
+  };
+  const btn = (label, cls, title, onclick) => el('button', { class: `btn sm ${cls}`, title, onclick }, label);
+  const removeBtn = (id) => btn(_t('Remove'), 'danger', _t('Remove this group from the user'),
+    () => confirm(_t('Remove %s from %s?', byId.get(id).full_name, u.name)) && write([[3, id]]));
+  const stopBtn = (id) => btn('×', 'ghost', _t('Stop trying it'), () => tryGroup(id, false));
+
+  // ---------- tree (nothing typed) ----------
+  const ids = all.filter((g) => groupIds.has(g.id)).map((g) => g.id); // by name
+  const { roots, kidsOf, below } = groupTree(ids, (id) => byId.get(id)?.implied_ids || []);
+  const twisties = new Set(); // of the branches built so far (a branch builds its rows when first opened)
+  const node = (id, path) => {
+    const key = path ? `${path}/${id}` : String(id);
+    const n = below(id);
+    const isTried = tried.has(id);
+    const action = isTried ? stopBtn(id) : !path && realIds.has(id) && !impliedBy.has(id) ? removeBtn(id) : null;
+    const count = n ? pill(`+${n}`) : null;
+    const twisty = n ? el('button', { class: 'twisty', 'aria-expanded': 'false', 'aria-label': _t('Implied groups') }) : el('span', { class: 'twisty' });
+    const row = el('div', { class: `gnode${n ? ' branch' : ''}${realIds.has(id) ? '' : ' via-try'}` }, twisty, gname(id),
+      isTried ? pill(_t('trying'), 'accent') : null, count, el('span', { class: 'grow' }), action);
+    const li = el('li', {}, row);
+    if (!n) return li;
+    count.title = _t('Implies %s groups', n);
+    let kids = null;
+    const setOpen = (open) => {
+      if (open && !kids) li.append(kids = el('ul', { class: 'gtree' }, kidsOf(id).map((k) => node(k, key))));
+      if (kids) kids.hidden = !open;
+      count.hidden = open;
+      twisty.setAttribute('aria-expanded', String(open));
+      if (open) unfolded.add(key); else unfolded.delete(key);
+    };
+    twisty.addEventListener('click', () => { setOpen(twisty.getAttribute('aria-expanded') !== 'true'); syncAll(); });
+    row.addEventListener('click', (e) => { if (!e.target.closest('button')) twisty.click(); }); // the whole row opens it
+    twisties.add(twisty);
+    if (unfolded.has(key)) setOpen(true);
+    return li;
+  };
+  const tree = el('ul', { class: 'gtree root' }, roots.map((id) => node(id, '')));
+  const closed = () => [...twisties].filter((tw) => tw.getAttribute('aria-expanded') !== 'true' && !tw.parentElement.closest('.gtree:not(.root)[hidden]')); // in sight
+  const allBtn = el('button', { class: 'btn sm ghost', onclick: () => {
+    if (allBtn.dataset.open === '1') { for (const tw of twisties) if (tw.getAttribute('aria-expanded') === 'true') tw.click(); return; }
+    for (let c = closed(); c.length; c = closed()) c.forEach((tw) => tw.click()); // opening builds the next level
+  } });
+  const syncAll = () => { // "Expand all" until every branch in sight is open
+    const open = twisties.size && !closed().length;
+    allBtn.dataset.open = open ? '1' : '';
+    allBtn.textContent = open ? _t('Collapse all') : _t('Expand all');
+    allBtn.hidden = !twisties.size;
+  };
+  syncAll();
+
+  // ---------- flat list (while typing): every matching group, the ones to try too ----------
   const row = (g) => {
     const held = realIds.has(g.id), trying = !held && groupIds.has(g.id);
     const by = impliedBy.get(g.id);
-    const action = held ? (by ? pill(_t('implied')) : el('button', { class: 'chip', onclick: () => confirm(_t('Remove %s from %s?', g.full_name, u.name)) && write([[3, g.id]]) }, _t('Remove')))
-      : !trying ? el('button', { class: 'chip', title: _t('Simulate this group below, nothing is written'), onclick: () => tryGroup(g.id) }, _t('Try'))
-      : tried.has(g.id) ? el('button', { class: 'chip', title: _t('Stop trying it'), onclick: () => tryGroup(g.id, false) }, '×')
-      : pill(_t('implied'));
+    const action = held ? (by ? pill(_t('implied')) : removeBtn(g.id))
+      : !trying ? btn(_t('Try'), 'primary', _t('Simulate this group below, nothing is written'), () => tryGroup(g.id))
+      : tried.has(g.id) ? stopBtn(g.id) : pill(_t('implied'));
     if (by) action.title = _t('Implied by %s', by.join(', '));
-    const li = el('li', { class: held ? '' : trying ? 'trying' : 'addable' }, splitRow(el('span', {}, g.full_name, trying ? pill(_t('trying'), 'accent') : null), action));
+    const li = el('li', { class: held ? '' : trying ? 'trying' : 'addable' }, splitRow(el('span', { class: 'grow' }, gname(g.id), trying ? pill(_t('trying'), 'accent') : null), action));
     li.dataset.q = g.full_name.toLowerCase();
-    return { li, shown: held || trying };
+    return li;
   };
-  // held first, then tried, then the rest
-  const rank = (g) => (realIds.has(g.id) ? 0 : groupIds.has(g.id) ? 1 : 2);
+  const rank = (g) => (realIds.has(g.id) ? 0 : groupIds.has(g.id) ? 1 : 2); // held first, then tried, then the rest
   const rows = [...all].sort((a, b) => rank(a) - rank(b)).map(row);
-  const shown = rows.filter((r) => r.shown).length;
-  const count = el('span', { class: 'muted count-note' }, _t('%s groups', shown));
+  const list = el('ul', { class: 'list groups', hidden: true }, rows);
+
+  const count = el('span', { class: 'muted count-note' }, _t('%s groups', ids.length));
+  const note = el('p', { class: 'note pad' }, _t('Top level: the groups given to the user. Click one to see the groups it implies.'));
   const input = el('input', {
-    type: 'search', placeholder: _t('Filter or try a group…'), 'aria-label': _t('Filter or try a group…'),
+    type: 'search', placeholder: _t('Find a group to try…'), 'aria-label': _t('Find a group to try…'),
     oninput: () => {
       const q = input.value.trim().toLowerCase();
-      for (const r of rows) r.li.hidden = !r.li.dataset.q.includes(q) || (!r.shown && !q); // groups to try: only while searching
-      count.textContent = q ? _t('%s/%s groups', rows.filter((r) => r.shown && !r.li.hidden).length, shown) : _t('%s groups', shown);
+      for (const li of rows) li.hidden = !li.dataset.q.includes(q);
+      list.hidden = !q;
+      tree.hidden = !!q;
+      allBtn.hidden = !!q || !twisties.size;
+      count.textContent = q ? _t('%s found', rows.filter((li) => !li.hidden).length) : _t('%s groups', ids.length);
+      note.hidden = !!q;
     },
   });
-  for (const r of rows) r.li.hidden = !r.shown;
   const bar = tried.size ? el('div', { class: 'trybar' },
     el('span', { class: 'grow' }, _t('Trying %s: every card below is simulated with it.', names(tried))),
-    el('button', { class: 'chip', onclick: () => confirm(_t('Add %s to %s?', names(tried), u.name)) && write([...tried].map((id) => [4, id])) }, _t('Apply')),
-    el('button', { class: 'chip', onclick: () => { trials.delete(origin); rerender(); } }, _t('Discard'))) : null;
-  box.append(bar || '', el('div', { class: 'toolbar' }, input, count), el('ul', { class: 'list groups' }, rows.map((r) => r.li)));
+    btn(_t('Apply'), 'solid', '', () => confirm(_t('Add %s to %s?', names(tried), u.name)) && write([...tried].map((id) => [4, id]))),
+    btn(_t('Discard'), '', '', () => { trials.delete(origin); rerender(); })) : null;
+  box.append(bar || '', el('div', { class: 'toolbar' }, input, allBtn, count), tree, list, note);
   return box;
 }
 

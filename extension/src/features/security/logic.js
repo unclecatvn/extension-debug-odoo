@@ -147,3 +147,18 @@ export function userRisks(u, has) {
   if (u.active === false) add('info', _t('User is archived.'));
   return out;
 }
+
+/** The groups `ids` (sorted) as a tree, `implied(id)` → the ids it directly implies: `roots` (implied by none of the
+ * others), `kidsOf(id)` (the ones of `ids` it directly implies) and `below(id)` (how many it implies, all levels). A group
+ * implied by several sits under each of them: the tree is built as it is opened. */
+export function groupTree(ids, implied) {
+  const kidsOf = (id) => { const d = new Set(implied(id)); return ids.filter((c) => c !== id && d.has(c)); };
+  const under = new Set(ids.flatMap(kidsOf));
+  const below = (id) => {
+    const seen = new Set();
+    const walk = (g) => kidsOf(g).forEach((k) => { if (!seen.has(k)) { seen.add(k); walk(k); } });
+    walk(id);
+    return seen.size;
+  };
+  return { roots: ids.filter((id) => !under.has(id)), kidsOf, below };
+}

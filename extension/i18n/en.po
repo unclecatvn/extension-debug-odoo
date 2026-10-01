@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/features/apps/apps.js:16
-#: src/features/security/security.js:193
+#: src/features/security/security.js:194
 #: src/features/translations/translations.js:36
 msgid "Needs Settings rights (base.group_system)."
 msgstr "Needs Settings rights (base.group_system)."
@@ -142,7 +142,7 @@ msgid "Not Installed"
 msgstr "Not Installed"
 
 #: src/features/apps/searchbar.js:12
-#: src/panel/panel.html:27
+#: src/panel/panel.html:31
 msgid "Apps"
 msgstr "Apps"
 
@@ -172,12 +172,12 @@ msgstr "or"
 
 #: src/features/apps/searchbar.js:38
 #: src/features/apps/searchbar.js:38
-#: src/features/security/security.js:236
+#: src/features/security/security.js:242
 msgid "Remove"
 msgstr "Remove"
 
 #: src/features/code/code.js:47
-#: src/panel/panel.html:24
+#: src/panel/panel.html:28
 msgid "Code"
 msgstr "Code"
 
@@ -472,7 +472,7 @@ msgid "Views"
 msgstr "Views"
 
 #: src/features/menus/logic.js:10
-#: src/panel/panel.html:28
+#: src/panel/panel.html:32
 msgid "Menus"
 msgstr "Menus"
 
@@ -939,316 +939,341 @@ msgstr "LOW"
 msgid "INFO"
 msgstr "INFO"
 
-#: src/features/security/security.js:23
+#: src/features/security/security.js:24
 msgid "✓ No issue found."
 msgstr "✓ No issue found."
 
-#: src/features/security/security.js:72
-#: src/features/security/security.js:72
+#: src/features/security/security.js:73
+#: src/features/security/security.js:73
 msgid "Search a user by name or login…"
 msgstr "Search a user by name or login…"
 
-#: src/features/security/security.js:102
+#: src/features/security/security.js:103
 msgid "Log in as %s in an incognito window"
 msgstr "Log in as %s in an incognito window"
 
-#: src/features/security/security.js:120
+#: src/features/security/security.js:121
 msgid "User"
 msgstr "User"
 
-#: src/features/security/security.js:126
+#: src/features/security/security.js:127
 msgid "My User"
 msgstr "My User"
 
-#: src/features/security/security.js:127
+#: src/features/security/security.js:128
 msgid "me"
 msgstr "me"
 
-#: src/features/security/security.js:128
+#: src/features/security/security.js:129
 msgid "%s · #%s · %s (%s companies) · %s groups"
 msgstr "%s · #%s · %s (%s companies) · %s groups"
 
-#: src/features/security/security.js:129
+#: src/features/security/security.js:130
 msgid "Simulates the selected user's rights without logging in as them (reading other users' groups needs admin rights)."
 msgstr "Simulates the selected user's rights without logging in as them (reading other users' groups needs admin rights)."
 
-#: src/features/security/security.js:130
+#: src/features/security/security.js:131
 msgid "Click their name to log in as them in an incognito window: your session here stays."
 msgstr "Click their name to log in as them in an incognito window: your session here stays."
 
-#: src/features/security/security.js:133
+#: src/features/security/security.js:134
 msgid "Groups"
 msgstr "Groups"
 
-#: src/features/security/security.js:134
+#: src/features/security/security.js:135
 msgid "User Risks"
 msgstr "User Risks"
 
-#: src/features/security/security.js:143
+#: src/features/security/security.js:144
 msgid "Why Allowed / Blocked"
 msgstr "Why Allowed / Blocked"
 
-#: src/features/security/security.js:145
+#: src/features/security/security.js:146
 msgid "ACL"
 msgstr "ACL"
 
-#: src/features/security/security.js:147
+#: src/features/security/security.js:148
 msgid "No ACL."
 msgstr "No ACL."
 
-#: src/features/security/security.js:148
+#: src/features/security/security.js:149
 msgid "ACL / group"
 msgstr "ACL / group"
 
-#: src/features/security/security.js:150
+#: src/features/security/security.js:151
 msgid "(all users)"
 msgstr "(all users)"
 
-#: src/features/security/security.js:152
+#: src/features/security/security.js:153
 msgid "ir.model.access: the rows in green apply to the user."
 msgstr "ir.model.access: the rows in green apply to the user."
 
-#: src/features/security/security.js:154
+#: src/features/security/security.js:155
 msgid "Hidden Fields"
 msgstr "Hidden Fields"
 
-#: src/features/security/security.js:157
+#: src/features/security/security.js:158
 msgid "No field is restricted to groups."
 msgstr "No field is restricted to groups."
 
-#: src/features/security/security.js:162
+#: src/features/security/security.js:163
 msgid "Real groups only: the tried groups are not counted here."
 msgstr "Real groups only: the tried groups are not counted here."
 
-#: src/features/security/security.js:163
+#: src/features/security/security.js:164
 msgid "Field · label · for this user"
 msgstr "Field · label · for this user"
 
-#: src/features/security/security.js:163
+#: src/features/security/security.js:164
 msgid "Allowed groups"
 msgstr "Allowed groups"
 
-#: src/features/security/security.js:165
+#: src/features/security/security.js:166
 msgid "visible"
 msgstr "visible"
 
-#: src/features/security/security.js:165
+#: src/features/security/security.js:166
 #: src/features/view/view.js:66
 msgid "hidden"
 msgstr "hidden"
 
-#: src/features/security/security.js:167
+#: src/features/security/security.js:168
 msgid "Fields restricted to groups, and whether the selected user can see each one."
 msgstr "Fields restricted to groups, and whether the selected user can see each one."
 
-#: src/features/security/security.js:169
+#: src/features/security/security.js:170
 msgid "Model Audit"
 msgstr "Model Audit"
 
-#: src/features/security/security.js:172
+#: src/features/security/security.js:173
 msgid "The model's security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user."
 msgstr "The model's security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user."
 
-#: src/features/security/security.js:176
+#: src/features/security/security.js:177
 msgid "Instance"
 msgstr "Instance"
 
-#: src/features/security/security.js:177
+#: src/features/security/security.js:178
 msgid "Session"
 msgstr "Session"
 
-#: src/features/security/security.js:184
+#: src/features/security/security.js:185
 msgid "Companies"
 msgstr "Companies"
 
-#: src/features/security/security.js:186
+#: src/features/security/security.js:187
 msgid "Odoo's built-in /web/become route, base.group_system only"
 msgstr "Odoo's built-in /web/become route, base.group_system only"
 
-#: src/features/security/security.js:187
+#: src/features/security/security.js:188
 msgid "Switch the current session to superuser (bypasses every rule)?"
 msgstr "Switch the current session to superuser (bypasses every rule)?"
 
-#: src/features/security/security.js:188
+#: src/features/security/security.js:189
 msgid "Become Superuser"
 msgstr "Become Superuser"
 
-#: src/features/security/security.js:192
+#: src/features/security/security.js:193
 msgid "System Parameters"
 msgstr "System Parameters"
 
-#: src/features/security/security.js:203
+#: src/features/security/security.js:204
 msgid "Filter key / value"
 msgstr "Filter key / value"
 
-#: src/features/security/security.js:203
+#: src/features/security/security.js:204
 msgid "%s parameters"
 msgstr "%s parameters"
 
-#: src/features/security/security.js:203
+#: src/features/security/security.js:204
 msgid "%s/%s parameters"
 msgstr "%s/%s parameters"
 
-#: src/features/security/security.js:203
+#: src/features/security/security.js:204
 msgid "Key"
 msgstr "Key"
 
-#: src/features/security/security.js:203
+#: src/features/security/security.js:204
 msgid "Value"
 msgstr "Value"
 
-#: src/features/security/security.js:203
+#: src/features/security/security.js:204
 msgid "No parameter."
 msgstr "No parameter."
 
-#: src/features/security/security.js:204
+#: src/features/security/security.js:205
 msgid "ir.config_parameter: secret-looking values are masked, a click on one still copies it."
 msgstr "ir.config_parameter: secret-looking values are masked, a click on one still copies it."
 
-#: src/features/security/security.js:206
+#: src/features/security/security.js:207
 msgid "Instance Check"
 msgstr "Instance Check"
 
-#: src/features/security/security.js:209
+#: src/features/security/security.js:210
 msgid "Check failed"
 msgstr "Check failed"
 
-#: src/features/security/security.js:214
+#: src/features/security/security.js:215
 msgid "Raw Data"
 msgstr "Raw Data"
 
-#: src/features/security/security.js:215
+#: src/features/security/security.js:216
 msgid "Check Again"
 msgstr "Check Again"
 
-#: src/features/security/security.js:236
-#: src/features/security/security.js:239
-msgid "implied"
-msgstr "implied"
+#: src/features/security/security.js:242
+msgid "Remove this group from the user"
+msgstr "Remove this group from the user"
 
-#: src/features/security/security.js:236
+#: src/features/security/security.js:243
 msgid "Remove %s from %s?"
 msgstr "Remove %s from %s?"
 
-#: src/features/security/security.js:237
-msgid "Simulate this group below, nothing is written"
-msgstr "Simulate this group below, nothing is written"
-
-#: src/features/security/security.js:237
-msgid "Try"
-msgstr "Try"
-
-#: src/features/security/security.js:238
+#: src/features/security/security.js:244
 msgid "Stop trying it"
 msgstr "Stop trying it"
 
-#: src/features/security/security.js:240
-msgid "Implied by %s"
-msgstr "Implied by %s"
+#: src/features/security/security.js:256
+msgid "Implied groups"
+msgstr "Implied groups"
 
-#: src/features/security/security.js:241
+#: src/features/security/security.js:258
+#: src/features/security/security.js:298
 msgid "trying"
 msgstr "trying"
 
-#: src/features/security/security.js:249
-#: src/features/security/security.js:255
+#: src/features/security/security.js:261
+msgid "Implies %s groups"
+msgstr "Implies %s groups"
+
+#: src/features/security/security.js:285
+msgid "Collapse all"
+msgstr "Collapse all"
+
+#: src/features/security/security.js:285
+msgid "Expand all"
+msgstr "Expand all"
+
+#: src/features/security/security.js:294
+#: src/features/security/security.js:296
+msgid "implied"
+msgstr "implied"
+
+#: src/features/security/security.js:295
+msgid "Try"
+msgstr "Try"
+
+#: src/features/security/security.js:295
+msgid "Simulate this group below, nothing is written"
+msgstr "Simulate this group below, nothing is written"
+
+#: src/features/security/security.js:297
+msgid "Implied by %s"
+msgstr "Implied by %s"
+
+#: src/features/security/security.js:306
+#: src/features/security/security.js:316
 msgid "%s groups"
 msgstr "%s groups"
 
-#: src/features/security/security.js:251
-#: src/features/security/security.js:251
-msgid "Filter or try a group…"
-msgstr "Filter or try a group…"
+#: src/features/security/security.js:307
+msgid "Top level: the groups given to the user. Click one to see the groups it implies."
+msgstr "Top level: the groups given to the user. Click one to see the groups it implies."
 
-#: src/features/security/security.js:255
-msgid "%s/%s groups"
-msgstr "%s/%s groups"
+#: src/features/security/security.js:309
+#: src/features/security/security.js:309
+msgid "Find a group to try…"
+msgstr "Find a group to try…"
 
-#: src/features/security/security.js:260
+#: src/features/security/security.js:316
+msgid "%s found"
+msgstr "%s found"
+
+#: src/features/security/security.js:321
 msgid "Trying %s: every card below is simulated with it."
 msgstr "Trying %s: every card below is simulated with it."
 
-#: src/features/security/security.js:261
-msgid "Add %s to %s?"
-msgstr "Add %s to %s?"
-
-#: src/features/security/security.js:261
+#: src/features/security/security.js:322
 msgid "Apply"
 msgstr "Apply"
 
-#: src/features/security/security.js:262
+#: src/features/security/security.js:322
+msgid "Add %s to %s?"
+msgstr "Add %s to %s?"
+
+#: src/features/security/security.js:323
 msgid "Discard"
 msgstr "Discard"
 
-#: src/features/security/security.js:282
+#: src/features/security/security.js:343
 msgid "no result"
 msgstr "no result"
 
-#: src/features/security/security.js:283
+#: src/features/security/security.js:344
 msgid "cannot evaluate: %s"
 msgstr "cannot evaluate: %s"
 
-#: src/features/security/security.js:286
+#: src/features/security/security.js:347
 msgid "You cannot read this record yourself, so its rules cannot be checked."
 msgstr "You cannot read this record yourself, so its rules cannot be checked."
 
-#: src/features/security/security.js:300
+#: src/features/security/security.js:361
 msgid "Try:"
 msgstr "Try:"
 
-#: src/features/security/security.js:301
+#: src/features/security/security.js:362
 msgid "Also adds %s"
 msgstr "Also adds %s"
 
-#: src/features/security/security.js:302
+#: src/features/security/security.js:363
 msgid "No single group allows it."
 msgstr "No single group allows it."
 
-#: src/features/security/security.js:306
+#: src/features/security/security.js:367
 msgid "server ✓"
 msgstr "server ✓"
 
-#: src/features/security/security.js:306
+#: src/features/security/security.js:367
 msgid "server ✗"
 msgstr "server ✗"
 
-#: src/features/security/security.js:306
+#: src/features/security/security.js:367
 msgid "server ?"
 msgstr "server ?"
 
-#: src/features/security/security.js:307
+#: src/features/security/security.js:368
 msgid "has_access, run by the server as you"
 msgstr "has_access, run by the server as you"
 
-#: src/features/security/security.js:310
+#: src/features/security/security.js:371
 msgid "ALLOWED"
 msgstr "ALLOWED"
 
-#: src/features/security/security.js:310
+#: src/features/security/security.js:371
 msgid "BLOCKED"
 msgstr "BLOCKED"
 
-#: src/features/security/security.js:310
+#: src/features/security/security.js:371
 msgid "UNKNOWN"
 msgstr "UNKNOWN"
 
-#: src/features/security/security.js:318
+#: src/features/security/security.js:379
 msgid "not applicable"
 msgstr "not applicable"
 
-#: src/features/security/security.js:327
+#: src/features/security/security.js:388
 msgid "Rule · operations · result"
 msgstr "Rule · operations · result"
 
-#: src/features/security/security.js:327
+#: src/features/security/security.js:388
 msgid "Groups · domain"
 msgstr "Groups · domain"
 
-#: src/features/security/security.js:328
+#: src/features/security/security.js:389
 msgid "This model has no record rule."
 msgstr "This model has no record rule."
 
-#: src/features/security/security.js:330
+#: src/features/security/security.js:391
 msgid "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 msgstr "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 
@@ -1478,6 +1503,10 @@ msgstr "The current tab is not an Odoo page."
 msgid "Not an Odoo page"
 msgstr "Not an Odoo page"
 
+#: src/panel/main.js:129
+msgid "Back into the Page"
+msgstr "Back into the Page"
+
 #: src/panel/panel.html:14
 msgid "Connecting…"
 msgstr "Connecting…"
@@ -1487,43 +1516,51 @@ msgstr "Connecting…"
 msgid "Reload Data"
 msgstr "Reload Data"
 
-#: src/panel/panel.html:17
-msgid "Minimize (the Odoo Debug button reopens it)"
-msgstr "Minimize (the Odoo Debug button reopens it)"
+#: src/panel/panel.html:19
+msgid "Open in Its Own Window (you stay on this page)"
+msgstr "Open in Its Own Window (you stay on this page)"
 
-#: src/panel/panel.html:17
-msgid "Minimize"
-msgstr "Minimize"
+#: src/panel/panel.html:19
+msgid "Open in Its Own Window"
+msgstr "Open in Its Own Window"
 
-#: src/panel/panel.html:18
+#: src/panel/panel.html:20
 msgid "Full Screen (Esc to exit)"
 msgstr "Full Screen (Esc to exit)"
 
-#: src/panel/panel.html:18
+#: src/panel/panel.html:20
 msgid "Full Screen"
 msgstr "Full Screen"
 
 #: src/panel/panel.html:21
+msgid "Minimize (the Odoo Debug button reopens it)"
+msgstr "Minimize (the Odoo Debug button reopens it)"
+
+#: src/panel/panel.html:21
+msgid "Minimize"
+msgstr "Minimize"
+
+#: src/panel/panel.html:25
 msgid "Record"
 msgstr "Record"
 
-#: src/panel/panel.html:22
+#: src/panel/panel.html:26
 msgid "View"
 msgstr "View"
 
-#: src/panel/panel.html:23
+#: src/panel/panel.html:27
 msgid "RPC"
 msgstr "RPC"
 
-#: src/panel/panel.html:25
+#: src/panel/panel.html:29
 msgid "Security"
 msgstr "Security"
 
-#: src/panel/panel.html:26
+#: src/panel/panel.html:30
 msgid "i18n"
 msgstr "i18n"
 
-#: src/panel/panel.html:29
+#: src/panel/panel.html:33
 msgid "Perf"
 msgstr "Perf"
 
@@ -1532,32 +1569,36 @@ msgid "This page"
 msgstr "This page"
 
 #: src/popup/popup.html:19
+msgid "Open the Panel in Its Own Window"
+msgstr "Open the Panel in Its Own Window"
+
 #: src/popup/popup.html:20
+#: src/popup/popup.html:21
 msgid "Debug Mode"
 msgstr "Debug Mode"
 
-#: src/popup/popup.html:21
+#: src/popup/popup.html:22
 msgid "Keep it on for this Odoo"
 msgstr "Keep it on for this Odoo"
 
-#: src/popup/popup.html:24
+#: src/popup/popup.html:25
 msgid "Language"
 msgstr "Language"
 
-#: src/popup/popup.html:28
 #: src/popup/popup.html:29
+#: src/popup/popup.html:30
 msgid "Theme"
 msgstr "Theme"
 
-#: src/popup/popup.html:32
+#: src/popup/popup.html:33
 msgid "Shortcuts"
 msgstr "Shortcuts"
 
-#: src/popup/popup.html:33
+#: src/popup/popup.html:34
 msgid "Change"
 msgstr "Change"
 
-#: src/popup/popup.html:35
+#: src/popup/popup.html:36
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 
@@ -1576,6 +1617,10 @@ msgstr "Dark"
 #: src/popup/popup.js:33
 msgid "panel"
 msgstr "panel"
+
+#: src/popup/popup.js:33
+msgid "window"
+msgstr "window"
 
 #: src/popup/popup.js:33
 msgid "debug"

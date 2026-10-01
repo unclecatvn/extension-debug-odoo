@@ -58,6 +58,7 @@ code, pre, .mono { font-family: var(--mono); font-size: 11px; }
 .brand { display: flex; align-items: center; gap: 8px; }
 .brand strong { font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
 .spacer { flex: 1; }
+.win-btns { display: flex; gap: 2px; padding-left: 6px; border-left: 1px solid var(--line); } /* kept together, apart from ⟳ */
 /* segmented control: a sunken track, the chosen option raised on it (popup: debug mode, language) */
 .seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: var(--r); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); }
 .seg button { border: 0; background: none; padding: 3px 10px; border-radius: 6px; font-size: 11px; color: var(--muted); }
@@ -89,6 +90,8 @@ code, pre, .mono { font-family: var(--mono); font-size: 11px; }
 [data-tab=menus] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12h16M4 6h16M4 18h16'/></svg>"); }
 [data-tab=perf] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>"); }
 #refresh { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8'/><path d='M21 3v5h-5'/></svg>"); }
+#popout { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/></svg>"); }
+#popout[aria-pressed=true] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4M12 13h9v8h-9z'/></svg>"); }
 #minimize { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/></svg>"); }
 #full { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7'/></svg>"); }
 #full[aria-pressed=true] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m14 10 7-7M20 10h-6V4M3 21l7-7M4 14h6v6'/></svg>"); }
@@ -164,15 +167,44 @@ input[type=search]:focus, select:focus { outline: 0; border-color: var(--accent)
 .list > li:hover { background: var(--hover); }
 .list > li:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .list > li[hidden] { display: none; }
-.groups > li { cursor: default; } /* Security › Groups: the buttons act, not the row */
+/* small action buttons (Security › Groups…): one height, one shape; primary = accent text, solid = filled, danger = red on hover */
+.btn.sm { padding: 0 9px; font-size: 11px; line-height: 20px; border-radius: 6px; white-space: nowrap; }
+.btn.ghost { color: var(--muted); border-color: transparent; background: none; }
+.btn.ghost:hover { color: var(--fg); background: var(--hover); border-color: transparent; }
+.btn.solid { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn.solid:hover { background: color-mix(in srgb, var(--accent) 88%, var(--fg)); }
+.btn.danger { color: var(--muted); }
+.btn.danger:hover { color: var(--err); background: var(--err-soft); border-color: color-mix(in srgb, var(--err) 35%, var(--line)); }
+/* Security › Groups: a tree of the user's groups, the flat list while searching */
+.groups-box .toolbar .btn { flex: none; }
+.gname { overflow-wrap: anywhere; }
+.gname .cat { color: var(--muted); }
+.gtree { list-style: none; margin: 0; padding: 0; }
+.gtree.root { padding: 4px 0; }
+.gtree .gtree { margin-left: 21px; border-left: 1px solid var(--line); } /* the guide line runs under the parent's twisty */
+.gnode { display: flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 10px 3px 6px; }
+.gtree .gtree .gnode { padding-left: 8px; }
+.gnode:hover { background: var(--hover); }
+.gnode.via-try .gname { color: var(--muted); font-style: italic; } /* only there through a group being tried */
+.gnode > .grow { flex: 1; }
+.gnode .pill[hidden] { display: none; } /* +N: only on a folded branch */
+/* Remove on every row is noise: it shows on the row under the pointer or the keyboard (a touch screen keeps it) */
+@media (hover: hover) { .gnode .btn.danger { opacity: 0; } .gnode:hover .btn.danger, .gnode:focus-within .btn.danger { opacity: 1; } }
+.gnode.branch { cursor: pointer; } /* a click anywhere on it opens its implied groups */
+.twisty { flex: none; width: 18px; height: 18px; padding: 0; border: 0; border-radius: 4px; background: none; display: grid; place-items: center; }
+button.twisty::before { content: ''; width: 5px; height: 5px; border: solid var(--muted); border-width: 0 1.5px 1.5px 0; transform: rotate(-45deg); transition: transform .15s; }
+button.twisty[aria-expanded=true]::before { transform: rotate(45deg); }
+button.twisty:hover { background: var(--hover); }
+button.twisty:focus-visible { outline: 0; box-shadow: var(--ring); }
+.groups > li { cursor: default; } /* the buttons act, not the row */
 .list.groups > li:not([hidden]) { display: block; } /* one line per group, button at the right edge, also in full screen (no 2-column table) */
-.groups > li.addable > .row > .grow { color: var(--muted); } /* a group the user doesn't have */
+.groups > li.addable .gname { color: var(--muted); } /* a group the user doesn't have */
 .groups > li > .row { align-items: center; }
-.groups .chip { padding: 0 8px; font-size: 11px; line-height: 16px; } /* as tall as the implied pill: even rows */
+.groups > li .pill { margin-left: 6px; }
+.groups-box .note { margin: 0; border-top: 1px solid var(--line); }
 .menus .row.split { align-items: center; } /* Menus: a one-line label, ↗ level with it */
-.trybar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--accent-soft); font-size: 11px; } /* Security › Groups: tried groups, not written yet */
-.groups > li.trying .pill { margin-left: 6px; }
-.trybar .chip, .fix .chip { padding: 0 8px; font-size: 11px; line-height: 16px; }
+.trybar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--accent-soft); font-size: 11px; } /* tried groups, not written yet */
+.fix .chip { padding: 0 8px; font-size: 11px; line-height: 16px; }
 .verdict .fix { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 4px; font-size: 11px; color: var(--muted); } /* the groups that would allow a blocked mode */
 /* Rows wrap instead of overflowing: long names, labels and pills move to the next line, nothing is cut. */
 .row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; min-width: 0; }

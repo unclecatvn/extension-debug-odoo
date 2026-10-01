@@ -29,9 +29,33 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
 chrome.commands.onCommand.addListener(async (command, tab) => {
   if (!tab?.id) return;
   if (command === 'toggle-panel') chrome.tabs.sendMessage(tab.id, { type: 'odoo-toggle' }).catch(() => {});
+  if (command === 'popout-panel') popOut(tab.id);
   if (command === 'toggle-debug') {
     chrome.scripting.executeScript({ target: { tabId: tab.id }, world: 'MAIN', func: pageToggleDebug }).catch(() => {});
   }
+});
+
+// ---------- the panel in its own window, bound to an Odoo tab (src/panel/panel.html?tab=<id>): one per tab ----------
+const panelUrl = (tabId) => chrome.runtime.getURL(`src/panel/panel.html?tab=${tabId}`);
+const popoutOf = async (tabId) => (await chrome.runtime.getContexts({ contextTypes: ['TAB'], documentUrls: [panelUrl(tabId)] }))[0];
+
+/** Opens the window of this tab, or brings it to the front when it is open already. */
+async function popOut(tabId) {
+  const open = await popoutOf(tabId);
+  if (open) return chrome.windows.update(open.windowId, { focused: true });
+  // ponytail: a fixed size, wide enough for the full-screen layout (900 px); remember the bounds if asked
+  chrome.windows.create({ url: panelUrl(tabId), type: 'popup', width: 1100, height: 800 });
+}
+
+// from the panel's ⧉ (in the page), the toolbar popup, or the round button while the window is open
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  const tabId = msg?.tabId ?? sender.tab?.id;
+  if (msg?.type === 'odoo-popout' && tabId) popOut(tabId);
+});
+// the Odoo tab closed: its window has nothing left to show
+chrome.tabs.onRemoved.addListener(async (tabId) => {
+  const open = await popoutOf(tabId);
+  if (open) chrome.windows.remove(open.windowId).catch(() => {});
 });
 
 /** Debug off → on, on (or assets) → off. Self-contained: runs in the page. */

@@ -104,7 +104,7 @@ await full(true);
 await show('record', ['Identity', 'Fields']);
 await shot('full-record');
 await show('security', ['Groups', 'User Risks', 'Why Allowed']); // Groups | User risks side by side
-await panel.$eval('#security .toolbar:has(+ .groups) input', (i) => { i.value = 'sales'; i.dispatchEvent(new Event('input')); }); // a few groups, with some to add
+await panel.$eval('#security .groups-box input[type=search]', (i) => { i.value = 'sales'; i.dispatchEvent(new Event('input')); }); // a few groups, with some to add
 await shot('full-security');
 
 // Perf: start the profiler, reload the page (the panel comes back, full screen, on this tab) so its requests are

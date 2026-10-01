@@ -76,23 +76,28 @@ test('Security tab: another user is found by login and picked, then back to mine
   await panel.waitForFunction(() => document.querySelector('#security .user-line b')?.textContent !== 'E2E Demo' && !document.querySelector('#security .picker .chip'), { timeout: 15_000 });
 });
 
-test('Security tab: a group is tried, applied to the user, then removed', async () => {
+test('Security tab: a group is found, tried, applied to the user, then removed from the tree', async () => {
   await click('.tabs [data-tab="security"]');
   await panel.evaluate(() => { window.confirm = () => true; });
   await panel.$$eval('#security details.card', (cs) => { cs.find((c) => c.querySelector('h3').textContent === 'Groups').open = true; });
+  const search = '#security .groups-box input[type=search]';
+  await panel.waitForSelector(search);
+  const find = async (q) => (await panel.waitForSelector(search)).evaluate((i, q) => { i.value = q; i.dispatchEvent(new Event('input')); }, q); // the card may re-render meanwhile
   // the button of the row `name` among `sel` rows, once it shows (the card re-renders after each write)
   const press = (sel, name) => panel.waitForFunction((sel, n) => {
-    const li = [...document.querySelectorAll(`#security .groups > li${sel}`)].find((l) => !l.hidden && l.querySelector('.grow').textContent === n);
-    return li && (li.querySelector('button').click(), true);
+    const row = [...document.querySelectorAll(`#security ${sel}`)].find((r) => r.checkVisibility() && r.querySelector('.gname').textContent === n);
+    return row?.querySelector('.btn') && (row.querySelector('.btn').click(), true);
   }, { timeout: 15_000 }, sel, name);
-  await panel.waitForSelector('#security .groups');
-  const name = await panel.$eval('#security .groups > li.addable .grow', (n) => n.textContent); // a group the user doesn't have
-  await panel.$eval('#security .toolbar:has(+ .groups) input', (i, n) => { i.value = n; i.dispatchEvent(new Event('input')); }, name); // groups to add show while filtering
-  await press('.addable', name); // Try: simulated, nothing written yet
+  await find('a'); // typing: the flat list, the groups the user doesn't have too
+  const name = await panel.$eval('#security .groups-box', (b) => b.querySelector('.gtree.root').hidden && b.querySelector('.groups > li.addable:not([hidden]) .gname').textContent);
+  assert.ok(name, 'the tree makes way for the list');
+  await find(name);
+  await press('.groups > li.addable', name); // Try: simulated, nothing written yet
   await panel.waitForSelector('#security .trybar');
-  await panel.$eval('#security .trybar .chip', (b) => b.click()); // Apply
-  await press(':not(.addable):not(.trying)', name); // added: the user's now, and nothing else implies it
-  await panel.waitForFunction((n) => [...document.querySelectorAll('#security .groups > li.addable .grow')].some((g) => g.textContent === n), { timeout: 15_000 }, name);
+  await (await panel.waitForSelector('#security .trybar .btn.solid')).click(); // Apply
+  await press('.gtree.root > li > .gnode', name); // the user's now, at the top of the tree (nothing else implies it): Remove
+  await find(name);
+  await panel.waitForFunction((n) => [...document.querySelectorAll('#security .groups > li.addable .gname')].some((g) => g.textContent === n), { timeout: 15_000 }, name);
 });
 
 test('RPC tab: the calls the webclient made to load the form are listed', async () => {
@@ -377,6 +382,48 @@ test('every tab is in sight: the tab strip wraps instead of scrolling', async ()
   assert.deepEqual(hidden, []);
 });
 
+test('the panel is resized from its free corner, keeps that size after a reload, double-click: the default size', async () => {
+  const box = async () => (await panel.frameElement()).boundingBox();
+  const before = await box(); // beside the button at the bottom right: it grows from its top left corner
+  await page.mouse.move(before.x + 5, before.y + 5);
+  await page.mouse.down();
+  await page.mouse.move(before.x - 95, before.y - 45, { steps: 5 });
+  await page.mouse.up();
+  const after = await box();
+  assert.deepEqual([after.width - before.width, after.height - before.height], [100, 50]);
+  assert.equal(Math.round(after.x + after.width), Math.round(before.x + before.width), 'its side on the button stays put');
+  await page.reload();
+  await page.waitForSelector('.o_form_view');
+  panel = await page.waitForFrame((f) => f.url().endsWith('/src/panel/panel.html'), { timeout: 15_000 }); // reopened after a reload
+  await panel.waitForFunction(() => document.querySelector('#status')?.textContent.includes('res.users'), { timeout: 15_000 });
+  assert.equal((await box()).width, after.width, 'kept');
+  const b = await box();
+  await page.mouse.click(b.x + 5, b.y + 5, { count: 2 });
+  assert.equal((await box()).width, before.width, 'default again');
+});
+
+test('Security tab: a click on a group opens the groups it implies, Expand all opens every branch', async () => {
+  await click('.tabs [data-tab="security"]');
+  await panel.$$eval('#security details.card', (cs) => { cs.find((c) => c.querySelector('h3').textContent === 'Groups').open = true; });
+  // through waitForSelector: the card may re-render meanwhile (the branches opened stay open)
+  const $ = (sel) => panel.waitForSelector(`#security ${sel}`, { timeout: 15_000 });
+  const tap = async (sel) => (await $(sel)).evaluate((b) => b.click());
+  const opened = async () => (await $('.gtree.root')).evaluate((t) => t.querySelectorAll('.twisty[aria-expanded=true]').length);
+  const all = '.groups-box .toolbar .btn';
+  if (await (await $(all)).evaluate((b) => b.dataset.open === '1')) await tap(all); // a rerun: start folded
+  assert.equal(await opened(), 0, 'folded');
+  const first = '.gtree.root > li:has(> .gnode.branch)'; // admin: Settings implies others
+  assert.match(await (await $(`${first} > .gnode > .pill:not([hidden])`)).evaluate((p) => p.textContent), /^\+\d+$/, 'how many it implies');
+  await tap(`${first} > .gnode > .gname`); // the name, not the arrow
+  assert.equal(await opened(), 1);
+  assert.ok(await (await $(first)).evaluate((li) => li.querySelectorAll(':scope > .gtree > li').length > 0), 'its implied groups under it');
+  await tap(all);
+  assert.equal(await (await $(all)).evaluate((b) => b.textContent), 'Collapse all');
+  assert.equal(await (await $('.gtree.root')).evaluate((t) => t.querySelectorAll('.twisty[aria-expanded=false]').length), 0, 'every branch open, a group under several too');
+  await tap(all);
+  assert.equal(await opened(), 0);
+});
+
 test('toolbar popup: the page\'s database, and its debug mode switched from there', async () => {
   const [ext] = (await browser.extensions()).values();
   await ext.triggerAction(page);
@@ -475,6 +522,38 @@ test('⌥/Alt + click copies the technical name: a field, the label of a readonl
   const label = await page.$eval('.o-mail-Message-tracking .o-mail-Message-trackingField', (n) => n.textContent);
   assert.equal(label, '(Email)');
   assert.equal(await altClick('.o-mail-Message-tracking'), 'email');
+});
+
+test('⧉ opens the panel in its own window bound to the page, which keeps its RPCs coming after a reload; ⧉ there docks it back', async () => {
+  const PANEL = (f) => f.url().endsWith('/src/panel/panel.html');
+  await page.reload();
+  await page.waitForSelector('.o_form_view');
+  const inPage = page.frames().find(PANEL) || await openPanel(page);
+  await inPage.waitForSelector('#popout');
+  await inPage.$eval('#popout', (b) => b.click());
+  const win = await (await browser.waitForTarget((t) => t.url().includes('/src/panel/panel.html?tab='))).asPage();
+  const model = await inPage.$eval('#status .model', (n) => n.textContent); // the tests before may have left another record
+  await win.waitForFunction((m) => document.querySelector('#status .model')?.textContent === m, { timeout: 15_000 }, model);
+  assert.equal(await win.$('#minimize'), null, 'no minimize / full screen in the window');
+  await new Promise((r) => setTimeout(r, 500)); // the content script drops the iframe
+  assert.equal(page.frames().find(PANEL), undefined, 'the panel left the page');
+
+  await win.$eval('.tabs [data-tab="rpc"]', (b) => b.click());
+  const seen = (route) => win.waitForFunction((r) => [...document.querySelectorAll('#rpc .list .name')].some((n) => n.textContent === r), { timeout: 15_000 }, route);
+  await rpc(page, '/web/webclient/version_info', {});
+  await seen('/web/webclient/version_info');
+  await page.reload(); // the port goes with the page: connected again once it is loaded
+  await page.waitForSelector('.o_form_view');
+  await new Promise((r) => setTimeout(r, 1500));
+  assert.equal(page.frames().find(PANEL), undefined, 'still not in the page after a reload');
+  await rpc(page, '/web/session/get_session_info', {});
+  await seen('/web/session/get_session_info');
+
+  await win.$eval('#popout', (b) => b.click());
+  panel = await page.waitForFrame(PANEL, { timeout: 15_000 });
+  await panel.waitForFunction((m) => document.querySelector('#status .model')?.textContent === m, { timeout: 15_000 }, model);
+  await new Promise((r) => setTimeout(r, 500));
+  assert.ok(win.isClosed(), 'the window closed');
 });
 
 test('no error from the extension in the console', () => {

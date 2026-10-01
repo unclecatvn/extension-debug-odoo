@@ -30,7 +30,7 @@ themeBox.value = THEMES.includes(saved.theme) ? saved.theme : 'auto';
 themeBox.addEventListener('change', () => { applyTheme(themeBox.value); chrome.storage.local.set({ theme: themeBox.value }); }); // every open panel follows (loadSettings)
 
 // Keyboard shortcuts (manifest "commands"): as set in chrome://extensions/shortcuts, where Change leads.
-const COMMANDS = { 'toggle-panel': N_('panel'), 'toggle-debug': N_('debug') };
+const COMMANDS = { 'toggle-panel': N_('panel'), 'popout-panel': N_('window'), 'toggle-debug': N_('debug') };
 const all = await chrome.commands.getAll();
 const keys = Object.keys(COMMANDS).map((name) => all.find((c) => c.name === name)).filter(Boolean); // panel first
 $('#shortcuts').replaceChildren(...keys.flatMap((c, i) => [i ? ' · ' : '', el('kbd', {}, c.shortcut || '—'), ` ${_t(COMMANDS[c.name])}`]));
@@ -74,6 +74,10 @@ if (chrome.extension.getViews({ type: 'popup' }).includes(window)) {
   segmented($('#debug'), [['0', 'Off', _t('Turn Debug Off')], ['1', 'Debug', '?debug=1'], ['assets', 'Assets', '?debug=assets']], current, async (mode) => {
     if (box.checked) await keep(mode); // off: not kept any more
     setMode(mode);
+  });
+  $('#popout').addEventListener('click', () => { // src/background.js opens it (or brings it to the front)
+    chrome.runtime.sendMessage({ type: 'odoo-popout', tabId: tab.id }).catch(() => {});
+    window.close();
   });
   $('#page').hidden = false;
 }

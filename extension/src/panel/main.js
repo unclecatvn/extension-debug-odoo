@@ -1,4 +1,4 @@
-// Panel shell (in an iframe inside the Odoo page): header (status), tab switching, binding to its tab.
+// Panel shell (in an iframe inside the Odoo page, or in its own window): header (status), tab switching, binding to its tab.
 // The debug mode switch and the settings live in the toolbar popup (src/popup/); each tab's content in src/features/<tab>/.
 import { lang, loadLang, translateDom, _t } from '../shared/i18n.js';
 import { tabId, setTab, exec, clearCache } from '../shared/bridge.js';
@@ -100,16 +100,15 @@ if ([...document.querySelectorAll('.tabs button')].some((b) => b.dataset.tab ===
 for (const b of document.querySelectorAll('.tabs button')) b.addEventListener('click', () => showTab(b.dataset.tab));
 $('#refresh').addEventListener('click', () => { clearCache(); clearForms(); forgetRun(); refresh(); }); // every tab re-renders, forms (and the Code tab's last run) empty
 
-// ---------- bound to the tab it is embedded in (iframe from src/content/bubble.js; a page reload recreates it) ----------
+// ---------- bound to its tab (iframe from src/content/bubble.js, which a page reload recreates, or its own window) ----------
 let timer = null;
 const scheduleRefresh = () => { clearTimeout(timer); timer = setTimeout(refresh, 500); };
 
 chrome.tabs.onUpdated.addListener((id, change) => {
   if (id === tabId && (change.url || change.status === 'complete')) scheduleRefresh(); // Odoo's pushState navigation
 });
-addEventListener('message', (e) => { // from content/bubble.js: what the page recorded (RPCs) or picked (a field)
-  if (e.source !== parent) return;
-  const { type, detail } = e.data || {};
+/** From content/bubble.js: what the page recorded (RPCs) or picked (a field). */
+function fromPage({ type, detail } = {}) {
   if (type === 'odoo-debug-rpc') {
     addRpc(detail);
   } else if (type === 'odoo-debug-pick') {
@@ -117,23 +116,50 @@ addEventListener('message', (e) => { // from content/bubble.js: what the page re
     rendered.delete('view');
     showTab('view');
   }
-});
+}
 
-// ---------- minimize: back to the Odoo Debug button (content/bubble.js hides the frame; the panel keeps its state) ----------
-$('#minimize').addEventListener('click', () => chrome.tabs.sendMessage(tabId, { type: 'odoo-toggle', open: false }).catch(() => {}));
+// ---------- in its own window (src/background.js opens it with ?tab=<the Odoo tab>), or in an iframe in the page ----------
+const popped = Number(new URLSearchParams(location.search).get('tab')) || null;
+const popBtn = $('#popout');
+if (popped) {
+  setTab({ id: popped });
+  $('#minimize').remove(); // the window's own buttons do both
+  $('#full').remove();
+  popBtn.setAttribute('aria-pressed', 'true'); // ui.css: the "back into the page" icon
+  popBtn.title = popBtn.ariaLabel = _t('Back into the Page');
+  popBtn.addEventListener('click', async () => {
+    await chrome.tabs.sendMessage(tabId, { type: 'odoo-toggle', open: true }).catch(() => {});
+    window.close();
+  });
+  // what the page sends goes through a port to content/bubble.js, which closes the panel in the page meanwhile. A page
+  // load takes the port with it: connected again once the new page is there.
+  let port = null;
+  const connect = () => {
+    port = chrome.tabs.connect(tabId, { name: 'odoo-popout', frameId: 0 });
+    port.onMessage.addListener(fromPage);
+    port.onDisconnect.addListener(() => { void chrome.runtime.lastError; port = null; }); // no content script (yet)
+  };
+  chrome.tabs.onUpdated.addListener((id, change) => { if (id === tabId && change.status === 'complete' && !port) connect(); });
+  connect();
+} else {
+  setTab(await chrome.tabs.getCurrent());
+  addEventListener('message', (e) => { if (e.source === parent) fromPage(e.data); });
+  popBtn.addEventListener('click', () => chrome.runtime.sendMessage({ type: 'odoo-popout', tabId }).catch(() => {}));
 
-// ---------- full screen: the frame belongs to content/bubble.js, which answers with the resulting state ----------
-const fullBtn = $('#full');
-const isFull = () => fullBtn.getAttribute('aria-pressed') === 'true';
-const setFull = (on) => chrome.tabs.sendMessage(tabId, { type: 'odoo-full', on }).then((now) => {
-  fullBtn.setAttribute('aria-pressed', !!now); // ui.css swaps the icon
-}, () => {});
-fullBtn.addEventListener('click', () => setFull(!isFull()));
-addEventListener('keydown', (e) => { // Esc leaves full screen, unless it is clearing a search box
-  if (e.key === 'Escape' && isFull() && !e.target.value) setFull(false);
-});
+  // ---------- minimize: back to the Odoo Debug button (content/bubble.js hides the frame; the panel keeps its state) ----------
+  $('#minimize').addEventListener('click', () => chrome.tabs.sendMessage(tabId, { type: 'odoo-toggle', open: false }).catch(() => {}));
 
-setTab(await chrome.tabs.getCurrent());
-setFull(); // no argument: just read the state (full screen survives a reload)
+  // ---------- full screen: the frame belongs to content/bubble.js, which answers with the resulting state ----------
+  const fullBtn = $('#full');
+  const isFull = () => fullBtn.getAttribute('aria-pressed') === 'true';
+  const setFull = (on) => chrome.tabs.sendMessage(tabId, { type: 'odoo-full', on }).then((now) => {
+    fullBtn.setAttribute('aria-pressed', !!now); // ui.css swaps the icon
+  }, () => {});
+  fullBtn.addEventListener('click', () => setFull(!isFull()));
+  addEventListener('keydown', (e) => { // Esc leaves full screen, unless it is clearing a search box
+    if (e.key === 'Escape' && isFull() && !e.target.value) setFull(false);
+  });
+  setFull(); // no argument: just read the state (full screen survives a reload)
+}
 await reloadRpc();
 refresh();

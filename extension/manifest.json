@@ -26,6 +26,9 @@
       "suggested_key": { "default": "Alt+Shift+O" },
       "description": "Show / hide the panel"
     },
+    "popout-panel": {
+      "description": "Open the panel in its own window"
+    },
     "toggle-debug": {
       "suggested_key": { "default": "Alt+Shift+D" },
       "description": "Debug mode on / off"

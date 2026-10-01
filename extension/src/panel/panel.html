@@ -14,8 +14,12 @@
       <div id="status" class="context" data-i18n="text">Connecting…</div>
       <span class="spacer"></span>
       <button id="refresh" class="icon-btn" title="Reload Data" aria-label="Reload Data" data-i18n="title,aria-label">⟳</button>
-      <button id="minimize" class="icon-btn" title="Minimize (the Odoo Debug button reopens it)" aria-label="Minimize" data-i18n="title,aria-label">−</button>
-      <button id="full" class="icon-btn" title="Full Screen (Esc to exit)" aria-label="Full Screen" aria-pressed="false" data-i18n="title,aria-label">⤢</button>
+      <!-- the panel's own place, apart from ⟳: its window, full screen, then − at the end, where a window's close sits -->
+      <span class="win-btns">
+        <button id="popout" class="icon-btn" title="Open in Its Own Window (you stay on this page)" aria-label="Open in Its Own Window" aria-pressed="false" data-i18n="title,aria-label">⧉</button>
+        <button id="full" class="icon-btn" title="Full Screen (Esc to exit)" aria-label="Full Screen" aria-pressed="false" data-i18n="title,aria-label">⤢</button>
+        <button id="minimize" class="icon-btn" title="Minimize (the Odoo Debug button reopens it)" aria-label="Minimize" data-i18n="title,aria-label">−</button>
+      </span>
     </div>
     <nav class="tabs" role="tablist">
       <button role="tab" data-tab="record" class="active" aria-selected="true" data-i18n="text">Record</button>
