@@ -17,7 +17,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - **Apps › search bar like Odoo's**: each facet has a coloured label (a funnel for a filter, the field name for the category), its values joined by an italic *or*, and ×; when they fill a line the input goes to the next one and ▾ stays as tall as the bar. The filters start at Installed each time the panel opens (they used to be remembered, so a cleared filter stayed cleared).
 - **Apps › ⟳ Update Apps List** beside the count: Odoo's Update Apps List on its own, the new modules join the list at once (no page reload), the typed modules and the filters kept.
 - **Filter counts on their own line** under their input, on the right (Apps, Translations, Record › Fields, Security › Groups and System Parameters, Perf): the input gets the whole width.
-- **Apps / Translations lists**: a long module name is cut with … (the title beside it gives way first); hovering it shows it whole.
+- **Apps / Translations lists**: a module's name and title are one line, cut with a single … at its end (the title goes first, the row never overflows); hovering the row shows it whole, drawn over the version, ↗ staying on top.
 
 ### Removed
 

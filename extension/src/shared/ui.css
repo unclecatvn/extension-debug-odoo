@@ -439,9 +439,17 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .toolbar > .count-note { flex-basis: 100%; margin-top: -2px; text-align: right; }
 .module-picker .list { max-height: 240px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
 .module-picker label.pick { flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 6px; cursor: pointer; font-weight: normal; }
-.module-picker label.pick > .name { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* a long name: cut, whole on hover (title); the title beside it gives way first */
-.module-picker label.pick > .muted { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* one line per module */
+.module-picker label.pick > .pick-text { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px; } /* one line per module, as tall as a .pill */
+.module-picker .pick-text .muted { margin-left: 6px; }
+.module-picker .pick-text :is(.name, .muted) { vertical-align: top; } /* two fonts on one baseline would make the line 17px, not the pill's 16 */
 .module-picker .list > li:not([hidden]) { display: block; } /* one line even in the wide 2-column layout */
+/* hover: the cut name + title show whole, drawn over the version (on the row's colour, opaque), under ↗ which stays usable;
+   the label clips them at the row's end, so the list never scrolls sideways */
+.module-picker label.pick { overflow: hidden; }
+.module-picker li:hover label.pick > .pick-text { overflow: visible; text-overflow: clip; position: relative; z-index: 1; }
+.module-picker li:hover .pick-text > span { display: inline-block; vertical-align: top; padding-right: 6px; border-radius: 4px; /* a block the version pill's height, centred like it */
+  background: linear-gradient(var(--hover), var(--hover)), var(--surface); }
+.module-picker li:hover label.pick > a { position: relative; z-index: 2; background-color: var(--surface); }
 
 /* masterDetail() (RPC, Perf): the pane beside the list only exists on a wide panel; narrow, rows unfold in place */
 .master-detail > .pane { display: none; }

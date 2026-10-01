@@ -18,8 +18,9 @@ export function modulePicker(input, mods, { countEl, count, extra = () => [], sh
     const box = el('input', { type: 'checkbox', tabIndex: -1, // the input stays the one keyboard stop
       onchange: () => set((box.checked ? pickInList : unpickInList)(input.value, m.name, known)) });
     const li = el('li', { title: m.author || '' },
-      el('label', { class: 'row pick' }, box, el('span', { class: 'name', title: m.name }, m.name), // cut when too long: the whole name on hover
-        el('span', { class: 'grow muted', title: m.shortdesc }, m.shortdesc), extra(m)));
+      // name and title as one line of text: one … at its end when too long (the title goes first), whole on hover (ui.css)
+      el('label', { class: 'row pick' }, box,
+        el('span', { class: 'pick-text' }, el('span', {}, el('span', { class: 'name' }, m.name), el('span', { class: 'muted' }, m.shortdesc))), extra(m)));
     li.dataset.q = `${m.name} ${m.shortdesc} ${m.author || ''}`.toLowerCase();
     li.dataset.name = m.name;
     return { li, box, m };
