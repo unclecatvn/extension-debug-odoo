@@ -185,8 +185,8 @@ extension/                 the extension itself: exactly what the release zip co
   src/
     background.js          toolbar icon enabled on Odoo pages only (declarativeContent)
     popup/                 toolbar popup = options page: language, theme; the page's host, version, db, debug mode
-    content/               hook.js (MAIN world, records JSON-RPC), relay.js (forwards to the panel),
-                           bubble.js (draggable button + the panel's iframe in a shadow root, ⌥/Alt+click copy)
+    content/               hook.js (MAIN world, records JSON-RPC), bubble.js (draggable button + the panel's iframe
+                           in a shadow root, forwards the recorded RPCs to it, ⌥/Alt+click copy)
     panel/                 panel.html / main.js: header, tabs, binding to the tab it is embedded in
     shared/                bridge.js (page functions, RPC, cached reads), ui.js + ui.css (DOM, widgets, styles of the panel and popup),
                            page.js (core page functions), list.js, picker.js, i18n.js, odoo.js, settings.js

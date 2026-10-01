@@ -138,6 +138,25 @@ test('RPC tab: a call is edited and sent again, a new request is sent, the answe
   assert.equal(fresh.pill, 'AttributeError');
 });
 
+test('RPC tab: a call the page makes while the panel is open is added, newest first', async () => {
+  await click('.tabs [data-tab="rpc"]');
+  const before = await panel.$$eval('#rpc .list > li', (ls) => ls.length);
+  await rpc(page, '/web/session/get_session_info', {});
+  await panel.waitForFunction(() => document.querySelector('#rpc .list .name')?.textContent === '/web/session/get_session_info', { timeout: 15_000 });
+  assert.equal(await panel.$$eval('#rpc .list > li', (ls) => ls.length), before + 1, 'listed once');
+});
+
+test('View tab: ⌖ Pick on Page, then a click on a field of the form, shows that field', async () => {
+  await click('.tabs [data-tab="view"]');
+  const pick = () => [...document.querySelectorAll('#view button')].find((b) => b.textContent === '⌖ Pick on Page');
+  await panel.$$eval('#view details.card', (cards) => cards.forEach((c) => { c.open = true; }));
+  await panel.waitForFunction(pick, { timeout: 30_000 });
+  await panel.evaluate(`(${pick})().click()`);
+  await page.waitForFunction(() => window.__odooDebugPick);
+  await page.click('.o_form_view .o_field_widget[name="login"]');
+  await panel.waitForFunction(() => [...document.querySelectorAll('#view input[type="search"]')].some((i) => i.value === 'login'), { timeout: 15_000 });
+});
+
 test('Code tab: a search runs as the logged-in user, writes are blocked by default', async () => {
   const run = async (code) => {
     await click('.tabs [data-tab="code"]');

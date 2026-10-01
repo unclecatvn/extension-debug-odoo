@@ -172,8 +172,8 @@ extension/                 chính extension: đúng những gì có trong file z
   src/
     background.js          chỉ bật icon trên trang Odoo (declarativeContent)
     popup/                 popup trên thanh công cụ = trang options: ngôn ngữ, giao diện; host, version, db, chế độ debug của trang
-    content/               hook.js (MAIN world, ghi lại JSON-RPC), relay.js (chuyển tiếp tới bảng),
-                           bubble.js (nút kéo thả + iframe của bảng trong shadow root, copy bằng ⌥/Alt+click)
+    content/               hook.js (MAIN world, ghi lại JSON-RPC), bubble.js (nút kéo thả + iframe của bảng
+                           trong shadow root, chuyển tiếp RPC đã ghi tới bảng, copy bằng ⌥/Alt+click)
     panel/                 panel.html / main.js: thanh tiêu đề, các tab, gắn với tab đang nhúng
     shared/                bridge.js (hàm chạy trong trang, RPC, đọc có cache), ui.js + ui.css (DOM, widget, style của bảng và popup),
                            page.js (hàm lõi chạy trong trang), list.js, picker.js, i18n.js, odoo.js, settings.js

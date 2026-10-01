@@ -1,7 +1,8 @@
 // ISOLATED-world content script: a draggable Odoo Debug button, on the bottom edge of the page until dragged elsewhere
 // (dropped back on that edge, it sticks to it again). Clicking it opens the panel (src/panel/panel.html) in an iframe
 // next to it, following it: beside the button, aligned on its top (upper half of the window) or its bottom (lower half). Shown on Odoo pages only.
-// Also: ⌥/Alt + click on a field of the page, or on a tracked change in the chatter, copies its technical name.
+// Also: ⌥/Alt + click on a field of the page, or on a tracked change in the chatter, copies its technical name, and the
+// RPCs recorded by hook.js go to the panel.
 (() => {
   const SIZE = 40; // button, px
   const GAP = 8;
@@ -191,6 +192,14 @@
     if (!on[location.origin]) return;
     u.searchParams.set('debug', on[location.origin]);
     location.replace(u);
+  }
+
+  // RPCs recorded by hook.js and field picks (both MAIN world) go to the panel of this tab by postMessage, not through
+  // chrome.runtime: in an incognito window its messages go to the extension's regular profile, never to the panel here.
+  // No panel yet → dropped (hook.js keeps a buffer).
+  const PANEL = new URL(chrome.runtime.getURL('')).origin;
+  for (const type of ['odoo-debug-rpc', 'odoo-debug-pick']) {
+    document.addEventListener(type, (e) => frame?.firstChild?.contentWindow?.postMessage({ type, detail: e.detail }, PANEL));
   }
 
   // Injected again by background.js after an update: the copy before it is orphaned (its chrome.* calls fail, the panel

@@ -28,6 +28,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 - Rows with buttons on the right (Security › Groups and System parameters, View › inherited views) keep the buttons in their own column again, top-aligned, instead of wrapping under a long name: the style had been renamed away in 1.2.0.
 - Code tab › Guide: suggestions take the fields of the variable's model (the last `env[…]` model only when the variable isn't understood), as they have for a while.
+- **RPC tab in an incognito window** (where Security logs in as the picked user): the calls the page made after the panel opened never showed, e.g. the `name_search` of a many2one being typed in; the tab kept what the page had recorded before, nothing when the panel reopened with the page. ⌖ Pick on Page (View) never came back either. Chrome sends an incognito tab's extension messages to the regular profile, not to the panel in that tab: the page now hands them to its own panel directly.
 
 ## [1.3.0] - 2026-10-01
 

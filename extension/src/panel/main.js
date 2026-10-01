@@ -106,12 +106,13 @@ const scheduleRefresh = () => { clearTimeout(timer); timer = setTimeout(refresh,
 chrome.tabs.onUpdated.addListener((id, change) => {
   if (id === tabId && (change.url || change.status === 'complete')) scheduleRefresh(); // Odoo's pushState navigation
 });
-chrome.runtime.onMessage.addListener((msg, sender) => {
-  if (sender.tab?.id !== tabId) return;
-  if (msg?.type === 'odoo-rpc') {
-    addRpc(msg.raw);
-  } else if (msg?.type === 'odoo-pick') {
-    setPicked(msg.name); // '' = cancelled: the re-render just resets the picker button
+addEventListener('message', (e) => { // from content/bubble.js: what the page recorded (RPCs) or picked (a field)
+  if (e.source !== parent) return;
+  const { type, detail } = e.data || {};
+  if (type === 'odoo-debug-rpc') {
+    addRpc(detail);
+  } else if (type === 'odoo-debug-pick') {
+    setPicked(detail); // '' = cancelled: the re-render just resets the picker button
     rendered.delete('view');
     showTab('view');
   }

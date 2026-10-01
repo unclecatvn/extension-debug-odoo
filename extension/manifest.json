@@ -58,7 +58,6 @@
         "<all_urls>"
       ],
       "js": [
-        "src/content/relay.js",
         "src/content/bubble.js"
       ],
       "run_at": "document_start"
