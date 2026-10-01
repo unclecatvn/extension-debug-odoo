@@ -34,7 +34,7 @@ shadow DOM so it never touches Odoo's styles.
 |---|---|
 | **Record** | Identity & metadata (xmlids, `noupdate`, create / write user), every field with its type, value, module, storage, compute / related source, `groups=` and the fields it triggers a recompute of. |
 | **View** | Inheritance tree of the current view (primary + extensions, priority, source file), combined arch, action details, form field modifiers (`invisible` / `readonly` / `required`) evaluated like the webclient, *Pick on page*. |
-| **RPC** | Live log of JSON-RPC and JSON-2 calls from page load: timing, errors with tracebacks, and a jump to the Security tab for `AccessError`s. |
+| **RPC** | Live log of JSON-RPC and JSON-2 calls from page load: timing, errors with tracebacks, and a jump to the Security tab for `AccessError`s. **Edit & Resend** any call (route and JSON body) with the page's session, or start a **New Request**; **Copy as cURL** replays it outside the browser (a `call_kw` as the external API's `execute_kw`, with an API key). |
 | **Code** | ORM Console: JavaScript with an ORM-like `env` (`env['sale.order'].search(…)`, `read`, `mapped`, `write`, any public method…) run **as the logged-in user**, so the server applies their ACLs, record rules and active companies. Fields read and written like in Python (`return rec.state`, `rec.state = 'sent'`). Suggests the models of the installed modules, their fields and the recordset methods while you type. Read-only by default; **Allow Writes** lets writes through, and **Auto Refresh** then reloads the view on screen. Results as a table, prints, errors with server traceback, every call made. |
 | **Apps** | For a list of modules, typed or ticked in the list below an Odoo-like search bar (filters Installed / Not Installed, Apps / Extra, category, as facets): Activate (Update Apps List, then install with dependencies), Upgrade, Open Forms (Settings rights). |
 | **Security** | Three parts. **User**: search any user by name or login (yourself by default) and every card follows, or log in as them in an incognito window (your session stays): their groups (add / remove, needs Access Rights), risk audit. **Model**: rule by rule why each operation is allowed or blocked for that user (for yourself, with the server's exact `has_access` answer next to it), ACLs, fields hidden by `groups=`, configuration audit. **Instance**: session (db, version, `web.base.url`, `test_mode`; **Become Superuser** for Settings users), system parameters (secrets masked), checks (HTTPS, cookie flags, security headers, database manager). |
@@ -49,7 +49,7 @@ page to copy its technical name.
 <table>
   <tr>
     <td width="50%"><b>View</b>: inheritance tree and combined arch<br><img src="website/screenshots/side-view.png" alt="View tab"></td>
-    <td width="50%"><b>RPC</b>: every call with its timing<br><img src="website/screenshots/side-rpc.png" alt="RPC tab"></td>
+    <td width="50%"><b>RPC</b>: every call with its timing, edited and sent again<br><img src="website/screenshots/side-rpc.png" alt="RPC tab"></td>
   </tr>
 </table>
 
