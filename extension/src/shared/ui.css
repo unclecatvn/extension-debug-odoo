@@ -272,6 +272,45 @@ tr.mine td { background: var(--ok-soft); }
 .findings li.low { border-left-color: var(--muted); }
 .findings li.info { border-left-color: var(--info); }
 .okline { color: var(--ok); padding: 8px 10px; }
+/* Perf: what the tab is for (profiler off), each request's duration against the slowest, a request's diagnosis */
+.perf-intro h4 { margin: 0 0 4px; font-size: 13px; }
+.perf-intro ol { margin: 0 0 10px; padding-left: 18px; color: var(--muted); line-height: 1.6; }
+.perf-intro .row { align-items: center; gap: 10px; }
+#perf .card-body > div > details > summary { padding: 8px 12px; color: var(--muted); cursor: pointer; }
+.perf-head { align-items: center; }
+.perf-bar { flex-basis: 100%; height: 3px; border-radius: 2px; background: var(--hover); overflow: hidden; }
+.perf-bar > i { display: block; height: 100%; background: color-mix(in srgb, var(--muted) 55%, transparent); }
+.perf-bar.med > i { background: var(--warn); }
+.perf-bar.err > i { background: var(--err); }
+.ms.dur { min-width: 48px; text-align: right; color: var(--fg); font-weight: 600; }
+.ms.med { color: var(--warn); }
+.ms.err, .ms.bad { color: var(--err); }
+.perf-detail { display: grid; gap: 10px; }
+.perf-time { align-items: center; gap: 8px; flex-wrap: nowrap; font-size: 11px; white-space: nowrap; }
+.perf-split { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--hover); }
+.perf-split > .sql, .key.sql::before { background: var(--info); }
+.perf-split > .py, .key.py::before { background: var(--accent); }
+.key::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; }
+.diag { padding: 8px 10px; border-radius: 8px; font-size: 12px; line-height: 1.45; }
+.diag > div { color: var(--fg); margin-top: 2px; }
+.diag.ok { background: var(--ok-soft); color: var(--ok); }
+.diag.med { background: var(--warn-soft); color: var(--warn); }
+.diag.err { background: var(--err-soft); color: var(--err); }
+.diag.info { background: var(--info-soft); color: var(--info); }
+.perf-detail > .seg { justify-self: start; }
+.perf-view > .note, .perf-view > .okline { margin: 0 0 6px; padding: 0; }
+/* a request's functions and queries: one row each (no table columns), the rest (code line, SQL…) only once clicked */
+.perf-view .list > li:not([hidden]) { display: block; padding-inline: 0; }
+.perf-view .list > li:not(.open) > :not(.row) { display: none; }
+.perf-view .list > li > :not(.row) { margin-top: 6px; }
+.perf-view .row { align-items: center; }
+.perf-view .sub { flex-basis: 100%; color: var(--muted); font-size: 11px; }
+.loc { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.loc > b { color: var(--fg); }
+.says code, .diag code { font-family: var(--mono); font-size: 11px; padding: 0 3px; border-radius: 4px; background: var(--hover); }
+.code-line { margin: 0; border: 0; padding: 4px 8px; border-radius: 6px; background: var(--hover); font-size: 11px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.diag .code-line { margin-top: 4px; background: color-mix(in srgb, var(--surface) 60%, transparent); }
+.calls { display: flex; flex-wrap: wrap; gap: 2px 8px; }
 
 /* verdict */
 .verdict { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 6px; padding: 8px 10px; }

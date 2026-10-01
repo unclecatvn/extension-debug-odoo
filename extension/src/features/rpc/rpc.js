@@ -3,7 +3,7 @@ import { parseRpc, parseRpcResponse, prettyJson, toCurl } from './logic.js';
 import { pageRpcLog, pageSend } from './page.js';
 import { exec, sessionInfo } from '../../shared/bridge.js';
 import { localTime } from '../../shared/odoo.js';
-import { el, pre, errBox, pill, details, empty, expandable, listHead, masterDetail, copyText, WIDE } from '../../shared/ui.js';
+import { el, pre, errBox, pill, empty, expandable, listHead, masterDetail, copyText } from '../../shared/ui.js';
 import { _t } from '../../shared/i18n.js';
 
 const MAX = 300;
@@ -38,7 +38,7 @@ export function mountRpc(section, whyBlocked, page) {
   rows = el('ul', { class: 'list' });
   emptyMsg = empty(_t('No RPC yet. Use the Odoo page to record some.'));
   section.append(el('div', { class: 'toolbar' }, filter, errBtn, clear, newBtn, listHead(_t('Method · model · duration'), _t('Time · route'))),
-    draft, masterDetail(rows, _t('Select a call to see its parameters and result.')), emptyMsg);
+    draft, masterDetail(rows, _t('Select a call to edit its parameters, send it again and see its result.')), emptyMsg);
 }
 
 function applyFilter(li) {
@@ -53,22 +53,12 @@ function item(e) {
       el('span', { class: 'ms' }, `${e.ms} ms`)),
     el('div', { class: 'meta' }, `${localTime(e.at)} · ${e.path}`));
   li.dataset.q = `${e.model} ${e.method}`.toLowerCase();
-  // detail: the actions, then the request (Parameters), then the answer (Result, or the error first). Edit & Resend turns the
-  // request into its editor in place, which has its own Copy as cURL (of what is typed).
-  expandable(li, () => {
-    const shown = (d) => Object.assign(d, { open: WIDE.matches }); // in the pane beside the list there is room: unfolded
-    const params = shown(details(_t('Parameters'), pre({ args: e.args, kwargs: e.kwargs })));
-    const curl = curlBtn(() => e);
-    const edit = el('button', { class: 'btn', onclick: (ev) => {
-      ev.stopPropagation(); // removed, the button is out of the row: the row would take the click as its own and close
-      edit.remove();
-      curl.remove();
-      params.replaceWith(composer(e.route, e.body));
-    } }, _t('Edit & Resend'));
-    const bar = el('div', { class: 'row actions-bar' }, edit, curl, denied && el('button', { class: 'btn', onclick: onWhyBlocked }, _t('Why was it blocked? → Security')));
-    if (e.error) return el('div', {}, bar, errBox({ message: e.error, traceback: e.traceback }), params);
-    return el('div', {}, bar, params, shown(details(_t('Result'), resultPre(e.result))));
-  });
+  // detail: the request, editable right away (Send posts it again), then its answer: the recorded one until sent again
+  expandable(li, () => composer(e.route, e.body, [
+    el('div', { class: 'row' }, e.error ? pill(e.errorType?.split('.').pop() || _t('error'), 'err') : pill('ok', 'ok'),
+      el('span', { class: 'muted' }, _t('Recorded at %s · %s ms', localTime(e.at), e.ms))),
+    e.error ? errBox({ message: e.error, traceback: e.traceback }) : resultPre(e.result),
+  ], denied && el('button', { class: 'btn', type: 'button', onclick: onWhyBlocked }, _t('Why was it blocked? → Security'))));
   applyFilter(li);
   return li;
 }
@@ -78,13 +68,14 @@ const resultPre = (result) => {
   return pre(res.length > 50000 ? `${res.slice(0, 50000)}\n${_t('… (%s characters)', res.length)}` : res);
 };
 
-/** A request as sent, editable (route, JSON body): Send (or Ctrl/⌘ + Enter) posts it with the page's session, the answer shows below. */
-function composer(route, body) {
+/** A request as sent, editable (route, JSON body): Send (or Ctrl/⌘ + Enter) posts it with the page's session, the answer
+ * shows below, in place of `answer` (the recorded one, if any). `extra`: one more action button. */
+function composer(route, body, answer = [], extra = null) {
   const json = prettyJson(body);
   const path = el('input', { type: 'text', value: route, spellcheck: false, 'aria-label': _t('Route') });
   const text = el('textarea', { value: json, spellcheck: false, rows: Math.min(18, Math.max(6, json.split('\n').length)), 'aria-label': _t('Body (JSON)') });
   const send = el('button', { class: 'btn primary', type: 'submit' }, _t('Send'));
-  const out = el('div', {});
+  const out = el('div', { class: 'answer' }, answer);
   const form = el('form', { class: 'composer', onsubmit: async (ev) => {
     ev.preventDefault();
     try { JSON.parse(text.value); } catch (err) { return out.replaceChildren(errBox({ message: _t('Invalid JSON: %s', err.message) })); }
@@ -98,7 +89,7 @@ function composer(route, body) {
       el('span', { class: 'muted' }, `HTTP ${r.status} · ${r.ms} ms`));
     out.replaceChildren(head, a.error ? errBox({ message: a.error, traceback: a.traceback }) : resultPre(a.result));
   } }, path, text, el('div', { class: 'row actions-bar' }, send, curlBtn(() => ({ route: path.value.trim(), body: text.value })),
-    el('span', { class: 'muted' }, _t('Ctrl/⌘ + Enter'))), out);
+    extra, el('span', { class: 'muted' }, _t('Ctrl/⌘ + Enter'))), out);
   text.addEventListener('keydown', (ev) => {
     if (ev.key === 'Enter' && (ev.metaKey || ev.ctrlKey)) { ev.preventDefault(); form.requestSubmit(); }
   });

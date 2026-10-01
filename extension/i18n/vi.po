@@ -51,7 +51,8 @@ msgstr "Đang chạy…"
 #: src/features/code/code.js:134
 #: src/features/code/code.js:173
 #: src/features/rpc/rpc.js:52
-#: src/features/rpc/rpc.js:97
+#: src/features/rpc/rpc.js:58
+#: src/features/rpc/rpc.js:88
 #: src/features/translations/translations.js:75
 #: src/features/translations/translations.js:161
 msgid "error"
@@ -236,7 +237,7 @@ msgstr "chưa làm mới trang"
 
 #: src/features/code/code.js:131
 #: src/features/menus/menus.js:22
-#: src/features/rpc/rpc.js:95
+#: src/features/rpc/rpc.js:86
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
 msgstr "Không có phản hồi — đây có phải trang Odoo?"
@@ -497,7 +498,6 @@ msgid "Reports"
 msgstr "Reports"
 
 #: src/features/menus/logic.js:16
-#: src/features/rpc/rpc.js:60
 msgid "Parameters"
 msgstr "Tham số"
 
@@ -522,126 +522,221 @@ msgstr "Menu · model"
 msgid "Action"
 msgstr "Action"
 
-#: src/features/perf/perf.js:15
+#: src/features/perf/perf.js:13
 msgid "Cannot call /web/set_profiling"
 msgstr "Không gọi được /web/set_profiling"
 
-#: src/features/perf/perf.js:23
+#: src/features/perf/perf.js:21
 msgid "Profiling is not enabled on this database.\nEnable it for 5 minutes? (writes ir.config_parameter base.profiling_enabled_until)"
 msgstr "Profiling chưa được bật cho database này.\nBật trong 5 phút? (ghi ir.config_parameter base.profiling_enabled_until)"
 
-#: src/features/perf/perf.js:27
+#: src/features/perf/perf.js:25
 msgid "Profiling could not be enabled."
 msgstr "Vẫn chưa bật được profiling."
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:42
 msgid "Stop Profiling"
 msgstr "Tắt profiling"
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:42
 msgid "Start Profiling"
 msgstr "Bật profiling"
 
-#: src/features/perf/perf.js:46
+#: src/features/perf/perf.js:45
 msgid "RECORDING"
 msgstr "ĐANG ĐO"
 
 #: src/features/perf/perf.js:46
-msgid "off"
-msgstr "tắt"
-
-#: src/features/perf/perf.js:47
 msgid "since %s"
 msgstr "từ %s"
 
-#: src/features/perf/perf.js:50
-msgid "Each request of this session writes one ir.profile row; ⟳ reloads the list."
-msgstr "Mỗi request của phiên này ghi một dòng ir.profile; ⟳ để tải lại danh sách."
+#: src/features/perf/perf.js:47
+msgid "⟳ Refresh List"
+msgstr "⟳ Làm mới danh sách"
+
+#: src/features/perf/perf.js:49
+msgid "Find out why a screen is slow"
+msgstr "Tìm xem vì sao một màn hình chạy chậm"
 
 #: src/features/perf/perf.js:51
-msgid "Records the SQL + Python stacks of every request of this session (Odoo's built-in profiler, base.group_system)."
-msgstr "Ghi lại SQL + stack Python của mọi request trong phiên này (profiler có sẵn của Odoo, base.group_system)."
+msgid "Start profiling (Odoo's built-in profiler, administrators only)."
+msgstr "Bật profiling (profiler có sẵn của Odoo, chỉ dành cho quản trị viên)."
 
-#: src/features/perf/perf.js:65
-msgid "No request yet: use the Odoo page, then press ⟳."
-msgstr "Chưa có request nào, thao tác trên trang Odoo rồi bấm ⟳."
+#: src/features/perf/perf.js:52
+msgid "Do the slow action on the Odoo page: open the record, save, confirm…"
+msgstr "Làm thao tác bị chậm trên trang Odoo: mở bản ghi, lưu, xác nhận…"
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:53
+msgid "Come back and refresh: the requests show slowest first; click one to see why it is slow."
+msgstr "Quay lại đây và làm mới: request chậm nhất nằm trên cùng; bấm vào một request để xem vì sao nó chậm."
+
+#: src/features/perf/perf.js:54
+msgid "Profiling slows Odoo down a little: stop it when you are done."
+msgstr "Profiling làm Odoo chậm đi một chút: nhớ tắt khi xong."
+
+#: src/features/perf/perf.js:57
+msgid "Previous Session (%s requests)"
+msgstr "Phiên trước (%s request)"
+
+#: src/features/perf/perf.js:73
+msgid "Scripts, images, manifest…: nothing to optimise in a module"
+msgstr "Script, ảnh, manifest…: không có gì để tối ưu trong module"
+
+#: src/features/perf/perf.js:74
+msgid "Static Files (%s)"
+msgstr "File tĩnh (%s)"
+
+#: src/features/perf/perf.js:75
+msgid "No request yet: do the slow action on the Odoo page, then press ⟳ Refresh List."
+msgstr "Chưa có request nào: làm thao tác bị chậm trên trang Odoo, rồi bấm ⟳ Làm mới danh sách."
+
+#: src/features/perf/perf.js:75
 msgid "No profile data yet."
 msgstr "Chưa có dữ liệu profile."
 
-#: src/features/perf/perf.js:66
-msgid "Filter request"
-msgstr "Lọc request"
+#: src/features/perf/perf.js:80
+msgid "Filter %s requests"
+msgstr "Lọc %s request"
 
-#: src/features/perf/perf.js:66
-msgid "%s requests"
-msgstr "%s request"
+#: src/features/perf/perf.js:81
+msgid "Click a request to see where its time goes."
+msgstr "Bấm vào một request để xem thời gian của nó tiêu vào đâu."
 
-#: src/features/perf/perf.js:66
-msgid "%s/%s requests"
-msgstr "%s/%s request"
+#: src/features/perf/perf.js:96
+msgid "%s SQL"
+msgstr "%s SQL"
 
-#: src/features/perf/perf.js:67
-msgid "Request · SQL · duration"
-msgstr "Request · SQL · thời gian"
+#: src/features/perf/perf.js:120
+msgid "Reads %s"
+msgstr "Đọc bảng %s"
 
-#: src/features/perf/perf.js:67
-msgid "Id · time · CPU"
-msgstr "Id · giờ · CPU"
+#: src/features/perf/perf.js:120
+msgid "Creates in %s"
+msgstr "Tạo bản ghi trong %s"
 
-#: src/features/perf/perf.js:68
-msgid "Select a request to see its SQL queries."
-msgstr "Chọn một request để xem các câu SQL của nó."
+#: src/features/perf/perf.js:120
+msgid "Updates %s"
+msgstr "Cập nhật bảng %s"
 
-#: src/features/perf/perf.js:70
-msgid "Latest session: %s"
-msgstr "Phiên gần nhất: %s"
+#: src/features/perf/perf.js:120
+msgid "Deletes from %s"
+msgstr "Xoá trong bảng %s"
 
-#: src/features/perf/perf.js:85
-msgid "Flame Graph (speedscope)"
-msgstr "Flame graph (speedscope)"
+#: src/features/perf/perf.js:124
+msgid "Runs a SQL query"
+msgstr "Chạy một câu SQL"
 
-#: src/features/perf/perf.js:94
-msgid "No SQL recorded."
-msgstr "Không có SQL nào được ghi."
+#: src/features/perf/perf.js:136
+msgid "SQL + Full Stack"
+msgstr "SQL + stack đầy đủ"
 
-#: src/features/perf/perf.js:99
-msgid "Full SQL + Stack"
-msgstr "SQL đầy đủ + stack"
+#: src/features/perf/perf.js:143
+msgid "≈ %s in Python, %s in %s SQL queries"
+msgstr "≈ %s ở Python, %s cho %s câu SQL"
 
-#: src/features/perf/perf.js:101
-msgid "%s queries · SQL %s / total %s · Python ≈ %s"
-msgstr "%s query · SQL %s / tổng %s · Python ≈ %s"
+#: src/features/perf/perf.js:143
+msgid "≈ %s in Python, no SQL"
+msgstr "≈ %s ở Python, không có SQL"
 
-#: src/features/perf/perf.js:103
+#: src/features/perf/perf.js:145
+msgid "Called by"
+msgstr "Được gọi từ"
+
+#: src/features/perf/perf.js:160
+msgid "Every Python function of the request and the time it took (speedscope)"
+msgstr "Từng hàm Python của request và thời gian mỗi hàm (speedscope)"
+
+#: src/features/perf/perf.js:160
+msgid "Flame Graph ↗"
+msgstr "Flame Graph ↗"
+
+#: src/features/perf/perf.js:161
+msgid "Nothing recorded."
+msgstr "Không có dữ liệu nào được ghi lại."
+
+#: src/features/perf/perf.js:167
+msgid "N+1: one query runs %s× in this request"
+msgstr "N+1: một câu truy vấn chạy %s lần trong request này"
+
+#: src/features/perf/perf.js:168
+msgid "%s runs it once per record: read them all at once instead (a recordset, mapped(), read_group…)."
+msgstr "%s chạy nó một lần cho mỗi bản ghi: hãy đọc tất cả một lần (recordset, mapped(), read_group…)."
+
+#: src/features/perf/perf.js:169
+msgid "Most of the time is in the database (%s of %s)"
+msgstr "Phần lớn thời gian nằm ở database (%s trên %s)"
+
+#: src/features/perf/perf.js:169
+msgid "See the slowest queries below: a missing index, a large join, a search on a non-stored field…"
+msgstr "Xem các câu truy vấn chậm nhất bên dưới: thiếu index, join lớn, tìm kiếm trên field không lưu (non-stored)…"
+
+#: src/features/perf/perf.js:170
+msgid "Most of the time is in Python (≈ %s of %s)"
+msgstr "Phần lớn thời gian nằm ở Python (≈ %s trên %s)"
+
+#: src/features/perf/perf.js:170
+msgid "The SQL is not the problem: see which code takes the time below, or every function in the Flame Graph."
+msgstr "SQL không phải nguyên nhân: xem đoạn code nào tốn thời gian ở bên dưới, hoặc từng hàm trong Flame Graph."
+
+#: src/features/perf/perf.js:171
+msgid "✓ Fast request (%s)"
+msgstr "✓ Request nhanh (%s)"
+
+#: src/features/perf/perf.js:171
+msgid "Nothing to optimise here."
+msgstr "Không cần tối ưu gì ở đây."
+
+#: src/features/perf/perf.js:180
+msgid "SQL %s"
+msgstr "SQL %s"
+
+#: src/features/perf/perf.js:181
+msgid "SQL %s, Python ≈ %s"
+msgstr "SQL %s, Python ≈ %s"
+
+#: src/features/perf/perf.js:183
+msgid "Python ≈ %s"
+msgstr "Python ≈ %s"
+
+#: src/features/perf/perf.js:185
+msgid "By Code"
+msgstr "Theo code"
+
+#: src/features/perf/perf.js:186
+msgid "The functions of the modules (outside the ORM and the server) the time went to, SQL they ran included. Sampled every 10 ms or so: approximate."
+msgstr "Các hàm của module (ngoài ORM và server) mà thời gian tiêu vào, tính cả SQL chúng chạy. Lấy mẫu khoảng 10 ms một lần: chỉ là ước lượng."
+
+#: src/features/perf/perf.js:187
+msgid "No time in the modules' code: the server itself (routing, ORM) took it."
+msgstr "Không tốn thời gian trong code của module: thời gian nằm ở chính server (routing, ORM)."
+
+#: src/features/perf/perf.js:187
+msgid "No Python samples: this request was recorded without them."
+msgstr "Không có mẫu Python: request này được ghi lại mà không có chúng."
+
+#: src/features/perf/perf.js:189
 msgid "Repeated Queries (%s)"
 msgstr "Query lặp lại (%s)"
 
-#: src/features/perf/perf.js:103
-msgid "The same query run several times: N+1 suspects."
-msgstr "Cùng một query chạy nhiều lần: nghi N+1."
+#: src/features/perf/perf.js:190
+msgid "The same SQL sent several times. If a count follows the number of records shown (10 records → 10×), it is an N+1: the code reads records one by one where one query could read them all."
+msgstr "Cùng một câu SQL được gửi nhiều lần. Nếu số lần tăng theo số bản ghi đang hiển thị (10 bản ghi → 10×), đó là N+1: code đọc từng bản ghi một, trong khi một câu truy vấn có thể đọc hết."
 
-#: src/features/perf/perf.js:103
-msgid "Count · caller · time"
-msgstr "Số lần · nơi gọi · thời gian"
-
-#: src/features/perf/perf.js:103
-#: src/features/perf/perf.js:106
-msgid "Query"
-msgstr "Câu truy vấn"
-
-#: src/features/perf/perf.js:105
+#: src/features/perf/perf.js:191
 msgid "✓ No repeated query."
 msgstr "✓ Không có query lặp lại."
 
-#: src/features/perf/perf.js:106
-msgid "Slowest Queries (%s)"
-msgstr "Query chậm nhất (%s)"
+#: src/features/perf/perf.js:193
+msgid "Slowest Queries"
+msgstr "Query chậm nhất"
 
-#: src/features/perf/perf.js:106
-msgid "Caller · time"
-msgstr "Nơi gọi · thời gian"
+#: src/features/perf/perf.js:194
+msgid "✓ No slow query (the slowest took %s): the database is not the problem here."
+msgstr "✓ Không có truy vấn chậm (chậm nhất %s): database không phải vấn đề ở đây."
+
+#: src/features/perf/perf.js:195
+msgid "The slowest took %s. Check the columns it filters or joins on have an index, and that it does not read more rows than needed."
+msgstr "Truy vấn chậm nhất mất %s. Kiểm tra các cột dùng để lọc hoặc join đã có index chưa, và nó có đọc nhiều dòng hơn cần thiết không."
 
 #: src/features/record/record.js:9
 msgid "This screen is not bound to a model."
@@ -726,56 +821,52 @@ msgid "Time · route"
 msgstr "Giờ · route"
 
 #: src/features/rpc/rpc.js:41
-msgid "Select a call to see its parameters and result."
-msgstr "Chọn một lời gọi để xem tham số và kết quả."
+msgid "Select a call to edit its parameters, send it again and see its result."
+msgstr "Chọn một lời gọi để sửa tham số, gửi lại và xem kết quả."
 
-#: src/features/rpc/rpc.js:67
-msgid "Edit & Resend"
-msgstr "Sửa & Gửi lại"
+#: src/features/rpc/rpc.js:59
+msgid "Recorded at %s · %s ms"
+msgstr "Ghi lúc %s · %s ms"
 
-#: src/features/rpc/rpc.js:68
+#: src/features/rpc/rpc.js:61
 msgid "Why was it blocked? → Security"
 msgstr "Vì sao bị chặn? → Security"
 
-#: src/features/rpc/rpc.js:70
-msgid "Result"
-msgstr "Kết quả"
-
-#: src/features/rpc/rpc.js:78
+#: src/features/rpc/rpc.js:68
 msgid "… (%s characters)"
 msgstr "… (%s ký tự)"
 
-#: src/features/rpc/rpc.js:84
+#: src/features/rpc/rpc.js:75
 msgid "Route"
 msgstr "Route"
 
-#: src/features/rpc/rpc.js:85
+#: src/features/rpc/rpc.js:76
 msgid "Body (JSON)"
 msgstr "Body (JSON)"
 
-#: src/features/rpc/rpc.js:86
+#: src/features/rpc/rpc.js:77
 msgid "Send"
 msgstr "Gửi"
 
-#: src/features/rpc/rpc.js:90
+#: src/features/rpc/rpc.js:81
 msgid "Invalid JSON: %s"
 msgstr "JSON không hợp lệ: %s"
 
-#: src/features/rpc/rpc.js:92
+#: src/features/rpc/rpc.js:83
 #: src/shared/ui.js:104
 #: src/shared/ui.js:166
 msgid "Loading…"
 msgstr "Đang tải…"
 
-#: src/features/rpc/rpc.js:101
+#: src/features/rpc/rpc.js:92
 msgid "Ctrl/⌘ + Enter"
 msgstr "Ctrl/⌘ + Enter"
 
-#: src/features/rpc/rpc.js:112
+#: src/features/rpc/rpc.js:103
 msgid "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
 msgstr "call_kw: qua API ngoài (execute_kw), với API key của người dùng này trong $ODOO_API_KEY. Các route khác: cookie session_id trong $ODOO_SESSION."
 
-#: src/features/rpc/rpc.js:120
+#: src/features/rpc/rpc.js:111
 msgid "Copy as cURL"
 msgstr "Sao chép dạng cURL"
 

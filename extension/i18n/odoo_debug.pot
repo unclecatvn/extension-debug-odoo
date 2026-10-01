@@ -51,7 +51,8 @@ msgstr ""
 #: src/features/code/code.js:134
 #: src/features/code/code.js:173
 #: src/features/rpc/rpc.js:52
-#: src/features/rpc/rpc.js:97
+#: src/features/rpc/rpc.js:58
+#: src/features/rpc/rpc.js:88
 #: src/features/translations/translations.js:75
 #: src/features/translations/translations.js:161
 msgid "error"
@@ -236,7 +237,7 @@ msgstr ""
 
 #: src/features/code/code.js:131
 #: src/features/menus/menus.js:22
-#: src/features/rpc/rpc.js:95
+#: src/features/rpc/rpc.js:86
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
 msgstr ""
@@ -497,7 +498,6 @@ msgid "Reports"
 msgstr ""
 
 #: src/features/menus/logic.js:16
-#: src/features/rpc/rpc.js:60
 msgid "Parameters"
 msgstr ""
 
@@ -522,125 +522,220 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: src/features/perf/perf.js:15
+#: src/features/perf/perf.js:13
 msgid "Cannot call /web/set_profiling"
 msgstr ""
 
-#: src/features/perf/perf.js:23
+#: src/features/perf/perf.js:21
 msgid "Profiling is not enabled on this database.\nEnable it for 5 minutes? (writes ir.config_parameter base.profiling_enabled_until)"
 msgstr ""
 
-#: src/features/perf/perf.js:27
+#: src/features/perf/perf.js:25
 msgid "Profiling could not be enabled."
 msgstr ""
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:42
 msgid "Stop Profiling"
 msgstr ""
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:42
 msgid "Start Profiling"
 msgstr ""
 
-#: src/features/perf/perf.js:46
+#: src/features/perf/perf.js:45
 msgid "RECORDING"
 msgstr ""
 
 #: src/features/perf/perf.js:46
-msgid "off"
-msgstr ""
-
-#: src/features/perf/perf.js:47
 msgid "since %s"
 msgstr ""
 
-#: src/features/perf/perf.js:50
-msgid "Each request of this session writes one ir.profile row; ⟳ reloads the list."
+#: src/features/perf/perf.js:47
+msgid "⟳ Refresh List"
+msgstr ""
+
+#: src/features/perf/perf.js:49
+msgid "Find out why a screen is slow"
 msgstr ""
 
 #: src/features/perf/perf.js:51
-msgid "Records the SQL + Python stacks of every request of this session (Odoo's built-in profiler, base.group_system)."
+msgid "Start profiling (Odoo's built-in profiler, administrators only)."
 msgstr ""
 
-#: src/features/perf/perf.js:65
-msgid "No request yet: use the Odoo page, then press ⟳."
+#: src/features/perf/perf.js:52
+msgid "Do the slow action on the Odoo page: open the record, save, confirm…"
 msgstr ""
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:53
+msgid "Come back and refresh: the requests show slowest first; click one to see why it is slow."
+msgstr ""
+
+#: src/features/perf/perf.js:54
+msgid "Profiling slows Odoo down a little: stop it when you are done."
+msgstr ""
+
+#: src/features/perf/perf.js:57
+msgid "Previous Session (%s requests)"
+msgstr ""
+
+#: src/features/perf/perf.js:73
+msgid "Scripts, images, manifest…: nothing to optimise in a module"
+msgstr ""
+
+#: src/features/perf/perf.js:74
+msgid "Static Files (%s)"
+msgstr ""
+
+#: src/features/perf/perf.js:75
+msgid "No request yet: do the slow action on the Odoo page, then press ⟳ Refresh List."
+msgstr ""
+
+#: src/features/perf/perf.js:75
 msgid "No profile data yet."
 msgstr ""
 
-#: src/features/perf/perf.js:66
-msgid "Filter request"
+#: src/features/perf/perf.js:80
+msgid "Filter %s requests"
 msgstr ""
 
-#: src/features/perf/perf.js:66
-msgid "%s requests"
+#: src/features/perf/perf.js:81
+msgid "Click a request to see where its time goes."
 msgstr ""
 
-#: src/features/perf/perf.js:66
-msgid "%s/%s requests"
+#: src/features/perf/perf.js:96
+msgid "%s SQL"
 msgstr ""
 
-#: src/features/perf/perf.js:67
-msgid "Request · SQL · duration"
+#: src/features/perf/perf.js:120
+msgid "Reads %s"
 msgstr ""
 
-#: src/features/perf/perf.js:67
-msgid "Id · time · CPU"
+#: src/features/perf/perf.js:120
+msgid "Creates in %s"
 msgstr ""
 
-#: src/features/perf/perf.js:68
-msgid "Select a request to see its SQL queries."
+#: src/features/perf/perf.js:120
+msgid "Updates %s"
 msgstr ""
 
-#: src/features/perf/perf.js:70
-msgid "Latest session: %s"
+#: src/features/perf/perf.js:120
+msgid "Deletes from %s"
 msgstr ""
 
-#: src/features/perf/perf.js:85
-msgid "Flame Graph (speedscope)"
+#: src/features/perf/perf.js:124
+msgid "Runs a SQL query"
 msgstr ""
 
-#: src/features/perf/perf.js:94
-msgid "No SQL recorded."
+#: src/features/perf/perf.js:136
+msgid "SQL + Full Stack"
 msgstr ""
 
-#: src/features/perf/perf.js:99
-msgid "Full SQL + Stack"
+#: src/features/perf/perf.js:143
+msgid "≈ %s in Python, %s in %s SQL queries"
 msgstr ""
 
-#: src/features/perf/perf.js:101
-msgid "%s queries · SQL %s / total %s · Python ≈ %s"
+#: src/features/perf/perf.js:143
+msgid "≈ %s in Python, no SQL"
 msgstr ""
 
-#: src/features/perf/perf.js:103
+#: src/features/perf/perf.js:145
+msgid "Called by"
+msgstr ""
+
+#: src/features/perf/perf.js:160
+msgid "Every Python function of the request and the time it took (speedscope)"
+msgstr ""
+
+#: src/features/perf/perf.js:160
+msgid "Flame Graph ↗"
+msgstr ""
+
+#: src/features/perf/perf.js:161
+msgid "Nothing recorded."
+msgstr ""
+
+#: src/features/perf/perf.js:167
+msgid "N+1: one query runs %s× in this request"
+msgstr ""
+
+#: src/features/perf/perf.js:168
+msgid "%s runs it once per record: read them all at once instead (a recordset, mapped(), read_group…)."
+msgstr ""
+
+#: src/features/perf/perf.js:169
+msgid "Most of the time is in the database (%s of %s)"
+msgstr ""
+
+#: src/features/perf/perf.js:169
+msgid "See the slowest queries below: a missing index, a large join, a search on a non-stored field…"
+msgstr ""
+
+#: src/features/perf/perf.js:170
+msgid "Most of the time is in Python (≈ %s of %s)"
+msgstr ""
+
+#: src/features/perf/perf.js:170
+msgid "The SQL is not the problem: see which code takes the time below, or every function in the Flame Graph."
+msgstr ""
+
+#: src/features/perf/perf.js:171
+msgid "✓ Fast request (%s)"
+msgstr ""
+
+#: src/features/perf/perf.js:171
+msgid "Nothing to optimise here."
+msgstr ""
+
+#: src/features/perf/perf.js:180
+msgid "SQL %s"
+msgstr ""
+
+#: src/features/perf/perf.js:181
+msgid "SQL %s, Python ≈ %s"
+msgstr ""
+
+#: src/features/perf/perf.js:183
+msgid "Python ≈ %s"
+msgstr ""
+
+#: src/features/perf/perf.js:185
+msgid "By Code"
+msgstr ""
+
+#: src/features/perf/perf.js:186
+msgid "The functions of the modules (outside the ORM and the server) the time went to, SQL they ran included. Sampled every 10 ms or so: approximate."
+msgstr ""
+
+#: src/features/perf/perf.js:187
+msgid "No time in the modules' code: the server itself (routing, ORM) took it."
+msgstr ""
+
+#: src/features/perf/perf.js:187
+msgid "No Python samples: this request was recorded without them."
+msgstr ""
+
+#: src/features/perf/perf.js:189
 msgid "Repeated Queries (%s)"
 msgstr ""
 
-#: src/features/perf/perf.js:103
-msgid "The same query run several times: N+1 suspects."
+#: src/features/perf/perf.js:190
+msgid "The same SQL sent several times. If a count follows the number of records shown (10 records → 10×), it is an N+1: the code reads records one by one where one query could read them all."
 msgstr ""
 
-#: src/features/perf/perf.js:103
-msgid "Count · caller · time"
-msgstr ""
-
-#: src/features/perf/perf.js:103
-#: src/features/perf/perf.js:106
-msgid "Query"
-msgstr ""
-
-#: src/features/perf/perf.js:105
+#: src/features/perf/perf.js:191
 msgid "✓ No repeated query."
 msgstr ""
 
-#: src/features/perf/perf.js:106
-msgid "Slowest Queries (%s)"
+#: src/features/perf/perf.js:193
+msgid "Slowest Queries"
 msgstr ""
 
-#: src/features/perf/perf.js:106
-msgid "Caller · time"
+#: src/features/perf/perf.js:194
+msgid "✓ No slow query (the slowest took %s): the database is not the problem here."
+msgstr ""
+
+#: src/features/perf/perf.js:195
+msgid "The slowest took %s. Check the columns it filters or joins on have an index, and that it does not read more rows than needed."
 msgstr ""
 
 #: src/features/record/record.js:9
@@ -726,56 +821,52 @@ msgid "Time · route"
 msgstr ""
 
 #: src/features/rpc/rpc.js:41
-msgid "Select a call to see its parameters and result."
+msgid "Select a call to edit its parameters, send it again and see its result."
 msgstr ""
 
-#: src/features/rpc/rpc.js:67
-msgid "Edit & Resend"
+#: src/features/rpc/rpc.js:59
+msgid "Recorded at %s · %s ms"
 msgstr ""
 
-#: src/features/rpc/rpc.js:68
+#: src/features/rpc/rpc.js:61
 msgid "Why was it blocked? → Security"
 msgstr ""
 
-#: src/features/rpc/rpc.js:70
-msgid "Result"
-msgstr ""
-
-#: src/features/rpc/rpc.js:78
+#: src/features/rpc/rpc.js:68
 msgid "… (%s characters)"
 msgstr ""
 
-#: src/features/rpc/rpc.js:84
+#: src/features/rpc/rpc.js:75
 msgid "Route"
 msgstr ""
 
-#: src/features/rpc/rpc.js:85
+#: src/features/rpc/rpc.js:76
 msgid "Body (JSON)"
 msgstr ""
 
-#: src/features/rpc/rpc.js:86
+#: src/features/rpc/rpc.js:77
 msgid "Send"
 msgstr ""
 
-#: src/features/rpc/rpc.js:90
+#: src/features/rpc/rpc.js:81
 msgid "Invalid JSON: %s"
 msgstr ""
 
-#: src/features/rpc/rpc.js:92
+#: src/features/rpc/rpc.js:83
 #: src/shared/ui.js:104
 #: src/shared/ui.js:166
 msgid "Loading…"
 msgstr ""
 
-#: src/features/rpc/rpc.js:101
+#: src/features/rpc/rpc.js:92
 msgid "Ctrl/⌘ + Enter"
 msgstr ""
 
-#: src/features/rpc/rpc.js:112
+#: src/features/rpc/rpc.js:103
 msgid "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
 msgstr ""
 
-#: src/features/rpc/rpc.js:120
+#: src/features/rpc/rpc.js:111
 msgid "Copy as cURL"
 msgstr ""
 

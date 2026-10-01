@@ -213,9 +213,8 @@ async function record() {
   await sleep(1300);
   await clickIn('#rpc .list > li[data-q="sale.order web_read"] .name');
   await sleep(500);
-  await clickIn('#rpc .detail .btn', 'Edit & Resend');
-  await sleep(500);
-  // the body: `specification` cut down to four fields, typed where it starts
+  await wait(panel.waitForSelector('#rpc .detail .composer textarea'));
+  // the body, editable right away: `specification` cut down to four fields, typed where it starts
   await panel.$eval('#rpc .detail .composer textarea', (t) => {
     const body = JSON.parse(t.value);
     delete body.params.kwargs.specification;
@@ -230,7 +229,7 @@ async function record() {
   await type('{"name": {}, "state": {}, "amount_total": {}},', 45);
   await sleep(300);
   await clickIn('#rpc .detail .composer button[type=submit]');
-  await wait(panel.waitForSelector('#rpc .detail .composer .pill', { timeout: 15_000 }));
+  await wait(panel.waitForFunction(() => document.querySelector('#rpc .detail .composer .answer')?.textContent.includes('HTTP'), { timeout: 15_000 })); // the recorded answer, replaced
   log.posterAt = now();
   highlight(await boxOf('#rpc .detail .composer'));
   await sleep(1200);
