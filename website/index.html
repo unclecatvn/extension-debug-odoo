@@ -52,7 +52,7 @@
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
   html:not([lang="vi"]) [data-l="vi"], html[lang="vi"] [data-l="en"] { display: none; }
   a { color: inherit; }
-  img { max-width: 100%; height: auto; display: block; }
+  img, video { max-width: 100%; height: auto; display: block; }
   code { white-space: nowrap; font: .86em var(--mono); background: var(--surface-2); border: 1px solid var(--line); padding: .1em .4em; border-radius: 5px; }
   ::selection { background: var(--brand-deep); }
 
@@ -257,7 +257,7 @@
     <div class="meta"><span>Chrome · Edge · Brave</span><span data-l="en">no backend</span><span data-l="vi">không backend</span><span data-l="en">no analytics</span><span data-l="vi">không analytics</span></div>
     <div class="window">
       <div class="bar"><i></i><i></i><i></i><span>odoo · S00016</span></div>
-      <img src="screenshots/overview.png" width="2880" height="1800" alt="Odoo Debug panel open next to a sales order, half light theme, half dark theme">
+      <video src="intro.mp4" poster="screenshots/overview.png" width="1440" height="900" autoplay muted loop playsinline aria-label="15-second tour: the Odoo Debug panel opened on a sales order, its fields, an RPC call edited and sent again, the ORM console, Security in full screen"></video>
     </div>
   </div>
 
@@ -432,6 +432,8 @@
     a.querySelector('span[data-l="vi"]').textContent = 'đã phát hành · xem có gì mới';
   }).catch(() => {});
 
+  // The hero's tour: still, with its controls, for people who ask for less motion.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) for (const v of document.querySelectorAll('video[autoplay]')) { v.autoplay = false; v.pause(); v.controls = true; }
   // Zoomable screenshots. ponytail: native <dialog>, one zoom step + scroll to pan; pinch-zoom on phones comes from the browser.
   const zoom = document.getElementById('zoom');
   const zimg = zoom.querySelector('img');
@@ -448,6 +450,7 @@
   };
   document.querySelectorAll('.window').forEach((w) => {
     const img = w.querySelector('img');
+    if (!img) return; // the hero's video
     w.insertAdjacentHTML('beforeend', '<span class="zoom-hint">⤢ <span data-l="en">Click to zoom</span><span data-l="vi">Bấm để phóng to</span></span>');
     img.onclick = () => {
       zimg.src = img.currentSrc || img.src;

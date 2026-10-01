@@ -5,7 +5,8 @@
     "test": "node --test \"tests/*.test.mjs\"",
     "i18n": "node tools/i18n.mjs",
     "e2e": "node --test \"e2e/*.e2e.mjs\"",
-    "screenshots": "node tools/screenshots.mjs"
+    "screenshots": "node tools/screenshots.mjs",
+    "intro": "node tools/intro.mjs"
   },
   "devDependencies": {
     "puppeteer": "^25.12.0"

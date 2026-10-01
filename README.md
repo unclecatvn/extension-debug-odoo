@@ -17,7 +17,7 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
-<img src="website/screenshots/overview.png" alt="Odoo Debug panel open next to a sales order, half light theme, half dark theme" width="100%">
+<img src="website/intro.gif" alt="15-second tour: the Odoo Debug panel opened on a sales order, its fields, an RPC call edited and sent again, the ORM console, Security in full screen" width="100%">
 
 </div>
 
@@ -167,6 +167,12 @@ ODOO_VERSION=18 ODOO_MODULES=sale_management,crm ODOO_ARGS= docker compose -f e2
 npm run screenshots
 ```
 
+The 15-second tour (`website/intro.mp4` for the website, `website/intro.gif` for this README) is recorded the same way, ffmpeg needed:
+
+```bash
+npm run intro
+```
+
 ### Project structure
 
 ```
@@ -191,6 +197,7 @@ tests/                     *.test.mjs, one per logic module
 e2e/                       panel.e2e.mjs (Puppeteer) + compose.yml (Odoo 18 / 19 + PostgreSQL) + odoo.mjs (login, open the panel)
 tools/i18n.mjs             npm run i18n: extract strings → .pot, merge into every .po
 tools/screenshots.mjs      npm run screenshots: retake website/screenshots/*.png from a real Odoo
+tools/intro.mjs            npm run intro: record the 15-second tour (website/intro.mp4, website/intro.gif)
 ```
 
 Paths below are relative to `extension/`.
