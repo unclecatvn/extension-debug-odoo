@@ -358,6 +358,17 @@ test('Apps tab: ⟳ Update Apps List beside the count draws the list again, the 
   assert.deepEqual(await panel.$$eval('#apps .facet', (fs) => fs.map((f) => f.title)), ['Installed'], 'the filters are kept');
 });
 
+test('Menus tab: a click opens the technical screen in the Odoo page, as its menu would', async () => {
+  await click('.tabs [data-tab="menus"]');
+  await panel.waitForSelector('#menus .menus li');
+  assert.equal(await panel.$eval('#menus .menus li a', (a) => new URL(a.href).pathname), '/odoo/action-base.action_model_model', '↗: the same screen in a new tab');
+  await panel.$$eval('#menus .menus li', (lis) => lis.find((li) => li.querySelector('.grow > span').textContent === 'Record Rules').click());
+  await page.waitForFunction(() => document.querySelector('.o_list_view') && document.querySelector('.o_breadcrumb')?.textContent.includes('Record Rules'), { timeout: 30_000 });
+  await panel.waitForFunction(() => document.querySelector('#status')?.textContent.includes('ir.rule'), { timeout: 15_000 });
+  await page.goBack(); // the user form again, for what follows (not a page load: the panel stays)
+  await page.waitForSelector('.o_form_view');
+});
+
 test('every tab is in sight: the tab strip wraps instead of scrolling', async () => {
   const hidden = await panel.$$eval('.tabs button', (bs) => {
     const nav = bs[0].parentElement.getBoundingClientRect();

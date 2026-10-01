@@ -235,6 +235,7 @@ msgid "page not refreshed"
 msgstr "page not refreshed"
 
 #: src/features/code/code.js:131
+#: src/features/menus/menus.js:22
 #: src/features/rpc/rpc.js:94
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
@@ -453,6 +454,74 @@ msgstr "No view to refresh on this page"
 msgid "Suggestions"
 msgstr "Suggestions"
 
+#: src/features/menus/logic.js:6
+msgid "Models"
+msgstr "Models"
+
+#: src/features/menus/logic.js:7
+#: src/features/record/record.js:22
+msgid "Fields"
+msgstr "Fields"
+
+#: src/features/menus/logic.js:8
+msgid "Record Rules"
+msgstr "Record Rules"
+
+#: src/features/menus/logic.js:9
+msgid "Views"
+msgstr "Views"
+
+#: src/features/menus/logic.js:10
+#: src/panel/panel.html:28
+msgid "Menus"
+msgstr "Menus"
+
+#: src/features/menus/logic.js:11
+msgid "Model Data"
+msgstr "Model Data"
+
+#: src/features/menus/logic.js:12
+msgid "Crons"
+msgstr "Crons"
+
+#: src/features/menus/logic.js:13
+msgid "Actions Window"
+msgstr "Actions Window"
+
+#: src/features/menus/logic.js:14
+msgid "Actions Server"
+msgstr "Actions Server"
+
+#: src/features/menus/logic.js:15
+msgid "Reports"
+msgstr "Reports"
+
+#: src/features/menus/logic.js:16
+#: src/features/rpc/rpc.js:59
+msgid "Parameters"
+msgstr "Parameters"
+
+#: src/features/menus/logic.js:17
+msgid "Sequences"
+msgstr "Sequences"
+
+#: src/features/menus/logic.js:18
+msgid "Mail Templates"
+msgstr "Mail Templates"
+
+#: src/features/menus/menus.js:13
+msgid "Needs Access Rights (base.group_erp_manager)."
+msgstr "Needs Access Rights (base.group_erp_manager)."
+
+#: src/features/menus/menus.js:34
+msgid "Menu · model"
+msgstr "Menu · model"
+
+#: src/features/menus/menus.js:34
+#: src/features/view/view.js:37
+msgid "Action"
+msgstr "Action"
+
 #: src/features/perf/perf.js:14
 msgid "Cannot call /web/set_profiling"
 msgstr "Cannot call /web/set_profiling"
@@ -598,10 +667,6 @@ msgstr "last updated by"
 msgid "Model and id, xmlids (noupdate flagged), who created and last updated the record, and when."
 msgstr "Model and id, xmlids (noupdate flagged), who created and last updated the record, and when."
 
-#: src/features/record/record.js:22
-msgid "Fields"
-msgstr "Fields"
-
 #: src/features/record/record.js:41
 msgid "change → recomputes %s"
 msgstr "change → recomputes %s"
@@ -663,10 +728,6 @@ msgstr "Time · route"
 #: src/features/rpc/rpc.js:40
 msgid "Select a call to see its parameters and result."
 msgstr "Select a call to see its parameters and result."
-
-#: src/features/rpc/rpc.js:59
-msgid "Parameters"
-msgstr "Parameters"
 
 #: src/features/rpc/rpc.js:66
 msgid "Edit & Resend"
@@ -1329,10 +1390,6 @@ msgstr "Combined Arch (View #%s)"
 msgid "Every %s view of this model as an inheritance tree (the one shown highlighted, inactive ones included), and the combined arch."
 msgstr "Every %s view of this model as an inheritance tree (the one shown highlighted, inactive ones included), and the combined arch."
 
-#: src/features/view/view.js:37
-msgid "Action"
-msgstr "Action"
-
 #: src/features/view/view.js:46
 msgid "Open Action Record ↗"
 msgstr "Open Action Record ↗"
@@ -1409,15 +1466,15 @@ msgstr "Modifier expressions"
 msgid "The form is read-only: every field is readonly."
 msgstr "The form is read-only: every field is readonly."
 
-#: src/panel/main.js:34
+#: src/panel/main.js:35
 msgid "Cannot read this tab: %s"
 msgstr "Cannot read this tab: %s"
 
-#: src/panel/main.js:34
+#: src/panel/main.js:35
 msgid "The current tab is not an Odoo page."
 msgstr "The current tab is not an Odoo page."
 
-#: src/panel/main.js:86
+#: src/panel/main.js:87
 msgid "Not an Odoo page"
 msgstr "Not an Odoo page"
 
@@ -1463,10 +1520,10 @@ msgid "Security"
 msgstr "Security"
 
 #: src/panel/panel.html:26
-msgid "Translations"
-msgstr "Translations"
+msgid "i18n"
+msgstr "i18n"
 
-#: src/panel/panel.html:28
+#: src/panel/panel.html:29
 msgid "Perf"
 msgstr "Perf"
 

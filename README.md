@@ -40,7 +40,8 @@ shadow DOM so it never touches Odoo's styles.
 | **Code** | ORM Console: JavaScript with an ORM-like `env` (`env['sale.order'].search(…)`, `read`, `mapped`, `write`, any public method…) run **as the logged-in user**, so the server applies their ACLs, record rules and active companies. Fields read and written like in Python (`return rec.state`, `rec.state = 'sent'`). Suggests the models of the installed modules, their fields and the recordset methods while you type. Read-only by default; **Allow Writes** lets writes through, and **Auto Refresh** then reloads the view on screen. Results as a table, prints, errors with server traceback, every call made. |
 | **Apps** | For a list of modules, typed or ticked in the list below an Odoo-like search bar (filters Installed / Not Installed, Apps / Extra, category, as facets; Installed when the panel opens): Activate (Update Apps List, then install with dependencies), Upgrade, Open Forms (Settings rights); ⟳ **Update Apps List** on its own, under the bar. |
 | **Security** | Three parts. **User**: search any user by name or login (yourself by default) and every card follows, or log in as them in an incognito window (your session stays): their groups (add / remove, needs Access Rights), risk audit. **Model**: rule by rule why each operation is allowed or blocked for that user (for yourself, with the server's exact `has_access` answer next to it), ACLs, fields hidden from the user (restricted to groups), configuration audit. **Instance**: session (db, version, `web.base.url`, `test_mode`; **Become Superuser** for Settings users), system parameters (secrets masked), checks (HTTPS, cookie flags, security headers, database manager). |
-| **Translations** | **Languages** (Settings rights): activates languages and loads, or reloads, their terms for every installed app (Odoo's Add Languages wizard, Overwrite Existing Terms optional). Exports the `.pot` template and one `.po` per language for several apps (the input searches the installed modules as you type; tick them or type their names) and languages (toggles of the active ones) with Odoo's own wizard, saved straight to `Downloads/<module>/i18n/`. |
+| **i18n** | **Languages** (Settings rights): activates languages and loads, or reloads, their terms for every installed app (Odoo's Add Languages wizard, Overwrite Existing Terms optional). Exports the `.pot` template and one `.po` per language for several apps (the input searches the installed modules as you type; tick them or type their names) and languages (toggles of the active ones) with Odoo's own wizard, saved straight to `Downloads/<module>/i18n/`. |
+| **Menus** | The technical screens a developer opens all day, one click away without debug mode or the Technical menu: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (the list of OCA's `developer_menu`, with nothing to install; for Access Rights managers). A click opens the screen in the Odoo page, as its menu would; ↗ in a new tab. |
 | **Perf** | Odoo's built-in server profiler: start / stop, profiled requests, SQL summary with repeated queries (N+1 suspects), slowest queries, speedscope flame graph. |
 
 Plus: click any field name, model or xmlid in the panel to copy it, and <kbd>⌥ Alt</kbd> + click a field on the Odoo
@@ -121,7 +122,7 @@ analytics and sends nothing anywhere else.
 | `cookies` | Report the session cookie's flags (`Secure`, `HttpOnly`, `SameSite`) in the Security tab. The value is never read. |
 | `storage` | Language and theme settings. |
 | `clipboardWrite` | Copy field names, xmlids and values. |
-| `downloads` | Save exported `.pot` / `.po` files to `Downloads/<module>/i18n/` (Translations tab). |
+| `downloads` | Save exported `.pot` / `.po` files to `Downloads/<module>/i18n/` (i18n tab). |
 | `declarativeContent` | Enable the toolbar icon on Odoo pages only. |
 
 Odoo data only reaches the DOM through `textContent`, and the panel page can't be framed by other sites.
@@ -190,7 +191,7 @@ extension/                 the extension itself: exactly what the release zip co
     panel/                 panel.html / main.js: header, tabs, binding to the tab it is embedded in
     shared/                bridge.js (page functions, RPC, cached reads), ui.js + ui.css (DOM, widgets, styles of the panel and popup),
                            page.js (core page functions), list.js, picker.js, i18n.js, odoo.js, settings.js
-    features/<tab>/        one folder per tab: record, view, rpc, code, security, translations, apps, perf
+    features/<tab>/        one folder per tab: record, view, rpc, code, security, translations, apps, menus, perf
       <tab>.js             the tab UI: render(section, state); big ones split into a file per part (code: suggest.js, help.js)
       page.js              functions injected into the Odoo page (self-contained, no imports)
       logic.js             pure logic, no chrome.* / DOM

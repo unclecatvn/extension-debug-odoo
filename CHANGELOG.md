@@ -6,18 +6,20 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 ### Added
 
-- **Translations › Languages**: activates one or more languages and loads, or reloads, their terms for every installed app, with Odoo's Add Languages wizard (Overwrite Existing Terms optional). Needs Settings rights; the active languages are chips that toggle their code in the field. The export below lists the new languages right away.
+- **Menus tab**: the technical screens a developer opens all day, one click away without debug mode or the Technical menu: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (the list of OCA's `developer_menu`, with nothing to install). A click opens the screen in the Odoo page, as its menu would (leaving full screen, so it shows); ↗ opens it in a new tab. Each row gives the model and, in full screen, the action's xmlid, both copied on click. For Access Rights managers; Mail Templates only shows with the mail module.
+- **i18n › Languages**: activates one or more languages and loads, or reloads, their terms for every installed app, with Odoo's Add Languages wizard (Overwrite Existing Terms optional). Needs Settings rights; the active languages are chips that toggle their code in the field. The export below lists the new languages right away.
 
 ### Changed
 
 - **Toolbar popup**: "This page" shows the Odoo version and database next to the host (one line, an icon each), and the debug mode switch reads Off / Debug / Assets.
-- **Card titles stay short**; what they used to spell out goes in an ⓘ after the title, shown on hover or keyboard focus: ACL (`ir.model.access`, the rows in green apply to the user), System parameters (`ir.config_parameter`, secrets masked), View › Form fields (invisible / readonly / required, evaluated on the record shown), Perf › Repeated queries (N+1 suspects). Long titles are shorter, their detail in the ⓘ: Identity (was Identity & metadata), Hidden fields (Fields hidden from the user), Model audit (Model configuration audit), Inherited views (Inherited views — <type>), Translations › Languages (Activate / Update Languages). Titles are in Title Case, like Odoo's labels (Context & Domain, User Risks, Why Allowed / Blocked…).
 - **Security**: plainer labels than `groups=` in the model part ("Hidden fields", "Allowed groups", "not restricted to any group").
 - Text fields show focus with their border only, no ring around them.
 - **Apps › search bar like Odoo's**: each facet has a coloured label (a funnel for a filter, the field name for the category), its values joined by an italic *or*, and ×; when they fill a line the input goes to the next one and ▾ stays as tall as the bar. The filters start at Installed each time the panel opens (they used to be remembered, so a cleared filter stayed cleared).
 - **Apps › ⟳ Update Apps List** beside the count: Odoo's Update Apps List on its own, the new modules join the list at once (no page reload), the typed modules and the filters kept.
-- **Filter counts on their own line** under their input, on the right (Apps, Translations, Record › Fields, Security › Groups and System Parameters, Perf): the input gets the whole width.
-- **Apps / Translations lists**: a module's name and title are one line, cut with a single … at its end (the title goes first, the row never overflows); hovering the row shows it whole, drawn over the version, ↗ staying on top.
+- **The Translations tab is titled i18n**: shorter in the tab strip, and what the folder it exports to is called.
+- **Filter counts on their own line** under their input, on the right (Apps, i18n, Record › Fields, Security › Groups and System Parameters, Perf): the input gets the whole width.
+- **Apps / i18n lists**: a module's name and title are one line, cut with a single … at its end (the title goes first, the row never overflows); hovering the row shows it whole, drawn over the version, ↗ staying on top.
+- **Card titles stay short**; what they used to spell out goes in an ⓘ after the title, shown on hover or keyboard focus: ACL (`ir.model.access`, the rows in green apply to the user), System parameters (`ir.config_parameter`, secrets masked), View › Form fields (invisible / readonly / required, evaluated on the record shown), Perf › Repeated queries (N+1 suspects). Long titles are shorter, their detail in the ⓘ: Identity (was Identity & metadata), Hidden fields (Fields hidden from the user), Model audit (Model configuration audit), Inherited views (Inherited views — <type>), i18n › Languages (Activate / Update Languages). Titles are in Title Case, like Odoo's labels (Context & Domain, User Risks, Why Allowed / Blocked…).
 
 ### Removed
 
