@@ -245,13 +245,14 @@ test('Code tab: a pick replaces the word, also after a skipped closer and under 
 test('Translations tab: one input searches the installed modules and holds the ticked ones', async () => {
   await click('.tabs [data-tab="translations"]');
   await panel.waitForSelector('#translations .module-picker li');
-  const state = () => panel.$eval('#translations', (s) => ({
+  const EXPORT = '#translations > div.card'; // the untitled export card, not Activate / Update Languages above it
+  const state = () => panel.$eval(EXPORT, (s) => ({
     apps: s.querySelector('form input[type=text]').value,
     shown: [...s.querySelectorAll('.module-picker li:not([hidden])')].map((li) => li.dataset.name),
     ticked: [...s.querySelectorAll('.module-picker li input:checked')].map((b) => b.closest('li').dataset.name),
   }));
-  const type = (v) => panel.$eval('#translations form input[type=text]', (i, v) => { i.value = v; i.dispatchEvent(new Event('input')); }, v);
-  const key = (k) => panel.$eval('#translations form input[type=text]', (i, k) => i.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })), k);
+  const type = (v) => panel.$eval(`${EXPORT} form input[type=text]`, (i, v) => { i.value = v; i.dispatchEvent(new Event('input')); }, v);
+  const key = (k) => panel.$eval(`${EXPORT} form input[type=text]`, (i, k) => i.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })), k);
   const tick = (name) => panel.$eval(`#translations .module-picker li[data-name="${name}"] input`, (b) => b.click());
 
   await type('web; base_imp');
@@ -265,18 +266,32 @@ test('Translations tab: one input searches the installed modules and holds the t
   await type('web; base_import; base_setu');
   await key('Enter');
   assert.equal((await state()).apps, 'web; base_import; base_setup; ', 'Enter picks the match, no export');
-  assert.equal(await panel.$eval('#translations .steps', (u) => u.childElementCount), 0);
+  assert.equal(await panel.$eval(`${EXPORT} .steps`, (u) => u.childElementCount), 0);
 
   await tick('web');
   assert.equal((await state()).apps, 'base_import; base_setup; ', 'unticking removes it');
 
   // languages are toggles; the button says how many files it will download (template + one .po per language, per app)
-  const button = () => panel.$eval('#translations button[type=submit]', (b) => b.textContent);
+  const button = () => panel.$eval(`${EXPORT} button[type=submit]`, (b) => b.textContent);
   assert.equal(await button(), 'Export & Download · 2 files');
-  await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.click());
-  assert.equal(await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.getAttribute('aria-pressed')), 'true');
+  await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.click());
+  assert.equal(await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.getAttribute('aria-pressed')), 'true');
   assert.equal(await button(), 'Export & Download · 4 files');
-  await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.click()); // back off
+  await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.click()); // back off
+});
+
+test('Translations tab: Activate / Update Languages, the active languages as chips that toggle their code in the field', async () => {
+  const CARD = '#translations details.card[data-key="add-langs"]';
+  await panel.$eval(CARD, (d) => { d.open = true; }); // opened by an earlier test, and remembered: open it anyway
+  await panel.waitForSelector(`${CARD} form input[type=text]`);
+  const field = () => panel.$eval(`${CARD} form input[type=text]`, (i) => i.value);
+  const chip = () => panel.$eval(`${CARD} .chip`, (c) => { c.click(); return [c.textContent, c.getAttribute('aria-pressed')]; });
+  await panel.$eval(`${CARD} form input[type=text]`, (i) => { i.value = ''; i.dispatchEvent(new Event('input')); });
+  const [code, pressed] = await chip();
+  assert.equal(pressed, 'true');
+  assert.equal(await field(), code);
+  assert.deepEqual(await chip(), [code, 'false']);
+  assert.equal(await field(), '');
 });
 
 test('Apps tab: Odoo\'s filters (Installed by default), the word being typed searches inside them', async () => {

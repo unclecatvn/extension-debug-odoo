@@ -396,6 +396,8 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 :is(#apps, #translations) :is(.card-body, .card-body > .pad, .form) { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 :is(#apps, #translations) .module-picker { flex: 1; min-height: 160px; display: flex; flex-direction: column; }
 :is(#apps, #translations) .module-picker .list { flex: 1; min-height: 0; max-height: none; }
+#translations > details.card { flex: none; display: block; margin-bottom: 8px; } /* Activate / Update Languages: above the export, as tall as its content */
+.form label.check { flex-direction: row; align-self: flex-start; align-items: center; gap: 6px; }
 .chip:disabled { cursor: default; opacity: .85; } /* Translations: the template chip, always on */
 /* Translations: many active languages scroll inside two rows of chips instead of squeezing the module list */
 .langs { max-height: 58px; overflow-y: auto; align-items: center; }

@@ -4,6 +4,10 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 ## [Unreleased]
 
+### Added
+
+- **Translations › Activate / Update Languages**: activates one or more languages and loads, or reloads, their terms for every installed app, with Odoo's Add Languages wizard (Overwrite Existing Terms optional). Needs Settings rights; the active languages are chips that toggle their code in the field. The export below lists the new languages right away.
+
 ### Changed
 
 - **Toolbar popup**: "This page" shows the Odoo version and database next to the host (one line, an icon each), and the debug mode switch reads Off / Debug / Assets.

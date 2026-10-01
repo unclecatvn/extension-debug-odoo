@@ -12,11 +12,12 @@ msgstr ""
 
 #: src/features/apps/apps.js:16
 #: src/features/security/security.js:193
+#: src/features/translations/translations.js:34
 msgid "Needs Settings rights (base.group_system)."
 msgstr "Needs Settings rights (base.group_system)."
 
 #: src/features/apps/apps.js:22
-#: src/features/translations/translations.js:14
+#: src/features/translations/translations.js:84
 msgid "Search or type: sale; stock; my_module"
 msgstr "Search or type: sale; stock; my_module"
 
@@ -30,6 +31,7 @@ msgstr "%s/%s modules"
 
 #: src/features/apps/apps.js:46
 #: src/features/code/code.js:36
+#: src/features/translations/translations.js:63
 msgid "Running…"
 msgstr "Running…"
 
@@ -38,7 +40,8 @@ msgstr "Running…"
 #: src/features/code/code.js:174
 #: src/features/rpc/rpc.js:51
 #: src/features/rpc/rpc.js:96
-#: src/features/translations/translations.js:90
+#: src/features/translations/translations.js:73
+#: src/features/translations/translations.js:160
 msgid "error"
 msgstr "error"
 
@@ -1155,68 +1158,112 @@ msgstr "This model has no record rule."
 msgid "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 msgstr "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 
-#: src/features/translations/translations.js:14
+#: src/features/translations/translations.js:29
+msgid "Active:"
+msgstr "Active:"
+
+#: src/features/translations/translations.js:33
+msgid "Activate / Update Languages"
+msgstr "Activate / Update Languages"
+
+#: src/features/translations/translations.js:40
+msgid "Activate / Update"
+msgstr "Activate / Update"
+
+#: src/features/translations/translations.js:44
+msgid "Languages"
+msgstr "Languages"
+
+#: src/features/translations/translations.js:46
+msgid "Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps."
+msgstr "Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps."
+
+#: src/features/translations/translations.js:47
+msgid "Overwrite Existing Terms"
+msgstr "Overwrite Existing Terms"
+
+#: src/features/translations/translations.js:48
+msgid "If you check this box, your customized translations will be overwritten and replaced by the official ones."
+msgstr "If you check this box, your customized translations will be overwritten and replaced by the official ones."
+
+#: src/features/translations/translations.js:57
+msgid "Unknown language: %s"
+msgstr "Unknown language: %s"
+
+#: src/features/translations/translations.js:58
+msgid "Enter at least one language."
+msgstr "Enter at least one language."
+
+#: src/features/translations/translations.js:62
+msgid "activate %s"
+msgstr "activate %s"
+
+#: src/features/translations/translations.js:62
+msgid "update %s"
+msgstr "update %s"
+
+#: src/features/translations/translations.js:84
 msgid "Apps To Export"
 msgstr "Apps To Export"
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:92
 msgid "Export & Download"
 msgstr "Export & Download"
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:92
 msgid "Export & Download · 1 file"
 msgstr "Export & Download · 1 file"
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:92
 msgid "Export & Download · %s files"
 msgstr "Export & Download · %s files"
 
-#: src/features/translations/translations.js:39
+#: src/features/translations/translations.js:109
 msgid "%s/%s installed modules"
 msgstr "%s/%s installed modules"
 
-#: src/features/translations/translations.js:40
+#: src/features/translations/translations.js:110
 msgid "Technical names, separated by ;"
 msgstr "Technical names, separated by ;"
 
-#: src/features/translations/translations.js:41
+#: src/features/translations/translations.js:111
 msgid "Languages:"
 msgstr "Languages:"
 
-#: src/features/translations/translations.js:42
+#: src/features/translations/translations.js:112
 msgid "Always exported: the empty template, as <module>.pot"
 msgstr "Always exported: the empty template, as <module>.pot"
 
-#: src/features/translations/translations.js:42
-#: src/features/translations/translations.js:79
+#: src/features/translations/translations.js:112
+#: src/features/translations/translations.js:149
 msgid "Template (.pot)"
 msgstr "Template (.pot)"
 
-#: src/features/translations/translations.js:67
+#: src/features/translations/translations.js:137
 msgid "Enter at least one app."
 msgstr "Enter at least one app."
 
-#: src/features/translations/translations.js:69
+#: src/features/translations/translations.js:139
 msgid "Not an active language: %s. Active: %s"
 msgstr "Not an active language: %s. Active: %s"
 
-#: src/features/translations/translations.js:72
+#: src/features/translations/translations.js:142
 msgid "Unknown app: %s"
 msgstr "Unknown app: %s"
 
-#: src/features/translations/translations.js:73
+#: src/features/translations/translations.js:143
 msgid "Not installed: %s"
 msgstr "Not installed: %s"
 
-#: src/features/translations/translations.js:76
+#: src/features/translations/translations.js:146
 msgid "Exporting…"
 msgstr "Exporting…"
 
-#: src/features/translations/translations.js:88
+#: src/features/translations/translations.js:158
 msgid "%s files"
 msgstr "%s files"
 
-#: src/features/translations/translations.js:88
+#: src/features/translations/translations.js:158
 msgid "nothing to export"
 msgstr "nothing to export"
 
