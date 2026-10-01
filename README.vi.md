@@ -17,9 +17,7 @@ Soi record, view, lời gọi RPC, quyền truy cập và hiệu năng server m�
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Cài đặt](#cài-đặt) · [Tính năng](#tính-năng) · [Sử dụng](#sử-dụng) · [Quyền riêng tư](#quyền-riêng-tư--quyền-hạn) · [Phát triển](#phát-triển) · [Changelog](CHANGELOG.md)
 
-<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="Phim 87 giây: extension được dùng thật trên Odoo, mở panel cạnh một đơn bán hàng, lọc field, sửa và gửi lại một lời gọi RPC, gõ và chạy code ORM, giải thích quyền của một user, các câu SQL N+1 của một request. Bấm để xem trên website." width="100%"></a>
-
-▶ [Xem phim giới thiệu 87 giây](https://unclecatvn.github.io/extension-debug-odoo/)
+https://github.com/user-attachments/assets/ae9e90d5-f269-4fad-834b-8e5b88d7877f
 
 </div>
 
@@ -164,6 +162,8 @@ Phim giới thiệu được quay từ cùng bộ dựng đó: một phiên dùn
 ```bash
 npm run intro
 ```
+
+GitHub không phát video nằm trong repo: phim ở đầu README này là `website/intro.mp4` được tải lên làm tệp đính kèm của GitHub (kéo file vào một ô bình luận bất kỳ, copy link `user-attachments` hiện ra, thay cho link cũ).
 
 ### Cấu trúc dự án
 

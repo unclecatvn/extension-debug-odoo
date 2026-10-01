@@ -17,9 +17,7 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
-<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="87-second film: the extension used on a real Odoo, the panel opened beside a sales order, fields filtered, an RPC call edited and sent again, ORM code typed and run, a user's access explained, a request's N+1 queries. Click to watch it on the website." width="100%"></a>
-
-▶ [Watch the 87-second film](https://unclecatvn.github.io/extension-debug-odoo/)
+https://github.com/user-attachments/assets/ae9e90d5-f269-4fad-834b-8e5b88d7877f
 
 </div>
 
@@ -177,6 +175,8 @@ The intro film is recorded from the same setup: a real session with the extensio
 ```bash
 npm run intro
 ```
+
+GitHub plays no video from the repository: the film at the top of this README is `website/intro.mp4` uploaded as a GitHub attachment (drag it into any comment box, copy the `user-attachments` link it gives, put it in place of the old one).
 
 ### Project structure
 
