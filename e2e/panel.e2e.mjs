@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { test, before, after } from 'node:test';
 import puppeteer from 'puppeteer';
-import { EXT, rpc, openForm, openPanel } from './odoo.mjs';
+import { ODOO, EXT, rpc, openForm, openPanel } from './odoo.mjs';
 
 const ext = (s) => String(s).includes('chrome-extension://');
 // element.click(), not a mouse click: Puppeteer misplaces those in an iframe inside a closed shadow root
@@ -83,11 +83,11 @@ test('Security tab: a group is found, tried, applied to the user, then removed f
   const search = '#security .groups-box input[type=search]';
   await panel.waitForSelector(search);
   const find = async (q) => (await panel.waitForSelector(search)).evaluate((i, q) => { i.value = q; i.dispatchEvent(new Event('input')); }, q); // the card may re-render meanwhile
-  // the button of the row `name` among `sel` rows, once it shows (the card re-renders after each write)
-  const press = (sel, name) => panel.waitForFunction((sel, n) => {
+  // the button `btn` of the row `name` among `sel` rows, once it shows (the card re-renders after each write)
+  const press = (sel, name, btn = '.btn') => panel.waitForFunction((sel, n, btn) => {
     const row = [...document.querySelectorAll(`#security ${sel}`)].find((r) => r.checkVisibility() && r.querySelector('.gname').textContent === n);
-    return row?.querySelector('.btn') && (row.querySelector('.btn').click(), true);
-  }, { timeout: 15_000 }, sel, name);
+    return row?.querySelector(btn) && (row.querySelector(btn).click(), true);
+  }, { timeout: 15_000 }, sel, name, btn);
   await find('a'); // typing: the flat list, the groups the user doesn't have too
   const name = await panel.$eval('#security .groups-box', (b) => b.querySelector('.gtree.root').hidden && b.querySelector('.groups > li.addable:not([hidden]) .gname').textContent);
   assert.ok(name, 'the tree makes way for the list');
@@ -95,7 +95,9 @@ test('Security tab: a group is found, tried, applied to the user, then removed f
   await press('.groups > li.addable', name); // Try: simulated, nothing written yet
   await panel.waitForSelector('#security .trybar');
   await (await panel.waitForSelector('#security .trybar .btn.solid')).click(); // Apply
-  await press('.gtree.root > li > .gnode', name); // the user's now, at the top of the tree (nothing else implies it): Remove
+  // the user's now, at the top of the tree (nothing else implies it): Remove. Not any button: until Apply's write is back,
+  // the row is still the tried one, whose button is × Stop trying
+  await press('.gtree.root > li > .gnode', name, '.btn.danger');
   await find(name);
   await panel.waitForFunction((n) => [...document.querySelectorAll('#security .groups > li.addable .gname')].some((g) => g.textContent === n), { timeout: 15_000 }, name);
 });
@@ -135,7 +137,7 @@ test('RPC tab: a call is edited and sent again, a new request is sent, the answe
   await panel.$eval('#rpc .detail .composer textarea', (t, v) => { t.value = v; }, JSON.stringify(body));
   await panel.$$eval('#rpc .detail .composer .btn', (bs) => bs.find((b) => b.textContent === 'Copy as cURL').click());
   const curl = await panel.waitForFunction(() => window.copied, { timeout: 5_000 }).then((h) => h.jsonValue());
-  assert.match(curl, /^curl 'http:\/\/localhost:8069\/jsonrpc'/);
+  assert.ok(curl.startsWith(`curl '${ODOO}/jsonrpc'`), curl);
   assert.match(curl, /"execute_kw","args":\["e2e",2,"'"\$ODOO_API_KEY"'","res.users","web_read",\[\[2\]\]/);
 
   await panel.$$eval('#rpc .toolbar .chip', (bs) => bs.find((b) => b.textContent === 'New Request').click());
