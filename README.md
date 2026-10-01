@@ -17,7 +17,7 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
-https://github.com/user-attachments/assets/ae9e90d5-f269-4fad-834b-8e5b88d7877f
+https://github.com/user-attachments/assets/a257c2f8-ee49-4b97-a7d9-72b04d7e5781
 
 </div>
 

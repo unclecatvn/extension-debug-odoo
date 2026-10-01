@@ -17,7 +17,7 @@ Soi record, view, lời gọi RPC, quyền truy cập và hiệu năng server m�
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Cài đặt](#cài-đặt) · [Tính năng](#tính-năng) · [Sử dụng](#sử-dụng) · [Quyền riêng tư](#quyền-riêng-tư--quyền-hạn) · [Phát triển](#phát-triển) · [Changelog](CHANGELOG.md)
 
-https://github.com/user-attachments/assets/ae9e90d5-f269-4fad-834b-8e5b88d7877f
+https://github.com/user-attachments/assets/a257c2f8-ee49-4b97-a7d9-72b04d7e5781
 
 </div>
 
