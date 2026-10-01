@@ -20,6 +20,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - **Filter counts on their own line** under their input, on the right (Apps, i18n, Record › Fields, Security › Groups and System Parameters, Perf): the input gets the whole width.
 - **Apps / i18n lists**: a module's name and title are one line, cut with a single … at its end (the title goes first, the row never overflows); hovering the row shows it whole, drawn over the version, ↗ staying on top.
 - **Card titles stay short**; what they used to spell out goes in an ⓘ after the title, shown on hover or keyboard focus: ACL (`ir.model.access`, the rows in green apply to the user), System parameters (`ir.config_parameter`, secrets masked), View › Form fields (invisible / readonly / required, evaluated on the record shown), Perf › Repeated queries (N+1 suspects). Long titles are shorter, their detail in the ⓘ: Identity (was Identity & metadata), Hidden fields (Fields hidden from the user), Model audit (Model configuration audit), Inherited views (Inherited views — <type>), i18n › Languages (Activate / Update Languages). Titles are in Title Case, like Odoo's labels (Context & Domain, User Risks, Why Allowed / Blocked…).
+- **RPC and Perf: times are on the browser's clock** (its timezone), no longer in UTC: the time of a call, of a profiled request, and the "since" of the recording.
 
 ### Removed
 

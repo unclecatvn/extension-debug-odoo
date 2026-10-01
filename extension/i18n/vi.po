@@ -50,8 +50,8 @@ msgstr "Đang chạy…"
 #: src/features/apps/apps.js:53
 #: src/features/code/code.js:134
 #: src/features/code/code.js:173
-#: src/features/rpc/rpc.js:51
-#: src/features/rpc/rpc.js:96
+#: src/features/rpc/rpc.js:52
+#: src/features/rpc/rpc.js:97
 #: src/features/translations/translations.js:75
 #: src/features/translations/translations.js:161
 msgid "error"
@@ -236,7 +236,7 @@ msgstr "chưa làm mới trang"
 
 #: src/features/code/code.js:131
 #: src/features/menus/menus.js:22
-#: src/features/rpc/rpc.js:94
+#: src/features/rpc/rpc.js:95
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
 msgstr "Không có phản hồi — đây có phải trang Odoo?"
@@ -497,7 +497,7 @@ msgid "Reports"
 msgstr "Reports"
 
 #: src/features/menus/logic.js:16
-#: src/features/rpc/rpc.js:59
+#: src/features/rpc/rpc.js:60
 msgid "Parameters"
 msgstr "Tham số"
 
@@ -522,124 +522,124 @@ msgstr "Menu · model"
 msgid "Action"
 msgstr "Action"
 
-#: src/features/perf/perf.js:14
+#: src/features/perf/perf.js:15
 msgid "Cannot call /web/set_profiling"
 msgstr "Không gọi được /web/set_profiling"
 
-#: src/features/perf/perf.js:22
+#: src/features/perf/perf.js:23
 msgid "Profiling is not enabled on this database.\nEnable it for 5 minutes? (writes ir.config_parameter base.profiling_enabled_until)"
 msgstr "Profiling chưa được bật cho database này.\nBật trong 5 phút? (ghi ir.config_parameter base.profiling_enabled_until)"
 
-#: src/features/perf/perf.js:26
+#: src/features/perf/perf.js:27
 msgid "Profiling could not be enabled."
 msgstr "Vẫn chưa bật được profiling."
 
-#: src/features/perf/perf.js:43
+#: src/features/perf/perf.js:44
 msgid "Stop Profiling"
 msgstr "Tắt profiling"
 
-#: src/features/perf/perf.js:43
+#: src/features/perf/perf.js:44
 msgid "Start Profiling"
 msgstr "Bật profiling"
 
-#: src/features/perf/perf.js:45
+#: src/features/perf/perf.js:46
 msgid "RECORDING"
 msgstr "ĐANG ĐO"
 
-#: src/features/perf/perf.js:45
+#: src/features/perf/perf.js:46
 msgid "off"
 msgstr "tắt"
 
-#: src/features/perf/perf.js:46
+#: src/features/perf/perf.js:47
 msgid "since %s"
 msgstr "từ %s"
 
-#: src/features/perf/perf.js:49
+#: src/features/perf/perf.js:50
 msgid "Each request of this session writes one ir.profile row; ⟳ reloads the list."
 msgstr "Mỗi request của phiên này ghi một dòng ir.profile; ⟳ để tải lại danh sách."
 
-#: src/features/perf/perf.js:50
+#: src/features/perf/perf.js:51
 msgid "Records the SQL + Python stacks of every request of this session (Odoo's built-in profiler, base.group_system)."
 msgstr "Ghi lại SQL + stack Python của mọi request trong phiên này (profiler có sẵn của Odoo, base.group_system)."
 
-#: src/features/perf/perf.js:64
+#: src/features/perf/perf.js:65
 msgid "No request yet: use the Odoo page, then press ⟳."
 msgstr "Chưa có request nào, thao tác trên trang Odoo rồi bấm ⟳."
 
-#: src/features/perf/perf.js:64
+#: src/features/perf/perf.js:65
 msgid "No profile data yet."
 msgstr "Chưa có dữ liệu profile."
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:66
 msgid "Filter request"
 msgstr "Lọc request"
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:66
 msgid "%s requests"
 msgstr "%s request"
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:66
 msgid "%s/%s requests"
 msgstr "%s/%s request"
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:67
 msgid "Request · SQL · duration"
 msgstr "Request · SQL · thời gian"
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:67
 msgid "Id · time · CPU"
 msgstr "Id · giờ · CPU"
 
-#: src/features/perf/perf.js:67
+#: src/features/perf/perf.js:68
 msgid "Select a request to see its SQL queries."
 msgstr "Chọn một request để xem các câu SQL của nó."
 
-#: src/features/perf/perf.js:69
+#: src/features/perf/perf.js:70
 msgid "Latest session: %s"
 msgstr "Phiên gần nhất: %s"
 
-#: src/features/perf/perf.js:84
+#: src/features/perf/perf.js:85
 msgid "Flame Graph (speedscope)"
 msgstr "Flame graph (speedscope)"
 
-#: src/features/perf/perf.js:93
+#: src/features/perf/perf.js:94
 msgid "No SQL recorded."
 msgstr "Không có SQL nào được ghi."
 
-#: src/features/perf/perf.js:98
+#: src/features/perf/perf.js:99
 msgid "Full SQL + Stack"
 msgstr "SQL đầy đủ + stack"
 
-#: src/features/perf/perf.js:100
+#: src/features/perf/perf.js:101
 msgid "%s queries · SQL %s / total %s · Python ≈ %s"
 msgstr "%s query · SQL %s / tổng %s · Python ≈ %s"
 
-#: src/features/perf/perf.js:102
+#: src/features/perf/perf.js:103
 msgid "Repeated Queries (%s)"
 msgstr "Query lặp lại (%s)"
 
-#: src/features/perf/perf.js:102
+#: src/features/perf/perf.js:103
 msgid "The same query run several times: N+1 suspects."
 msgstr "Cùng một query chạy nhiều lần: nghi N+1."
 
-#: src/features/perf/perf.js:102
+#: src/features/perf/perf.js:103
 msgid "Count · caller · time"
 msgstr "Số lần · nơi gọi · thời gian"
 
-#: src/features/perf/perf.js:102
-#: src/features/perf/perf.js:105
+#: src/features/perf/perf.js:103
+#: src/features/perf/perf.js:106
 msgid "Query"
 msgstr "Câu truy vấn"
 
-#: src/features/perf/perf.js:104
+#: src/features/perf/perf.js:105
 msgid "✓ No repeated query."
 msgstr "✓ Không có query lặp lại."
 
-#: src/features/perf/perf.js:105
+#: src/features/perf/perf.js:106
 msgid "Slowest Queries (%s)"
 msgstr "Query chậm nhất (%s)"
 
-#: src/features/perf/perf.js:105
+#: src/features/perf/perf.js:106
 msgid "Caller · time"
 msgstr "Nơi gọi · thời gian"
 
@@ -691,91 +691,91 @@ msgstr "Field · kiểu · giá trị"
 msgid "Label · storage · compute · module"
 msgstr "Nhãn · lưu trữ · compute · module"
 
-#: src/features/rpc/rpc.js:16
+#: src/features/rpc/rpc.js:17
 msgid "Filter model / method"
 msgstr "Lọc model / method"
 
-#: src/features/rpc/rpc.js:18
+#: src/features/rpc/rpc.js:19
 msgid "Errors Only"
 msgstr "Chỉ lỗi"
 
-#: src/features/rpc/rpc.js:24
+#: src/features/rpc/rpc.js:25
 msgid "Clear"
 msgstr "Xoá"
 
-#: src/features/rpc/rpc.js:30
-#: src/features/rpc/rpc.js:36
+#: src/features/rpc/rpc.js:31
+#: src/features/rpc/rpc.js:37
 msgid "New Request"
 msgstr "Request mới"
 
-#: src/features/rpc/rpc.js:30
-#: src/features/rpc/rpc.js:30
+#: src/features/rpc/rpc.js:31
+#: src/features/rpc/rpc.js:31
 msgid "Close"
 msgstr "Đóng"
 
-#: src/features/rpc/rpc.js:38
+#: src/features/rpc/rpc.js:39
 msgid "No RPC yet. Use the Odoo page to record some."
 msgstr "Chưa có RPC nào. Thao tác trên trang Odoo để ghi lại."
 
-#: src/features/rpc/rpc.js:39
+#: src/features/rpc/rpc.js:40
 msgid "Method · model · duration"
 msgstr "Method · model · thời gian"
 
-#: src/features/rpc/rpc.js:39
+#: src/features/rpc/rpc.js:40
 msgid "Time · route"
 msgstr "Giờ · route"
 
-#: src/features/rpc/rpc.js:40
+#: src/features/rpc/rpc.js:41
 msgid "Select a call to see its parameters and result."
 msgstr "Chọn một lời gọi để xem tham số và kết quả."
 
-#: src/features/rpc/rpc.js:66
+#: src/features/rpc/rpc.js:67
 msgid "Edit & Resend"
 msgstr "Sửa & Gửi lại"
 
-#: src/features/rpc/rpc.js:67
+#: src/features/rpc/rpc.js:68
 msgid "Why was it blocked? → Security"
 msgstr "Vì sao bị chặn? → Security"
 
-#: src/features/rpc/rpc.js:69
+#: src/features/rpc/rpc.js:70
 msgid "Result"
 msgstr "Kết quả"
 
-#: src/features/rpc/rpc.js:77
+#: src/features/rpc/rpc.js:78
 msgid "… (%s characters)"
 msgstr "… (%s ký tự)"
 
-#: src/features/rpc/rpc.js:83
+#: src/features/rpc/rpc.js:84
 msgid "Route"
 msgstr "Route"
 
-#: src/features/rpc/rpc.js:84
+#: src/features/rpc/rpc.js:85
 msgid "Body (JSON)"
 msgstr "Body (JSON)"
 
-#: src/features/rpc/rpc.js:85
+#: src/features/rpc/rpc.js:86
 msgid "Send"
 msgstr "Gửi"
 
-#: src/features/rpc/rpc.js:89
+#: src/features/rpc/rpc.js:90
 msgid "Invalid JSON: %s"
 msgstr "JSON không hợp lệ: %s"
 
-#: src/features/rpc/rpc.js:91
+#: src/features/rpc/rpc.js:92
 #: src/shared/ui.js:104
 #: src/shared/ui.js:166
 msgid "Loading…"
 msgstr "Đang tải…"
 
-#: src/features/rpc/rpc.js:100
+#: src/features/rpc/rpc.js:101
 msgid "Ctrl/⌘ + Enter"
 msgstr "Ctrl/⌘ + Enter"
 
-#: src/features/rpc/rpc.js:111
+#: src/features/rpc/rpc.js:112
 msgid "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
 msgstr "call_kw: qua API ngoài (execute_kw), với API key của người dùng này trong $ODOO_API_KEY. Các route khác: cookie session_id trong $ODOO_SESSION."
 
-#: src/features/rpc/rpc.js:119
+#: src/features/rpc/rpc.js:120
 msgid "Copy as cURL"
 msgstr "Sao chép dạng cURL"
 

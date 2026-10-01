@@ -2,6 +2,7 @@
 import { sqlSummary, appFrame } from './logic.js';
 import { pageFetch } from '../../shared/page.js';
 import { execOrThrow, rpc, call, fieldsOf } from '../../shared/bridge.js';
+import { localTime } from '../../shared/odoo.js';
 import { el, pre, pill, details, empty, card, errBox, expandable, filteredList, listHead, splitRow, masterDetail, infoTip } from '../../shared/ui.js';
 import { _t, N_ } from '../../shared/i18n.js';
 
@@ -43,7 +44,7 @@ export function renderPerf(s, state) {
     }, session ? _t('Stop Profiling') : _t('Start Profiling'));
     const head = el('div', { class: 'pad row' },
       pill(session ? _t('RECORDING') : _t('off'), session ? 'ok' : ''),
-      el('span', { class: 'grow muted', title: session || '' }, session ? _t('since %s', session.slice(11, 19)) : ''),
+      el('span', { class: 'grow muted', title: session || '' }, session ? _t('since %s', localTime(session)) : ''),
       btn);
     const note = el('div', { class: 'pad-bottom note mt0' }, session
       ? _t('Each request of this session writes one ir.profile row; ⟳ reloads the list.')
@@ -82,7 +83,7 @@ function profileItem(r, origin) {
     splitRow([el('span', { class: 'row grow' }, requestName(r.name)),
       pill(`${r.sql_count} SQL`, slowSql ? 'err' : ''), el('span', { class: 'ms' }, ms(r.duration))],
     el('a', { class: 'btn', href: `${origin}/web/speedscope/${r.id}`, target: '_blank', rel: 'noopener', title: _t('Flame Graph (speedscope)') }, '↗')),
-    el('div', { class: 'meta', title: r.name }, [`#${r.id}`, r.create_date?.slice(11), 'cpu_duration' in r && `CPU ${ms(r.cpu_duration)}`].filter(Boolean).join(' · ')));
+    el('div', { class: 'meta', title: r.name }, [`#${r.id}`, localTime(r.create_date), 'cpu_duration' in r && `CPU ${ms(r.cpu_duration)}`].filter(Boolean).join(' · ')));
   li.dataset.q = r.name.toLowerCase();
   return expandable(li, async () => sqlDetail(r, await call('ir.profile', 'read', [[r.id], ['sql']])));
 }

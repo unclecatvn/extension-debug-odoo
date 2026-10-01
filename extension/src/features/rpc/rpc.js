@@ -2,6 +2,7 @@
 import { parseRpc, parseRpcResponse, prettyJson, toCurl } from './logic.js';
 import { pageRpcLog, pageSend } from './page.js';
 import { exec, sessionInfo } from '../../shared/bridge.js';
+import { localTime } from '../../shared/odoo.js';
 import { el, pre, errBox, pill, details, empty, expandable, listHead, masterDetail, copyText, WIDE } from '../../shared/ui.js';
 import { _t } from '../../shared/i18n.js';
 
@@ -50,7 +51,7 @@ function item(e) {
     el('div', { class: 'row' }, el('span', { class: 'dot' }), el('span', { class: 'name' }, e.method),
       el('span', { class: 'grow muted' }, e.model), e.error ? pill(denied ? '🔒 AccessError' : e.errorType?.split('.').pop() || _t('error'), 'err') : null,
       el('span', { class: 'ms' }, `${e.ms} ms`)),
-    el('div', { class: 'meta' }, `${(e.at || '').slice(11, 19)} · ${e.path}`));
+    el('div', { class: 'meta' }, `${localTime(e.at)} · ${e.path}`));
   li.dataset.q = `${e.model} ${e.method}`.toLowerCase();
   // detail: the actions, then the request (Parameters), then the answer (Result, or the error first). Edit & Resend turns the
   // request into its editor in place, which has its own Copy as cURL (of what is typed).
