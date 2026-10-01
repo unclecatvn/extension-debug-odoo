@@ -1,7 +1,7 @@
 // ISOLATED-world content script: a draggable Odoo Debug button, on the bottom edge of the page until dragged elsewhere
 // (dropped back on that edge, it sticks to it again). Clicking it opens the panel (src/panel/panel.html) in an iframe
 // next to it, following it: beside the button, aligned on its top (upper half of the window) or its bottom (lower half). Shown on Odoo pages only; the toolbar popup toggles it too.
-// Also: ⌥/Alt + click on a field of the page copies its technical name.
+// Also: ⌥/Alt + click on a field of the page, or on a tracked change in the chatter, copies its technical name.
 (() => {
   const SIZE = 40; // button, px
   const GAP = 8;
@@ -34,7 +34,7 @@
       iframe { display: block; width: 100%; height: 100%; border: 0; }
       .toast { position: fixed; z-index: 2147483647; padding: 4px 8px; border-radius: 6px; pointer-events: none;
         background: #1f1d24; color: #fff; font: 600 12px ui-monospace, Menlo, monospace; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
-    </style><button type="button" title="Odoo Debug · ⌥/Alt + click a field: copy its name" aria-label="Odoo Debug" aria-expanded="false"><img alt=""></button><div class="frame" hidden></div>`;
+    </style><button type="button" title="Odoo Debug · ⌥/Alt + click a field (or a change in the chatter): copy its name" aria-label="Odoo Debug" aria-expanded="false"><img alt=""></button><div class="frame" hidden></div>`;
     btn = root.querySelector('button');
     frame = root.querySelector('.frame');
     root.querySelector('img').src = chrome.runtime.getURL('icons/icon-48.png');
@@ -105,18 +105,42 @@
   /** Technical name of the field under `t`: form widget (or its label), list cell or list column header. */
   function fieldName(t) {
     const label = t.closest?.('label[for]');
-    const n = ((label && document.getElementById(label.htmlFor)) || t).closest?.('.o_field_widget[name], td.o_data_cell[name], th[data-name]');
+    const input = label && document.getElementById(label.htmlFor);
+    // a readonly field renders no input carrying the label's id, Odoo's `${name}_${n}`
+    if (label && !input && label.matches('.o_form_label')) return label.htmlFor.replace(/_\d+$/, '');
+    const n = (input || t).closest?.('.o_field_widget[name], td.o_data_cell[name], th[data-name]');
     return n ? n.getAttribute('name') || n.dataset.name : null;
+  }
+
+  /** Label of the field on the chatter tracking line under `t` ("Draft → Sent (Status)": Status), or null. */
+  function trackingLabel(t) {
+    const s = t.closest?.('.o-mail-Message-tracking')?.querySelector('.o-mail-Message-trackingField')?.textContent.trim();
+    return s ? s.replace(/^\((.*)\)$/, '$1') : null;
+  }
+
+  /** Technical names of the current model's fields labelled `label`: the chatter shows only the label. Asked to hook.js
+   * (MAIN world: Odoo's field service); [] when it doesn't answer (a tab open before an update, until reloaded). */
+  function namesOf(label) {
+    return new Promise((resolve) => {
+      const done = (e) => { clearTimeout(timer); resolve(JSON.parse(e.detail)); };
+      const timer = setTimeout(() => { document.removeEventListener('odoo-debug-field-names', done); resolve([]); }, 3000);
+      document.addEventListener('odoo-debug-field-names', done, { once: true });
+      document.dispatchEvent(new CustomEvent('odoo-debug-field-of', { detail: label }));
+    });
   }
 
   async function altClick(e) {
     if (!e.altKey || e.button !== 0) return;
     const name = fieldName(e.target);
-    if (!name) return;
+    const label = !name && trackingLabel(e.target);
+    if (!name && !label) return;
     e.preventDefault(); // ⌥+click on a link would download it
     e.stopImmediatePropagation();
     const at = { x: e.clientX, y: e.clientY };
-    toast(await copy(name) ? `✓ ${name}` : `✗ ${name}`, at);
+    const names = name ? [name] : await namesOf(label);
+    if (!names.length) return toast(`✗ ${label}`, at);
+    // ponytail: two fields with the same label: the first is copied, the toast names both
+    toast(`${await copy(names[0]) ? '✓' : '✗'} ${names.join(' · ')}`, at);
   }
 
   async function copy(text) {

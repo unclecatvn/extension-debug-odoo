@@ -10,9 +10,11 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - **Keyboard shortcuts**: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>O</kbd> shows / hides the panel, <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd> turns debug mode on / off. The toolbar popup lists them, and *Change* opens Chrome's shortcut settings.
 - **Debug mode kept on per Odoo**: *Keep it on for this Odoo* in the toolbar popup reopens every page of that instance in debug (or assets), after a module upgrade or from a bookmark too. A URL with `?debug=0` is left alone, and picking *off* stops keeping it.
 - **RPC: edit a call and send it again, or send a new one.** *Edit & Resend* on a logged call opens its route and JSON body for editing; *Send* (or <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Enter</kbd>) posts it with the page's session and shows the result or the error with its traceback below. *New Request* starts from a `search_read` on the current model, for any route of the JSON-RPC API. *Copy as cURL* (on a logged call, or of what is being edited) replays it outside the browser: a `call_kw` becomes the external API's `execute_kw` on `/jsonrpc` with an API key from `$ODOO_API_KEY`, any other route keeps the session cookie from `$ODOO_SESSION`. A call's detail now reads actions, parameters, then the result (the error first when it failed), and editing turns the parameters into the editor in place.
+- **⌥ Alt + click a tracked change in the chatter copies the field's technical name**: on *Draft → Sent (Status)*, `state`. The chatter only shows the label: the name comes from the model's fields with that label (both are named when two share it, the first is copied).
 
 ### Fixed
 
+- **⌥ Alt + click on the label of a readonly field copied nothing** (e.g. *Customer* on a confirmed sales order): a readonly field has no input for the label to point at, the name now comes from the label itself.
 - **The panel and the Odoo Debug button stopped answering after the extension was updated** (Chrome Web Store update or a reload while developing): the tabs already open kept the old content scripts, the panel hung on *Connecting…* and neither − nor the button worked until the page was reloaded. The extension now injects its scripts again into the open tabs when it is installed or updated.
 
 ## [1.2.0] - 2026-09-30

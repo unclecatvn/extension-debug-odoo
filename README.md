@@ -93,7 +93,7 @@ The extension is not on the Chrome Web Store yet; install it unpacked (Chrome, E
 - **Cards**: each tab is a stack of cards, closed at first; a card loads its data once opened, and open / closed cards
   stay so across reloads. Click a list row to open its details (label, storage, module, full value…), again to close.
 - **Copy**: click a field name, model, xmlid or parameter in the panel; <kbd>⌥ Alt</kbd> + click a form field, label,
-  list cell or column header on the page. Masked secret values still copy the real value.
+  list cell or column header on the page, or a tracked change in the chatter (*Draft → Sent (Status)* copies `state`). Masked secret values still copy the real value.
 - **Reload data**: <kbd>⟳</kbd>. Stable server data (session info, `fields_get`, users) is cached until the page
   reloads; ACLs, rules, views and record values are always re-read.
 - **Settings**: click the toolbar icon (or right-click → *Options*): language (English, Tiếng Việt), color theme (Odoo system / light / dark, or an editor theme: GitHub Light / Dark, Solarized Light / Dark, Dracula, Monokai, One Dark Pro, Nord, Catppuccin Mocha), show / hide the panel.

@@ -389,6 +389,38 @@ test('after an update of the extension, the page opened before gets a working bu
   assert.equal(await frame.boundingBox(), null, 'minimized');
 });
 
+test('⌥/Alt + click copies the technical name: a field, the label of a readonly one, a tracked change in the chatter', async (t) => {
+  await page.browserContext().overridePermissions(new URL(page.url()).origin, ['clipboard-read', 'clipboard-write', 'clipboard-sanitized-write']);
+  const altClick = async (sel) => {
+    await page.evaluate(() => navigator.clipboard.writeText('-'));
+    const { x, y } = await page.$eval(sel, (n) => {
+      n.scrollIntoView({ block: 'center' });
+      const r = n.getBoundingClientRect();
+      return { x: r.x + Math.min(10, r.width / 2), y: r.y + r.height / 2 };
+    });
+    await page.keyboard.down('Alt');
+    await page.mouse.click(x, y);
+    await page.keyboard.up('Alt');
+    await new Promise((r) => setTimeout(r, 300));
+    return page.evaluate(() => navigator.clipboard.readText());
+  };
+  const [model] = await rpc(page, '/web/dataset/call_kw', { model: 'ir.model', method: 'search', args: [[['model', '=', 'res.partner']]], kwargs: {} });
+  await page.goto(`${new URL(page.url()).origin}/odoo/action-base.action_model_model/${model}`); // a base model: its name is readonly
+  await page.waitForSelector('.o_form_view .o_field_widget[name="model"]');
+  assert.equal(await altClick('.o_form_view .o_field_widget[name="model"]'), 'model');
+  assert.equal(await page.$eval('label.o_form_label[for^="model_"]', (l) => !!document.getElementById(l.htmlFor)), false, 'no input carries the id');
+  assert.equal(await altClick('label.o_form_label[for^="model_"]'), 'model');
+
+  const partner = (await rpc(page, '/web/session/get_session_info', {})).partner_id;
+  await rpc(page, '/web/dataset/call_kw', { model: 'res.partner', method: 'write', args: [[partner], { email: `e2e${Date.now()}@example.com` }], kwargs: {} });
+  await page.goto(`${new URL(page.url()).origin}/odoo/action-base.action_partner_form/${partner}`);
+  await page.waitForSelector('.o_form_view');
+  if (!await page.waitForSelector('.o-mail-Message-tracking', { timeout: 10_000 }).catch(() => null)) return t.skip('no chatter (mail not installed)');
+  const label = await page.$eval('.o-mail-Message-tracking .o-mail-Message-trackingField', (n) => n.textContent);
+  assert.equal(label, '(Email)');
+  assert.equal(await altClick('.o-mail-Message-tracking'), 'email');
+});
+
 test('no error from the extension in the console', () => {
   assert.deepEqual(errors, []);
 });
