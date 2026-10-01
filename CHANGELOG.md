@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
-## [Unreleased]
+## [1.4.0] - 2026-10-02
 
 ### Added
 
@@ -171,6 +171,7 @@ First public release. Chrome extension (Manifest V3) for Odoo 18 / 19 developers
 - The panel page is a `use_dynamic_url` web-accessible resource, so other sites can't frame it.
 - `odoo.conf` is not readable from a browser by design; nothing in the extension tries to.
 
+[1.4.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.4.0
 [1.3.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.3.0
 [1.2.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.2.0
 [1.1.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.1.0
