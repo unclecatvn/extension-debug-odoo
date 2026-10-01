@@ -1385,59 +1385,71 @@ msgstr "Perf"
 msgid "This page"
 msgstr "Trang hiện tại"
 
+#: src/popup/popup.html:19
 #: src/popup/popup.html:20
-msgid "Show / Hide Panel"
-msgstr "Hiện / ẩn panel"
-
-#: src/popup/popup.html:22
-#: src/popup/popup.html:23
 msgid "Debug Mode"
 msgstr "Chế độ debug"
 
-#: src/popup/popup.html:24
+#: src/popup/popup.html:21
 msgid "Keep it on for this Odoo"
 msgstr "Luôn bật cho Odoo này"
 
-#: src/popup/popup.html:27
+#: src/popup/popup.html:24
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: src/popup/popup.html:31
-#: src/popup/popup.html:32
+#: src/popup/popup.html:28
+#: src/popup/popup.html:29
 msgid "Theme"
 msgstr "Giao diện"
 
-#: src/popup/popup.html:35
+#: src/popup/popup.html:32
 msgid "Shortcuts"
 msgstr "Phím tắt"
 
-#: src/popup/popup.html:36
+#: src/popup/popup.html:33
 msgid "Change"
 msgstr "Đổi"
 
-#: src/popup/popup.html:38
+#: src/popup/popup.html:35
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Mẹo: ⌥/Alt + click vào một field trên trang Odoo để copy tên kỹ thuật."
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "System"
 msgstr "Hệ thống"
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Light"
 msgstr "Sáng"
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Dark"
 msgstr "Tối"
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "panel"
 msgstr "panel"
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "debug"
 msgstr "debug"
+
+#: src/popup/popup.js:47
+msgid "Host"
+msgstr "Host"
+
+#: src/popup/popup.js:47
+msgid "Odoo version"
+msgstr "Phiên bản Odoo"
+
+#: src/popup/popup.js:47
+msgid "Database"
+msgstr "Database"
+
+#: src/popup/popup.js:74
+msgid "Turn Debug Off"
+msgstr "Tắt debug"
 
 #: src/shared/bridge.js:12
 msgid "No tab is open."

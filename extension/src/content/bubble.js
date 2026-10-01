@@ -1,6 +1,6 @@
 // ISOLATED-world content script: a draggable Odoo Debug button, on the bottom edge of the page until dragged elsewhere
 // (dropped back on that edge, it sticks to it again). Clicking it opens the panel (src/panel/panel.html) in an iframe
-// next to it, following it: beside the button, aligned on its top (upper half of the window) or its bottom (lower half). Shown on Odoo pages only; the toolbar popup toggles it too.
+// next to it, following it: beside the button, aligned on its top (upper half of the window) or its bottom (lower half). Shown on Odoo pages only.
 // Also: ⌥/Alt + click on a field of the page, or on a tracked change in the chatter, copies its technical name.
 (() => {
   const SIZE = 40; // button, px
@@ -204,10 +204,8 @@
       if (btn && typeof msg.on === 'boolean') setFull(msg.on);
       return reply(full);
     }
-    if (msg?.type !== 'odoo-toggle') return; // { open }: from the panel's minimize button; none: the toolbar popup
-    if (btn) {
-      toggle(msg.open ?? frame.hidden);
-      if (msg.open === false) btn.focus(); // keyboard users land on the button that reopens it
-    } else { mount(); toggle(true); }
+    if (msg?.type !== 'odoo-toggle' || !btn) return; // { open: false }: from the panel's minimize button
+    toggle(msg.open ?? frame.hidden);
+    if (msg.open === false) btn.focus(); // keyboard users land on the button that reopens it
   });
 })();

@@ -88,7 +88,7 @@ The extension is not on the Chrome Web Store yet; install it unpacked (Chrome, E
 - **Open / close**: click the round button; the panel opens beside it, on the tab you were on, scrolled where you left it. Drag the button anywhere and the panel follows it; its position is kept per Odoo instance (dropped back near the bottom edge, it sticks to it again). Nothing shows on non-Odoo sites, and the toolbar icon is greyed out there.
 - **Minimize**: <kbd>−</kbd> in the panel header hides the panel back to the round button, which reopens it as it was.
 - **Full screen**: <kbd>⤢</kbd> in the panel header, <kbd>Esc</kbd> or <kbd>⤡</kbd> to leave. The layout is an editor's: tabs in a sidebar, one header line, no card frames, short blocks side by side, the Code editor beside its result, RPC and Perf as a list with the selected row's detail on the right. The round button hides meanwhile (<kbd>−</kbd> brings it back). Open state and full screen survive page reloads.
-- **Debug mode**: click the toolbar icon; its `off` / `debug` / `assets` switch shows the page's mode and reloads Odoo in the one picked. **Keep it on for this Odoo** reopens every page of that instance in debug, unless its URL says otherwise (`?debug=0`).
+- **This page**: click the toolbar icon; it shows the page's host, Odoo version and database on one line, and its Off / Debug / Assets switch shows the page's debug mode and reloads Odoo in the one picked. **Keep it on for this Odoo** reopens every page of that instance in debug, unless its URL says otherwise (`?debug=0`).
 - **Shortcuts**: <kbd>⌥ Alt</kbd>+<kbd>⇧ Shift</kbd>+<kbd>O</kbd> shows / hides the panel, <kbd>⌥ Alt</kbd>+<kbd>⇧ Shift</kbd>+<kbd>D</kbd> turns debug on / off. Change them in `chrome://extensions/shortcuts` (*Change* in the toolbar popup).
 - **Cards**: each tab is a stack of cards, closed at first; a card loads its data once opened, and open / closed cards
   stay so across reloads. Click a list row to open its details (label, storage, module, full value…), again to close.
@@ -96,7 +96,7 @@ The extension is not on the Chrome Web Store yet; install it unpacked (Chrome, E
   list cell or column header on the page, or a tracked change in the chatter (*Draft → Sent (Status)* copies `state`). Masked secret values still copy the real value.
 - **Reload data**: <kbd>⟳</kbd>. Stable server data (session info, `fields_get`, users) is cached until the page
   reloads; ACLs, rules, views and record values are always re-read.
-- **Settings**: click the toolbar icon (or right-click → *Options*): language (English, Tiếng Việt), color theme (Odoo system / light / dark, or an editor theme: GitHub Light / Dark, Solarized Light / Dark, Dracula, Monokai, One Dark Pro, Nord, Catppuccin Mocha), show / hide the panel.
+- **Settings**: click the toolbar icon (or right-click → *Options*): language (English, Tiếng Việt), color theme (Odoo system / light / dark, or an editor theme: GitHub Light / Dark, Solarized Light / Dark, Dracula, Monokai, One Dark Pro, Nord, Catppuccin Mocha).
 
 ### Compatibility
 
@@ -184,7 +184,7 @@ extension/                 the extension itself: exactly what the release zip co
   i18n/                    odoo_debug.pot + en.po, vi.po (read at runtime, no build step)
   src/
     background.js          toolbar icon enabled on Odoo pages only (declarativeContent)
-    popup/                 toolbar popup = options page: language, theme, show/hide the panel
+    popup/                 toolbar popup = options page: language, theme; the page's host, version, db, debug mode
     content/               hook.js (MAIN world, records JSON-RPC), relay.js (forwards to the panel),
                            bubble.js (draggable button + the panel's iframe in a shadow root, ⌥/Alt+click copy)
     panel/                 panel.html / main.js: header, tabs, binding to the tab it is embedded in

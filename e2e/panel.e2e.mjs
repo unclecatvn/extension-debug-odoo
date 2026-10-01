@@ -323,13 +323,15 @@ test('every tab is in sight: the tab strip wraps instead of scrolling', async ()
   assert.deepEqual(hidden, []);
 });
 
-test('toolbar popup: the debug mode of the page, switched from there', async () => {
+test('toolbar popup: the page\'s database, and its debug mode switched from there', async () => {
   const [ext] = (await browser.extensions()).values();
   await ext.triggerAction(page);
   const popup = await (await browser.waitForTarget((t) => t.url().endsWith('/src/popup/popup.html'))).asPage();
+  await popup.waitForSelector('#page-info [data-info=db]');
+  assert.equal(await popup.$eval('#page-info [data-info=db]', (e) => e.textContent), process.env.ODOO_DB || 'e2e');
   await popup.waitForSelector('#debug button.on');
-  assert.equal(await popup.$eval('#debug button.on', (b) => b.textContent), 'off');
-  await Promise.all([page.waitForNavigation(), popup.$$eval('#debug button', (bs) => bs.find((b) => b.textContent === 'debug').click())]);
+  assert.equal(await popup.$eval('#debug button.on', (b) => b.textContent), 'Off');
+  await Promise.all([page.waitForNavigation(), popup.$$eval('#debug button', (bs) => bs.find((b) => b.textContent === 'Debug').click())]);
   assert.equal(await page.evaluate(() => window.odoo.debug), '1');
   await page.goto(page.url().replace('debug=1', 'debug=0')); // back to off for what follows
   await page.waitForSelector('.o_form_view');

@@ -1385,59 +1385,71 @@ msgstr "Perf"
 msgid "This page"
 msgstr "This page"
 
+#: src/popup/popup.html:19
 #: src/popup/popup.html:20
-msgid "Show / Hide Panel"
-msgstr "Show / Hide Panel"
-
-#: src/popup/popup.html:22
-#: src/popup/popup.html:23
 msgid "Debug Mode"
 msgstr "Debug Mode"
 
-#: src/popup/popup.html:24
+#: src/popup/popup.html:21
 msgid "Keep it on for this Odoo"
 msgstr "Keep it on for this Odoo"
 
-#: src/popup/popup.html:27
+#: src/popup/popup.html:24
 msgid "Language"
 msgstr "Language"
 
-#: src/popup/popup.html:31
-#: src/popup/popup.html:32
+#: src/popup/popup.html:28
+#: src/popup/popup.html:29
 msgid "Theme"
 msgstr "Theme"
 
-#: src/popup/popup.html:35
+#: src/popup/popup.html:32
 msgid "Shortcuts"
 msgstr "Shortcuts"
 
-#: src/popup/popup.html:36
+#: src/popup/popup.html:33
 msgid "Change"
 msgstr "Change"
 
-#: src/popup/popup.html:38
+#: src/popup/popup.html:35
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "System"
 msgstr "System"
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Light"
 msgstr "Light"
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Dark"
 msgstr "Dark"
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "panel"
 msgstr "panel"
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "debug"
 msgstr "debug"
+
+#: src/popup/popup.js:47
+msgid "Host"
+msgstr "Host"
+
+#: src/popup/popup.js:47
+msgid "Odoo version"
+msgstr "Odoo version"
+
+#: src/popup/popup.js:47
+msgid "Database"
+msgstr "Database"
+
+#: src/popup/popup.js:74
+msgid "Turn Debug Off"
+msgstr "Turn Debug Off"
 
 #: src/shared/bridge.js:12
 msgid "No tab is open."

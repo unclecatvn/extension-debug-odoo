@@ -83,12 +83,12 @@ Extension chưa có trên Chrome Web Store; cài dạng unpacked (Chrome, Edge, 
 - **Mở / đóng**: bấm nút tròn; bảng mở cạnh nút, đúng tab và vị trí cuộn lần trước. Kéo nút đi đâu cũng được, bảng đi theo nút; vị trí được nhớ riêng cho từng instance Odoo (thả lại gần mép dưới thì nút bám lại mép). Trên các trang không phải Odoo thì không có gì hiện ra, và icon trên thanh công cụ bị làm mờ.
 - **Thu nhỏ**: <kbd>−</kbd> trên thanh tiêu đề ẩn bảng về lại nút tròn; bấm nút là mở lại đúng như trước.
 - **Toàn màn hình**: <kbd>⤢</kbd> trên thanh tiêu đề của bảng, <kbd>Esc</kbd> hoặc <kbd>⤡</kbd> để thoát. Bố cục giống một editor: tab ở thanh bên trái, tiêu đề một dòng, không khung thẻ, khối ngắn xếp cạnh nhau, editor của tab Code nằm cạnh kết quả, RPC và Perf là danh sách bên trái với chi tiết dòng được chọn bên phải. Nút tròn ẩn đi trong lúc đó (<kbd>−</kbd> để hiện lại). Trạng thái mở và toàn màn hình được giữ khi tải lại trang.
-- **Chế độ debug**: bấm icon extension trên thanh công cụ; công tắc `off` / `debug` / `assets` ở đó cho biết chế độ hiện tại của trang và tải lại Odoo ở chế độ được chọn. **Luôn bật cho Odoo này** mở mọi trang của instance đó ở chế độ debug, trừ khi URL chỉ định khác (`?debug=0`).
+- **Trang hiện tại**: bấm icon extension trên thanh công cụ; một dòng cho biết host, phiên bản Odoo và database của trang, công tắc Off / Debug / Assets cho biết chế độ debug hiện tại và tải lại Odoo ở chế độ được chọn. **Luôn bật cho Odoo này** mở mọi trang của instance đó ở chế độ debug, trừ khi URL chỉ định khác (`?debug=0`).
 - **Phím tắt**: <kbd>⌥ Alt</kbd>+<kbd>⇧ Shift</kbd>+<kbd>O</kbd> ẩn / hiện panel, <kbd>⌥ Alt</kbd>+<kbd>⇧ Shift</kbd>+<kbd>D</kbd> bật / tắt debug. Đổi phím trong `chrome://extensions/shortcuts` (nút *Đổi* trong popup).
 - **Thẻ**: mỗi tab là một chồng thẻ, ban đầu đều đóng; thẻ chỉ tải dữ liệu khi được mở, và trạng thái mở / đóng được giữ qua các lần tải lại. Bấm vào một dòng trong list để xem chi tiết (nhãn, cách lưu, module, giá trị đầy đủ…), bấm lần nữa để đóng.
 - **Copy**: bấm vào tên field, model, xmlid hay tham số trong bảng; <kbd>⌥ Alt</kbd> + click vào field, nhãn, ô trong list, tiêu đề cột trên trang, hoặc một dòng thay đổi trong chatter (*Nháp → Đã gửi (Trạng thái)* copy ra `state`). Giá trị bí mật bị che vẫn copy ra giá trị thật.
 - **Tải lại dữ liệu**: <kbd>⟳</kbd>. Dữ liệu ổn định của server (session info, `fields_get`, danh sách user) được cache tới khi tải lại trang; ACL, rule, view và giá trị record luôn được đọc lại.
-- **Cài đặt**: bấm icon trên thanh công cụ (hoặc chuột phải → *Options*): ngôn ngữ (English, Tiếng Việt), giao diện màu (Odoo theo hệ thống / sáng / tối, hoặc theme kiểu editor: GitHub Light / Dark, Solarized Light / Dark, Dracula, Monokai, One Dark Pro, Nord, Catppuccin Mocha), hiện / ẩn bảng.
+- **Cài đặt**: bấm icon trên thanh công cụ (hoặc chuột phải → *Options*): ngôn ngữ (English, Tiếng Việt), giao diện màu (Odoo theo hệ thống / sáng / tối, hoặc theme kiểu editor: GitHub Light / Dark, Solarized Light / Dark, Dracula, Monokai, One Dark Pro, Nord, Catppuccin Mocha).
 
 ### Tương thích
 
@@ -171,7 +171,7 @@ extension/                 chính extension: đúng những gì có trong file z
   i18n/                    odoo_debug.pot + en.po, vi.po (đọc lúc chạy, không cần build)
   src/
     background.js          chỉ bật icon trên trang Odoo (declarativeContent)
-    popup/                 popup trên thanh công cụ = trang options: ngôn ngữ, giao diện, hiện/ẩn bảng
+    popup/                 popup trên thanh công cụ = trang options: ngôn ngữ, giao diện; host, version, db, chế độ debug của trang
     content/               hook.js (MAIN world, ghi lại JSON-RPC), relay.js (chuyển tiếp tới bảng),
                            bubble.js (nút kéo thả + iframe của bảng trong shadow root, copy bằng ⌥/Alt+click)
     panel/                 panel.html / main.js: thanh tiêu đề, các tab, gắn với tab đang nhúng

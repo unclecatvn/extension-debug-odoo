@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
+## [Unreleased]
+
+### Changed
+
+- **Toolbar popup**: "This page" shows the Odoo version and database next to the host (one line, an icon each), and the debug mode switch reads Off / Debug / Assets.
+
+### Removed
+
+- The Show / Hide Panel button of the toolbar popup: the round button on the page does it.
+
 ## [1.3.0] - 2026-10-01
 
 ### Added
