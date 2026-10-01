@@ -1,7 +1,8 @@
 <!doctype html>
 <!-- The intro film's editing room, rendered frame by frame by tools/intro.mjs (render): the take it recorded (real
-     frames of the extension in use, /take/frames/*.jpg, and its log /take/take.json) played in a browser window on a
-     dark stage, a camera following the action, captions. Every frame is a pure function of t: window.renderAt(t). -->
+     frames of the extension in use, /take/frames/*.jpg, and its log /take/take.json) cut into an opening montage of its
+     best moments, a title, then played in a browser window on a dark stage with a camera following the action and
+     captions. Every frame is a pure function of t: window.renderAt(t). window.MUSIC: the cues the score follows. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -26,20 +27,34 @@
   #sheen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
     background: linear-gradient(105deg, transparent 0%, transparent 40%, rgba(255, 255, 255, .22) 50%, transparent 60%, transparent 100%); background-size: 300% 100%; }
 
-  /* lower-third captions, on glass */
-  #cap { position: absolute; left: 210px; bottom: 70px; max-width: 900px; padding: 20px 30px 22px; border-radius: 22px;
-    background: rgba(16, 16, 20, .72); backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5);
+  /* lower-third captions, on glass: one element each, so one fades out fully before the next comes in */
+  .cap { position: absolute; left: 210px; bottom: 70px; max-width: 900px; padding: 20px 30px 22px; border-radius: 22px; opacity: 0;
+    background: rgba(16, 16, 20, .74); backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5);
     box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 20px 60px rgba(0, 0, 0, .45); }
-  #cap b { display: block; font-size: 17px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #c99ae0; }
-  #cap p { margin: 6px 0 0; font-size: 36px; font-weight: 650; letter-spacing: -.025em; line-height: 1.15; }
+  .cap b { display: block; font-size: 17px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #c99ae0; }
+  .cap p { margin: 6px 0 0; font-size: 36px; font-weight: 650; letter-spacing: -.025em; line-height: 1.15; }
 
-  /* the opening and closing titles */
+  /* the opening montage: close-ups of the take's best moments, floating in depth */
+  #montage { perspective: 1800px; }
+  .shot { position: absolute; overflow: hidden; border-radius: 18px; opacity: 0; background: #fff;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .16), 0 50px 140px rgba(0, 0, 0, .85), 0 0 140px rgba(180, 124, 208, .25); }
+  .shot img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+  .shot b { position: absolute; left: 22px; bottom: 18px; padding: 6px 12px; border-radius: 8px; background: rgba(16, 16, 20, .8);
+    font-size: 15px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #e3b8f0; }
+  #flash { pointer-events: none; background: radial-gradient(900px 500px at 50% 50%, rgba(220, 180, 255, .55), transparent 70%); opacity: 0; }
+
+  /* the title, letter by letter, a light sweeping across it */
   .title { position: absolute; left: 0; right: 0; text-align: center; }
-  .title h1 { margin: 0; font-size: 132px; font-weight: 750; letter-spacing: -.055em; line-height: 1; }
+  .title h1 { margin: 0; font-size: 150px; font-weight: 750; letter-spacing: -.055em; line-height: 1; white-space: nowrap; }
+  .title h1 span { display: inline-block; }
   .title h1 img { width: 118px; height: 118px; vertical-align: -14px; margin-right: 26px; }
-  .title p { margin: 22px 0 0; font-size: 40px; font-weight: 550; letter-spacing: -.02em; color: #a1a1a6; }
+  #open h1.sweep { position: absolute; left: 0; right: 0; top: 0; color: transparent;
+    background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, .95) 50%, transparent 65%); background-size: 260% 100%;
+    -webkit-background-clip: text; background-clip: text; }
+  .title p { margin: 26px 0 0; font-size: 40px; font-weight: 550; letter-spacing: -.02em; color: #a1a1a6; }
   .title p span { background: linear-gradient(90deg, #e3b8f0, #b47cd0 55%, #8f6bd8); -webkit-background-clip: text; color: transparent; }
   .title small { display: block; margin-top: 26px; font: 500 24px ui-monospace, 'SF Mono', Menlo, monospace; color: #6e6e73; }
+  #end h1 { font-size: 132px; }
   #fade { background: #000; pointer-events: none; }
 </style>
 </head>
@@ -47,12 +62,15 @@
 <div id="stage" class="layer">
   <div class="glow" id="g1" style="background: radial-gradient(closest-side, rgba(150, 90, 200, .55), transparent)"></div>
   <div class="glow" id="g2" style="background: radial-gradient(closest-side, rgba(60, 90, 200, .35), transparent)"></div>
+  <div id="montage" class="layer"></div>
+  <div id="flash" class="layer"></div>
   <div id="win">
     <div id="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>localhost:8069/odoo/sales</span></div>
     <div id="view"><img id="a" alt=""><img id="b" alt=""><div id="sheen"></div></div>
   </div>
-  <div id="cap"><b></b><p></p></div>
-  <div class="title" id="open" style="top: 360px"><h1>Odoo Debug</h1><p>See <span>why</span> Odoo does what it does.</p></div>
+  <div id="caps"></div>
+  <div class="title" id="open" style="top: 380px"><div style="position: relative"><h1 class="letters"></h1><h1 class="sweep">Odoo Debug</h1></div>
+    <p>See <span>why</span> Odoo does what it does.</p></div>
   <div class="title" id="end" style="top: 330px"><h1><img src="/extension/icons/icon.svg" alt="">Odoo Debug</h1>
     <p>A debug panel, <span>right on the Odoo page.</span></p><small>Free and open source · Odoo 18 and 19 · unclecatvn.github.io/extension-debug-odoo</small></div>
 </div>
@@ -68,8 +86,15 @@ const smooth = (a, b, t) => { const k = clamp((t - a) / (b - a)); return k * k *
 const ease = (k) => (k < .5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2);
 const out = (k) => 1 - (1 - clamp(k)) ** 3;
 
-// ---------- the edit: the take without its cuts, its long typing sped up; between an opening and an ending ----------
-const OPEN = 3.4, END = 5.2;
+// ---------- the opening's beat: the montage cuts on it, the title lands on its 5th; the score follows ----------
+const BEAT = .75;
+const MONTAGE = [1, 2, 3, 4].map((k) => k * BEAT); // 0.75 … 3.0: one close-up per beat
+const IMPACT = 5 * BEAT; // 3.75: the title
+const WIN_IN = 6.1; // the window flies in
+const OPEN = 8.2; // the take starts playing
+
+// ---------- the edit: the take without its cuts, its long typing sped up; between the opening and an ending ----------
+const END = 5.2;
 const S0 = take.start + .9, S1 = take.end; // source times kept
 const marks = [S0, S1, ...take.cuts.flat(), ...take.fast.flatMap(([a, b]) => [a, b])].filter((x) => x >= S0 && x <= S1).sort((a, b) => a - b);
 const pieces = []; // { s0, s1, rate, o0 }: source span s0..s1 plays at `rate` from output time o0
@@ -111,13 +136,8 @@ function camera(T) {
     const e = ease(clamp((T - k.t) / MOVE));
     cur = { cx: lerp(cur.cx, k.cx, e), cy: lerp(cur.cy, k.cy, e), z: Math.exp(lerp(Math.log(cur.z), Math.log(k.z), e)) };
   }
-  // a slow drift, so a held shot still breathes
-  return { ...cur, z: cur.z * (1 + .012 * Math.sin(T * .5)) };
+  return { ...cur, z: cur.z * (1 + .012 * Math.sin(T * .5)) }; // a slow drift: a held shot still breathes
 }
-
-// ---------- captions: from each one's time to the next's ----------
-const caps = take.captions.filter((c) => c.title !== 'Odoo Debug').map((c) => ({ ...c, o: toOut(c.t) }));
-caps.forEach((c, i) => { c.until = (caps[i + 1]?.o ?? BODY_END) - .35; });
 
 // ---------- frames ----------
 const idx = (s) => { // the last frame painted at source time s
@@ -129,57 +149,125 @@ async function show(img, file) {
   const src = `/take/frames/${file}`;
   if (img.getAttribute('src') !== src) { img.src = src; await img.decode().catch(() => {}); }
 }
-const rise = (n, t, t0, t1 = Infinity, d = 24) => {
-  const a = out((t - t0) / .8), b = t1 === Infinity ? 0 : smooth(t1, t1 + .5, t);
+/** In from below out of a blur at t0, out at t1 (opacity on `n`, the blur on its text only: never on a glass box). */
+function rise(n, t, t0, t1 = Infinity, d = 24, blurOn = n) {
+  const a = out((t - t0) / .7), b = t1 === Infinity ? 0 : smooth(t1, t1 + .45, t);
   n.style.opacity = a * (1 - b);
-  n.style.transform = `translateY(${(1 - a) * d - b * 12}px)`;
-  n.style.filter = `blur(${(1 - a) * 14 + b * 8}px)`;
-};
+  n.style.transform = `translateY(${(1 - a) * d - b * 10}px)`;
+  blurOn.style.filter = `blur(${(1 - a) * 12 + b * 6}px)`;
+}
+
+// ---------- captions: each from its time until shortly before the next one ----------
+const caps = take.captions.filter((c) => c.title !== 'Odoo Debug').map((c) => ({ ...c, o: toOut(c.t) }));
+caps.forEach((c, i) => {
+  c.until = (caps[i + 1]?.o ?? BODY_END) - .55; // gone (0.45 s fade) before the next one starts
+  c.n = Object.assign(document.createElement('div'), { className: 'cap' });
+  c.n.innerHTML = '<div><b></b><p></p></div>';
+  c.n.querySelector('b').textContent = c.title;
+  c.n.querySelector('p').textContent = c.text;
+  $('#caps').append(c.n);
+});
+
+// ---------- the montage: the highlights, cropped close ----------
+const LABELS = ['RPC', 'Code', 'Security', 'Perf'];
+const order = [0, 2, 3, 1]; // RPC, Security, Perf, Code
+const shots = order.map((i, k) => {
+  const h = take.highlights[i];
+  const fit = Math.min(1250 / h.r.w, 680 / h.r.h); // page px → shot px
+  const w = h.r.w * fit, ht = h.r.h * fit;
+  const n = Object.assign(document.createElement('div'), { className: 'shot' });
+  Object.assign(n.style, { left: `${(1920 - w) / 2}px`, top: `${(1080 - ht) / 2 - 20}px`, width: `${w}px`, height: `${ht}px` });
+  const img = document.createElement('img');
+  Object.assign(img.style, { width: `${VW * fit}px`, height: `${VH * fit}px`, transform: `translate(${-h.r.x * fit}px, ${-h.r.y * fit}px)` });
+  img.src = `/take/frames/${idx(h.t)}`;
+  const label = document.createElement('b');
+  label.textContent = LABELS[i];
+  n.append(img, label);
+  $('#montage').append(n);
+  return { n, side: k % 2 ? 1 : -1 };
+});
+
+// ---------- the title, a span per letter ----------
+const letters = [...'Odoo Debug'].map((ch) => Object.assign(document.createElement('span'), { textContent: ch === ' ' ? '\u00a0' : ch }));
+$('#open h1.letters').append(...letters);
 
 window.renderAt = async (T) => {
-  // the stage breathes: two glows drifting
-  $('#g1').style.transform = `translate(${-200 + 160 * Math.sin(T * .17)}px, ${-260 + 90 * Math.cos(T * .13)}px)`;
+  // the stage breathes: two glows drifting; brighter on the title's landing
+  const land = smooth(IMPACT - .05, IMPACT + .1, T) * (1 - smooth(IMPACT + .1, IMPACT + 1.6, T));
+  $('#g1').style.transform = `translate(${-200 + 160 * Math.sin(T * .17)}px, ${-260 + 90 * Math.cos(T * .13)}px) scale(${1 + .25 * land})`;
   $('#g2').style.transform = `translate(${760 + 140 * Math.cos(T * .15)}px, ${200 + 110 * Math.sin(T * .19)}px)`;
+  $('#g1').style.opacity = $('#g2').style.opacity = smooth(0, 1.2, T);
 
-  // the window: rises tilted at the start, settles; recedes at the end
-  const inK = out((T - 1.5) / 2.1), endK = ease(clamp((T - BODY_END) / 1.8));
-  const win = $('#win');
-  win.style.opacity = smooth(1.45, 2.2, T) * (1 - .78 * endK); // dark behind the closing title
-  win.style.transform = `translateY(${(1 - inK) * 420 - endK * 60}px) rotateX(${(1 - inK) * 32 + endK * 16}deg) scale(${lerp(.78, 1, inK) * lerp(1, .74, endK)})`;
-  win.style.filter = `blur(${endK * 6}px) brightness(${1 - .55 * endK})`;
-  rise($('#open'), T, .25, 1.75, 30);
-  $('#open').style.transform += ` translateY(${-smooth(1.6, 2.6, T) * 120}px)`;
+  // montage: each close-up comes forward out of a blur on its beat, drifts, leaves into a blur
+  shots.forEach(({ n, side }, k) => {
+    const u = T - MONTAGE[k], on = u > -.2 && u < BEAT + .15;
+    if (!on) { n.style.opacity = 0; return; }
+    const a = out(u / .32), b = smooth(BEAT - .14, BEAT + .1, u), p = clamp(u / BEAT);
+    n.style.opacity = a * (1 - b);
+    n.style.transform = `translateZ(${lerp(-320, 0, a) + p * 60 + b * 140}px) rotateY(${side * lerp(12, 5, ease(p))}deg) rotateX(${lerp(7, 3, p)}deg)`;
+    n.style.filter = `blur(${(1 - a) * 14 + b * 12}px)`;
+  });
+  $('#flash').style.opacity = land * .9;
+
+  // title: letters land on the impact, tracking in; a light sweeps across; then it lifts away as the window comes
+  const tIn = IMPACT - .25;
+  letters.forEach((l, i) => {
+    const a = out((T - tIn - i * .035) / .55);
+    l.style.opacity = a;
+    l.style.transform = `translateY(${(1 - a) * 40}px) scale(${lerp(1.25, 1, a)})`;
+    l.style.filter = `blur(${(1 - a) * 16}px)`;
+  });
+  $('#open h1.letters').style.letterSpacing = `${lerp(.2, -.055, out((T - tIn) / 1.6))}em`;
+  const sw = $('#open h1.sweep');
+  sw.style.letterSpacing = $('#open h1.letters').style.letterSpacing;
+  sw.style.backgroundPosition = `${lerp(130, -30, clamp((T - IMPACT - .2) / 1.1))}% 0`;
+  sw.style.opacity = T > IMPACT && T < IMPACT + 1.4 ? 1 : 0;
+  rise($('#open p'), T, IMPACT + .7, Infinity, 22);
+  const lift = smooth(WIN_IN - .3, WIN_IN + .7, T);
+  $('#open').style.opacity = 1 - lift;
+  $('#open').style.transform = `translateY(${-lift * 140}px) scale(${1 - lift * .1})`;
+  $('#open').style.filter = `blur(${lift * 10}px)`;
   [...$('#end').children].forEach((n, i) => rise(n, T, BODY_END + .8 + i * .4, Infinity, 30));
 
-  // the take at this instant, with a dissolve over a jump cut
-  const s = toSrc(Math.max(T, OPEN));
-  await show($('#a'), idx(s));
-  const cut = cutsOut.find((c) => T >= c && T < c + .35);
-  if (cut != null) {
-    await show($('#b'), idx(toSrc(cut - .01)));
-    $('#b').style.opacity = 1 - smooth(cut, cut + .35, T);
-  } else $('#b').style.opacity = 0;
-  const c = camera(T), z = base * c.z;
-  const tx = view.w / 2 - c.cx * z, ty = view.h / 2 - c.cy * z;
-  for (const img of [$('#a'), $('#b')]) img.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
+  // the window: rises tilted, settles; recedes, darker, behind the closing title
+  const inK = out((T - WIN_IN) / 2.1), endK = ease(clamp((T - BODY_END) / 1.8));
+  const win = $('#win');
+  win.style.opacity = smooth(WIN_IN - .05, WIN_IN + .7, T) * (1 - .78 * endK);
+  win.style.transform = `translateY(${(1 - inK) * 420 - endK * 60}px) rotateX(${(1 - inK) * 32 + endK * 16}deg) scale(${lerp(.78, 1, inK) * lerp(1, .74, endK)})`;
+  win.style.filter = `blur(${endK * 6}px) brightness(${1 - .55 * endK})`;
 
-  // a light sweeping across the glass when a new part starts
-  const cap = caps.findLast((x) => T >= x.o - .2);
-  const sweep = cap ? clamp((T - cap.o + .2) / 1.1) : 1;
-  $('#sheen').style.opacity = sweep < 1 ? Math.sin(Math.PI * sweep) * .9 : 0;
+  // the take at this instant (the window is hidden before it flies in), a dissolve over a jump cut
+  if (T > WIN_IN - .1) {
+    await show($('#a'), idx(toSrc(Math.max(T, OPEN))));
+    const cut = cutsOut.find((c) => T >= c && T < c + .35);
+    if (cut != null) {
+      await show($('#b'), idx(toSrc(cut - .01)));
+      $('#b').style.opacity = 1 - smooth(cut, cut + .35, T);
+    } else $('#b').style.opacity = 0;
+    const c = camera(T), z = base * c.z;
+    const tx = view.w / 2 - c.cx * z, ty = view.h / 2 - c.cy * z;
+    for (const img of [$('#a'), $('#b')]) img.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
+  }
+
+  // a soft light across the glass when a new part starts
+  const cur = caps.findLast((x) => T >= x.o - .2);
+  const sweep = cur ? clamp((T - cur.o + .2) / 1.2) : 1;
+  $('#sheen').style.opacity = sweep < 1 ? Math.sin(Math.PI * sweep) * .45 : 0;
   $('#sheen').style.backgroundPosition = `${lerp(110, -10, sweep)}% 0`;
 
-  const box = $('#cap');
-  if (cap && T < cap.until + .6) {
-    box.querySelector('b').textContent = cap.title;
-    box.querySelector('p').textContent = cap.text;
-    rise(box, T, cap.o, cap.until, 26);
-  } else box.style.opacity = 0;
+  for (const c of caps) {
+    const live = T > c.o - .1 && T < c.until + .5;
+    if (!live) { c.n.style.opacity = 0; continue; }
+    rise(c.n, T, c.o, c.until, 26, c.n.firstChild);
+  }
 
-  $('#fade').style.opacity = Math.max(1 - smooth(0, .6, T), smooth(DURATION - .8, DURATION, T));
+  $('#fade').style.opacity = smooth(DURATION - .8, DURATION, T);
 };
 window.DURATION = DURATION;
+window.CAPS = caps.map((c) => [c.title, +c.o.toFixed(2)]);
 window.POSTER_AT = take.posterAt ? toOut(take.posterAt) + 1.2 : DURATION / 2; // the RPC sent again, its answer in
+window.MUSIC = { duration: DURATION, beat: BEAT, montage: MONTAGE, impact: IMPACT, main: OPEN, captions: caps.map((c) => c.o), end: BODY_END };
+await Promise.all([...document.images].map((i) => i.decode().catch(() => {})));
 await show($('#a'), take.frames[0].f);
 await document.fonts.ready;
 window.ready = true;

@@ -17,9 +17,9 @@ Soi record, view, lời gọi RPC, quyền truy cập và hiệu năng server m�
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Cài đặt](#cài-đặt) · [Tính năng](#tính-năng) · [Sử dụng](#sử-dụng) · [Quyền riêng tư](#quyền-riêng-tư--quyền-hạn) · [Phát triển](#phát-triển) · [Changelog](CHANGELOG.md)
 
-<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="Phim 74 giây: extension được dùng thật trên Odoo, mở panel cạnh một đơn bán hàng, lọc field, sửa và gửi lại một lời gọi RPC, gõ và chạy code ORM, giải thích quyền của một user, các câu SQL N+1 của một request. Bấm để xem trên website." width="100%"></a>
+<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="Phim 78 giây: extension được dùng thật trên Odoo, mở panel cạnh một đơn bán hàng, lọc field, sửa và gửi lại một lời gọi RPC, gõ và chạy code ORM, giải thích quyền của một user, các câu SQL N+1 của một request. Bấm để xem trên website." width="100%"></a>
 
-▶ [Xem phim giới thiệu 74 giây](https://unclecatvn.github.io/extension-debug-odoo/)
+▶ [Xem phim giới thiệu 78 giây](https://unclecatvn.github.io/extension-debug-odoo/)
 
 </div>
 

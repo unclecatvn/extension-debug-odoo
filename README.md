@@ -17,9 +17,9 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
-<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="74-second film: the extension used on a real Odoo, the panel opened beside a sales order, fields filtered, an RPC call edited and sent again, ORM code typed and run, a user's access explained, a request's N+1 queries. Click to watch it on the website." width="100%"></a>
+<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="78-second film: the extension used on a real Odoo, the panel opened beside a sales order, fields filtered, an RPC call edited and sent again, ORM code typed and run, a user's access explained, a request's N+1 queries. Click to watch it on the website." width="100%"></a>
 
-▶ [Watch the 74-second film](https://unclecatvn.github.io/extension-debug-odoo/)
+▶ [Watch the 78-second film](https://unclecatvn.github.io/extension-debug-odoo/)
 
 </div>
 

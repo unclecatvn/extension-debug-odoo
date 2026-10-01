@@ -4,8 +4,8 @@
 //           a request profiled. Every frame Chrome paints is kept (2880×1800), with a log: where the camera looks,
 //           the captions, the waits to cut.
 //   render  edits that take in tools/intro.html (the window on a dark stage, a camera following the action, captions)
-//           frame by frame, then ffmpeg encodes website/intro.mp4 (1080p60), its poster website/intro-poster.jpg and
-//           store/odoo-debug-intro.mp4 (1440p60 master, not committed).
+//           frame by frame, scores it (tools/score.mjs, on its cues), then ffmpeg encodes website/intro.mp4 (1080p60),
+//           its poster website/intro-poster.jpg and store/odoo-debug-intro.mp4 (1440p60 master, not committed).
 //   node tools/intro.mjs render --stills 4,12.5   only those instants, as PNGs next to the take (to check an edit)
 import { spawn, execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -15,6 +15,7 @@ import { extname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import puppeteer from 'puppeteer';
 import { ODOO, EXT, rpc, openForm } from '../e2e/odoo.mjs';
+import { score } from './score.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const TAKE = join(tmpdir(), 'odoo-debug-take'); // frames/NNNNN.jpg + take.json
@@ -85,10 +86,12 @@ async function record() {
   await sleep(2000); // the chatter, the avatars
 
   // ---------- the director's log ----------
-  const log = { viewport: [VW, VH], cams: [], captions: [], cuts: [], fast: [] };
+  const log = { viewport: [VW, VH], cams: [], captions: [], cuts: [], fast: [], highlights: [] };
   /** The camera frames `r` ({ x, y, w, h } in page px; null: the whole page) from now on. */
   const cam = (r) => log.cams.push({ t: now(), r });
   const caption = (title, text) => log.captions.push({ t: now(), title, text });
+  /** A moment worth a close-up in the opening montage: `r` (page px) a little later, once it has settled. */
+  const highlight = (r, settle = .7) => log.highlights.push({ t: now() + settle, r });
   /** Waits for `p`; a long wait is cut from the film. */
   async function wait(p) {
     const a = now();
@@ -229,6 +232,7 @@ async function record() {
   await clickIn('#rpc .detail .composer button[type=submit]');
   await wait(panel.waitForSelector('#rpc .detail .composer .pill', { timeout: 15_000 }));
   log.posterAt = now();
+  highlight(await boxOf('#rpc .detail .composer'));
   await sleep(1200);
   await clickIn('#rpc .detail .composer .btn', 'Copy as cURL', { after: 1100 });
 
@@ -250,6 +254,7 @@ async function record() {
     .catch(async (e) => { throw new Error(`${e.message}: ${await panel.$eval('#code', (c) => c.querySelector('.output')?.textContent + ' | ' + c.querySelector('textarea.code').value)}`); }));
   const out = await boxOf('#code .output');
   cam({ x: out.x - 20, y: out.y - 220, w: out.w + 40, h: out.h + 260 });
+  highlight({ x: out.x - 6, y: out.y - 6, w: out.w + 12, h: Math.min(out.h + 12, 330) });
   await sleep(2200);
 
   // 7. Security, full screen: why another user can or can't
@@ -270,6 +275,7 @@ async function record() {
     && !document.querySelector('#security details.card[data-key=why] .card-body > .loading'), { timeout: 20_000 }));
   const why = await boxOf('#security details.card[data-key=why]');
   cam({ x: why.x - 30, y: why.y - 30, w: Math.min(why.w + 60, 1100), h: Math.min(why.h + 60, 560) });
+  highlight({ x: why.x, y: why.y, w: Math.min(why.w, 1000), h: Math.min(why.h, 420) }, 1.2);
   await sleep(2600);
 
   // 8. Perf: a request profiled, its repeated queries
@@ -301,6 +307,7 @@ async function record() {
   await panel.$$eval('#perf .pane .detail > div > details', (ds) => ds.forEach((d) => { d.open = true; }));
   const pane = await boxOf('#perf .pane');
   cam({ x: pane.x - 30, y: pane.y - 20, w: Math.min(pane.w + 60, 1000), h: 600 });
+  highlight({ x: pane.x, y: pane.y, w: Math.min(pane.w, 900), h: 520 }, 1);
   await sleep(2600);
 
   // 9. themes, then the whole page
@@ -338,10 +345,10 @@ async function render() {
   await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: W / 1920 });
   await page.goto(`http://localhost:${server.address().port}/tools/intro.html`);
   await page.waitForFunction(() => window.ready, { timeout: 60_000 });
-  const { duration, posterAt } = await page.evaluate(() => ({ duration: window.DURATION, posterAt: window.POSTER_AT }));
+  const { duration, posterAt, cues } = await page.evaluate(() => ({ duration: window.DURATION, posterAt: window.POSTER_AT, cues: window.MUSIC }));
   const only = process.argv.includes('--stills') ? process.argv[process.argv.indexOf('--stills') + 1].split(',').map(Number) : null;
   if (only) {
-    console.log(`duration ${duration.toFixed(2)} s, poster at ${posterAt.toFixed(2)} s`);
+    console.log(`duration ${duration.toFixed(2)} s, poster at ${posterAt.toFixed(2)} s, captions ${JSON.stringify(await page.evaluate(() => window.CAPS))}`);
     for (const t of only) {
       await page.evaluate((t) => window.renderAt(t), t);
       await writeFile(join(TAKE, `still-${t}.png`), await page.screenshot());
@@ -349,9 +356,10 @@ async function render() {
     }
   } else {
     await mkdir(join(ROOT, 'store'), { recursive: true });
-    const master = join(ROOT, 'store', 'odoo-debug-intro.mp4');
+    const master = join(ROOT, 'store', 'odoo-debug-intro.mp4'), picture = join(TAKE, 'picture.mp4'), music = join(TAKE, 'score.wav');
+    await writeFile(music, score(cues));
     const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-i', '-',
-      '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', master], { stdio: ['pipe', 'inherit', 'inherit'] });
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', picture], { stdio: ['pipe', 'inherit', 'inherit'] });
     const n = Math.round(duration * FPS), t0 = Date.now();
     for (let i = 0; i < n; i++) {
       await page.evaluate((t) => window.renderAt(t), i / FPS);
@@ -361,10 +369,12 @@ async function render() {
     }
     ff.stdin.end();
     await new Promise((r) => ff.on('close', r));
-    console.log(`\n${master} (${duration.toFixed(1)} s)`);
     const enc = (...a) => execFileSync('ffmpeg', ['-y', '-loglevel', 'error', ...a], { stdio: 'inherit' });
-    enc('-i', master, '-vf', 'scale=1920:1080:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-crf', '27', '-pix_fmt', 'yuv420p',
-      '-movflags', '+faststart', '-an', join(ROOT, 'website', 'intro.mp4'));
+    enc('-i', picture, '-i', music, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '48000',
+      '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', master);
+    console.log(`\n${master} (${duration.toFixed(1)} s)`);
+    enc('-i', master, '-vf', 'scale=1920:1080:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-crf', '28', '-pix_fmt', 'yuv420p',
+      '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', join(ROOT, 'website', 'intro.mp4'));
     enc('-ss', String(posterAt), '-i', join(ROOT, 'website', 'intro.mp4'), '-frames:v', '1', '-q:v', '3', join(ROOT, 'website', 'intro-poster.jpg'));
     console.log('website/intro.mp4, website/intro-poster.jpg');
   }
