@@ -1,7 +1,7 @@
 // Apps tab, one card: a list of modules (typed, or ticked below the input, which also searches them) to Activate
 // (Update Apps List, then install them all), Upgrade, or open their forms in new tabs. Same server methods as Odoo's
-// Apps menu; install / upgrade then reload the Odoo page. The list shows the installed modules, and every module
-// matching the word being typed, installed or not.
+// Apps menu; install / upgrade then reload the Odoo page. The list is filtered like the Apps menu (Installed by default,
+// see searchbar.js); a ticked module always shows.
 import { planInstall, planUpgrade, stateKind, moduleFilter } from './logic.js';
 import { splitList } from '../../shared/list.js';
 import { exec, tabId, call, sessionInfo } from '../../shared/bridge.js';
@@ -10,7 +10,7 @@ import { modulePicker } from '../../shared/picker.js';
 import { searchBar } from './searchbar.js';
 import { _t } from '../../shared/i18n.js';
 
-const read = (names) => call('ir.module.module', 'search_read', [[['name', 'in', names]]], { fields: ['name', 'shortdesc', 'state', 'latest_version'] });
+const read = (names) => call('ir.module.module', 'search_read', [[['name', 'in', names]]], { fields: ['name', 'state'] });
 const formPath = (id) => `action-base.open_module_tree/${id}`; // the Apps action: its breadcrumb leads back to Apps
 const names = (list) => list.map((m) => m.name).join(', ');
 const needsAdmin = () => empty(_t('Needs Settings rights (base.group_system).'));
@@ -22,11 +22,11 @@ export function renderApps(s, state) {
     const input = el('input', { type: 'text', placeholder: _t('Search or type: sale; stock; my_module'), 'aria-label': _t('Modules'), value: last.modules || '', spellcheck: false });
     // Odoo's Apps filters, kept across reloads (the list opens on the installed modules, as the Apps menu opens on Apps)
     const f = last.filters || { installed: true };
-    if (typeof f.category !== 'string') f.category = null; // an id, saved before categories went by name
     const save = () => saveForm('apps', { modules: input.value, filters: f });
     const count = el('span', { class: 'muted count-note' });
     const log = el('ul', { class: 'steps' });
-    // every module (Update Apps List adds the new ones: they show after the page reloads)
+    // every module (Update Apps List adds the new ones: they show after the page reloads); latest_version = the version
+    // installed in the DB (installed_version is computed from the manifest on disk: slow)
     const mods = await call('ir.module.module', 'search_read', [[]], { fields: ['name', 'shortdesc', 'state', 'latest_version', 'author', 'application', 'category_id'], order: 'name' });
     let keep = moduleFilter(f);
     const list = modulePicker(input, mods, {

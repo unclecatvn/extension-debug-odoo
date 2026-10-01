@@ -18,6 +18,11 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - The Show / Hide Panel button of the toolbar popup: the round button on the page does it.
 - The call counter on the RPC tab: the tab itself lists the calls.
 
+### Fixed
+
+- Rows with buttons on the right (Security › Groups and System parameters, View › inherited views) keep the buttons in their own column again, top-aligned, instead of wrapping under a long name: the style had been renamed away in 1.2.0.
+- Code tab › Guide: suggestions take the fields of the variable's model (the last `env[…]` model only when the variable isn't understood), as they have for a while.
+
 ## [1.3.0] - 2026-10-01
 
 ### Added

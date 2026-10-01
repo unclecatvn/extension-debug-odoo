@@ -18,7 +18,7 @@ const settings = await loadSettings();
 await loadLang(settings.lang); // before anything renders: every _t() below needs the catalog
 document.documentElement.lang = lang;
 translateDom();
-for (const b of document.querySelectorAll('.tabs button')) b.title = b.firstChild.textContent.trim(); // narrow panel: icons only, the name on hover
+for (const b of document.querySelectorAll('.tabs button')) b.title = b.textContent.trim(); // narrow panel: icons only, the name on hover
 
 let state = {};
 const TAB_KEY = 'odoo-debug-tab'; // sessionStorage (one per browser tab): the panel comes back on this tab after a reload
@@ -124,8 +124,7 @@ $('#minimize').addEventListener('click', () => chrome.tabs.sendMessage(tabId, { 
 const fullBtn = $('#full');
 const isFull = () => fullBtn.getAttribute('aria-pressed') === 'true';
 const setFull = (on) => chrome.tabs.sendMessage(tabId, { type: 'odoo-full', on }).then((now) => {
-  fullBtn.setAttribute('aria-pressed', !!now);
-  fullBtn.textContent = now ? '⤡' : '⤢';
+  fullBtn.setAttribute('aria-pressed', !!now); // ui.css swaps the icon
 }, () => {});
 fullBtn.addEventListener('click', () => setFull(!isFull()));
 addEventListener('keydown', (e) => { // Esc leaves full screen, unless it is clearing a search box

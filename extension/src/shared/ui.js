@@ -25,7 +25,7 @@ export function el(tag, props = {}, ...kids) {
   return n;
 }
 export const pre = (o) => el('pre', {}, typeof o === 'string' ? o : JSON.stringify(o, null, 2));
-/** Collapsible section, closed until its summary is clicked (every one in the panel starts closed). */
+/** Collapsible section, closed until its summary is clicked. */
 export const details = (summary, ...kids) => el('details', {}, el('summary', {}, summary), ...kids);
 export const errBox = (e) => el('div', { class: 'error' }, e.message, e.traceback ? details(_t('Traceback'), pre(e.traceback)) : null);
 export const pill = (text, kind = '') => el('span', { class: `pill ${kind}` }, text);
@@ -75,7 +75,7 @@ export function block(parent, key, title, fn) {
   parent.append(c);
 }
 
-/** A tab's only card: no title to open it by, its body built right away (`fn` may be async). */
+/** A card without a title, always open, its body built right away (`fn` may be async). */
 export function card(parent, fn) {
   const body = el('div', { class: 'card-body' });
   parent.append(el('div', { class: 'card' }, body));

@@ -1,7 +1,7 @@
 // Perf tab: Odoo's built-in server profiler (/web/set_profiling → ir.profile rows), read back per request.
 import { sqlSummary, appFrame } from './logic.js';
 import { pageFetch } from '../../shared/page.js';
-import { exec, rpc, call, fieldsOf } from '../../shared/bridge.js';
+import { execOrThrow, rpc, call, fieldsOf } from '../../shared/bridge.js';
 import { el, pre, pill, details, empty, card, errBox, expandable, filteredList, listHead, splitRow, masterDetail } from '../../shared/ui.js';
 import { _t, N_ } from '../../shared/i18n.js';
 
@@ -11,8 +11,7 @@ const short = (file) => file.replace(/^.*?\/((odoo\/)?addons\/|odoo\/)/, '$1');
 const frame = (f) => (f ? `${short(f[0])}:${f[1]} ${f[2]}()` : '');
 
 async function setProfiling(on) {
-  const r = await exec(pageFetch, `/web/set_profiling?profile=${on ? 1 : 0}&collectors=${COLLECTORS}`);
-  if (!r || r.error) throw new Error(r?.error || _t('Cannot call /web/set_profiling'));
+  const r = await execOrThrow(pageFetch, N_('Cannot call /web/set_profiling'), `/web/set_profiling?profile=${on ? 1 : 0}&collectors=${COLLECTORS}`);
   if (r.status !== 200) throw new Error(r.text.replace(/^error: /, '') || `HTTP ${r.status}`);
   return JSON.parse(r.text);
 }

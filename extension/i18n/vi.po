@@ -12,12 +12,12 @@ msgstr ""
 
 #: src/features/apps/apps.js:16
 #: src/features/security/security.js:193
-#: src/features/translations/translations.js:34
+#: src/features/translations/translations.js:36
 msgid "Needs Settings rights (base.group_system)."
 msgstr "Cần quyền Settings (base.group_system)."
 
 #: src/features/apps/apps.js:22
-#: src/features/translations/translations.js:84
+#: src/features/translations/translations.js:86
 msgid "Search or type: sale; stock; my_module"
 msgstr "Tìm hoặc gõ: sale; stock; my_module"
 
@@ -31,17 +31,17 @@ msgstr "%s/%s module"
 
 #: src/features/apps/apps.js:46
 #: src/features/code/code.js:36
-#: src/features/translations/translations.js:63
+#: src/features/translations/translations.js:65
 msgid "Running…"
 msgstr "Đang chạy…"
 
 #: src/features/apps/apps.js:48
-#: src/features/code/code.js:135
-#: src/features/code/code.js:174
+#: src/features/code/code.js:134
+#: src/features/code/code.js:173
 #: src/features/rpc/rpc.js:51
 #: src/features/rpc/rpc.js:96
-#: src/features/translations/translations.js:73
-#: src/features/translations/translations.js:160
+#: src/features/translations/translations.js:75
+#: src/features/translations/translations.js:161
 msgid "error"
 msgstr "lỗi"
 
@@ -192,104 +192,104 @@ msgstr "Chạy (⌘/Ctrl+Enter)"
 msgid "Run"
 msgstr "Chạy"
 
+#: src/features/code/code.js:92
 #: src/features/code/code.js:93
-#: src/features/code/code.js:94
 msgid "Guide"
 msgstr "Hướng dẫn"
 
-#: src/features/code/code.js:94
+#: src/features/code/code.js:93
 msgid "Available variables, recordset API, examples"
 msgstr "Các biến có sẵn, API của recordset, ví dụ"
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Lets the code call write, create, unlink and any other method that is not a read"
 msgstr "Cho phép code gọi write, create, unlink và mọi method không phải đọc"
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Read-only by default. With writes allowed, each call is committed at once: there is no rollback."
 msgstr "Mặc định chỉ đọc. Khi cho phép ghi, mỗi lời gọi được commit ngay: không có rollback."
 
-#: src/features/code/code.js:103
+#: src/features/code/code.js:102
 msgid "Allow Writes"
 msgstr "Cho phép ghi"
 
-#: src/features/code/code.js:105
+#: src/features/code/code.js:104
 msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
 msgstr "Chạy với user %s (uid %s): áp dụng đúng quyền truy cập, record rule và công ty của user đó."
 
-#: src/features/code/code.js:126
+#: src/features/code/code.js:125
 msgid "page refreshed"
 msgstr "đã làm mới trang"
 
-#: src/features/code/code.js:127
+#: src/features/code/code.js:126
 msgid "page not refreshed"
 msgstr "chưa làm mới trang"
 
-#: src/features/code/code.js:132
+#: src/features/code/code.js:131
 #: src/features/rpc/rpc.js:94
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
 msgstr "Không có phản hồi — đây có phải trang Odoo?"
 
-#: src/features/code/code.js:135
+#: src/features/code/code.js:134
 msgid "ok"
 msgstr "ok"
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "read-only"
 msgstr "chỉ đọc"
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "writes allowed"
 msgstr "cho phép ghi"
 
-#: src/features/code/code.js:137
-#: src/features/code/code.js:175
+#: src/features/code/code.js:136
+#: src/features/code/code.js:174
 msgid "%s ms"
 msgstr "%s ms"
 
-#: src/features/code/code.js:138
+#: src/features/code/code.js:137
 msgid "%s calls"
 msgstr "%s lời gọi"
 
-#: src/features/code/code.js:139
+#: src/features/code/code.js:138
 msgid "%s write calls"
 msgstr "%s lời gọi ghi"
 
-#: src/features/code/code.js:143
+#: src/features/code/code.js:142
 msgid "No return value: end with return … to see one."
 msgstr "Không có giá trị trả về: kết thúc bằng return … để xem kết quả."
 
-#: src/features/code/code.js:149
+#: src/features/code/code.js:148
 msgid "(line %s)"
 msgstr "(dòng %s)"
 
-#: src/features/code/code.js:154
+#: src/features/code/code.js:153
 msgid "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
 msgstr "Content-Security-Policy của trang này không cho chạy code (proxy trước Odoo đã thêm script-src)."
 
-#: src/features/code/code.js:155
+#: src/features/code/code.js:154
 #: src/shared/ui.js:30
 msgid "Traceback"
 msgstr "Traceback"
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows (first %s shown)"
 msgstr "%s dòng (hiện %s dòng đầu)"
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows"
 msgstr "%s dòng"
 
-#: src/features/code/code.js:166
+#: src/features/code/code.js:165
 msgid "JSON"
 msgstr "JSON"
 
-#: src/features/code/code.js:170
+#: src/features/code/code.js:169
 msgid "Calls (%s)"
 msgstr "Lời gọi (%s)"
 
-#: src/features/code/code.js:173
+#: src/features/code/code.js:172
 msgid "write"
 msgstr "ghi"
 
@@ -379,8 +379,8 @@ msgid "models of the installed modules"
 msgstr "model của các module đang cài"
 
 #: src/features/code/help.js:65
-msgid "fields of the last env[…] model, following relations (partner_id.country_id.)"
-msgstr "field của model env[…] gần nhất, đi theo quan hệ (partner_id.country_id.)"
+msgid "fields of the variable's model (else the last env[…] one), following relations (partner_id.country_id.)"
+msgstr "field của model mà biến được gán (không thì model env[…] gần nhất), đi theo quan hệ (partner_id.country_id.)"
 
 #: src/features/code/help.js:66
 msgid "recordset methods, env and Command members"
@@ -444,120 +444,120 @@ msgstr "Trang này không có view nào để làm mới"
 msgid "Suggestions"
 msgstr "Gợi ý"
 
-#: src/features/perf/perf.js:15
+#: src/features/perf/perf.js:14
 msgid "Cannot call /web/set_profiling"
 msgstr "Không gọi được /web/set_profiling"
 
-#: src/features/perf/perf.js:23
+#: src/features/perf/perf.js:22
 msgid "Profiling is not enabled on this database.\nEnable it for 5 minutes? (writes ir.config_parameter base.profiling_enabled_until)"
 msgstr "Profiling chưa được bật cho database này.\nBật trong 5 phút? (ghi ir.config_parameter base.profiling_enabled_until)"
 
-#: src/features/perf/perf.js:27
+#: src/features/perf/perf.js:26
 msgid "Profiling could not be enabled."
 msgstr "Vẫn chưa bật được profiling."
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:43
 msgid "Stop Profiling"
 msgstr "Tắt profiling"
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:43
 msgid "Start Profiling"
 msgstr "Bật profiling"
 
-#: src/features/perf/perf.js:46
+#: src/features/perf/perf.js:45
 msgid "RECORDING"
 msgstr "ĐANG ĐO"
 
-#: src/features/perf/perf.js:46
+#: src/features/perf/perf.js:45
 msgid "off"
 msgstr "tắt"
 
-#: src/features/perf/perf.js:47
+#: src/features/perf/perf.js:46
 msgid "since %s"
 msgstr "từ %s"
 
-#: src/features/perf/perf.js:50
+#: src/features/perf/perf.js:49
 msgid "Each request of this session writes one ir.profile row; ⟳ reloads the list."
 msgstr "Mỗi request của phiên này ghi một dòng ir.profile; ⟳ để tải lại danh sách."
 
-#: src/features/perf/perf.js:51
+#: src/features/perf/perf.js:50
 msgid "Records the SQL + Python stacks of every request of this session (Odoo's built-in profiler, base.group_system)."
 msgstr "Ghi lại SQL + stack Python của mọi request trong phiên này (profiler có sẵn của Odoo, base.group_system)."
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:64
 msgid "No request yet: use the Odoo page, then press ⟳."
 msgstr "Chưa có request nào, thao tác trên trang Odoo rồi bấm ⟳."
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:64
 msgid "No profile data yet."
 msgstr "Chưa có dữ liệu profile."
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:65
 msgid "Filter request"
 msgstr "Lọc request"
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:65
 msgid "%s requests"
 msgstr "%s request"
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:65
 msgid "%s/%s requests"
 msgstr "%s/%s request"
 
-#: src/features/perf/perf.js:67
+#: src/features/perf/perf.js:66
 msgid "Request · SQL · duration"
 msgstr "Request · SQL · thời gian"
 
-#: src/features/perf/perf.js:67
+#: src/features/perf/perf.js:66
 msgid "Id · time · CPU"
 msgstr "Id · giờ · CPU"
 
-#: src/features/perf/perf.js:68
+#: src/features/perf/perf.js:67
 msgid "Select a request to see its SQL queries."
 msgstr "Chọn một request để xem các câu SQL của nó."
 
-#: src/features/perf/perf.js:70
+#: src/features/perf/perf.js:69
 msgid "Latest session: %s"
 msgstr "Phiên gần nhất: %s"
 
-#: src/features/perf/perf.js:85
+#: src/features/perf/perf.js:84
 msgid "Flame Graph (speedscope)"
 msgstr "Flame graph (speedscope)"
 
-#: src/features/perf/perf.js:94
+#: src/features/perf/perf.js:93
 msgid "No SQL recorded."
 msgstr "Không có SQL nào được ghi."
 
-#: src/features/perf/perf.js:99
+#: src/features/perf/perf.js:98
 msgid "Full SQL + stack"
 msgstr "SQL đầy đủ + stack"
 
-#: src/features/perf/perf.js:101
+#: src/features/perf/perf.js:100
 msgid "%s queries · SQL %s / total %s · Python ≈ %s"
 msgstr "%s query · SQL %s / tổng %s · Python ≈ %s"
 
-#: src/features/perf/perf.js:103
+#: src/features/perf/perf.js:102
 msgid "Repeated queries — N+1 suspects (%s)"
 msgstr "Query lặp lại — nghi N+1 (%s)"
 
-#: src/features/perf/perf.js:103
+#: src/features/perf/perf.js:102
 msgid "Count · caller · time"
 msgstr "Số lần · nơi gọi · thời gian"
 
-#: src/features/perf/perf.js:103
-#: src/features/perf/perf.js:106
+#: src/features/perf/perf.js:102
+#: src/features/perf/perf.js:105
 msgid "Query"
 msgstr "Câu truy vấn"
 
-#: src/features/perf/perf.js:105
+#: src/features/perf/perf.js:104
 msgid "✓ No repeated query."
 msgstr "✓ Không có query lặp lại."
 
-#: src/features/perf/perf.js:106
+#: src/features/perf/perf.js:105
 msgid "Slowest queries (%s)"
 msgstr "Query chậm nhất (%s)"
 
-#: src/features/perf/perf.js:106
+#: src/features/perf/perf.js:105
 msgid "Caller · time"
 msgstr "Nơi gọi · thời gian"
 
@@ -1158,112 +1158,108 @@ msgstr "Model này không có record rule."
 msgid "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 msgstr "Giả định user chọn tất cả công ty được phép. Rule của model cha qua _inherits không được tính. Đây là mô phỏng; với chính user của bạn, “server” là kết quả chính xác (has_access)."
 
-#: src/features/translations/translations.js:29
+#: src/features/translations/translations.js:31
 msgid "Active:"
 msgstr "Đang bật:"
 
-#: src/features/translations/translations.js:33
+#: src/features/translations/translations.js:35
 msgid "Activate / Update Languages"
 msgstr "Kích hoạt / cập nhật ngôn ngữ"
 
-#: src/features/translations/translations.js:40
+#: src/features/translations/translations.js:42
 msgid "Activate / Update"
 msgstr "Kích hoạt / cập nhật"
 
-#: src/features/translations/translations.js:44
+#: src/features/translations/translations.js:46
 msgid "Languages"
 msgstr "Ngôn ngữ"
 
-#: src/features/translations/translations.js:46
+#: src/features/translations/translations.js:48
 msgid "Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps."
 msgstr "Mã ngôn ngữ, phân cách bằng ;. Ngôn ngữ chưa bật sẽ được bật, rồi mọi ngôn ngữ đều được nạp bản dịch của các app đã cài."
 
-#: src/features/translations/translations.js:47
+#: src/features/translations/translations.js:49
 msgid "Overwrite Existing Terms"
 msgstr "Ghi đè bản dịch hiện có"
 
-#: src/features/translations/translations.js:48
+#: src/features/translations/translations.js:50
 msgid "If you check this box, your customized translations will be overwritten and replaced by the official ones."
 msgstr "Nếu tick, các bản dịch bạn đã sửa sẽ bị ghi đè bằng bản dịch chính thức."
 
-#: src/features/translations/translations.js:57
+#: src/features/translations/translations.js:59
 msgid "Unknown language: %s"
 msgstr "Không có ngôn ngữ: %s"
 
-#: src/features/translations/translations.js:58
+#: src/features/translations/translations.js:60
 msgid "Enter at least one language."
 msgstr "Nhập ít nhất một ngôn ngữ."
 
-#: src/features/translations/translations.js:62
+#: src/features/translations/translations.js:64
 msgid "activate %s"
 msgstr "kích hoạt %s"
 
-#: src/features/translations/translations.js:62
+#: src/features/translations/translations.js:64
 msgid "update %s"
 msgstr "cập nhật %s"
 
-#: src/features/translations/translations.js:84
+#: src/features/translations/translations.js:86
 msgid "Apps To Export"
 msgstr "Apps cần xuất"
 
-#: src/features/translations/translations.js:92
+#: src/features/translations/translations.js:94
 msgid "Export & Download"
 msgstr "Xuất & tải về"
 
-#: src/features/translations/translations.js:92
+#: src/features/translations/translations.js:94
 msgid "Export & Download · 1 file"
 msgstr "Xuất & tải về · 1 file"
 
-#: src/features/translations/translations.js:92
+#: src/features/translations/translations.js:94
 msgid "Export & Download · %s files"
 msgstr "Xuất & tải về · %s file"
 
-#: src/features/translations/translations.js:109
+#: src/features/translations/translations.js:111
 msgid "%s/%s installed modules"
 msgstr "%s/%s module đã cài"
 
-#: src/features/translations/translations.js:110
+#: src/features/translations/translations.js:112
 msgid "Technical names, separated by ;"
 msgstr "Tên kỹ thuật, phân cách bằng ;"
 
-#: src/features/translations/translations.js:111
+#: src/features/translations/translations.js:113
 msgid "Languages:"
 msgstr "Ngôn ngữ:"
 
-#: src/features/translations/translations.js:112
+#: src/features/translations/translations.js:114
 msgid "Always exported: the empty template, as <module>.pot"
 msgstr "Luôn được xuất: file mẫu trống, thành <module>.pot"
 
-#: src/features/translations/translations.js:112
-#: src/features/translations/translations.js:149
+#: src/features/translations/translations.js:114
+#: src/features/translations/translations.js:150
 msgid "Template (.pot)"
 msgstr "Template (.pot)"
 
-#: src/features/translations/translations.js:137
+#: src/features/translations/translations.js:140
 msgid "Enter at least one app."
 msgstr "Nhập ít nhất một app."
 
-#: src/features/translations/translations.js:139
-msgid "Not an active language: %s. Active: %s"
-msgstr "Ngôn ngữ chưa được bật: %s. Đang bật: %s"
-
-#: src/features/translations/translations.js:142
+#: src/features/translations/translations.js:143
 msgid "Unknown app: %s"
 msgstr "Không có app: %s"
 
-#: src/features/translations/translations.js:143
+#: src/features/translations/translations.js:144
 msgid "Not installed: %s"
 msgstr "Chưa cài: %s"
 
-#: src/features/translations/translations.js:146
+#: src/features/translations/translations.js:147
 msgid "Exporting…"
 msgstr "Đang xuất…"
 
-#: src/features/translations/translations.js:158
+#: src/features/translations/translations.js:159
 msgid "%s files"
 msgstr "%s file"
 
-#: src/features/translations/translations.js:158
+#: src/features/translations/translations.js:159
 msgid "nothing to export"
 msgstr "không có gì để xuất"
 

@@ -12,12 +12,12 @@ msgstr ""
 
 #: src/features/apps/apps.js:16
 #: src/features/security/security.js:193
-#: src/features/translations/translations.js:34
+#: src/features/translations/translations.js:36
 msgid "Needs Settings rights (base.group_system)."
 msgstr ""
 
 #: src/features/apps/apps.js:22
-#: src/features/translations/translations.js:84
+#: src/features/translations/translations.js:86
 msgid "Search or type: sale; stock; my_module"
 msgstr ""
 
@@ -31,17 +31,17 @@ msgstr ""
 
 #: src/features/apps/apps.js:46
 #: src/features/code/code.js:36
-#: src/features/translations/translations.js:63
+#: src/features/translations/translations.js:65
 msgid "Running…"
 msgstr ""
 
 #: src/features/apps/apps.js:48
-#: src/features/code/code.js:135
-#: src/features/code/code.js:174
+#: src/features/code/code.js:134
+#: src/features/code/code.js:173
 #: src/features/rpc/rpc.js:51
 #: src/features/rpc/rpc.js:96
-#: src/features/translations/translations.js:73
-#: src/features/translations/translations.js:160
+#: src/features/translations/translations.js:75
+#: src/features/translations/translations.js:161
 msgid "error"
 msgstr ""
 
@@ -192,104 +192,104 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
+#: src/features/code/code.js:92
 #: src/features/code/code.js:93
-#: src/features/code/code.js:94
 msgid "Guide"
 msgstr ""
 
-#: src/features/code/code.js:94
+#: src/features/code/code.js:93
 msgid "Available variables, recordset API, examples"
 msgstr ""
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Lets the code call write, create, unlink and any other method that is not a read"
 msgstr ""
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Read-only by default. With writes allowed, each call is committed at once: there is no rollback."
 msgstr ""
 
-#: src/features/code/code.js:103
+#: src/features/code/code.js:102
 msgid "Allow Writes"
 msgstr ""
 
-#: src/features/code/code.js:105
+#: src/features/code/code.js:104
 msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
 msgstr ""
 
-#: src/features/code/code.js:126
+#: src/features/code/code.js:125
 msgid "page refreshed"
 msgstr ""
 
-#: src/features/code/code.js:127
+#: src/features/code/code.js:126
 msgid "page not refreshed"
 msgstr ""
 
-#: src/features/code/code.js:132
+#: src/features/code/code.js:131
 #: src/features/rpc/rpc.js:94
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
 msgstr ""
 
-#: src/features/code/code.js:135
+#: src/features/code/code.js:134
 msgid "ok"
 msgstr ""
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "read-only"
 msgstr ""
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "writes allowed"
 msgstr ""
 
-#: src/features/code/code.js:137
-#: src/features/code/code.js:175
+#: src/features/code/code.js:136
+#: src/features/code/code.js:174
 msgid "%s ms"
 msgstr ""
 
-#: src/features/code/code.js:138
+#: src/features/code/code.js:137
 msgid "%s calls"
 msgstr ""
 
-#: src/features/code/code.js:139
+#: src/features/code/code.js:138
 msgid "%s write calls"
 msgstr ""
 
-#: src/features/code/code.js:143
+#: src/features/code/code.js:142
 msgid "No return value: end with return … to see one."
 msgstr ""
 
-#: src/features/code/code.js:149
+#: src/features/code/code.js:148
 msgid "(line %s)"
 msgstr ""
 
-#: src/features/code/code.js:154
+#: src/features/code/code.js:153
 msgid "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
 msgstr ""
 
-#: src/features/code/code.js:155
+#: src/features/code/code.js:154
 #: src/shared/ui.js:30
 msgid "Traceback"
 msgstr ""
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows (first %s shown)"
 msgstr ""
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows"
 msgstr ""
 
-#: src/features/code/code.js:166
+#: src/features/code/code.js:165
 msgid "JSON"
 msgstr ""
 
-#: src/features/code/code.js:170
+#: src/features/code/code.js:169
 msgid "Calls (%s)"
 msgstr ""
 
-#: src/features/code/code.js:173
+#: src/features/code/code.js:172
 msgid "write"
 msgstr ""
 
@@ -379,7 +379,7 @@ msgid "models of the installed modules"
 msgstr ""
 
 #: src/features/code/help.js:65
-msgid "fields of the last env[…] model, following relations (partner_id.country_id.)"
+msgid "fields of the variable's model (else the last env[…] one), following relations (partner_id.country_id.)"
 msgstr ""
 
 #: src/features/code/help.js:66
@@ -444,120 +444,120 @@ msgstr ""
 msgid "Suggestions"
 msgstr ""
 
-#: src/features/perf/perf.js:15
+#: src/features/perf/perf.js:14
 msgid "Cannot call /web/set_profiling"
 msgstr ""
 
-#: src/features/perf/perf.js:23
+#: src/features/perf/perf.js:22
 msgid "Profiling is not enabled on this database.\nEnable it for 5 minutes? (writes ir.config_parameter base.profiling_enabled_until)"
 msgstr ""
 
-#: src/features/perf/perf.js:27
+#: src/features/perf/perf.js:26
 msgid "Profiling could not be enabled."
 msgstr ""
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:43
 msgid "Stop Profiling"
 msgstr ""
 
-#: src/features/perf/perf.js:44
+#: src/features/perf/perf.js:43
 msgid "Start Profiling"
 msgstr ""
 
-#: src/features/perf/perf.js:46
+#: src/features/perf/perf.js:45
 msgid "RECORDING"
 msgstr ""
 
-#: src/features/perf/perf.js:46
+#: src/features/perf/perf.js:45
 msgid "off"
 msgstr ""
 
-#: src/features/perf/perf.js:47
+#: src/features/perf/perf.js:46
 msgid "since %s"
 msgstr ""
 
-#: src/features/perf/perf.js:50
+#: src/features/perf/perf.js:49
 msgid "Each request of this session writes one ir.profile row; ⟳ reloads the list."
 msgstr ""
 
-#: src/features/perf/perf.js:51
+#: src/features/perf/perf.js:50
 msgid "Records the SQL + Python stacks of every request of this session (Odoo's built-in profiler, base.group_system)."
 msgstr ""
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:64
 msgid "No request yet: use the Odoo page, then press ⟳."
 msgstr ""
 
-#: src/features/perf/perf.js:65
+#: src/features/perf/perf.js:64
 msgid "No profile data yet."
 msgstr ""
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:65
 msgid "Filter request"
 msgstr ""
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:65
 msgid "%s requests"
 msgstr ""
 
-#: src/features/perf/perf.js:66
+#: src/features/perf/perf.js:65
 msgid "%s/%s requests"
 msgstr ""
 
-#: src/features/perf/perf.js:67
+#: src/features/perf/perf.js:66
 msgid "Request · SQL · duration"
 msgstr ""
 
-#: src/features/perf/perf.js:67
+#: src/features/perf/perf.js:66
 msgid "Id · time · CPU"
 msgstr ""
 
-#: src/features/perf/perf.js:68
+#: src/features/perf/perf.js:67
 msgid "Select a request to see its SQL queries."
 msgstr ""
 
-#: src/features/perf/perf.js:70
+#: src/features/perf/perf.js:69
 msgid "Latest session: %s"
 msgstr ""
 
-#: src/features/perf/perf.js:85
+#: src/features/perf/perf.js:84
 msgid "Flame Graph (speedscope)"
 msgstr ""
 
-#: src/features/perf/perf.js:94
+#: src/features/perf/perf.js:93
 msgid "No SQL recorded."
 msgstr ""
 
-#: src/features/perf/perf.js:99
+#: src/features/perf/perf.js:98
 msgid "Full SQL + stack"
 msgstr ""
 
-#: src/features/perf/perf.js:101
+#: src/features/perf/perf.js:100
 msgid "%s queries · SQL %s / total %s · Python ≈ %s"
 msgstr ""
 
-#: src/features/perf/perf.js:103
+#: src/features/perf/perf.js:102
 msgid "Repeated queries — N+1 suspects (%s)"
 msgstr ""
 
-#: src/features/perf/perf.js:103
+#: src/features/perf/perf.js:102
 msgid "Count · caller · time"
 msgstr ""
 
-#: src/features/perf/perf.js:103
-#: src/features/perf/perf.js:106
+#: src/features/perf/perf.js:102
+#: src/features/perf/perf.js:105
 msgid "Query"
 msgstr ""
 
-#: src/features/perf/perf.js:105
+#: src/features/perf/perf.js:104
 msgid "✓ No repeated query."
 msgstr ""
 
-#: src/features/perf/perf.js:106
+#: src/features/perf/perf.js:105
 msgid "Slowest queries (%s)"
 msgstr ""
 
-#: src/features/perf/perf.js:106
+#: src/features/perf/perf.js:105
 msgid "Caller · time"
 msgstr ""
 
@@ -1158,112 +1158,108 @@ msgstr ""
 msgid "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 msgstr ""
 
-#: src/features/translations/translations.js:29
+#: src/features/translations/translations.js:31
 msgid "Active:"
 msgstr ""
 
-#: src/features/translations/translations.js:33
+#: src/features/translations/translations.js:35
 msgid "Activate / Update Languages"
 msgstr ""
 
-#: src/features/translations/translations.js:40
+#: src/features/translations/translations.js:42
 msgid "Activate / Update"
 msgstr ""
 
-#: src/features/translations/translations.js:44
+#: src/features/translations/translations.js:46
 msgid "Languages"
 msgstr ""
 
-#: src/features/translations/translations.js:46
+#: src/features/translations/translations.js:48
 msgid "Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps."
 msgstr ""
 
-#: src/features/translations/translations.js:47
+#: src/features/translations/translations.js:49
 msgid "Overwrite Existing Terms"
 msgstr ""
 
-#: src/features/translations/translations.js:48
+#: src/features/translations/translations.js:50
 msgid "If you check this box, your customized translations will be overwritten and replaced by the official ones."
 msgstr ""
 
-#: src/features/translations/translations.js:57
+#: src/features/translations/translations.js:59
 msgid "Unknown language: %s"
 msgstr ""
 
-#: src/features/translations/translations.js:58
+#: src/features/translations/translations.js:60
 msgid "Enter at least one language."
 msgstr ""
 
-#: src/features/translations/translations.js:62
+#: src/features/translations/translations.js:64
 msgid "activate %s"
 msgstr ""
 
-#: src/features/translations/translations.js:62
+#: src/features/translations/translations.js:64
 msgid "update %s"
 msgstr ""
 
-#: src/features/translations/translations.js:84
+#: src/features/translations/translations.js:86
 msgid "Apps To Export"
 msgstr ""
 
-#: src/features/translations/translations.js:92
+#: src/features/translations/translations.js:94
 msgid "Export & Download"
 msgstr ""
 
-#: src/features/translations/translations.js:92
+#: src/features/translations/translations.js:94
 msgid "Export & Download · 1 file"
 msgstr ""
 
-#: src/features/translations/translations.js:92
+#: src/features/translations/translations.js:94
 msgid "Export & Download · %s files"
 msgstr ""
 
-#: src/features/translations/translations.js:109
+#: src/features/translations/translations.js:111
 msgid "%s/%s installed modules"
 msgstr ""
 
-#: src/features/translations/translations.js:110
+#: src/features/translations/translations.js:112
 msgid "Technical names, separated by ;"
 msgstr ""
 
-#: src/features/translations/translations.js:111
+#: src/features/translations/translations.js:113
 msgid "Languages:"
 msgstr ""
 
-#: src/features/translations/translations.js:112
+#: src/features/translations/translations.js:114
 msgid "Always exported: the empty template, as <module>.pot"
 msgstr ""
 
-#: src/features/translations/translations.js:112
-#: src/features/translations/translations.js:149
+#: src/features/translations/translations.js:114
+#: src/features/translations/translations.js:150
 msgid "Template (.pot)"
 msgstr ""
 
-#: src/features/translations/translations.js:137
+#: src/features/translations/translations.js:140
 msgid "Enter at least one app."
 msgstr ""
 
-#: src/features/translations/translations.js:139
-msgid "Not an active language: %s. Active: %s"
-msgstr ""
-
-#: src/features/translations/translations.js:142
+#: src/features/translations/translations.js:143
 msgid "Unknown app: %s"
 msgstr ""
 
-#: src/features/translations/translations.js:143
+#: src/features/translations/translations.js:144
 msgid "Not installed: %s"
 msgstr ""
 
-#: src/features/translations/translations.js:146
+#: src/features/translations/translations.js:147
 msgid "Exporting…"
 msgstr ""
 
-#: src/features/translations/translations.js:158
+#: src/features/translations/translations.js:159
 msgid "%s files"
 msgstr ""
 
-#: src/features/translations/translations.js:158
+#: src/features/translations/translations.js:159
 msgid "nothing to export"
 msgstr ""
 

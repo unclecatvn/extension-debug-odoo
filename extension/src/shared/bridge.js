@@ -50,9 +50,8 @@ export const clearCache = () => cache.clear();
 const FIELD_ATTRS = ['string', 'type', 'relation', 'store', 'depends', 'related', 'readonly', 'required', 'groups'];
 export const sessionInfo = () => cached('session', () => rpc('/web/session/get_session_info', {}));
 export const fieldsOf = (model) => cached(`fields ${model}`, () => call(model, 'fields_get', [], { attributes: FIELD_ATTRS }));
-// latest_version = the version installed in the DB (installed_version is computed from the manifest on disk: slow)
 export const installedModules = () => cached('modules', () => call('ir.module.module', 'search_read', [[['state', '=', 'installed']]],
-  { fields: ['name', 'shortdesc', 'latest_version', 'author'], order: 'name' }));
+  { fields: ['name', 'shortdesc', 'author'], order: 'name' }));
 
 // ACLs and rules are not cached: they are what people edit while debugging.
 const PERMS = MODES.map((m) => `perm_${m}`);

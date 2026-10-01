@@ -2,7 +2,7 @@
 // the page's host, Odoo version, database and debug mode.
 import { LANGS, lang, loadLang, translateDom, _t, N_ } from '../shared/i18n.js';
 import { THEMES, applyTheme, loadSettings } from '../shared/settings.js';
-import { setTab, rpc } from '../shared/bridge.js';
+import { setTab, exec, rpc, sessionInfo } from '../shared/bridge.js';
 import { $, el } from '../shared/ui.js';
 import { pageDebug } from '../shared/page.js';
 
@@ -39,7 +39,7 @@ $('#edit-shortcuts').addEventListener('click', () => chrome.tabs.create({ url: '
 // "This page" only makes sense in the toolbar popup, not on the options page.
 if (chrome.extension.getViews({ type: 'popup' }).includes(window)) {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  setTab(tab); // rpc() below runs in this tab, with its session
+  setTab(tab); // exec() / rpc() below run in this tab, with its session
   const host = tab?.url ? new URL(tab.url).host : '';
   // one line: host, version, db, each after its icon (ui.css), the full value in the tooltip
   const info = (kind, text, title) => el('span', { class: 'info', 'data-info': kind, title: `${title}: ${text}` }, el('span', {}, text));
@@ -48,14 +48,14 @@ if (chrome.extension.getViews({ type: 'popup' }).includes(window)) {
   ].filter(Boolean));
   show('…');
   // Logged in: the session info has both. Logged out (login page): the version only, the db comes with a session.
-  rpc('/web/session/get_session_info', {}).then((i) => show(i.server_version, i.db),
+  sessionInfo().then((i) => show(i.server_version, i.db),
     () => rpc('/web/webclient/version_info', {}).then((v) => show(v.server_version), () => show()));
   // Odoo's debug mode of this tab: reloads it with ?debug=0 / 1 / assets (Odoo keeps it in the session)
-  const [{ result: debug = '' } = {}] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, world: 'MAIN', func: () => window.odoo?.debug || '' })
-    .catch(() => []); // not scriptable (chrome:// …): no current mode shown
+  const r = await exec(() => window.odoo?.debug || '');
+  const debug = typeof r === 'string' ? r : ''; // not scriptable (chrome:// …): { error }, no current mode shown
   const current = debug.split(',').includes('assets') ? 'assets' : debug ? '1' : '0';
   const setMode = async (mode) => {
-    await chrome.scripting.executeScript({ target: { tabId: tab.id }, world: 'MAIN', func: pageDebug, args: [mode] }).catch(() => {});
+    await exec(pageDebug, mode);
     window.close();
   };
   // Keep it on: { origin → '1' | 'assets' } in storage, applied by content/bubble.js to every page opened without ?debug=

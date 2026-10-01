@@ -10,7 +10,7 @@ import { exec, call, cached, uncache, sessionInfo, fieldsOf, readAcls, readRules
 import { el, pre, pill, triPill, details, empty, errBox, kv, block, card, expandable, filteredList, copyable, odooLink, listHead, splitRow } from '../../shared/ui.js';
 import { _t, N_ } from '../../shared/i18n.js';
 
-const KEY_GROUPS = ['group_system', 'group_erp_manager', 'group_no_one', 'group_user', 'group_portal', 'group_public'];
+const KEY_GROUPS = ['group_system', 'group_erp_manager', 'group_no_one', 'group_portal', 'group_public'];
 const LABEL = { high: N_('HIGH'), med: N_('MEDIUM'), low: N_('LOW'), info: N_('INFO') };
 const LETTER = { read: 'R', write: 'W', create: 'C', unlink: 'D' };
 // ponytail: key-name heuristic, the value still shows when the row is expanded
@@ -269,8 +269,8 @@ async function whyBlock(model, resId, t, modelSec, tryGroup) {
   // your own user, real groups: the server's exact answer too (has_access runs as the logged-in user only)
   const server = uid === me && !tried.size ? Promise.all(MODES.map((op) => call(model, 'has_access', [resId ? [resId] : [], op]).catch(() => null))) : null;
   const modesOf = (r) => MODES.filter((m) => rulesFor([r], groupIds, m).length);
-  const relevant = rules; // not only the applicable ones: the groups that would unblock a mode need every rule
-  const evals = await exec(pageEvalDomains, relevant.map((r) => r.domain_force), ruleEvalContext(u));
+  // every rule, not only the applicable ones: the groups that would unblock a mode need them all
+  const evals = await exec(pageEvalDomains, rules.map((r) => r.domain_force), ruleEvalContext(u));
   const evaluated = new Map(); // ruleId → domain, evaluated for the simulated user
   const passed = new Map(); // ruleId → the record matches it
   const note = new Map(); // ruleId → why it could not be checked
@@ -278,7 +278,7 @@ async function whyBlock(model, resId, t, modelSec, tryGroup) {
   // ponytail: runs under the viewer's own rules; if the viewer can't see the record, nothing can be checked.
   const count = (dom) => call(model, 'search_count', [[['id', '=', resId], ...dom]], { context: { active_test: false } });
   const visible = resId ? await count([]).catch(() => 0) : 0;
-  await Promise.all(relevant.map(async (r, i) => {
+  await Promise.all(rules.map(async (r, i) => {
     const ev = (Array.isArray(evals) && evals[i]) || { error: evals?.error || N_('no result') };
     if (ev.error) return note.set(r.id, _t('cannot evaluate: %s', _t(ev.error)));
     evaluated.set(r.id, ev.domain);

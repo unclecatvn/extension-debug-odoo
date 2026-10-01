@@ -9,6 +9,8 @@ import { modulePicker } from '../../shared/picker.js';
 import { _t } from '../../shared/i18n.js';
 
 let done = null; // outcome of the last Activate / Update, shown again once the tab re-rendered with the new active languages
+// every language, the inactive ones too: both cards read it, Activate / Update drops it
+const allLangs = () => cached('langs', () => call('res.lang', 'search_read', [[]], { fields: ['code', 'name', 'active'], order: 'code', context: { active_test: false } }));
 
 /** "Active: en_US vi_VN…": each code toggles in `input` (a ;-separated list), lit while it is there; then onChange(). */
 function activeChips(langs, input, onChange) {
@@ -32,7 +34,7 @@ function activeChips(langs, input, onChange) {
 export function renderTranslations(s) {
   block(s, 'add-langs', _t('Activate / Update Languages'), async () => {
     if (!(await sessionInfo()).is_system) return empty(_t('Needs Settings rights (base.group_system).')); // the wizard's ACL
-    const all = await call('res.lang', 'search_read', [[]], { fields: ['code', 'name', 'active'], order: 'code', context: { active_test: false } });
+    const all = await allLangs();
     const input = el('input', { type: 'text', placeholder: 'fr_BE; de_DE', value: formValues('translations-add').langs || '', spellcheck: false });
     const keep = () => saveForm('translations-add', { langs: input.value });
     input.addEventListener('input', keep);
@@ -66,7 +68,7 @@ export function renderTranslations(s) {
         await call('base.language.install', 'lang_install', [[id]]);
         done = what;
         saveForm('translations-add', {});
-        uncache('active langs');
+        uncache('langs');
         s.replaceChildren(); // the export below lists the active languages: draw the tab again
         renderTranslations(s);
       } catch (e) {
@@ -79,7 +81,7 @@ export function renderTranslations(s) {
   });
 
   card(s, async () => { // the export, what the tab is for: no title to open it by
-    const langs = await cached('active langs', () => call('res.lang', 'search_read', [[['active', '=', true]]], { fields: ['code', 'name'], order: 'code' }));
+    const langs = (await allLangs()).filter((l) => l.active);
     const last = formValues('translations');
     const apps = el('input', { type: 'text', placeholder: _t('Search or type: sale; stock; my_module'), 'aria-label': _t('Apps To Export'), value: last.apps || '', spellcheck: false });
     // Languages: the active ones as toggles (the wizard exports nothing else), the last choice kept
@@ -121,7 +123,7 @@ export function renderTranslations(s) {
       btn.disabled = true;
       log.replaceChildren();
       try {
-        await exportAll(splitList(apps.value), [...picked], langs.map((l) => l.code), log);
+        await exportAll(splitList(apps.value), [...picked], log);
       } catch (e) {
         log.append(el('li', {}, errBox(e)));
       } finally {
@@ -132,11 +134,10 @@ export function renderTranslations(s) {
   });
 }
 
-/** One base.language.export run per language (template first); each file of its .tgz is downloaded on its own. */
-async function exportAll(appNames, langNames, active, log) {
+/** One base.language.export run per language (template first, `codes`: active ones, see the chips); each file of its
+ * .tgz is downloaded on its own. */
+async function exportAll(appNames, codes, log) {
   if (!appNames.length) throw new Error(_t('Enter at least one app.'));
-  const { codes, unknown } = resolveLangs(langNames, active);
-  if (unknown.length) throw new Error(_t('Not an active language: %s. Active: %s', unknown.join(', '), active.join(', ')));
   const rows = await call('ir.module.module', 'search_read', [[['name', 'in', appNames]]], { fields: ['name', 'state'] });
   const { ids, missing, notInstalled } = resolveModules(appNames, rows);
   if (missing.length) throw new Error(_t('Unknown app: %s', missing.join(', ')));

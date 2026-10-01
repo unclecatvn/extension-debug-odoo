@@ -30,7 +30,7 @@ export function pageFormFields() {
   // ponytail: DOM check is page-wide, so a dialog and the form behind it with the same field can mask each other.
   const inDom = (name) => !!document.querySelector(`.o_form_view .o_field_widget[name="${CSS.escape(name)}"]`);
   return {
-    model: rec.resModel, resId: rec.resId || null, editable: !!rec.isInEdition,
+    editable: !!rec.isInEdition,
     fields: Object.entries(ctrl.archInfo.fieldNodes).map(([id, f]) => ({
       id, name: f.name, string: f.string, type: f.type, widget: f.widget || f.field?.component?.name || null,
       invisible: ev(f.invisible), readonly: ev(f.readonly), required: ev(f.required),

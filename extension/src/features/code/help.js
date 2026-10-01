@@ -62,7 +62,7 @@ export function help() {
     el('div', { class: 'help-title' }, _t('Suggestions:')),
     list([
       ["env['", _t('models of the installed modules')],
-      ["'…' in a domain or a field list, rec.", _t('fields of the last env[…] model, following relations (partner_id.country_id.)')],
+      ["'…' in a domain or a field list, rec.", _t("fields of the variable's model (else the last env[…] one), following relations (partner_id.country_id.)")],
       ['.', _t('recordset methods, env and Command members')],
       ['↑ ↓, Enter / Tab, Esc, Ctrl+Space', _t('pick, insert, close, ask for suggestions')],
     ]),

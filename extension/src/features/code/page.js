@@ -259,7 +259,7 @@ export async function pageRunCode(code, opts = {}) {
       for (const [i, name] of parts.entries()) {
         const last = i === parts.length - 1;
         const info = await fieldInfo(rs, name);
-        const relational = ['many2one', 'one2many', 'many2many'].includes(info.type);
+        const relational = RELATIONAL.includes(info.type);
         if (!relational && !last) throw fail(N_('%s.%s is not relational'), [rs._name, name], `${rs._name}.${name} is not relational`);
         const rows = rs._ids.length ? await rs._records('read', [], { fields: [name], load: false }) : [];
         if (!relational) return rows.map((r) => r[name]);

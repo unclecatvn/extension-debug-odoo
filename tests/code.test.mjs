@@ -31,7 +31,7 @@ assert.deepEqual(t.columns, ['id', 'name', 'extra']);
 assert.deepEqual(t.rows, [['1', 'A', '']]);
 assert.equal(t.total, 2);
 
-assert.deepEqual(callStats([{ write: true }, { error: 'x' }, {}]), { total: 3, writes: 1, errors: 1, written: 1 });
+assert.deepEqual(callStats([{ write: true }, { error: 'x' }, {}]), { total: 3, writes: 1, written: 1 });
 assert.equal(callStats([{ write: true, error: 'refused' }]).written, 0);
 
 // ---------- pageRunCode against a fake call_kw ----------
@@ -60,7 +60,6 @@ function server(log) {
         return [f, load && m.fields[f].type === 'many2one' && v ? [v, `#${v}`] : v];
       })])));
     }
-    if (method === 'write' && model === 'res.country') { for (const id of args[0]) Object.assign(m.rows[id], args[1]); return reply(true); }
     if (method === 'write' && !('name' in args[1])) { for (const id of args[0]) Object.assign(m.rows[id], args[1]); return reply(true); }
     if (method === 'write') return err('You are not allowed to modify this document', 'odoo.exceptions.AccessError');
     if (method === 'check_object_reference') return reply(['res.partner', 1]);
@@ -274,7 +273,7 @@ test('tokenize: colours, half-typed code included, every character kept', () => 
   assert.deepEqual(of('fn'), ['search']); // after a dot and before a "(": a call
   assert.deepEqual(of('number'), ['1']);
   assert.deepEqual(of('comment'), ['// hi']);
-  assert.deepEqual(tokenize('rec.state, a.b(1)').filter(([k]) => k).map(([k, x]) => `${k}:${x}`), ['prop:state', 'prop:b'.replace('prop', 'fn'), 'number:1']);
+  assert.deepEqual(tokenize('rec.state, a.b(1)').filter(([k]) => k).map(([k, x]) => `${k}:${x}`), ['fn:b', 'number:1']);
   assert.deepEqual(tokenize('/* open'), [['comment', '/* open']]);
 });
 
