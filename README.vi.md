@@ -7,7 +7,7 @@
 **Bảng debug ngay trên trang dành cho lập trình viên Odoo.**<br>
 Soi record, view, lời gọi RPC, quyền truy cập và hiệu năng server mà không phải rời trang đang debug.
 
-[![Release](https://img.shields.io/github/v/release/unclecatvn/extension-debug-odoo?label=release)](https://github.com/unclecatvn/extension-debug-odoo/releases)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)
 [![Build](https://github.com/unclecatvn/extension-debug-odoo/actions/workflows/release.yml/badge.svg)](https://github.com/unclecatvn/extension-debug-odoo/actions/workflows/release.yml)
 [![GitHub stars](https://img.shields.io/github/stars/unclecatvn/extension-debug-odoo?style=social)](https://github.com/unclecatvn/extension-debug-odoo)
 ![Chrome](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
@@ -15,7 +15,7 @@ Soi record, view, lời gọi RPC, quyền truy cập và hiệu năng server m�
 
 [English](README.md) · **Tiếng Việt**
 
-[Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Cài đặt](#cài-đặt) · [Tính năng](#tính-năng) · [Sử dụng](#sử-dụng) · [Quyền riêng tư](#quyền-riêng-tư--quyền-hạn) · [Phát triển](#phát-triển) · [Changelog](CHANGELOG.md)
+**[Cài từ Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** · [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Tính năng](#tính-năng) · [Sử dụng](#sử-dụng) · [Quyền riêng tư](#quyền-riêng-tư--quyền-hạn) · [Phát triển](#phát-triển) · [Changelog](CHANGELOG.md)
 
 https://github.com/user-attachments/assets/a257c2f8-ee49-4b97-a7d9-72b04d7e5781
 
@@ -70,12 +70,9 @@ Ngoài ra: bấm vào tên field, model hay xmlid trong bảng để copy, và <
 
 ## Cài đặt
 
-Extension chưa có trên Chrome Web Store; cài dạng unpacked (Chrome, Edge, Brave và các trình duyệt nhân Chromium):
+Cài **[Odoo Debug từ Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** rồi bấm **Thêm vào Chrome** (Add to Chrome). Chạy được trên Chrome, Edge, Brave và các trình duyệt nhân Chromium khác (Edge sẽ hỏi cho phép cài extension từ store khác trước), và tự cập nhật.
 
-1. Tải `odoo-debug-v<version>.zip` từ [Releases](https://github.com/unclecatvn/extension-debug-odoo/releases) rồi giải nén (hoặc `git clone https://github.com/unclecatvn/extension-debug-odoo.git`).
-2. Mở `chrome://extensions` và bật **Developer mode**.
-3. Bấm **Load unpacked** và chọn thư mục vừa giải nén (nếu clone: chọn thư mục `extension/`).
-4. Mở một trang Odoo bất kỳ: nút tròn xuất hiện ở mép dưới.
+Sau đó mở một trang Odoo bất kỳ: nút tròn xuất hiện ở mép dưới.
 
 ## Sử dụng
 
@@ -234,7 +231,7 @@ Rất hoan nghênh issue và pull request. Trước khi mở PR:
 
 Gặp lỗi? [Mở issue](https://github.com/unclecatvn/extension-debug-odoo/issues) kèm phiên bản Odoo, trang bạn đang mở và, nếu có, lỗi trong tab RPC.
 
-Mở pull request nghĩa là đồng ý với [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement) một câu: UncleCat được cấp license cho phần đóng góp của bạn theo bất kỳ điều khoản nào (giống n8n).
+Mở pull request nghĩa là đồng ý với [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement) một câu: UncleCat được cấp license cho phần đóng góp của bạn theo bất kỳ điều khoản nào.
 
 ## Ủng hộ dự án
 
@@ -246,11 +243,9 @@ Phát triển bởi **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
 
 ## Giấy phép
 
-[Sustainable Use License](LICENSE) © 2026 UncleCat, license mà [n8n](https://github.com/n8n-io/n8n) đang dùng ("fair-code").
+[Sustainable Use License](LICENSE) © 2026 UncleCat.
 
 - **Được dùng và sửa miễn phí** cho mục đích cá nhân, phi thương mại, hoặc cho công việc nội bộ của chính công ty bạn: lập trình viên của một đối tác Odoo dùng trên dự án của khách hàng vẫn được.
 - **Được chia sẻ, nhưng chỉ miễn phí và cho mục đích phi thương mại**, giữ nguyên thông báo license và bản quyền.
 - **Không được bán**: không đưa bản thu phí lên store, không host hay bán lại, không làm sản phẩm hay dịch vụ thu phí dựa trên nó.
 - Muốn dùng thương mại theo cách không được phép ở trên? [Mở issue](https://github.com/unclecatvn/extension-debug-odoo/issues) hoặc liên hệ qua [unclecatvn.com](https://unclecatvn.com/) để có license thương mại.
-
-Mã nguồn công khai, nhưng vì không được bán, Odoo Debug là *mã nguồn công khai* (source available) chứ không phải mã nguồn mở theo định nghĩa của OSI.

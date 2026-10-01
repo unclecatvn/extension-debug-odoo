@@ -7,7 +7,7 @@
 **An in-page debug panel for Odoo developers.**<br>
 Inspect records, views, RPC calls, access rights and server performance without leaving the page you are debugging.
 
-[![Release](https://img.shields.io/github/v/release/unclecatvn/extension-debug-odoo?label=release)](https://github.com/unclecatvn/extension-debug-odoo/releases)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)
 [![Build](https://github.com/unclecatvn/extension-debug-odoo/actions/workflows/release.yml/badge.svg)](https://github.com/unclecatvn/extension-debug-odoo/actions/workflows/release.yml)
 [![GitHub stars](https://img.shields.io/github/stars/unclecatvn/extension-debug-odoo?style=social)](https://github.com/unclecatvn/extension-debug-odoo)
 ![Chrome](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
@@ -15,7 +15,7 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 **English** · [Tiếng Việt](README.vi.md)
 
-[Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** · [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
 https://github.com/user-attachments/assets/a257c2f8-ee49-4b97-a7d9-72b04d7e5781
 
@@ -74,13 +74,9 @@ page to copy its technical name.
 
 ## Installation
 
-The extension is not on the Chrome Web Store yet; install it unpacked (Chrome, Edge, Brave and other Chromium browsers):
+Install **[Odoo Debug from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** and click **Add to Chrome**. It works in Chrome, Edge, Brave and other Chromium browsers (Edge asks to allow extensions from other stores first), and updates itself.
 
-1. Download `odoo-debug-v<version>.zip` from [Releases](https://github.com/unclecatvn/extension-debug-odoo/releases) and unzip it
-   (or `git clone https://github.com/unclecatvn/extension-debug-odoo.git`).
-2. Open `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and select the unzipped folder (from a clone: the `extension/` folder).
-4. Open any Odoo page: a round button appears on the bottom edge.
+Then open any Odoo page: a round button appears on the bottom edge.
 
 ## Usage
 
@@ -252,7 +248,7 @@ Issues and pull requests are welcome. Before opening a PR:
 Found a bug? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) with your Odoo version, the
 page you were on and, if relevant, the RPC tab's error.
 
-Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement): UncleCat may license your contribution on any terms (as n8n's).
+Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement): UncleCat may license your contribution on any terms.
 
 ## Support the project
 
@@ -264,11 +260,9 @@ Made by **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
 
 ## License
 
-[Sustainable Use License](LICENSE) © 2026 UncleCat, the license [n8n](https://github.com/n8n-io/n8n) uses ("fair-code").
+[Sustainable Use License](LICENSE) © 2026 UncleCat.
 
 - **Free to use and modify** for personal or non-commercial use, or for your own company's internal work: an Odoo partner's developers can use it on their clients' projects.
 - **Free to share, only free of charge and for non-commercial purposes**, with the license and copyright notices kept.
 - **Not to sell**: no paid build of it on a store, no hosting or reselling it, no product or service built on it for a fee.
 - Want to use it commercially in a way that isn't allowed? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) or write via [unclecatvn.com](https://unclecatvn.com/) for a commercial license.
-
-Its code is public, but being restricted from selling, Odoo Debug is *source available* rather than open source in the OSI sense.
