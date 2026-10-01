@@ -735,8 +735,8 @@ msgid "Has company_id but no global multi-company rule → records may leak acro
 msgstr "Has company_id but no global multi-company rule → records may leak across companies."
 
 #: src/features/security/logic.js:103
-msgid "Field \"%s\" looks sensitive but has no groups=."
-msgstr "Field \"%s\" looks sensitive but has no groups=."
+msgid "Field \"%s\" looks sensitive but is not restricted to any group."
+msgstr "Field \"%s\" looks sensitive but is not restricted to any group."
 
 #: src/features/security/logic.js:113
 msgid "Not served over HTTPS."
@@ -924,12 +924,12 @@ msgid "(all users)"
 msgstr "(all users)"
 
 #: src/features/security/security.js:154
-msgid "Fields hidden from the user (groups=)"
-msgstr "Fields hidden from the user (groups=)"
+msgid "Fields hidden from the user"
+msgstr "Fields hidden from the user"
 
 #: src/features/security/security.js:157
-msgid "No field declares groups=."
-msgstr "No field declares groups=."
+msgid "No field is restricted to groups."
+msgstr "No field is restricted to groups."
 
 #: src/features/security/security.js:162
 msgid "Real groups only: the tried groups are not counted here."
@@ -938,6 +938,10 @@ msgstr "Real groups only: the tried groups are not counted here."
 #: src/features/security/security.js:163
 msgid "Field · label · for this user"
 msgstr "Field · label · for this user"
+
+#: src/features/security/security.js:163
+msgid "Allowed groups"
+msgstr "Allowed groups"
 
 #: src/features/security/security.js:165
 msgid "visible"

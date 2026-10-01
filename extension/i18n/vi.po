@@ -735,8 +735,8 @@ msgid "Has company_id but no global multi-company rule → records may leak acro
 msgstr "Có company_id nhưng không có global rule multi-company → record có thể lộ giữa các công ty."
 
 #: src/features/security/logic.js:103
-msgid "Field \"%s\" looks sensitive but has no groups=."
-msgstr "Field \"%s\" có vẻ nhạy cảm nhưng không có groups=."
+msgid "Field \"%s\" looks sensitive but is not restricted to any group."
+msgstr "Field \"%s\" có vẻ nhạy cảm nhưng không bị giới hạn theo group nào."
 
 #: src/features/security/logic.js:113
 msgid "Not served over HTTPS."
@@ -924,12 +924,12 @@ msgid "(all users)"
 msgstr "(mọi user)"
 
 #: src/features/security/security.js:154
-msgid "Fields hidden from the user (groups=)"
-msgstr "Field bị ẩn với user (groups=)"
+msgid "Fields hidden from the user"
+msgstr "Field bị ẩn với user"
 
 #: src/features/security/security.js:157
-msgid "No field declares groups=."
-msgstr "Không field nào khai báo groups=."
+msgid "No field is restricted to groups."
+msgstr "Không có field nào bị giới hạn theo group."
 
 #: src/features/security/security.js:162
 msgid "Real groups only: the tried groups are not counted here."
@@ -938,6 +938,10 @@ msgstr "Chỉ tính nhóm thật: các nhóm đang thử không được tính �
 #: src/features/security/security.js:163
 msgid "Field · label · for this user"
 msgstr "Field · nhãn · với user này"
+
+#: src/features/security/security.js:163
+msgid "Allowed groups"
+msgstr "Group được phép"
 
 #: src/features/security/security.js:165
 msgid "visible"

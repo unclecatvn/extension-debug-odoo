@@ -735,7 +735,7 @@ msgid "Has company_id but no global multi-company rule → records may leak acro
 msgstr ""
 
 #: src/features/security/logic.js:103
-msgid "Field \"%s\" looks sensitive but has no groups=."
+msgid "Field \"%s\" looks sensitive but is not restricted to any group."
 msgstr ""
 
 #: src/features/security/logic.js:113
@@ -924,11 +924,11 @@ msgid "(all users)"
 msgstr ""
 
 #: src/features/security/security.js:154
-msgid "Fields hidden from the user (groups=)"
+msgid "Fields hidden from the user"
 msgstr ""
 
 #: src/features/security/security.js:157
-msgid "No field declares groups=."
+msgid "No field is restricted to groups."
 msgstr ""
 
 #: src/features/security/security.js:162
@@ -937,6 +937,10 @@ msgstr ""
 
 #: src/features/security/security.js:163
 msgid "Field · label · for this user"
+msgstr ""
+
+#: src/features/security/security.js:163
+msgid "Allowed groups"
 msgstr ""
 
 #: src/features/security/security.js:165

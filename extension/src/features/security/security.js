@@ -151,16 +151,16 @@ export function renderSecurity(s, state) {
           MODES.map((m) => el('td', { class: 'c' }, a[`perm_${m}`] ? '✓' : ''))))));
     });
 
-    block(s, 'hidden-fields', _t('Fields hidden from the user (groups=)'), async () => {
+    block(s, 'hidden-fields', _t('Fields hidden from the user'), async () => {
       const [{ uid, tried }, [, , fields]] = await Promise.all([t, modelSec]);
       const restricted = Object.entries(fields).filter(([, f]) => f.groups);
-      if (!restricted.length) return empty(_t('No field declares groups=.'));
+      if (!restricted.length) return empty(_t('No field is restricted to groups.'));
       // ponytail: has_groups is the server's answer on the real groups; tried groups are not counted here
       const specs = [...new Set(restricted.map(([, f]) => f.groups))];
       const ok = new Map(await Promise.all(specs.map(async (sp) => [sp, await call('res.users', 'has_groups', [[uid], sp]).catch(() => null)])));
       restricted.sort(([, a], [, b]) => Number(ok.get(a.groups)) - Number(ok.get(b.groups)));
       return el('div', {}, tried.size ? el('p', { class: 'note' }, _t('Real groups only: the tried groups are not counted here.')) : null,
-        listHead(_t('Field · label · for this user'), 'groups='), el('ul', { class: 'list' }, restricted.map(([name, f]) => expandable(el('li', {},
+        listHead(_t('Field · label · for this user'), _t('Allowed groups')), el('ul', { class: 'list' }, restricted.map(([name, f]) => expandable(el('li', {},
         el('div', { class: 'row' }, copyable(name), el('span', { class: 'grow muted' }, f.string),
           triPill(ok.get(f.groups), [_t('visible'), _t('hidden'), '?'])),
         el('div', { class: 'meta' }, f.groups))))));

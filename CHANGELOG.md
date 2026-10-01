@@ -7,6 +7,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 ### Changed
 
 - **Toolbar popup**: "This page" shows the Odoo version and database next to the host (one line, an icon each), and the debug mode switch reads Off / Debug / Assets.
+- **Security**: plainer labels than `groups=` in the model part ("Fields hidden from the user", "Allowed groups", "not restricted to any group").
 
 ### Removed
 
