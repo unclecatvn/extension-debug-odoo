@@ -273,6 +273,11 @@ async function record() {
   await wait(panel.waitForFunction(() => /Marc/.test(document.querySelector('#security .user-line')?.textContent || ''), { timeout: 15_000 }));
   await wait(panel.waitForFunction(() => document.querySelector('#security details.card[data-key=why] .card-body')?.childElementCount
     && !document.querySelector('#security details.card[data-key=why] .card-body > .loading'), { timeout: 20_000 }));
+  // their groups, as a tree: the given ones, what each implies
+  const groups = await wait(panel.waitForFunction(() => document.querySelector('#security details.card[data-key=groups] .card-body')?.childElementCount
+    && !document.querySelector('#security details.card[data-key=groups] .card-body > .loading'), { timeout: 20_000 }).then(() => boxOf('#security details.card[data-key=groups]')));
+  cam({ x: groups.x - 30, y: groups.y - 30, w: Math.min(groups.w + 60, 1000), h: Math.min(groups.h + 60, 560) });
+  await sleep(1900);
   const why = await boxOf('#security details.card[data-key=why]');
   cam({ x: why.x - 30, y: why.y - 30, w: Math.min(why.w + 60, 1100), h: Math.min(why.h + 60, 560) });
   highlight({ x: why.x, y: why.y, w: Math.min(why.w, 1000), h: Math.min(why.h, 420) }, 1.2);
@@ -310,7 +315,20 @@ async function record() {
   highlight({ x: pane.x, y: pane.y, w: Math.min(pane.w, 900), h: 520 }, 1);
   await sleep(2600);
 
-  // 9. themes, then the whole page
+  // 9. Menus: the technical screens, one click away; the page opens the one picked
+  caption('Menus', 'The technical screens, one click away: models, views, rules, crons…');
+  cam(null);
+  await clickIn('.tabs [data-tab="menus"]', null, { ms: 900 });
+  await wait(panel.waitForSelector('#menus .list.menus li', { timeout: 15_000 }));
+  const menus = await boxOf('#menus .list.menus');
+  cam({ x: menus.x - 30, y: menus.y - 60, w: Math.min(menus.w + 60, 1100), h: 600 });
+  await sleep(1500);
+  await clickIn('#menus .list.menus li span', 'Record Rules', { ms: 900, after: 0 });
+  await wait(page.waitForSelector('.o_list_view .o_data_row', { timeout: 15_000 }));
+  cam(null);
+  await sleep(2200);
+
+  // 10. themes, then the whole page
   caption('Yours', 'Odoo\'s light or dark, or an editor theme. English or Tiếng Việt.');
   cam(null);
   await glide(VW * .6, VH * .55, 900);
@@ -373,7 +391,7 @@ async function render() {
     enc('-i', picture, '-i', music, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '48000',
       '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', master);
     console.log(`\n${master} (${duration.toFixed(1)} s)`);
-    enc('-i', master, '-vf', 'scale=1920:1080:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-crf', '28', '-pix_fmt', 'yuv420p',
+    enc('-i', master, '-vf', 'scale=1920:1080:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-crf', '29', '-pix_fmt', 'yuv420p',
       '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', join(ROOT, 'website', 'intro.mp4'));
     enc('-ss', String(posterAt), '-i', join(ROOT, 'website', 'intro.mp4'), '-frames:v', '1', '-q:v', '3', join(ROOT, 'website', 'intro-poster.jpg'));
     console.log('website/intro.mp4, website/intro-poster.jpg');

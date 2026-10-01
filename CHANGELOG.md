@@ -28,7 +28,7 @@ Thanks to [@anhbtit](https://github.com/anhbtit) (AnhBT) for the Menus tab, i18n
 - **RPC and Perf: times are on the browser's clock** (its timezone), no longer in UTC: the time of a call, of a profiled request, and the "since" of the recording. ([#10](https://github.com/unclecatvn/extension-debug-odoo/pull/10))
 - **Filter counts on their own line** under their input, on the right (Apps, i18n, Record › Fields, Security › Groups and System Parameters, Perf): the input gets the whole width. ([#10](https://github.com/unclecatvn/extension-debug-odoo/pull/10))
 - Text fields show focus with their border only, no ring around them. ([#10](https://github.com/unclecatvn/extension-debug-odoo/pull/10))
-- **README and website**: a 78-second intro film of the extension used on Odoo replaces the overview image (`npm run intro` records, edits and scores it); the RPC tab's text and screenshot show Edit & Resend, New Request and Copy as cURL.
+- **README and website**: a 87-second intro film of the extension used on Odoo replaces the overview image (`npm run intro` records, edits and scores it); the RPC tab's text and screenshot show Edit & Resend, New Request and Copy as cURL.
 
 ### Removed
 
