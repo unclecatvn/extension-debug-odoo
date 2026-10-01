@@ -252,8 +252,17 @@ If Odoo Debug saves you time, ⭐ [star it on GitHub](https://github.com/uncleca
 
 ## Author
 
+Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement): UncleCat may license your contribution on any terms (as n8n's).
+
 Made by **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
 
 ## License
 
-[MIT](LICENSE) © 2026 UncleCat
+[Sustainable Use License](LICENSE) © 2026 UncleCat, the license [n8n](https://github.com/n8n-io/n8n) uses ("fair-code").
+
+- **Free to use and modify** for personal or non-commercial use, or for your own company's internal work: an Odoo partner's developers can use it on their clients' projects.
+- **Free to share, only free of charge and for non-commercial purposes**, with the license and copyright notices kept.
+- **Not to sell**: no paid build of it on a store, no hosting or reselling it, no product or service built on it for a fee.
+- Want to use it commercially in a way that isn't allowed? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) or write via [unclecatvn.com](https://unclecatvn.com/) for a commercial license.
+
+Its code is public, but being restricted from selling, Odoo Debug is *source available* rather than open source in the OSI sense.

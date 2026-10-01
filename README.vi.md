@@ -234,8 +234,17 @@ Nếu Odoo Debug giúp bạn tiết kiệm thời gian, hãy ⭐ [star trên Git
 
 ## Tác giả
 
+Mở pull request nghĩa là đồng ý với [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement) một câu: UncleCat được cấp license cho phần đóng góp của bạn theo bất kỳ điều khoản nào (giống n8n).
+
 Phát triển bởi **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
 
 ## Giấy phép
 
-[MIT](LICENSE) © 2026 UncleCat
+[Sustainable Use License](LICENSE) © 2026 UncleCat, license mà [n8n](https://github.com/n8n-io/n8n) đang dùng ("fair-code").
+
+- **Được dùng và sửa miễn phí** cho mục đích cá nhân, phi thương mại, hoặc cho công việc nội bộ của chính công ty bạn: lập trình viên của một đối tác Odoo dùng trên dự án của khách hàng vẫn được.
+- **Được chia sẻ, nhưng chỉ miễn phí và cho mục đích phi thương mại**, giữ nguyên thông báo license và bản quyền.
+- **Không được bán**: không đưa bản thu phí lên store, không host hay bán lại, không làm sản phẩm hay dịch vụ thu phí dựa trên nó.
+- Muốn dùng thương mại theo cách không được phép ở trên? [Mở issue](https://github.com/unclecatvn/extension-debug-odoo/issues) hoặc liên hệ qua [unclecatvn.com](https://unclecatvn.com/) để có license thương mại.
+
+Mã nguồn công khai, nhưng vì không được bán, Odoo Debug là *mã nguồn công khai* (source available) chứ không phải mã nguồn mở theo định nghĩa của OSI.
