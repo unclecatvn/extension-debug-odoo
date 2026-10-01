@@ -2,7 +2,7 @@
 import { parseRpc, parseRpcResponse, prettyJson, toCurl } from './logic.js';
 import { pageRpcLog, pageSend } from './page.js';
 import { exec, sessionInfo } from '../../shared/bridge.js';
-import { $, el, pre, errBox, pill, details, empty, expandable, listHead, masterDetail, copyText, WIDE } from '../../shared/ui.js';
+import { el, pre, errBox, pill, details, empty, expandable, listHead, masterDetail, copyText, WIDE } from '../../shared/ui.js';
 import { _t } from '../../shared/i18n.js';
 
 const MAX = 300;
@@ -21,7 +21,7 @@ export function mountRpc(section, whyBlocked, page) {
     errBtn.setAttribute('aria-pressed', onlyErrors);
     for (const li of rows.children) applyFilter(li);
   });
-  const clear = el('button', { class: 'chip', onclick: () => { rows.replaceChildren(); rows.pane.replaceChildren(rows.pane.hint); count(); } }, _t('Clear'));
+  const clear = el('button', { class: 'chip', onclick: () => { rows.replaceChildren(); rows.pane.replaceChildren(rows.pane.hint); showEmpty(); } }, _t('Clear'));
   // New Request: a card above the log, a search_read on the page's model to start from
   const draft = el('div', {});
   const toggleDraft = () => {
@@ -120,10 +120,8 @@ function curlBtn(req) {
   return b;
 }
 
-function count() {
-  const n = rows.children.length;
-  $('#rpc-count').textContent = n || '';
-  emptyMsg.hidden = n > 0;
+function showEmpty() {
+  emptyMsg.hidden = rows.children.length > 0;
 }
 
 /** raw: an entry of hook.js, as an object (page buffer) or its JSON text (live message). */
@@ -133,7 +131,7 @@ export function addRpc(raw) {
   if (!e) return;
   rows.prepend(item(e)); // newest first
   if (rows.children.length > MAX) rows.lastElementChild.remove();
-  count();
+  showEmpty();
 }
 
 /** Fills the log with what the page recorded before the panel opened. */
@@ -141,5 +139,5 @@ export async function reloadRpc() {
   const buf = await exec(pageRpcLog);
   rows.replaceChildren(); // after the await: live messages received meanwhile are in the buffer too
   if (Array.isArray(buf)) for (const raw of buf) addRpc(raw);
-  count();
+  showEmpty();
 }

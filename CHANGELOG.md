@@ -16,6 +16,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 ### Removed
 
 - The Show / Hide Panel button of the toolbar popup: the round button on the page does it.
+- The call counter on the RPC tab: the tab itself lists the calls.
 
 ## [1.3.0] - 2026-10-01
 
