@@ -57,7 +57,6 @@ export function renderCode(s, state) {
     const go = async () => {
       if (last.running) return;
       Object.assign(last, { running: true, result: null, refreshed: null });
-      saveCode(key, editor.value);
       paint();
       try {
         const r = await exec(pageRunCode, editor.value, { readonly: !last.writes, context: info.user_context || {}, uid: info.uid });

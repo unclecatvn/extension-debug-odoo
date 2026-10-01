@@ -138,6 +138,25 @@ test('RPC tab: a call is edited and sent again, a new request is sent, the answe
   assert.equal(fresh.pill, 'AttributeError');
 });
 
+test('RPC tab: a call the page makes while the panel is open is added, newest first', async () => {
+  await click('.tabs [data-tab="rpc"]');
+  const before = await panel.$$eval('#rpc .list > li', (ls) => ls.length);
+  await rpc(page, '/web/session/get_session_info', {});
+  await panel.waitForFunction(() => document.querySelector('#rpc .list .name')?.textContent === '/web/session/get_session_info', { timeout: 15_000 });
+  assert.equal(await panel.$$eval('#rpc .list > li', (ls) => ls.length), before + 1, 'listed once');
+});
+
+test('View tab: ⌖ Pick on Page, then a click on a field of the form, shows that field', async () => {
+  await click('.tabs [data-tab="view"]');
+  const pick = () => [...document.querySelectorAll('#view button')].find((b) => b.textContent === '⌖ Pick on Page');
+  await panel.$$eval('#view details.card', (cards) => cards.forEach((c) => { c.open = true; }));
+  await panel.waitForFunction(pick, { timeout: 30_000 });
+  await panel.evaluate(`(${pick})().click()`);
+  await page.waitForFunction(() => window.__odooDebugPick);
+  await page.click('.o_form_view .o_field_widget[name="login"]');
+  await panel.waitForFunction(() => [...document.querySelectorAll('#view input[type="search"]')].some((i) => i.value === 'login'), { timeout: 15_000 });
+});
+
 test('Code tab: a search runs as the logged-in user, writes are blocked by default', async () => {
   const run = async (code) => {
     await click('.tabs [data-tab="code"]');
@@ -245,13 +264,14 @@ test('Code tab: a pick replaces the word, also after a skipped closer and under 
 test('Translations tab: one input searches the installed modules and holds the ticked ones', async () => {
   await click('.tabs [data-tab="translations"]');
   await panel.waitForSelector('#translations .module-picker li');
-  const state = () => panel.$eval('#translations', (s) => ({
+  const EXPORT = '#translations > div.card'; // the untitled export card, not the Languages card above it
+  const state = () => panel.$eval(EXPORT, (s) => ({
     apps: s.querySelector('form input[type=text]').value,
     shown: [...s.querySelectorAll('.module-picker li:not([hidden])')].map((li) => li.dataset.name),
     ticked: [...s.querySelectorAll('.module-picker li input:checked')].map((b) => b.closest('li').dataset.name),
   }));
-  const type = (v) => panel.$eval('#translations form input[type=text]', (i, v) => { i.value = v; i.dispatchEvent(new Event('input')); }, v);
-  const key = (k) => panel.$eval('#translations form input[type=text]', (i, k) => i.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })), k);
+  const type = (v) => panel.$eval(`${EXPORT} form input[type=text]`, (i, v) => { i.value = v; i.dispatchEvent(new Event('input')); }, v);
+  const key = (k) => panel.$eval(`${EXPORT} form input[type=text]`, (i, k) => i.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })), k);
   const tick = (name) => panel.$eval(`#translations .module-picker li[data-name="${name}"] input`, (b) => b.click());
 
   await type('web; base_imp');
@@ -265,18 +285,32 @@ test('Translations tab: one input searches the installed modules and holds the t
   await type('web; base_import; base_setu');
   await key('Enter');
   assert.equal((await state()).apps, 'web; base_import; base_setup; ', 'Enter picks the match, no export');
-  assert.equal(await panel.$eval('#translations .steps', (u) => u.childElementCount), 0);
+  assert.equal(await panel.$eval(`${EXPORT} .steps`, (u) => u.childElementCount), 0);
 
   await tick('web');
   assert.equal((await state()).apps, 'base_import; base_setup; ', 'unticking removes it');
 
   // languages are toggles; the button says how many files it will download (template + one .po per language, per app)
-  const button = () => panel.$eval('#translations button[type=submit]', (b) => b.textContent);
+  const button = () => panel.$eval(`${EXPORT} button[type=submit]`, (b) => b.textContent);
   assert.equal(await button(), 'Export & Download · 2 files');
-  await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.click());
-  assert.equal(await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.getAttribute('aria-pressed')), 'true');
+  await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.click());
+  assert.equal(await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.getAttribute('aria-pressed')), 'true');
   assert.equal(await button(), 'Export & Download · 4 files');
-  await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.click()); // back off
+  await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.click()); // back off
+});
+
+test('Translations tab: Languages card, the active languages as chips that toggle their code in the field', async () => {
+  const CARD = '#translations details.card[data-key="add-langs"]';
+  await panel.$eval(CARD, (d) => { d.open = true; }); // opened by an earlier test, and remembered: open it anyway
+  await panel.waitForSelector(`${CARD} form input[type=text]`);
+  const field = () => panel.$eval(`${CARD} form input[type=text]`, (i) => i.value);
+  const chip = () => panel.$eval(`${CARD} .chip`, (c) => { c.click(); return [c.textContent, c.getAttribute('aria-pressed')]; });
+  await panel.$eval(`${CARD} form input[type=text]`, (i) => { i.value = ''; i.dispatchEvent(new Event('input')); });
+  const [code, pressed] = await chip();
+  assert.equal(pressed, 'true');
+  assert.equal(await field(), code);
+  assert.deepEqual(await chip(), [code, 'false']);
+  assert.equal(await field(), '');
 });
 
 test('Apps tab: Odoo\'s filters (Installed by default), the word being typed searches inside them', async () => {
@@ -291,7 +325,7 @@ test('Apps tab: Odoo\'s filters (Installed by default), the word being typed sea
     if (bar.querySelector('.search-panel').hidden) bar.querySelector('.search-toggle').click();
     [...bar.querySelectorAll('.search-item')].find((b) => b.textContent.replace('✓ ', '') === label).click();
   }, label);
-  const facets = () => panel.$$eval('#apps .searchbar .facet', (fs) => fs.map((f) => f.firstChild.textContent));
+  const facets = () => panel.$$eval('#apps .searchbar .facet-values', (fs) => fs.map((f) => [...f.childNodes].map((n) => n.textContent).join(' ')));
 
   await type('');
   const installed = await shown();
@@ -315,6 +349,26 @@ test('Apps tab: Odoo\'s filters (Installed by default), the word being typed sea
   assert.ok((await shown()).some((m) => m.name === 'crm_sms'), 'a ticked module shows whatever the filters');
 });
 
+test('Apps tab: ⟳ Update Apps List beside the count draws the list again, the filters kept', async () => {
+  await click('.tabs [data-tab="apps"]');
+  await panel.waitForSelector('#apps .count-line .update-list');
+  await panel.$eval('#apps .update-list', (b) => b.click());
+  await panel.waitForFunction(() => /updated/.test(document.querySelector('#apps .steps .pill.ok')?.textContent || ''), { timeout: 120_000 });
+  assert.equal(await panel.$eval('#apps .steps li', (li) => li.firstChild.textContent), 'Update Apps List');
+  assert.deepEqual(await panel.$$eval('#apps .facet', (fs) => fs.map((f) => f.title)), ['Installed'], 'the filters are kept');
+});
+
+test('Menus tab: a click opens the technical screen in the Odoo page, as its menu would', async () => {
+  await click('.tabs [data-tab="menus"]');
+  await panel.waitForSelector('#menus .menus li');
+  assert.equal(await panel.$eval('#menus .menus li a', (a) => new URL(a.href).pathname), '/odoo/action-base.action_model_model', '↗: the same screen in a new tab');
+  await panel.$$eval('#menus .menus li', (lis) => lis.find((li) => li.querySelector('.grow > span').textContent === 'Record Rules').click());
+  await page.waitForFunction(() => document.querySelector('.o_list_view') && document.querySelector('.o_breadcrumb')?.textContent.includes('Record Rules'), { timeout: 30_000 });
+  await panel.waitForFunction(() => document.querySelector('#status')?.textContent.includes('ir.rule'), { timeout: 15_000 });
+  await page.goBack(); // the user form again, for what follows (not a page load: the panel stays)
+  await page.waitForSelector('.o_form_view');
+});
+
 test('every tab is in sight: the tab strip wraps instead of scrolling', async () => {
   const hidden = await panel.$$eval('.tabs button', (bs) => {
     const nav = bs[0].parentElement.getBoundingClientRect();
@@ -323,13 +377,15 @@ test('every tab is in sight: the tab strip wraps instead of scrolling', async ()
   assert.deepEqual(hidden, []);
 });
 
-test('toolbar popup: the debug mode of the page, switched from there', async () => {
+test('toolbar popup: the page\'s database, and its debug mode switched from there', async () => {
   const [ext] = (await browser.extensions()).values();
   await ext.triggerAction(page);
   const popup = await (await browser.waitForTarget((t) => t.url().endsWith('/src/popup/popup.html'))).asPage();
+  await popup.waitForSelector('#page-info [data-info=db]');
+  assert.equal(await popup.$eval('#page-info [data-info=db]', (e) => e.textContent), process.env.ODOO_DB || 'e2e');
   await popup.waitForSelector('#debug button.on');
-  assert.equal(await popup.$eval('#debug button.on', (b) => b.textContent), 'off');
-  await Promise.all([page.waitForNavigation(), popup.$$eval('#debug button', (bs) => bs.find((b) => b.textContent === 'debug').click())]);
+  assert.equal(await popup.$eval('#debug button.on', (b) => b.textContent), 'Off');
+  await Promise.all([page.waitForNavigation(), popup.$$eval('#debug button', (bs) => bs.find((b) => b.textContent === 'Debug').click())]);
   assert.equal(await page.evaluate(() => window.odoo.debug), '1');
   await page.goto(page.url().replace('debug=1', 'debug=0')); // back to off for what follows
   await page.waitForSelector('.o_form_view');

@@ -13,7 +13,7 @@ export function renderView(s, state) {
   const openLink = (path, text) => odooLink(state.origin, path, text);
 
   if (model && viewType) {
-    block(s, 'inherited', _t('Inherited views — %s', viewType), async () => {
+    block(s, 'inherited', _t('Inherited Views'), async () => {
       const [gv, all] = await Promise.all([
         call(model, 'get_views', [], { views: [[viewId || false, viewType]], options: {} }),
         call('ir.ui.view', 'search_read', [[['model', '=', model], ['type', '=', viewType]]],
@@ -29,8 +29,8 @@ export function renderView(s, state) {
         openLink(`ir.ui.view/${x.id}`)),
         el('div', { class: 'meta' }, [x.name, `#${x.id}`, x.arch_fs, !x.active && _t('inactive')].filter(Boolean).join(' · ')))));
       return el('div', {}, listHead(_t('View · mode · priority'), _t('Name · id · file')), el('ul', { class: 'list' }, items),
-        el('div', { class: 'pad-bottom' }, details(_t('Combined arch (view #%s)', v.id), pre(v.arch))));
-    });
+        el('div', { class: 'pad-bottom' }, details(_t('Combined Arch (View #%s)', v.id), pre(v.arch))));
+    }, _t('Every %s view of this model as an inheritance tree (the one shown highlighted, inactive ones included), and the combined arch.', viewType));
   }
 
   if (action) {
@@ -44,13 +44,14 @@ export function renderView(s, state) {
       return el('div', {},
         kv({ name, id, xml_id: xml_id || '—', type, res_model: res_model || '—', target: target || '—', ...(path ? { path: `/odoo/${path}` } : {}) }),
         typeof id === 'number' && type ? el('div', { class: 'pad-bottom' }, openLink(`${type}/${id}`, _t('Open Action Record ↗'))) : null,
-        details(_t('Full action (JSON)'), pre(action)));
+        details(_t('Full Action (JSON)'), pre(action)));
     });
   }
 
-  if (viewType === 'form') block(s, 'form-fields', _t('Form fields — invisible / readonly / required'), formFields);
+  if (viewType === 'form') block(s, 'form-fields', _t('Form Fields'), formFields,
+    _t('invisible / readonly / required of every field of the form, evaluated on the record shown.'));
 
-  block(s, 'context', _t('Context & domain'), () => el('div', {}, details(_t('Context'), pre(state.context ?? {})), details(_t('Domain'), pre(state.domain ?? []))));
+  block(s, 'context', _t('Context & Domain'), () => el('div', {}, details(_t('Context'), pre(state.context ?? {})), details(_t('Domain'), pre(state.domain ?? []))));
 }
 
 const MODIFIERS = ['invisible', 'readonly', 'required'];
@@ -70,8 +71,8 @@ async function formFields() {
     return expandable(li, () => el('div', {},
       hiddenByParent ? el('div', { class: 'note' }, _t('The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible.')) : null,
       MODIFIERS.filter((k) => f[k].error).map((k) => el('div', { class: 'error' }, `${k}: ${f[k].error}`)),
-      Object.keys(f.vars).length ? details(_t('Values used in the expressions'), pre(f.vars)) : null,
-      details(_t('Full node'), pre({ ...f, vars: undefined }))));
+      Object.keys(f.vars).length ? details(_t('Expression Values'), pre(f.vars)) : null,
+      details(_t('Full Node'), pre({ ...f, vars: undefined }))));
   });
 
   const filter = filterBox(items, _t('Filter name / label / widget'));

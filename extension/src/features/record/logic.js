@@ -1,4 +1,4 @@
-// Pure helpers, no chrome.* / DOM: tested by the *.test.mjs next to this file.
+// Pure helpers, no chrome.* / DOM: tested by tests/record.test.mjs.
 
 /** Field value → display string. */
 export function fmtValue(v, type) {

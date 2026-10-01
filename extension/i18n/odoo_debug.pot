@@ -12,154 +12,166 @@ msgstr ""
 
 #: src/features/apps/apps.js:16
 #: src/features/security/security.js:193
+#: src/features/translations/translations.js:36
 msgid "Needs Settings rights (base.group_system)."
 msgstr ""
 
-#: src/features/apps/apps.js:22
-#: src/features/translations/translations.js:14
+#: src/features/apps/apps.js:26
+#: src/features/translations/translations.js:86
 msgid "Search or type: sale; stock; my_module"
 msgstr ""
 
-#: src/features/apps/apps.js:22
+#: src/features/apps/apps.js:26
 msgid "Modules"
 msgstr ""
 
-#: src/features/apps/apps.js:34
+#: src/features/apps/apps.js:31
+#: src/features/apps/apps.js:58
+#: src/features/apps/apps.js:62
+#: src/features/apps/apps.js:99
+msgid "Update Apps List"
+msgstr ""
+
+#: src/features/apps/apps.js:31
+#: src/features/apps/apps.js:101
+msgid "%s updated · %s added"
+msgstr ""
+
+#: src/features/apps/apps.js:39
 msgid "%s/%s modules"
 msgstr ""
 
-#: src/features/apps/apps.js:46
+#: src/features/apps/apps.js:51
 #: src/features/code/code.js:36
+#: src/features/translations/translations.js:65
 msgid "Running…"
 msgstr ""
 
-#: src/features/apps/apps.js:48
-#: src/features/code/code.js:135
-#: src/features/code/code.js:174
-#: src/features/rpc/rpc.js:51
-#: src/features/rpc/rpc.js:96
-#: src/features/translations/translations.js:90
+#: src/features/apps/apps.js:53
+#: src/features/code/code.js:134
+#: src/features/code/code.js:173
+#: src/features/rpc/rpc.js:52
+#: src/features/rpc/rpc.js:97
+#: src/features/translations/translations.js:75
+#: src/features/translations/translations.js:161
 msgid "error"
 msgstr ""
 
-#: src/features/apps/apps.js:50
+#: src/features/apps/apps.js:55
 msgid "Reloading the Odoo page…"
 msgstr ""
 
 #: src/features/apps/apps.js:58
-msgid "Enter at least one module."
-msgstr ""
-
-#: src/features/apps/apps.js:75
-msgid "Activate"
-msgstr ""
-
-#: src/features/apps/apps.js:75
-msgid "Update Apps List, then install every module (with its dependencies)"
-msgstr ""
-
-#: src/features/apps/apps.js:76
-msgid "Update Apps List"
-msgstr ""
-
-#: src/features/apps/apps.js:78
-msgid "%s updated · %s added"
+msgid "Read the addons paths again: new modules join the list"
 msgstr ""
 
 #: src/features/apps/apps.js:81
+msgid "Enter at least one module."
+msgstr ""
+
+#: src/features/apps/apps.js:98
+msgid "Activate"
+msgstr ""
+
+#: src/features/apps/apps.js:98
+msgid "Update Apps List, then install every module (with its dependencies)"
+msgstr ""
+
+#: src/features/apps/apps.js:104
 msgid "Not found, even after Update Apps List: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:82
+#: src/features/apps/apps.js:105
 msgid "Not installable: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:83
+#: src/features/apps/apps.js:106
 msgid "Waiting to be uninstalled: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:84
+#: src/features/apps/apps.js:107
 msgid "Already installed: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:86
+#: src/features/apps/apps.js:109
 msgid "Install %s"
 msgstr ""
 
-#: src/features/apps/apps.js:92
+#: src/features/apps/apps.js:115
 msgid "Upgrade"
 msgstr ""
 
-#: src/features/apps/apps.js:92
+#: src/features/apps/apps.js:115
 msgid "Upgrade every module (they must be installed)"
 msgstr ""
 
-#: src/features/apps/apps.js:95
+#: src/features/apps/apps.js:118
 msgid "Not found: %s"
 msgstr ""
 
-#: src/features/apps/apps.js:96
+#: src/features/apps/apps.js:119
 msgid "Not installed (use Activate): %s"
 msgstr ""
 
-#: src/features/apps/apps.js:97
+#: src/features/apps/apps.js:120
 msgid "Upgrade %s"
 msgstr ""
 
-#: src/features/apps/apps.js:103
+#: src/features/apps/apps.js:126
 msgid "Open Forms ↗"
 msgstr ""
 
-#: src/features/apps/apps.js:103
+#: src/features/apps/apps.js:126
 msgid "Open the form of every module in a new tab"
 msgstr ""
 
-#: src/features/apps/apps.js:110
+#: src/features/apps/apps.js:133
 msgid "Opened %s tab(s): %s"
 msgstr ""
 
-#: src/features/apps/apps.js:112
+#: src/features/apps/apps.js:135
 msgid "Not found: %s (Activate runs Update Apps List first)"
 msgstr ""
 
-#: src/features/apps/searchbar.js:10
+#: src/features/apps/searchbar.js:11
 msgid "Installed"
 msgstr ""
 
-#: src/features/apps/searchbar.js:10
+#: src/features/apps/searchbar.js:11
 msgid "Not Installed"
 msgstr ""
 
-#: src/features/apps/searchbar.js:11
+#: src/features/apps/searchbar.js:12
 #: src/panel/panel.html:27
 msgid "Apps"
 msgstr ""
 
-#: src/features/apps/searchbar.js:11
+#: src/features/apps/searchbar.js:12
 msgid "Extra"
 msgstr ""
 
-#: src/features/apps/searchbar.js:15
-#: src/features/apps/searchbar.js:15
-#: src/features/apps/searchbar.js:27
+#: src/features/apps/searchbar.js:16
+#: src/features/apps/searchbar.js:16
+#: src/features/apps/searchbar.js:28
 msgid "Filters"
 msgstr ""
 
-#: src/features/apps/searchbar.js:23
-msgid " or "
-msgstr ""
-
-#: src/features/apps/searchbar.js:24
-#: src/features/apps/searchbar.js:29
+#: src/features/apps/searchbar.js:25
+#: src/features/apps/searchbar.js:30
 msgid "Category"
 msgstr ""
 
-#: src/features/apps/searchbar.js:30
+#: src/features/apps/searchbar.js:31
 msgid "All Categories"
 msgstr ""
 
-#: src/features/apps/searchbar.js:34
-#: src/features/apps/searchbar.js:34
+#: src/features/apps/searchbar.js:35
+#: src/features/apps/searchbar.js:37
+msgid "or"
+msgstr ""
+
+#: src/features/apps/searchbar.js:38
+#: src/features/apps/searchbar.js:38
 #: src/features/security/security.js:236
 msgid "Remove"
 msgstr ""
@@ -189,104 +201,105 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
+#: src/features/code/code.js:92
 #: src/features/code/code.js:93
-#: src/features/code/code.js:94
 msgid "Guide"
 msgstr ""
 
-#: src/features/code/code.js:94
+#: src/features/code/code.js:93
 msgid "Available variables, recordset API, examples"
 msgstr ""
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Lets the code call write, create, unlink and any other method that is not a read"
 msgstr ""
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Read-only by default. With writes allowed, each call is committed at once: there is no rollback."
 msgstr ""
 
-#: src/features/code/code.js:103
+#: src/features/code/code.js:102
 msgid "Allow Writes"
 msgstr ""
 
-#: src/features/code/code.js:105
+#: src/features/code/code.js:104
 msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
 msgstr ""
 
-#: src/features/code/code.js:126
+#: src/features/code/code.js:125
 msgid "page refreshed"
 msgstr ""
 
-#: src/features/code/code.js:127
+#: src/features/code/code.js:126
 msgid "page not refreshed"
 msgstr ""
 
-#: src/features/code/code.js:132
-#: src/features/rpc/rpc.js:94
+#: src/features/code/code.js:131
+#: src/features/menus/menus.js:22
+#: src/features/rpc/rpc.js:95
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
 msgstr ""
 
-#: src/features/code/code.js:135
+#: src/features/code/code.js:134
 msgid "ok"
 msgstr ""
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "read-only"
 msgstr ""
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "writes allowed"
 msgstr ""
 
-#: src/features/code/code.js:137
-#: src/features/code/code.js:175
+#: src/features/code/code.js:136
+#: src/features/code/code.js:174
 msgid "%s ms"
 msgstr ""
 
-#: src/features/code/code.js:138
+#: src/features/code/code.js:137
 msgid "%s calls"
 msgstr ""
 
-#: src/features/code/code.js:139
+#: src/features/code/code.js:138
 msgid "%s write calls"
 msgstr ""
 
-#: src/features/code/code.js:143
+#: src/features/code/code.js:142
 msgid "No return value: end with return … to see one."
 msgstr ""
 
-#: src/features/code/code.js:149
+#: src/features/code/code.js:148
 msgid "(line %s)"
 msgstr ""
 
-#: src/features/code/code.js:154
+#: src/features/code/code.js:153
 msgid "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
 msgstr ""
 
-#: src/features/code/code.js:155
+#: src/features/code/code.js:154
 #: src/shared/ui.js:30
 msgid "Traceback"
 msgstr ""
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows (first %s shown)"
 msgstr ""
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows"
 msgstr ""
 
-#: src/features/code/code.js:166
+#: src/features/code/code.js:165
 msgid "JSON"
 msgstr ""
 
-#: src/features/code/code.js:170
+#: src/features/code/code.js:169
 msgid "Calls (%s)"
 msgstr ""
 
-#: src/features/code/code.js:173
+#: src/features/code/code.js:172
 msgid "write"
 msgstr ""
 
@@ -300,7 +313,7 @@ msgid "Copied"
 msgstr ""
 
 #: src/features/code/help.js:41
-msgid "Available variables:"
+msgid "Available Variables:"
 msgstr ""
 
 #: src/features/code/help.js:43
@@ -376,7 +389,7 @@ msgid "models of the installed modules"
 msgstr ""
 
 #: src/features/code/help.js:65
-msgid "fields of the last env[…] model, following relations (partner_id.country_id.)"
+msgid "fields of the variable's model (else the last env[…] one), following relations (partner_id.country_id.)"
 msgstr ""
 
 #: src/features/code/help.js:66
@@ -439,6 +452,74 @@ msgstr ""
 
 #: src/features/code/suggest.js:36
 msgid "Suggestions"
+msgstr ""
+
+#: src/features/menus/logic.js:6
+msgid "Models"
+msgstr ""
+
+#: src/features/menus/logic.js:7
+#: src/features/record/record.js:22
+msgid "Fields"
+msgstr ""
+
+#: src/features/menus/logic.js:8
+msgid "Record Rules"
+msgstr ""
+
+#: src/features/menus/logic.js:9
+msgid "Views"
+msgstr ""
+
+#: src/features/menus/logic.js:10
+#: src/panel/panel.html:28
+msgid "Menus"
+msgstr ""
+
+#: src/features/menus/logic.js:11
+msgid "Model Data"
+msgstr ""
+
+#: src/features/menus/logic.js:12
+msgid "Crons"
+msgstr ""
+
+#: src/features/menus/logic.js:13
+msgid "Actions Window"
+msgstr ""
+
+#: src/features/menus/logic.js:14
+msgid "Actions Server"
+msgstr ""
+
+#: src/features/menus/logic.js:15
+msgid "Reports"
+msgstr ""
+
+#: src/features/menus/logic.js:16
+#: src/features/rpc/rpc.js:60
+msgid "Parameters"
+msgstr ""
+
+#: src/features/menus/logic.js:17
+msgid "Sequences"
+msgstr ""
+
+#: src/features/menus/logic.js:18
+msgid "Mail Templates"
+msgstr ""
+
+#: src/features/menus/menus.js:13
+msgid "Needs Access Rights (base.group_erp_manager)."
+msgstr ""
+
+#: src/features/menus/menus.js:34
+msgid "Menu · model"
+msgstr ""
+
+#: src/features/menus/menus.js:34
+#: src/features/view/view.js:37
+msgid "Action"
 msgstr ""
 
 #: src/features/perf/perf.js:15
@@ -526,7 +607,7 @@ msgid "No SQL recorded."
 msgstr ""
 
 #: src/features/perf/perf.js:99
-msgid "Full SQL + stack"
+msgid "Full SQL + Stack"
 msgstr ""
 
 #: src/features/perf/perf.js:101
@@ -534,7 +615,11 @@ msgid "%s queries · SQL %s / total %s · Python ≈ %s"
 msgstr ""
 
 #: src/features/perf/perf.js:103
-msgid "Repeated queries — N+1 suspects (%s)"
+msgid "Repeated Queries (%s)"
+msgstr ""
+
+#: src/features/perf/perf.js:103
+msgid "The same query run several times: N+1 suspects."
 msgstr ""
 
 #: src/features/perf/perf.js:103
@@ -551,7 +636,7 @@ msgid "✓ No repeated query."
 msgstr ""
 
 #: src/features/perf/perf.js:106
-msgid "Slowest queries (%s)"
+msgid "Slowest Queries (%s)"
 msgstr ""
 
 #: src/features/perf/perf.js:106
@@ -563,7 +648,7 @@ msgid "This screen is not bound to a model."
 msgstr ""
 
 #: src/features/record/record.js:11
-msgid "Identity & metadata"
+msgid "Identity"
 msgstr ""
 
 #: src/features/record/record.js:16
@@ -578,8 +663,8 @@ msgstr ""
 msgid "last updated by"
 msgstr ""
 
-#: src/features/record/record.js:22
-msgid "Fields"
+#: src/features/record/record.js:20
+msgid "Model and id, xmlids (noupdate flagged), who created and last updated the record, and when."
 msgstr ""
 
 #: src/features/record/record.js:41
@@ -606,95 +691,91 @@ msgstr ""
 msgid "Label · storage · compute · module"
 msgstr ""
 
-#: src/features/rpc/rpc.js:16
+#: src/features/rpc/rpc.js:17
 msgid "Filter model / method"
 msgstr ""
 
-#: src/features/rpc/rpc.js:18
+#: src/features/rpc/rpc.js:19
 msgid "Errors Only"
 msgstr ""
 
-#: src/features/rpc/rpc.js:24
+#: src/features/rpc/rpc.js:25
 msgid "Clear"
 msgstr ""
 
-#: src/features/rpc/rpc.js:30
-#: src/features/rpc/rpc.js:36
+#: src/features/rpc/rpc.js:31
+#: src/features/rpc/rpc.js:37
 msgid "New Request"
 msgstr ""
 
-#: src/features/rpc/rpc.js:30
-#: src/features/rpc/rpc.js:30
+#: src/features/rpc/rpc.js:31
+#: src/features/rpc/rpc.js:31
 msgid "Close"
 msgstr ""
 
-#: src/features/rpc/rpc.js:38
+#: src/features/rpc/rpc.js:39
 msgid "No RPC yet. Use the Odoo page to record some."
 msgstr ""
 
-#: src/features/rpc/rpc.js:39
+#: src/features/rpc/rpc.js:40
 msgid "Method · model · duration"
 msgstr ""
 
-#: src/features/rpc/rpc.js:39
+#: src/features/rpc/rpc.js:40
 msgid "Time · route"
 msgstr ""
 
-#: src/features/rpc/rpc.js:40
+#: src/features/rpc/rpc.js:41
 msgid "Select a call to see its parameters and result."
 msgstr ""
 
-#: src/features/rpc/rpc.js:59
-msgid "Parameters"
-msgstr ""
-
-#: src/features/rpc/rpc.js:66
+#: src/features/rpc/rpc.js:67
 msgid "Edit & Resend"
 msgstr ""
 
-#: src/features/rpc/rpc.js:67
+#: src/features/rpc/rpc.js:68
 msgid "Why was it blocked? → Security"
 msgstr ""
 
-#: src/features/rpc/rpc.js:69
+#: src/features/rpc/rpc.js:70
 msgid "Result"
 msgstr ""
 
-#: src/features/rpc/rpc.js:77
+#: src/features/rpc/rpc.js:78
 msgid "… (%s characters)"
 msgstr ""
 
-#: src/features/rpc/rpc.js:83
+#: src/features/rpc/rpc.js:84
 msgid "Route"
 msgstr ""
 
-#: src/features/rpc/rpc.js:84
+#: src/features/rpc/rpc.js:85
 msgid "Body (JSON)"
 msgstr ""
 
-#: src/features/rpc/rpc.js:85
+#: src/features/rpc/rpc.js:86
 msgid "Send"
 msgstr ""
 
-#: src/features/rpc/rpc.js:89
+#: src/features/rpc/rpc.js:90
 msgid "Invalid JSON: %s"
 msgstr ""
 
-#: src/features/rpc/rpc.js:91
-#: src/shared/ui.js:87
-#: src/shared/ui.js:149
+#: src/features/rpc/rpc.js:92
+#: src/shared/ui.js:104
+#: src/shared/ui.js:166
 msgid "Loading…"
 msgstr ""
 
-#: src/features/rpc/rpc.js:100
+#: src/features/rpc/rpc.js:101
 msgid "Ctrl/⌘ + Enter"
 msgstr ""
 
-#: src/features/rpc/rpc.js:111
+#: src/features/rpc/rpc.js:112
 msgid "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
 msgstr ""
 
-#: src/features/rpc/rpc.js:119
+#: src/features/rpc/rpc.js:120
 msgid "Copy as cURL"
 msgstr ""
 
@@ -735,7 +816,7 @@ msgid "Has company_id but no global multi-company rule → records may leak acro
 msgstr ""
 
 #: src/features/security/logic.js:103
-msgid "Field \"%s\" looks sensitive but has no groups=."
+msgid "Field \"%s\" looks sensitive but is not restricted to any group."
 msgstr ""
 
 #: src/features/security/logic.js:113
@@ -900,15 +981,15 @@ msgid "Groups"
 msgstr ""
 
 #: src/features/security/security.js:134
-msgid "User risks"
+msgid "User Risks"
 msgstr ""
 
 #: src/features/security/security.js:143
-msgid "Why allowed / blocked"
+msgid "Why Allowed / Blocked"
 msgstr ""
 
 #: src/features/security/security.js:145
-msgid "ACL (ir.model.access) — green = applies to the user"
+msgid "ACL"
 msgstr ""
 
 #: src/features/security/security.js:147
@@ -923,12 +1004,16 @@ msgstr ""
 msgid "(all users)"
 msgstr ""
 
+#: src/features/security/security.js:152
+msgid "ir.model.access: the rows in green apply to the user."
+msgstr ""
+
 #: src/features/security/security.js:154
-msgid "Fields hidden from the user (groups=)"
+msgid "Hidden Fields"
 msgstr ""
 
 #: src/features/security/security.js:157
-msgid "No field declares groups=."
+msgid "No field is restricted to groups."
 msgstr ""
 
 #: src/features/security/security.js:162
@@ -939,17 +1024,29 @@ msgstr ""
 msgid "Field · label · for this user"
 msgstr ""
 
+#: src/features/security/security.js:163
+msgid "Allowed groups"
+msgstr ""
+
 #: src/features/security/security.js:165
 msgid "visible"
 msgstr ""
 
 #: src/features/security/security.js:165
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "hidden"
 msgstr ""
 
+#: src/features/security/security.js:167
+msgid "Fields restricted to groups, and whether the selected user can see each one."
+msgstr ""
+
 #: src/features/security/security.js:169
-msgid "Model configuration audit"
+msgid "Model Audit"
+msgstr ""
+
+#: src/features/security/security.js:172
+msgid "The model's security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user."
 msgstr ""
 
 #: src/features/security/security.js:176
@@ -977,7 +1074,7 @@ msgid "Become Superuser"
 msgstr ""
 
 #: src/features/security/security.js:192
-msgid "System parameters (ir.config_parameter)"
+msgid "System Parameters"
 msgstr ""
 
 #: src/features/security/security.js:203
@@ -1004,8 +1101,12 @@ msgstr ""
 msgid "No parameter."
 msgstr ""
 
+#: src/features/security/security.js:204
+msgid "ir.config_parameter: secret-looking values are masked, a click on one still copies it."
+msgstr ""
+
 #: src/features/security/security.js:206
-msgid "Instance check"
+msgid "Instance Check"
 msgstr ""
 
 #: src/features/security/security.js:209
@@ -1013,7 +1114,7 @@ msgid "Check failed"
 msgstr ""
 
 #: src/features/security/security.js:214
-msgid "Raw data"
+msgid "Raw Data"
 msgstr ""
 
 #: src/features/security/security.js:215
@@ -1151,68 +1252,109 @@ msgstr ""
 msgid "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 msgstr ""
 
-#: src/features/translations/translations.js:14
+#: src/features/translations/translations.js:31
+msgid "Active:"
+msgstr ""
+
+#: src/features/translations/translations.js:35
+#: src/features/translations/translations.js:38
+msgid "Languages"
+msgstr ""
+
+#: src/features/translations/translations.js:42
+msgid "Activate / Update"
+msgstr ""
+
+#: src/features/translations/translations.js:48
+msgid "Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps."
+msgstr ""
+
+#: src/features/translations/translations.js:49
+msgid "Overwrite Existing Terms"
+msgstr ""
+
+#: src/features/translations/translations.js:50
+msgid "If you check this box, your customized translations will be overwritten and replaced by the official ones."
+msgstr ""
+
+#: src/features/translations/translations.js:59
+msgid "Unknown language: %s"
+msgstr ""
+
+#: src/features/translations/translations.js:60
+msgid "Enter at least one language."
+msgstr ""
+
+#: src/features/translations/translations.js:64
+msgid "activate %s"
+msgstr ""
+
+#: src/features/translations/translations.js:64
+msgid "update %s"
+msgstr ""
+
+#: src/features/translations/translations.js:81
+msgid "Activate languages and load, or reload, their terms for every installed app (Odoo's Add Languages wizard)."
+msgstr ""
+
+#: src/features/translations/translations.js:86
 msgid "Apps To Export"
 msgstr ""
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:94
 msgid "Export & Download"
 msgstr ""
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:94
 msgid "Export & Download · 1 file"
 msgstr ""
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:94
 msgid "Export & Download · %s files"
 msgstr ""
 
-#: src/features/translations/translations.js:39
+#: src/features/translations/translations.js:111
 msgid "%s/%s installed modules"
 msgstr ""
 
-#: src/features/translations/translations.js:40
+#: src/features/translations/translations.js:112
 msgid "Technical names, separated by ;"
 msgstr ""
 
-#: src/features/translations/translations.js:41
+#: src/features/translations/translations.js:113
 msgid "Languages:"
 msgstr ""
 
-#: src/features/translations/translations.js:42
+#: src/features/translations/translations.js:114
 msgid "Always exported: the empty template, as <module>.pot"
 msgstr ""
 
-#: src/features/translations/translations.js:42
-#: src/features/translations/translations.js:79
+#: src/features/translations/translations.js:114
+#: src/features/translations/translations.js:150
 msgid "Template (.pot)"
 msgstr ""
 
-#: src/features/translations/translations.js:67
+#: src/features/translations/translations.js:140
 msgid "Enter at least one app."
 msgstr ""
 
-#: src/features/translations/translations.js:69
-msgid "Not an active language: %s. Active: %s"
-msgstr ""
-
-#: src/features/translations/translations.js:72
+#: src/features/translations/translations.js:143
 msgid "Unknown app: %s"
 msgstr ""
 
-#: src/features/translations/translations.js:73
+#: src/features/translations/translations.js:144
 msgid "Not installed: %s"
 msgstr ""
 
-#: src/features/translations/translations.js:76
+#: src/features/translations/translations.js:147
 msgid "Exporting…"
 msgstr ""
 
-#: src/features/translations/translations.js:88
+#: src/features/translations/translations.js:159
 msgid "%s files"
 msgstr ""
 
-#: src/features/translations/translations.js:88
+#: src/features/translations/translations.js:159
 msgid "nothing to export"
 msgstr ""
 
@@ -1225,7 +1367,7 @@ msgid "No form view is open."
 msgstr ""
 
 #: src/features/view/view.js:16
-msgid "Inherited views — %s"
+msgid "Inherited Views"
 msgstr ""
 
 #: src/features/view/view.js:30
@@ -1241,11 +1383,11 @@ msgid "Name · id · file"
 msgstr ""
 
 #: src/features/view/view.js:32
-msgid "Combined arch (view #%s)"
+msgid "Combined Arch (View #%s)"
 msgstr ""
 
-#: src/features/view/view.js:37
-msgid "Action"
+#: src/features/view/view.js:33
+msgid "Every %s view of this model as an inheritance tree (the one shown highlighted, inactive ones included), and the combined arch."
 msgstr ""
 
 #: src/features/view/view.js:46
@@ -1253,82 +1395,86 @@ msgid "Open Action Record ↗"
 msgstr ""
 
 #: src/features/view/view.js:47
-msgid "Full action (JSON)"
+msgid "Full Action (JSON)"
 msgstr ""
 
 #: src/features/view/view.js:51
-msgid "Form fields — invisible / readonly / required"
+msgid "Form Fields"
 msgstr ""
 
-#: src/features/view/view.js:53
-msgid "Context & domain"
+#: src/features/view/view.js:52
+msgid "invisible / readonly / required of every field of the form, evaluated on the record shown."
 msgstr ""
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
+msgid "Context & Domain"
+msgstr ""
+
+#: src/features/view/view.js:54
 msgid "Context"
 msgstr ""
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
 msgid "Domain"
 msgstr ""
 
-#: src/features/view/view.js:59
+#: src/features/view/view.js:60
 msgid "Cannot read the form."
 msgstr ""
 
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "not shown"
 msgstr ""
 
-#: src/features/view/view.js:71
+#: src/features/view/view.js:72
 msgid "The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible."
 msgstr ""
 
-#: src/features/view/view.js:73
-msgid "Values used in the expressions"
-msgstr ""
-
 #: src/features/view/view.js:74
-msgid "Full node"
+msgid "Expression Values"
 msgstr ""
 
-#: src/features/view/view.js:77
+#: src/features/view/view.js:75
+msgid "Full Node"
+msgstr ""
+
+#: src/features/view/view.js:78
 msgid "Filter name / label / widget"
 msgstr ""
 
-#: src/features/view/view.js:79
+#: src/features/view/view.js:80
 msgid "Click a field on the Odoo page (Esc to cancel)"
 msgstr ""
 
-#: src/features/view/view.js:80
+#: src/features/view/view.js:81
 msgid "Picking… (Esc to cancel)"
 msgstr ""
 
-#: src/features/view/view.js:81
+#: src/features/view/view.js:82
 msgid "⌖ Pick on Page"
 msgstr ""
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Field · widget · label · state"
 msgstr ""
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Modifier expressions"
 msgstr ""
 
-#: src/features/view/view.js:89
+#: src/features/view/view.js:90
 msgid "The form is read-only: every field is readonly."
 msgstr ""
 
-#: src/panel/main.js:34
+#: src/panel/main.js:35
 msgid "Cannot read this tab: %s"
 msgstr ""
 
-#: src/panel/main.js:34
+#: src/panel/main.js:35
 msgid "The current tab is not an Odoo page."
 msgstr ""
 
-#: src/panel/main.js:86
+#: src/panel/main.js:87
 msgid "Not an Odoo page"
 msgstr ""
 
@@ -1374,10 +1520,10 @@ msgid "Security"
 msgstr ""
 
 #: src/panel/panel.html:26
-msgid "Translations"
+msgid "i18n"
 msgstr ""
 
-#: src/panel/panel.html:28
+#: src/panel/panel.html:29
 msgid "Perf"
 msgstr ""
 
@@ -1385,58 +1531,70 @@ msgstr ""
 msgid "This page"
 msgstr ""
 
+#: src/popup/popup.html:19
 #: src/popup/popup.html:20
-msgid "Show / Hide Panel"
-msgstr ""
-
-#: src/popup/popup.html:22
-#: src/popup/popup.html:23
 msgid "Debug Mode"
 msgstr ""
 
-#: src/popup/popup.html:24
+#: src/popup/popup.html:21
 msgid "Keep it on for this Odoo"
 msgstr ""
 
-#: src/popup/popup.html:27
+#: src/popup/popup.html:24
 msgid "Language"
 msgstr ""
 
-#: src/popup/popup.html:31
-#: src/popup/popup.html:32
+#: src/popup/popup.html:28
+#: src/popup/popup.html:29
 msgid "Theme"
 msgstr ""
 
-#: src/popup/popup.html:35
+#: src/popup/popup.html:32
 msgid "Shortcuts"
 msgstr ""
 
-#: src/popup/popup.html:36
+#: src/popup/popup.html:33
 msgid "Change"
 msgstr ""
 
-#: src/popup/popup.html:38
+#: src/popup/popup.html:35
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr ""
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "System"
 msgstr ""
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Light"
 msgstr ""
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Dark"
 msgstr ""
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "panel"
 msgstr ""
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "debug"
+msgstr ""
+
+#: src/popup/popup.js:47
+msgid "Host"
+msgstr ""
+
+#: src/popup/popup.js:47
+msgid "Odoo version"
+msgstr ""
+
+#: src/popup/popup.js:47
+msgid "Database"
+msgstr ""
+
+#: src/popup/popup.js:74
+msgid "Turn Debug Off"
 msgstr ""
 
 #: src/shared/bridge.js:12
@@ -1447,6 +1605,6 @@ msgstr ""
 msgid "Open /odoo/%s"
 msgstr ""
 
-#: src/shared/ui.js:104
+#: src/shared/ui.js:121
 msgid "Click to copy"
 msgstr ""

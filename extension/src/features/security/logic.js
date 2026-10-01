@@ -1,4 +1,4 @@
-// Pure helpers, no chrome.* / DOM: tested by the *.test.mjs next to this file.
+// Pure helpers, no chrome.* / DOM: tested by tests/security.test.mjs.
 import { MODES } from '../../shared/odoo.js';
 import { _t } from '../../shared/i18n.js';
 
@@ -100,7 +100,7 @@ export function auditModel({ fields, acls, rules, groupXml }) {
   if (co?.type === 'many2one' && co.relation === 'res.company' && !rules.some((r) => r.global && /company_id/.test(r.domain_force || '')))
     add('med', _t('Has company_id but no global multi-company rule → records may leak across companies.'));
   for (const [name, f] of Object.entries(fields))
-    if (SENSITIVE.test(name) && !f.groups && f.type !== 'boolean') add('low', _t('Field "%s" looks sensitive but has no groups=.', name));
+    if (SENSITIVE.test(name) && !f.groups && f.type !== 'boolean') add('low', _t('Field "%s" looks sensitive but is not restricted to any group.', name));
   return out;
 }
 

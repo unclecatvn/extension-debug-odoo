@@ -1,4 +1,4 @@
-// Pure helpers, no chrome.* / DOM: tested by the *.test.mjs next to this file.
+// Pure helpers, no chrome.* / DOM: tested by tests/perf.test.mjs.
 
 /** ir.profile sql entries → totals, repeated queries (N+1 suspects) and the slowest ones. */
 export function sqlSummary(entries, n = 10) {

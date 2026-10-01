@@ -11,7 +11,6 @@ const recordsetText = (v) => `${v.$recordset}(${v.ids.join(', ')})`;
 /** A value from pageRunCode as text: recordsets as sale.order(1, 2), the rest as indented JSON. */
 export function formatValue(v) {
   if (isRecordset(v)) return recordsetText(v);
-  if (typeof v === 'string') return JSON.stringify(v);
   return JSON.stringify(v, (k, x) => (isRecordset(x) ? recordsetText(x) : x), 2) ?? String(v);
 }
 
@@ -43,10 +42,10 @@ export function toTable(v, max = MAX_ROWS) {
   return { columns: cols, rows: v.slice(0, max).map((r) => cols.map((c) => cellText(r[c]))), total: v.length };
 }
 
-/** Calls summary: how many, how many wrote, how many failed, how many wrote and succeeded (the page then shows stale data). */
+/** Calls summary: how many, how many wrote, how many wrote and succeeded (the page then shows stale data). */
 export function callStats(calls = []) {
   return {
-    total: calls.length, writes: calls.filter((c) => c.write).length, errors: calls.filter((c) => c.error).length,
+    total: calls.length, writes: calls.filter((c) => c.write).length,
     written: calls.filter((c) => c.write && !c.error).length,
   };
 }
@@ -176,7 +175,7 @@ const TOKEN = new RegExp([
 ].join('|'), 'g');
 
 /** JS source → [[type, text]] covering all of it, to colour: comment, string, number, kw, builtin, fn (a word before "("),
- * prop (a word after "."), '' for the rest. Never throws on half-typed code. */
+ * '' for the rest. Never throws on half-typed code. */
 export function tokenize(code) {
   const out = [];
   const push = (type, text) => {
@@ -191,7 +190,7 @@ export function tokenize(code) {
     if (comment) push('comment', text);
     else if (string) push('string', text);
     else if (number) push('number', text);
-    else if (code[m.index - 1] === '.') push(code[at] === '(' ? 'fn' : 'prop', text);
+    else if (code[m.index - 1] === '.') push(code[at] === '(' ? 'fn' : '', text);
     else if (KEYWORDS.has(word)) push('kw', text);
     else if (BUILTINS.has(word)) push('builtin', text);
     else push(code[at] === '(' ? 'fn' : '', text);

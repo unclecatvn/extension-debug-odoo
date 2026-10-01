@@ -8,7 +8,7 @@ export function renderRecord(s, state) {
   const { model, resId } = state;
   if (!model) return s.append(empty(_t('This screen is not bound to a model.')));
 
-  block(s, 'identity', _t('Identity & metadata'), async () => {
+  block(s, 'identity', _t('Identity'), async () => {
     // get_metadata reads ir.model.data with sudo, so xmlids show even without access to ir.model.data.
     const [m] = resId ? await call(model, 'get_metadata', [[resId]]) : [];
     const who = (uid, date) => (uid ? `${uid[1]} (#${uid[0]}) · ${date}` : '—');
@@ -17,7 +17,7 @@ export function renderRecord(s, state) {
       xmlid: m?.xmlids?.map((x) => `${x.xmlid}${x.noupdate ? ' (noupdate)' : ''}`).join(', ') || '—',
       ...(m && 'create_uid' in m ? { [_t('created by')]: who(m.create_uid, m.create_date), [_t('last updated by')]: who(m.write_uid, m.write_date) } : {}),
     });
-  });
+  }, _t('Model and id, xmlids (noupdate flagged), who created and last updated the record, and when.'));
 
   block(s, 'fields', _t('Fields'), async () => {
     const [fields, irFields, values] = await Promise.all([
@@ -46,7 +46,7 @@ export function renderRecord(s, state) {
       li.dataset.q = [name, f.string, f.type, ir[name]?.modules, shown].join(' ').toLowerCase();
       return expandable(li, () => has && pre(typeof v === 'string' ? v : JSON.stringify(v, null, 2)));
     });
-    const count = el('span', { class: 'muted' }, _t('%s fields', items.length));
+    const count = el('span', { class: 'muted count-note' }, _t('%s fields', items.length));
     const filter = filterBox(items, _t('Filter name / label / value / type / module'),
       (n) => { count.textContent = _t('%s/%s fields', n, items.length); });
     return el('div', {},

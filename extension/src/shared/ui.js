@@ -25,7 +25,7 @@ export function el(tag, props = {}, ...kids) {
   return n;
 }
 export const pre = (o) => el('pre', {}, typeof o === 'string' ? o : JSON.stringify(o, null, 2));
-/** Collapsible section, closed until its summary is clicked (every one in the panel starts closed). */
+/** Collapsible section, closed until its summary is clicked. */
 export const details = (summary, ...kids) => el('details', {}, el('summary', {}, summary), ...kids);
 export const errBox = (e) => el('div', { class: 'error' }, e.message, e.traceback ? details(_t('Traceback'), pre(e.traceback)) : null);
 export const pill = (text, kind = '') => el('span', { class: `pill ${kind}` }, text);
@@ -57,12 +57,29 @@ function rememberCard(id, open) {
   try { localStorage.setItem(OPEN_CARDS, JSON.stringify([...ids])); } catch { /* storage off: every card starts closed */ }
 }
 
+/** ⓘ next to a title: `text` (what the title leaves out: model, legend…) shows on hover / keyboard focus. A popover, in
+ * the top layer: the card's overflow would clip a tooltip drawn inside it, the card being closed or not. */
+export function infoTip(text) {
+  const tip = el('span', { class: 'tip', popover: 'manual', role: 'tooltip' }, text);
+  const show = () => {
+    tip.showPopover();
+    const r = i.getBoundingClientRect();
+    Object.assign(tip.style, { left: `${Math.max(8, Math.min(r.left - 8, innerWidth - tip.offsetWidth - 8))}px`, top: `${r.bottom + 6}px` });
+  };
+  const hide = () => tip.hidePopover();
+  const i = el('span', { class: 'info-tip', role: 'img', tabIndex: 0, 'aria-label': text,
+    onmouseenter: show, onmouseleave: hide, onfocus: show, onblur: hide,
+    onclick: (e) => e.preventDefault() }, tip); // in a <summary>: hovering it is enough, a click must not fold the card
+  return i;
+}
+
 /** A collapsible card of the tab `parent`, remembered as `<tab>:<key>` (key: stable, the title is translated / dynamic).
- * Its body is built the first time it opens (`fn` may be async); a failing card (e.g. no ACL on ir.rule) doesn't blank the others. */
-export function block(parent, key, title, fn) {
+ * Its body is built the first time it opens (`fn` may be async); a failing card (e.g. no ACL on ir.rule) doesn't blank the others.
+ * `hint`: an ⓘ after the title, see infoTip(). */
+export function block(parent, key, title, fn, hint) {
   const id = `${parent.id}:${key}`;
   const body = el('div', { class: 'card-body' });
-  const c = el('details', { class: 'card', 'data-key': key }, el('summary', {}, el('h3', {}, title)), body); // data-key: the full-screen layout places some side by side
+  const c = el('details', { class: 'card', 'data-key': key }, el('summary', {}, el('h3', {}, title), hint && infoTip(hint)), body); // data-key: the full-screen layout places some side by side
   let loaded = false;
   const load = () => {
     if (loaded) return;
@@ -75,7 +92,7 @@ export function block(parent, key, title, fn) {
   parent.append(c);
 }
 
-/** A tab's only card: no title to open it by, its body built right away (`fn` may be async). */
+/** A card without a title, always open, its body built right away (`fn` may be async). */
 export function card(parent, fn) {
   const body = el('div', { class: 'card-body' });
   parent.append(el('div', { class: 'card' }, body));
@@ -113,7 +130,7 @@ export function copyable(text, cls = 'name', label = text) {
 
 /** Filterable list with a count. items: <li> with data-q. total / visible: N_ msgids with %s and %s/%s. head: listHead(). */
 export function filteredList(items, placeholder, total, visible, head) {
-  const count = el('span', { class: 'muted' }, _t(total, items.length));
+  const count = el('span', { class: 'muted count-note' }, _t(total, items.length));
   return el('div', {},
     el('div', { class: 'toolbar' }, filterBox(items, placeholder, (n) => { count.textContent = _t(visible, n, items.length); }), count, head),
     el('ul', { class: 'list' }, items));

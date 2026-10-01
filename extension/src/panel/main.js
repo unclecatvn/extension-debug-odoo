@@ -12,18 +12,19 @@ import { renderPerf } from '../features/perf/perf.js';
 import { renderTranslations } from '../features/translations/translations.js';
 import { renderApps } from '../features/apps/apps.js';
 import { renderCode, forgetRun } from '../features/code/code.js';
+import { renderMenus } from '../features/menus/menus.js';
 import { loadSettings } from '../shared/settings.js';
 
 const settings = await loadSettings();
 await loadLang(settings.lang); // before anything renders: every _t() below needs the catalog
 document.documentElement.lang = lang;
 translateDom();
-for (const b of document.querySelectorAll('.tabs button')) b.title = b.firstChild.textContent.trim(); // narrow panel: icons only, the name on hover
+for (const b of document.querySelectorAll('.tabs button')) b.title = b.textContent.trim(); // narrow panel: icons only, the name on hover
 
 let state = {};
 const TAB_KEY = 'odoo-debug-tab'; // sessionStorage (one per browser tab): the panel comes back on this tab after a reload
 let active = 'record';
-const RENDER = { record: renderRecord, view: renderView, security: renderSecurity, perf: renderPerf, translations: renderTranslations, apps: renderApps, code: renderCode };
+const RENDER = { record: renderRecord, view: renderView, security: renderSecurity, perf: renderPerf, translations: renderTranslations, apps: renderApps, code: renderCode, menus: renderMenus };
 const rendered = new Set(); // tabs are rendered lazily, once per refresh
 
 function renderActive() {
@@ -106,12 +107,13 @@ const scheduleRefresh = () => { clearTimeout(timer); timer = setTimeout(refresh,
 chrome.tabs.onUpdated.addListener((id, change) => {
   if (id === tabId && (change.url || change.status === 'complete')) scheduleRefresh(); // Odoo's pushState navigation
 });
-chrome.runtime.onMessage.addListener((msg, sender) => {
-  if (sender.tab?.id !== tabId) return;
-  if (msg?.type === 'odoo-rpc') {
-    addRpc(msg.raw);
-  } else if (msg?.type === 'odoo-pick') {
-    setPicked(msg.name); // '' = cancelled: the re-render just resets the picker button
+addEventListener('message', (e) => { // from content/bubble.js: what the page recorded (RPCs) or picked (a field)
+  if (e.source !== parent) return;
+  const { type, detail } = e.data || {};
+  if (type === 'odoo-debug-rpc') {
+    addRpc(detail);
+  } else if (type === 'odoo-debug-pick') {
+    setPicked(detail); // '' = cancelled: the re-render just resets the picker button
     rendered.delete('view');
     showTab('view');
   }
@@ -124,8 +126,7 @@ $('#minimize').addEventListener('click', () => chrome.tabs.sendMessage(tabId, { 
 const fullBtn = $('#full');
 const isFull = () => fullBtn.getAttribute('aria-pressed') === 'true';
 const setFull = (on) => chrome.tabs.sendMessage(tabId, { type: 'odoo-full', on }).then((now) => {
-  fullBtn.setAttribute('aria-pressed', !!now);
-  fullBtn.textContent = now ? '⤡' : '⤢';
+  fullBtn.setAttribute('aria-pressed', !!now); // ui.css swaps the icon
 }, () => {});
 fullBtn.addEventListener('click', () => setFull(!isFull()));
 addEventListener('keydown', (e) => { // Esc leaves full screen, unless it is clearing a search box

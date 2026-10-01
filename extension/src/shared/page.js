@@ -4,7 +4,7 @@
 export function pageState() {
   const odoo = window.odoo;
   // loadedAt changes on every page load (not on Odoo's pushState navigation): the panel's cache lives that long.
-  const base = { url: location.href, origin: location.origin, loadedAt: performance.timeOrigin, odoo: !!odoo, debug: odoo?.debug || '' };
+  const base = { url: location.href, origin: location.origin, loadedAt: performance.timeOrigin, odoo: !!odoo };
   const c = odoo?.__WOWL_DEBUG__?.root?.env?.services?.action?.currentController;
   if (!c) {
     // Fallback when the webclient internals aren't reachable: /odoo/<...>/<model.name>/<id>
@@ -19,7 +19,7 @@ export function pageState() {
   const viewId = (views.find(([, t]) => t === viewType) || [])[0] || false;
   const plain = (o) => { try { return JSON.parse(JSON.stringify(o ?? null)); } catch { return String(o); } };
   return {
-    ...base, odoo: true,
+    ...base,
     model: p.resModel || c.action?.res_model || null,
     resId, viewType, viewId,
     context: plain(p.context), domain: plain(p.domain),

@@ -10,7 +10,7 @@ import { exec, call, cached, uncache, sessionInfo, fieldsOf, readAcls, readRules
 import { el, pre, pill, triPill, details, empty, errBox, kv, block, card, expandable, filteredList, copyable, odooLink, listHead, splitRow } from '../../shared/ui.js';
 import { _t, N_ } from '../../shared/i18n.js';
 
-const KEY_GROUPS = ['group_system', 'group_erp_manager', 'group_no_one', 'group_user', 'group_portal', 'group_public'];
+const KEY_GROUPS = ['group_system', 'group_erp_manager', 'group_no_one', 'group_portal', 'group_public'];
 const LABEL = { high: N_('HIGH'), med: N_('MEDIUM'), low: N_('LOW'), info: N_('INFO') };
 const LETTER = { read: 'R', write: 'W', create: 'C', unlink: 'D' };
 // ponytail: key-name heuristic, the value still shows when the row is expanded
@@ -131,7 +131,7 @@ export function renderSecurity(s, state) {
       out);
   });
   block(s, 'groups', _t('Groups'), () => groupsBlock(t, origin, tryGroup, rerender));
-  block(s, 'user-risks', _t('User risks'), async () => {
+  block(s, 'user-risks', _t('User Risks'), async () => {
     const { u, has } = await t;
     return findings(userRisks(u, has));
   });
@@ -140,36 +140,36 @@ export function renderSecurity(s, state) {
     section(s, `${model}${resId ? ` #${resId}` : ''}`);
     const modelSec = Promise.all([readAcls(model), readRules(model), fieldsOf(model)]);
 
-    block(s, 'why', _t('Why allowed / blocked'), () => whyBlock(model, resId, t, modelSec, tryGroup));
+    block(s, 'why', _t('Why Allowed / Blocked'), () => whyBlock(model, resId, t, modelSec, tryGroup));
 
-    block(s, 'acl', _t('ACL (ir.model.access) — green = applies to the user'), async () => {
+    block(s, 'acl', _t('ACL'), async () => {
       const [{ groupIds }, [rows]] = await Promise.all([t, modelSec]);
       if (!rows.length) return empty(_t('No ACL.'));
       return el('table', {}, el('thead', {}, el('tr', {}, el('th', {}, _t('ACL / group')), MODES.map((m) => el('th', { class: 'c' }, LETTER[m])))),
         el('tbody', {}, rows.map((a) => el('tr', { class: !a.group_id || groupIds.has(a.group_id[0]) ? 'mine' : '' },
           el('td', {}, a.name, el('div', { class: 'muted' }, a.group_id ? a.group_id[1] : _t('(all users)'))),
           MODES.map((m) => el('td', { class: 'c' }, a[`perm_${m}`] ? '✓' : ''))))));
-    });
+    }, _t('ir.model.access: the rows in green apply to the user.'));
 
-    block(s, 'hidden-fields', _t('Fields hidden from the user (groups=)'), async () => {
+    block(s, 'hidden-fields', _t('Hidden Fields'), async () => {
       const [{ uid, tried }, [, , fields]] = await Promise.all([t, modelSec]);
       const restricted = Object.entries(fields).filter(([, f]) => f.groups);
-      if (!restricted.length) return empty(_t('No field declares groups=.'));
+      if (!restricted.length) return empty(_t('No field is restricted to groups.'));
       // ponytail: has_groups is the server's answer on the real groups; tried groups are not counted here
       const specs = [...new Set(restricted.map(([, f]) => f.groups))];
       const ok = new Map(await Promise.all(specs.map(async (sp) => [sp, await call('res.users', 'has_groups', [[uid], sp]).catch(() => null)])));
       restricted.sort(([, a], [, b]) => Number(ok.get(a.groups)) - Number(ok.get(b.groups)));
       return el('div', {}, tried.size ? el('p', { class: 'note' }, _t('Real groups only: the tried groups are not counted here.')) : null,
-        listHead(_t('Field · label · for this user'), 'groups='), el('ul', { class: 'list' }, restricted.map(([name, f]) => expandable(el('li', {},
+        listHead(_t('Field · label · for this user'), _t('Allowed groups')), el('ul', { class: 'list' }, restricted.map(([name, f]) => expandable(el('li', {},
         el('div', { class: 'row' }, copyable(name), el('span', { class: 'grow muted' }, f.string),
           triPill(ok.get(f.groups), [_t('visible'), _t('hidden'), '?'])),
         el('div', { class: 'meta' }, f.groups))))));
-    });
+    }, _t('Fields restricted to groups, and whether the selected user can see each one.'));
 
-    block(s, 'model-audit', _t('Model configuration audit'), async () => {
+    block(s, 'model-audit', _t('Model Audit'), async () => {
       const [{ groupXml }, [acls, rules, fields]] = await Promise.all([t, modelSec]);
       return findings(auditModel({ fields, acls, rules, groupXml }));
-    });
+    }, _t('The model\'s security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user.'));
   }
 
   // ---------- this Odoo: the logged-in session, whoever is picked above ----------
@@ -189,7 +189,7 @@ export function renderSecurity(s, state) {
   });
 
   // base.group_system only: say so instead of showing an AccessError.
-  block(s, 'params', _t('System parameters (ir.config_parameter)'), async () => {
+  block(s, 'params', _t('System Parameters'), async () => {
     if (!(await sessionInfo()).is_system) return empty(_t('Needs Settings rights (base.group_system).'));
     const rows = await call('ir.config_parameter', 'search_read', [[]], { fields: ['key', 'value'], order: 'key' }); // not cached: edited while debugging
     const items = rows.map((p) => {
@@ -201,9 +201,9 @@ export function renderSecurity(s, state) {
       return expandable(li, () => pre(p.value));
     });
     return items.length ? filteredList(items, _t('Filter key / value'), N_('%s parameters'), N_('%s/%s parameters'), listHead(_t('Key'), _t('Value'))) : empty(_t('No parameter.'));
-  });
+  }, _t('ir.config_parameter: secret-looking values are masked, a click on one still copies it.'));
 
-  block(s, 'instance', _t('Instance check'), async () => {
+  block(s, 'instance', _t('Instance Check'), async () => {
     const [probe, cookie] = await cached('probe', async () => {
       const r = await Promise.all([exec(pageProbe), cookieFlags(state.url)]);
       if (!r[0] || r[0].error) throw new Error(r[0]?.error || _t('Check failed'));
@@ -211,7 +211,7 @@ export function renderSecurity(s, state) {
     });
     return el('div', {}, findings(checkInstance(probe, cookie)),
       el('div', { class: 'pad-bottom' },
-        details(_t('Raw data'), pre({ ...probe, cookie })),
+        details(_t('Raw Data'), pre({ ...probe, cookie })),
         el('button', { class: 'chip mt', onclick: () => { uncache('probe'); rerender(); } }, _t('Check Again'))));
   });
 }
@@ -246,7 +246,7 @@ async function groupsBlock(t, origin, tryGroup, rerender) {
   const rank = (g) => (realIds.has(g.id) ? 0 : groupIds.has(g.id) ? 1 : 2);
   const rows = [...all].sort((a, b) => rank(a) - rank(b)).map(row);
   const shown = rows.filter((r) => r.shown).length;
-  const count = el('span', { class: 'muted' }, _t('%s groups', shown));
+  const count = el('span', { class: 'muted count-note' }, _t('%s groups', shown));
   const input = el('input', {
     type: 'search', placeholder: _t('Filter or try a group…'), 'aria-label': _t('Filter or try a group…'),
     oninput: () => {
@@ -269,8 +269,8 @@ async function whyBlock(model, resId, t, modelSec, tryGroup) {
   // your own user, real groups: the server's exact answer too (has_access runs as the logged-in user only)
   const server = uid === me && !tried.size ? Promise.all(MODES.map((op) => call(model, 'has_access', [resId ? [resId] : [], op]).catch(() => null))) : null;
   const modesOf = (r) => MODES.filter((m) => rulesFor([r], groupIds, m).length);
-  const relevant = rules; // not only the applicable ones: the groups that would unblock a mode need every rule
-  const evals = await exec(pageEvalDomains, relevant.map((r) => r.domain_force), ruleEvalContext(u));
+  // every rule, not only the applicable ones: the groups that would unblock a mode need them all
+  const evals = await exec(pageEvalDomains, rules.map((r) => r.domain_force), ruleEvalContext(u));
   const evaluated = new Map(); // ruleId → domain, evaluated for the simulated user
   const passed = new Map(); // ruleId → the record matches it
   const note = new Map(); // ruleId → why it could not be checked
@@ -278,7 +278,7 @@ async function whyBlock(model, resId, t, modelSec, tryGroup) {
   // ponytail: runs under the viewer's own rules; if the viewer can't see the record, nothing can be checked.
   const count = (dom) => call(model, 'search_count', [[['id', '=', resId], ...dom]], { context: { active_test: false } });
   const visible = resId ? await count([]).catch(() => 0) : 0;
-  await Promise.all(relevant.map(async (r, i) => {
+  await Promise.all(rules.map(async (r, i) => {
     const ev = (Array.isArray(evals) && evals[i]) || { error: evals?.error || N_('no result') };
     if (ev.error) return note.set(r.id, _t('cannot evaluate: %s', _t(ev.error)));
     evaluated.set(r.id, ev.domain);

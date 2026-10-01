@@ -2,6 +2,38 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
+## [Unreleased]
+
+### Added
+
+- **Menus tab**: the technical screens a developer opens all day, one click away without debug mode or the Technical menu: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (the list of OCA's `developer_menu`, with nothing to install). A click opens the screen in the Odoo page, as its menu would (leaving full screen, so it shows); ↗ opens it in a new tab. Each row gives the model and, in full screen, the action's xmlid, both copied on click. For Access Rights managers; Mail Templates only shows with the mail module.
+- **i18n › Languages**: activates one or more languages and loads, or reloads, their terms for every installed app, with Odoo's Add Languages wizard (Overwrite Existing Terms optional). Needs Settings rights; the active languages are chips that toggle their code in the field. The export below lists the new languages right away.
+
+### Changed
+
+- **Toolbar popup**: "This page" shows the Odoo version and database next to the host (one line, an icon each), and the debug mode switch reads Off / Debug / Assets.
+- **Security**: plainer labels than `groups=` in the model part ("Hidden fields", "Allowed groups", "not restricted to any group").
+- Text fields show focus with their border only, no ring around them.
+- **Apps › search bar like Odoo's**: each facet has a coloured label (a funnel for a filter, the field name for the category), its values joined by an italic *or*, and ×; when they fill a line the input goes to the next one and ▾ stays as tall as the bar. The filters start at Installed each time the panel opens (they used to be remembered, so a cleared filter stayed cleared).
+- **Apps › ⟳ Update Apps List** beside the count: Odoo's Update Apps List on its own, the new modules join the list at once (no page reload), the typed modules and the filters kept.
+- **The Translations tab is titled i18n**: shorter in the tab strip, and what the folder it exports to is called.
+- **Filter counts on their own line** under their input, on the right (Apps, i18n, Record › Fields, Security › Groups and System Parameters, Perf): the input gets the whole width.
+- **Apps / i18n lists**: a module's name and title are one line, cut with a single … at its end (the title goes first, the row never overflows); hovering the row shows it whole, drawn over the version, ↗ staying on top.
+- **Card titles stay short**; what they used to spell out goes in an ⓘ after the title, shown on hover or keyboard focus: ACL (`ir.model.access`, the rows in green apply to the user), System parameters (`ir.config_parameter`, secrets masked), View › Form fields (invisible / readonly / required, evaluated on the record shown), Perf › Repeated queries (N+1 suspects). Long titles are shorter, their detail in the ⓘ: Identity (was Identity & metadata), Hidden fields (Fields hidden from the user), Model audit (Model configuration audit), Inherited views (Inherited views — <type>), i18n › Languages (Activate / Update Languages). Titles are in Title Case, like Odoo's labels (Context & Domain, User Risks, Why Allowed / Blocked…).
+- **RPC and Perf: times are on the browser's clock** (its timezone), no longer in UTC: the time of a call, of a profiled request, and the "since" of the recording.
+
+### Removed
+
+- The Show / Hide Panel button of the toolbar popup: the round button on the page does it.
+- The call counter on the RPC tab: the tab itself lists the calls.
+
+### Fixed
+
+- Rows with buttons on the right (Security › Groups and System parameters, View › inherited views) keep the buttons in their own column again, top-aligned, instead of wrapping under a long name: the style had been renamed away in 1.2.0.
+- Code tab › Guide: suggestions take the fields of the variable's model (the last `env[…]` model only when the variable isn't understood), as they have for a while.
+- **RPC tab in an incognito window** (where Security logs in as the picked user): the calls the page made after the panel opened never showed, e.g. the `name_search` of a many2one being typed in; the tab kept what the page had recorded before, nothing when the panel reopened with the page. ⌖ Pick on Page (View) never came back either. Chrome sends an incognito tab's extension messages to the regular profile, not to the panel in that tab: the page now hands them to its own panel directly.
+- **Errors from non-Odoo sites listed under Odoo Debug** in chrome://extensions, e.g. "Connecting to 'https://ad.doubleclick.net/…' violates the following Content Security Policy directive": the RPC recorder wrapped `fetch` and XHR on every site, so a request the site's own CSP blocked was blamed on the extension. It now hooks them only on Odoo pages, once `odoo` is defined; elsewhere the page is left untouched.
+
 ## [1.3.0] - 2026-10-01
 
 ### Added

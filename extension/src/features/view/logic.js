@@ -1,4 +1,4 @@
-// Pure helpers, no chrome.* / DOM: tested by the *.test.mjs next to this file.
+// Pure helpers, no chrome.* / DOM: tested by tests/view.test.mjs.
 
 /**
  * Views of one model/type → [{view, depth}] for the chain that builds `currentId`:

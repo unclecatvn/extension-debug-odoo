@@ -12,154 +12,166 @@ msgstr ""
 
 #: src/features/apps/apps.js:16
 #: src/features/security/security.js:193
+#: src/features/translations/translations.js:36
 msgid "Needs Settings rights (base.group_system)."
 msgstr "Cần quyền Settings (base.group_system)."
 
-#: src/features/apps/apps.js:22
-#: src/features/translations/translations.js:14
+#: src/features/apps/apps.js:26
+#: src/features/translations/translations.js:86
 msgid "Search or type: sale; stock; my_module"
 msgstr "Tìm hoặc gõ: sale; stock; my_module"
 
-#: src/features/apps/apps.js:22
+#: src/features/apps/apps.js:26
 msgid "Modules"
 msgstr "Module"
 
-#: src/features/apps/apps.js:34
+#: src/features/apps/apps.js:31
+#: src/features/apps/apps.js:58
+#: src/features/apps/apps.js:62
+#: src/features/apps/apps.js:99
+msgid "Update Apps List"
+msgstr "Cập nhật danh sách ứng dụng"
+
+#: src/features/apps/apps.js:31
+#: src/features/apps/apps.js:101
+msgid "%s updated · %s added"
+msgstr "%s cập nhật · %s thêm mới"
+
+#: src/features/apps/apps.js:39
 msgid "%s/%s modules"
 msgstr "%s/%s module"
 
-#: src/features/apps/apps.js:46
+#: src/features/apps/apps.js:51
 #: src/features/code/code.js:36
+#: src/features/translations/translations.js:65
 msgid "Running…"
 msgstr "Đang chạy…"
 
-#: src/features/apps/apps.js:48
-#: src/features/code/code.js:135
-#: src/features/code/code.js:174
-#: src/features/rpc/rpc.js:51
-#: src/features/rpc/rpc.js:96
-#: src/features/translations/translations.js:90
+#: src/features/apps/apps.js:53
+#: src/features/code/code.js:134
+#: src/features/code/code.js:173
+#: src/features/rpc/rpc.js:52
+#: src/features/rpc/rpc.js:97
+#: src/features/translations/translations.js:75
+#: src/features/translations/translations.js:161
 msgid "error"
 msgstr "lỗi"
 
-#: src/features/apps/apps.js:50
+#: src/features/apps/apps.js:55
 msgid "Reloading the Odoo page…"
 msgstr "Đang tải lại trang Odoo…"
 
 #: src/features/apps/apps.js:58
+msgid "Read the addons paths again: new modules join the list"
+msgstr "Đọc lại các addons path: module mới sẽ có trong danh sách"
+
+#: src/features/apps/apps.js:81
 msgid "Enter at least one module."
 msgstr "Nhập ít nhất một module."
 
-#: src/features/apps/apps.js:75
+#: src/features/apps/apps.js:98
 msgid "Activate"
 msgstr "Kích hoạt"
 
-#: src/features/apps/apps.js:75
+#: src/features/apps/apps.js:98
 msgid "Update Apps List, then install every module (with its dependencies)"
 msgstr "Cập nhật danh sách ứng dụng, rồi cài mọi module (kèm các module phụ thuộc)"
 
-#: src/features/apps/apps.js:76
-msgid "Update Apps List"
-msgstr "Cập nhật danh sách ứng dụng"
-
-#: src/features/apps/apps.js:78
-msgid "%s updated · %s added"
-msgstr "%s cập nhật · %s thêm mới"
-
-#: src/features/apps/apps.js:81
+#: src/features/apps/apps.js:104
 msgid "Not found, even after Update Apps List: %s"
 msgstr "Không tìm thấy, kể cả sau khi cập nhật danh sách ứng dụng: %s"
 
-#: src/features/apps/apps.js:82
+#: src/features/apps/apps.js:105
 msgid "Not installable: %s"
 msgstr "Không cài được: %s"
 
-#: src/features/apps/apps.js:83
+#: src/features/apps/apps.js:106
 msgid "Waiting to be uninstalled: %s"
 msgstr "Đang chờ gỡ cài đặt: %s"
 
-#: src/features/apps/apps.js:84
+#: src/features/apps/apps.js:107
 msgid "Already installed: %s"
 msgstr "Đã cài sẵn: %s"
 
-#: src/features/apps/apps.js:86
+#: src/features/apps/apps.js:109
 msgid "Install %s"
 msgstr "Cài %s"
 
-#: src/features/apps/apps.js:92
+#: src/features/apps/apps.js:115
 msgid "Upgrade"
 msgstr "Nâng cấp"
 
-#: src/features/apps/apps.js:92
+#: src/features/apps/apps.js:115
 msgid "Upgrade every module (they must be installed)"
 msgstr "Nâng cấp mọi module (phải đã được cài)"
 
-#: src/features/apps/apps.js:95
+#: src/features/apps/apps.js:118
 msgid "Not found: %s"
 msgstr "Không tìm thấy: %s"
 
-#: src/features/apps/apps.js:96
+#: src/features/apps/apps.js:119
 msgid "Not installed (use Activate): %s"
 msgstr "Chưa cài (hãy dùng Kích hoạt): %s"
 
-#: src/features/apps/apps.js:97
+#: src/features/apps/apps.js:120
 msgid "Upgrade %s"
 msgstr "Nâng cấp %s"
 
-#: src/features/apps/apps.js:103
+#: src/features/apps/apps.js:126
 msgid "Open Forms ↗"
 msgstr "Mở form ↗"
 
-#: src/features/apps/apps.js:103
+#: src/features/apps/apps.js:126
 msgid "Open the form of every module in a new tab"
 msgstr "Mở form của từng module trong tab mới"
 
-#: src/features/apps/apps.js:110
+#: src/features/apps/apps.js:133
 msgid "Opened %s tab(s): %s"
 msgstr "Đã mở %s tab: %s"
 
-#: src/features/apps/apps.js:112
+#: src/features/apps/apps.js:135
 msgid "Not found: %s (Activate runs Update Apps List first)"
 msgstr "Không tìm thấy: %s (Kích hoạt sẽ cập nhật danh sách ứng dụng trước)"
 
-#: src/features/apps/searchbar.js:10
+#: src/features/apps/searchbar.js:11
 msgid "Installed"
 msgstr "Đã cài"
 
-#: src/features/apps/searchbar.js:10
+#: src/features/apps/searchbar.js:11
 msgid "Not Installed"
 msgstr "Chưa cài"
 
-#: src/features/apps/searchbar.js:11
+#: src/features/apps/searchbar.js:12
 #: src/panel/panel.html:27
 msgid "Apps"
 msgstr "Apps"
 
-#: src/features/apps/searchbar.js:11
+#: src/features/apps/searchbar.js:12
 msgid "Extra"
 msgstr "Bổ sung"
 
-#: src/features/apps/searchbar.js:15
-#: src/features/apps/searchbar.js:15
-#: src/features/apps/searchbar.js:27
+#: src/features/apps/searchbar.js:16
+#: src/features/apps/searchbar.js:16
+#: src/features/apps/searchbar.js:28
 msgid "Filters"
 msgstr "Bộ lọc"
 
-#: src/features/apps/searchbar.js:23
-msgid " or "
-msgstr " hoặc "
-
-#: src/features/apps/searchbar.js:24
-#: src/features/apps/searchbar.js:29
+#: src/features/apps/searchbar.js:25
+#: src/features/apps/searchbar.js:30
 msgid "Category"
 msgstr "Danh mục"
 
-#: src/features/apps/searchbar.js:30
+#: src/features/apps/searchbar.js:31
 msgid "All Categories"
 msgstr "Mọi danh mục"
 
-#: src/features/apps/searchbar.js:34
-#: src/features/apps/searchbar.js:34
+#: src/features/apps/searchbar.js:35
+#: src/features/apps/searchbar.js:37
+msgid "or"
+msgstr "hoặc"
+
+#: src/features/apps/searchbar.js:38
+#: src/features/apps/searchbar.js:38
 #: src/features/security/security.js:236
 msgid "Remove"
 msgstr "Bỏ"
@@ -189,104 +201,105 @@ msgstr "Chạy (⌘/Ctrl+Enter)"
 msgid "Run"
 msgstr "Chạy"
 
+#: src/features/code/code.js:92
 #: src/features/code/code.js:93
-#: src/features/code/code.js:94
 msgid "Guide"
 msgstr "Hướng dẫn"
 
-#: src/features/code/code.js:94
+#: src/features/code/code.js:93
 msgid "Available variables, recordset API, examples"
 msgstr "Các biến có sẵn, API của recordset, ví dụ"
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Lets the code call write, create, unlink and any other method that is not a read"
 msgstr "Cho phép code gọi write, create, unlink và mọi method không phải đọc"
 
-#: src/features/code/code.js:102
+#: src/features/code/code.js:101
 msgid "Read-only by default. With writes allowed, each call is committed at once: there is no rollback."
 msgstr "Mặc định chỉ đọc. Khi cho phép ghi, mỗi lời gọi được commit ngay: không có rollback."
 
-#: src/features/code/code.js:103
+#: src/features/code/code.js:102
 msgid "Allow Writes"
 msgstr "Cho phép ghi"
 
-#: src/features/code/code.js:105
+#: src/features/code/code.js:104
 msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
 msgstr "Chạy với user %s (uid %s): áp dụng đúng quyền truy cập, record rule và công ty của user đó."
 
-#: src/features/code/code.js:126
+#: src/features/code/code.js:125
 msgid "page refreshed"
 msgstr "đã làm mới trang"
 
-#: src/features/code/code.js:127
+#: src/features/code/code.js:126
 msgid "page not refreshed"
 msgstr "chưa làm mới trang"
 
-#: src/features/code/code.js:132
-#: src/features/rpc/rpc.js:94
+#: src/features/code/code.js:131
+#: src/features/menus/menus.js:22
+#: src/features/rpc/rpc.js:95
 #: src/shared/bridge.js:30
 msgid "No response — is this an Odoo page?"
 msgstr "Không có phản hồi — đây có phải trang Odoo?"
 
-#: src/features/code/code.js:135
+#: src/features/code/code.js:134
 msgid "ok"
 msgstr "ok"
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "read-only"
 msgstr "chỉ đọc"
 
-#: src/features/code/code.js:136
+#: src/features/code/code.js:135
 msgid "writes allowed"
 msgstr "cho phép ghi"
 
-#: src/features/code/code.js:137
-#: src/features/code/code.js:175
+#: src/features/code/code.js:136
+#: src/features/code/code.js:174
 msgid "%s ms"
 msgstr "%s ms"
 
-#: src/features/code/code.js:138
+#: src/features/code/code.js:137
 msgid "%s calls"
 msgstr "%s lời gọi"
 
-#: src/features/code/code.js:139
+#: src/features/code/code.js:138
 msgid "%s write calls"
 msgstr "%s lời gọi ghi"
 
-#: src/features/code/code.js:143
+#: src/features/code/code.js:142
 msgid "No return value: end with return … to see one."
 msgstr "Không có giá trị trả về: kết thúc bằng return … để xem kết quả."
 
-#: src/features/code/code.js:149
+#: src/features/code/code.js:148
 msgid "(line %s)"
 msgstr "(dòng %s)"
 
-#: src/features/code/code.js:154
+#: src/features/code/code.js:153
 msgid "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
 msgstr "Content-Security-Policy của trang này không cho chạy code (proxy trước Odoo đã thêm script-src)."
 
-#: src/features/code/code.js:155
+#: src/features/code/code.js:154
 #: src/shared/ui.js:30
 msgid "Traceback"
 msgstr "Traceback"
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows (first %s shown)"
 msgstr "%s dòng (hiện %s dòng đầu)"
 
-#: src/features/code/code.js:162
+#: src/features/code/code.js:161
 msgid "%s rows"
 msgstr "%s dòng"
 
-#: src/features/code/code.js:166
+#: src/features/code/code.js:165
 msgid "JSON"
 msgstr "JSON"
 
-#: src/features/code/code.js:170
+#: src/features/code/code.js:169
 msgid "Calls (%s)"
 msgstr "Lời gọi (%s)"
 
-#: src/features/code/code.js:173
+#: src/features/code/code.js:172
 msgid "write"
 msgstr "ghi"
 
@@ -300,7 +313,7 @@ msgid "Copied"
 msgstr "Đã sao chép"
 
 #: src/features/code/help.js:41
-msgid "Available variables:"
+msgid "Available Variables:"
 msgstr "Các biến có sẵn:"
 
 #: src/features/code/help.js:43
@@ -376,8 +389,8 @@ msgid "models of the installed modules"
 msgstr "model của các module đang cài"
 
 #: src/features/code/help.js:65
-msgid "fields of the last env[…] model, following relations (partner_id.country_id.)"
-msgstr "field của model env[…] gần nhất, đi theo quan hệ (partner_id.country_id.)"
+msgid "fields of the variable's model (else the last env[…] one), following relations (partner_id.country_id.)"
+msgstr "field của model mà biến được gán (không thì model env[…] gần nhất), đi theo quan hệ (partner_id.country_id.)"
 
 #: src/features/code/help.js:66
 msgid "recordset methods, env and Command members"
@@ -440,6 +453,74 @@ msgstr "Trang này không có view nào để làm mới"
 #: src/features/code/suggest.js:36
 msgid "Suggestions"
 msgstr "Gợi ý"
+
+#: src/features/menus/logic.js:6
+msgid "Models"
+msgstr "Models"
+
+#: src/features/menus/logic.js:7
+#: src/features/record/record.js:22
+msgid "Fields"
+msgstr "Fields"
+
+#: src/features/menus/logic.js:8
+msgid "Record Rules"
+msgstr "Record Rules"
+
+#: src/features/menus/logic.js:9
+msgid "Views"
+msgstr "Views"
+
+#: src/features/menus/logic.js:10
+#: src/panel/panel.html:28
+msgid "Menus"
+msgstr "Menus"
+
+#: src/features/menus/logic.js:11
+msgid "Model Data"
+msgstr "Model Data"
+
+#: src/features/menus/logic.js:12
+msgid "Crons"
+msgstr "Crons"
+
+#: src/features/menus/logic.js:13
+msgid "Actions Window"
+msgstr "Actions Window"
+
+#: src/features/menus/logic.js:14
+msgid "Actions Server"
+msgstr "Actions Server"
+
+#: src/features/menus/logic.js:15
+msgid "Reports"
+msgstr "Reports"
+
+#: src/features/menus/logic.js:16
+#: src/features/rpc/rpc.js:60
+msgid "Parameters"
+msgstr "Tham số"
+
+#: src/features/menus/logic.js:17
+msgid "Sequences"
+msgstr "Sequences"
+
+#: src/features/menus/logic.js:18
+msgid "Mail Templates"
+msgstr "Mail Templates"
+
+#: src/features/menus/menus.js:13
+msgid "Needs Access Rights (base.group_erp_manager)."
+msgstr "Cần quyền Access Rights (base.group_erp_manager)."
+
+#: src/features/menus/menus.js:34
+msgid "Menu · model"
+msgstr "Menu · model"
+
+#: src/features/menus/menus.js:34
+#: src/features/view/view.js:37
+msgid "Action"
+msgstr "Action"
 
 #: src/features/perf/perf.js:15
 msgid "Cannot call /web/set_profiling"
@@ -526,7 +607,7 @@ msgid "No SQL recorded."
 msgstr "Không có SQL nào được ghi."
 
 #: src/features/perf/perf.js:99
-msgid "Full SQL + stack"
+msgid "Full SQL + Stack"
 msgstr "SQL đầy đủ + stack"
 
 #: src/features/perf/perf.js:101
@@ -534,8 +615,12 @@ msgid "%s queries · SQL %s / total %s · Python ≈ %s"
 msgstr "%s query · SQL %s / tổng %s · Python ≈ %s"
 
 #: src/features/perf/perf.js:103
-msgid "Repeated queries — N+1 suspects (%s)"
-msgstr "Query lặp lại — nghi N+1 (%s)"
+msgid "Repeated Queries (%s)"
+msgstr "Query lặp lại (%s)"
+
+#: src/features/perf/perf.js:103
+msgid "The same query run several times: N+1 suspects."
+msgstr "Cùng một query chạy nhiều lần: nghi N+1."
 
 #: src/features/perf/perf.js:103
 msgid "Count · caller · time"
@@ -551,7 +636,7 @@ msgid "✓ No repeated query."
 msgstr "✓ Không có query lặp lại."
 
 #: src/features/perf/perf.js:106
-msgid "Slowest queries (%s)"
+msgid "Slowest Queries (%s)"
 msgstr "Query chậm nhất (%s)"
 
 #: src/features/perf/perf.js:106
@@ -563,8 +648,8 @@ msgid "This screen is not bound to a model."
 msgstr "Màn hình này không gắn với model nào."
 
 #: src/features/record/record.js:11
-msgid "Identity & metadata"
-msgstr "Định danh & metadata"
+msgid "Identity"
+msgstr "Định danh"
 
 #: src/features/record/record.js:16
 msgid "(none / several records)"
@@ -578,9 +663,9 @@ msgstr "tạo bởi"
 msgid "last updated by"
 msgstr "sửa bởi"
 
-#: src/features/record/record.js:22
-msgid "Fields"
-msgstr "Fields"
+#: src/features/record/record.js:20
+msgid "Model and id, xmlids (noupdate flagged), who created and last updated the record, and when."
+msgstr "Model và id, xmlid (đánh dấu noupdate), ai tạo và ai sửa record lần cuối, lúc nào."
 
 #: src/features/record/record.js:41
 msgid "change → recomputes %s"
@@ -606,95 +691,91 @@ msgstr "Field · kiểu · giá trị"
 msgid "Label · storage · compute · module"
 msgstr "Nhãn · lưu trữ · compute · module"
 
-#: src/features/rpc/rpc.js:16
+#: src/features/rpc/rpc.js:17
 msgid "Filter model / method"
 msgstr "Lọc model / method"
 
-#: src/features/rpc/rpc.js:18
+#: src/features/rpc/rpc.js:19
 msgid "Errors Only"
 msgstr "Chỉ lỗi"
 
-#: src/features/rpc/rpc.js:24
+#: src/features/rpc/rpc.js:25
 msgid "Clear"
 msgstr "Xoá"
 
-#: src/features/rpc/rpc.js:30
-#: src/features/rpc/rpc.js:36
+#: src/features/rpc/rpc.js:31
+#: src/features/rpc/rpc.js:37
 msgid "New Request"
 msgstr "Request mới"
 
-#: src/features/rpc/rpc.js:30
-#: src/features/rpc/rpc.js:30
+#: src/features/rpc/rpc.js:31
+#: src/features/rpc/rpc.js:31
 msgid "Close"
 msgstr "Đóng"
 
-#: src/features/rpc/rpc.js:38
+#: src/features/rpc/rpc.js:39
 msgid "No RPC yet. Use the Odoo page to record some."
 msgstr "Chưa có RPC nào. Thao tác trên trang Odoo để ghi lại."
 
-#: src/features/rpc/rpc.js:39
+#: src/features/rpc/rpc.js:40
 msgid "Method · model · duration"
 msgstr "Method · model · thời gian"
 
-#: src/features/rpc/rpc.js:39
+#: src/features/rpc/rpc.js:40
 msgid "Time · route"
 msgstr "Giờ · route"
 
-#: src/features/rpc/rpc.js:40
+#: src/features/rpc/rpc.js:41
 msgid "Select a call to see its parameters and result."
 msgstr "Chọn một lời gọi để xem tham số và kết quả."
 
-#: src/features/rpc/rpc.js:59
-msgid "Parameters"
-msgstr "Tham số"
-
-#: src/features/rpc/rpc.js:66
+#: src/features/rpc/rpc.js:67
 msgid "Edit & Resend"
 msgstr "Sửa & Gửi lại"
 
-#: src/features/rpc/rpc.js:67
+#: src/features/rpc/rpc.js:68
 msgid "Why was it blocked? → Security"
 msgstr "Vì sao bị chặn? → Security"
 
-#: src/features/rpc/rpc.js:69
+#: src/features/rpc/rpc.js:70
 msgid "Result"
 msgstr "Kết quả"
 
-#: src/features/rpc/rpc.js:77
+#: src/features/rpc/rpc.js:78
 msgid "… (%s characters)"
 msgstr "… (%s ký tự)"
 
-#: src/features/rpc/rpc.js:83
+#: src/features/rpc/rpc.js:84
 msgid "Route"
 msgstr "Route"
 
-#: src/features/rpc/rpc.js:84
+#: src/features/rpc/rpc.js:85
 msgid "Body (JSON)"
 msgstr "Body (JSON)"
 
-#: src/features/rpc/rpc.js:85
+#: src/features/rpc/rpc.js:86
 msgid "Send"
 msgstr "Gửi"
 
-#: src/features/rpc/rpc.js:89
+#: src/features/rpc/rpc.js:90
 msgid "Invalid JSON: %s"
 msgstr "JSON không hợp lệ: %s"
 
-#: src/features/rpc/rpc.js:91
-#: src/shared/ui.js:87
-#: src/shared/ui.js:149
+#: src/features/rpc/rpc.js:92
+#: src/shared/ui.js:104
+#: src/shared/ui.js:166
 msgid "Loading…"
 msgstr "Đang tải…"
 
-#: src/features/rpc/rpc.js:100
+#: src/features/rpc/rpc.js:101
 msgid "Ctrl/⌘ + Enter"
 msgstr "Ctrl/⌘ + Enter"
 
-#: src/features/rpc/rpc.js:111
+#: src/features/rpc/rpc.js:112
 msgid "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
 msgstr "call_kw: qua API ngoài (execute_kw), với API key của người dùng này trong $ODOO_API_KEY. Các route khác: cookie session_id trong $ODOO_SESSION."
 
-#: src/features/rpc/rpc.js:119
+#: src/features/rpc/rpc.js:120
 msgid "Copy as cURL"
 msgstr "Sao chép dạng cURL"
 
@@ -735,8 +816,8 @@ msgid "Has company_id but no global multi-company rule → records may leak acro
 msgstr "Có company_id nhưng không có global rule multi-company → record có thể lộ giữa các công ty."
 
 #: src/features/security/logic.js:103
-msgid "Field \"%s\" looks sensitive but has no groups=."
-msgstr "Field \"%s\" có vẻ nhạy cảm nhưng không có groups=."
+msgid "Field \"%s\" looks sensitive but is not restricted to any group."
+msgstr "Field \"%s\" có vẻ nhạy cảm nhưng không bị giới hạn theo group nào."
 
 #: src/features/security/logic.js:113
 msgid "Not served over HTTPS."
@@ -900,16 +981,16 @@ msgid "Groups"
 msgstr "Group"
 
 #: src/features/security/security.js:134
-msgid "User risks"
+msgid "User Risks"
 msgstr "Rủi ro của user"
 
 #: src/features/security/security.js:143
-msgid "Why allowed / blocked"
+msgid "Why Allowed / Blocked"
 msgstr "Vì sao được / bị chặn"
 
 #: src/features/security/security.js:145
-msgid "ACL (ir.model.access) — green = applies to the user"
-msgstr "ACL (ir.model.access) — nền xanh = áp dụng cho user này"
+msgid "ACL"
+msgstr "ACL"
 
 #: src/features/security/security.js:147
 msgid "No ACL."
@@ -923,13 +1004,17 @@ msgstr "ACL / group"
 msgid "(all users)"
 msgstr "(mọi user)"
 
+#: src/features/security/security.js:152
+msgid "ir.model.access: the rows in green apply to the user."
+msgstr "ir.model.access: các dòng nền xanh áp dụng cho user này."
+
 #: src/features/security/security.js:154
-msgid "Fields hidden from the user (groups=)"
-msgstr "Field bị ẩn với user (groups=)"
+msgid "Hidden Fields"
+msgstr "Field bị ẩn"
 
 #: src/features/security/security.js:157
-msgid "No field declares groups=."
-msgstr "Không field nào khai báo groups=."
+msgid "No field is restricted to groups."
+msgstr "Không có field nào bị giới hạn theo group."
 
 #: src/features/security/security.js:162
 msgid "Real groups only: the tried groups are not counted here."
@@ -939,18 +1024,30 @@ msgstr "Chỉ tính nhóm thật: các nhóm đang thử không được tính �
 msgid "Field · label · for this user"
 msgstr "Field · nhãn · với user này"
 
+#: src/features/security/security.js:163
+msgid "Allowed groups"
+msgstr "Group được phép"
+
 #: src/features/security/security.js:165
 msgid "visible"
 msgstr "thấy"
 
 #: src/features/security/security.js:165
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "hidden"
 msgstr "ẩn"
 
+#: src/features/security/security.js:167
+msgid "Fields restricted to groups, and whether the selected user can see each one."
+msgstr "Các field chỉ dành cho một số group, và user đang chọn có thấy từng field hay không."
+
 #: src/features/security/security.js:169
-msgid "Model configuration audit"
-msgstr "Audit cấu hình model"
+msgid "Model Audit"
+msgstr "Kiểm tra model"
+
+#: src/features/security/security.js:172
+msgid "The model's security setup: ACLs without a group or granted to portal / public users, no multi-company rule, sensitive-looking fields open to every user."
+msgstr "Cấu hình bảo mật của model: ACL không có group hoặc cấp cho user portal / public, thiếu rule đa công ty, field có vẻ nhạy cảm mà user nào cũng xem được."
 
 #: src/features/security/security.js:176
 msgid "Instance"
@@ -977,8 +1074,8 @@ msgid "Become Superuser"
 msgstr "Chuyển sang superuser"
 
 #: src/features/security/security.js:192
-msgid "System parameters (ir.config_parameter)"
-msgstr "Tham số hệ thống (ir.config_parameter)"
+msgid "System Parameters"
+msgstr "Tham số hệ thống"
 
 #: src/features/security/security.js:203
 msgid "Filter key / value"
@@ -1004,8 +1101,12 @@ msgstr "Giá trị"
 msgid "No parameter."
 msgstr "Không có tham số."
 
+#: src/features/security/security.js:204
+msgid "ir.config_parameter: secret-looking values are masked, a click on one still copies it."
+msgstr "ir.config_parameter: giá trị có vẻ bí mật được che, bấm vào vẫn copy được giá trị thật."
+
 #: src/features/security/security.js:206
-msgid "Instance check"
+msgid "Instance Check"
 msgstr "Kiểm tra instance"
 
 #: src/features/security/security.js:209
@@ -1013,7 +1114,7 @@ msgid "Check failed"
 msgstr "Không kiểm tra được"
 
 #: src/features/security/security.js:214
-msgid "Raw data"
+msgid "Raw Data"
 msgstr "Dữ liệu thô"
 
 #: src/features/security/security.js:215
@@ -1151,68 +1252,109 @@ msgstr "Model này không có record rule."
 msgid "Assumes the user selected every allowed company. Rules of parent models through _inherits are not counted. This is a simulation; for your own user, “server” is the exact answer (has_access)."
 msgstr "Giả định user chọn tất cả công ty được phép. Rule của model cha qua _inherits không được tính. Đây là mô phỏng; với chính user của bạn, “server” là kết quả chính xác (has_access)."
 
-#: src/features/translations/translations.js:14
+#: src/features/translations/translations.js:31
+msgid "Active:"
+msgstr "Đang bật:"
+
+#: src/features/translations/translations.js:35
+#: src/features/translations/translations.js:38
+msgid "Languages"
+msgstr "Ngôn ngữ"
+
+#: src/features/translations/translations.js:42
+msgid "Activate / Update"
+msgstr "Kích hoạt / cập nhật"
+
+#: src/features/translations/translations.js:48
+msgid "Language codes, separated by ;. Inactive ones are activated, then every one gets the terms of the installed apps."
+msgstr "Mã ngôn ngữ, phân cách bằng ;. Ngôn ngữ chưa bật sẽ được bật, rồi mọi ngôn ngữ đều được nạp bản dịch của các app đã cài."
+
+#: src/features/translations/translations.js:49
+msgid "Overwrite Existing Terms"
+msgstr "Ghi đè bản dịch hiện có"
+
+#: src/features/translations/translations.js:50
+msgid "If you check this box, your customized translations will be overwritten and replaced by the official ones."
+msgstr "Nếu tick, các bản dịch bạn đã sửa sẽ bị ghi đè bằng bản dịch chính thức."
+
+#: src/features/translations/translations.js:59
+msgid "Unknown language: %s"
+msgstr "Không có ngôn ngữ: %s"
+
+#: src/features/translations/translations.js:60
+msgid "Enter at least one language."
+msgstr "Nhập ít nhất một ngôn ngữ."
+
+#: src/features/translations/translations.js:64
+msgid "activate %s"
+msgstr "kích hoạt %s"
+
+#: src/features/translations/translations.js:64
+msgid "update %s"
+msgstr "cập nhật %s"
+
+#: src/features/translations/translations.js:81
+msgid "Activate languages and load, or reload, their terms for every installed app (Odoo's Add Languages wizard)."
+msgstr "Bật ngôn ngữ và tải (hoặc tải lại) bản dịch của mọi app đã cài (wizard Add Languages của Odoo)."
+
+#: src/features/translations/translations.js:86
 msgid "Apps To Export"
 msgstr "Apps cần xuất"
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:94
 msgid "Export & Download"
 msgstr "Xuất & tải về"
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:94
 msgid "Export & Download · 1 file"
 msgstr "Xuất & tải về · 1 file"
 
-#: src/features/translations/translations.js:22
+#: src/features/translations/translations.js:94
 msgid "Export & Download · %s files"
 msgstr "Xuất & tải về · %s file"
 
-#: src/features/translations/translations.js:39
+#: src/features/translations/translations.js:111
 msgid "%s/%s installed modules"
 msgstr "%s/%s module đã cài"
 
-#: src/features/translations/translations.js:40
+#: src/features/translations/translations.js:112
 msgid "Technical names, separated by ;"
 msgstr "Tên kỹ thuật, phân cách bằng ;"
 
-#: src/features/translations/translations.js:41
+#: src/features/translations/translations.js:113
 msgid "Languages:"
 msgstr "Ngôn ngữ:"
 
-#: src/features/translations/translations.js:42
+#: src/features/translations/translations.js:114
 msgid "Always exported: the empty template, as <module>.pot"
 msgstr "Luôn được xuất: file mẫu trống, thành <module>.pot"
 
-#: src/features/translations/translations.js:42
-#: src/features/translations/translations.js:79
+#: src/features/translations/translations.js:114
+#: src/features/translations/translations.js:150
 msgid "Template (.pot)"
 msgstr "Template (.pot)"
 
-#: src/features/translations/translations.js:67
+#: src/features/translations/translations.js:140
 msgid "Enter at least one app."
 msgstr "Nhập ít nhất một app."
 
-#: src/features/translations/translations.js:69
-msgid "Not an active language: %s. Active: %s"
-msgstr "Ngôn ngữ chưa được bật: %s. Đang bật: %s"
-
-#: src/features/translations/translations.js:72
+#: src/features/translations/translations.js:143
 msgid "Unknown app: %s"
 msgstr "Không có app: %s"
 
-#: src/features/translations/translations.js:73
+#: src/features/translations/translations.js:144
 msgid "Not installed: %s"
 msgstr "Chưa cài: %s"
 
-#: src/features/translations/translations.js:76
+#: src/features/translations/translations.js:147
 msgid "Exporting…"
 msgstr "Đang xuất…"
 
-#: src/features/translations/translations.js:88
+#: src/features/translations/translations.js:159
 msgid "%s files"
 msgstr "%s file"
 
-#: src/features/translations/translations.js:88
+#: src/features/translations/translations.js:159
 msgid "nothing to export"
 msgstr "không có gì để xuất"
 
@@ -1225,8 +1367,8 @@ msgid "No form view is open."
 msgstr "Không có form view đang mở."
 
 #: src/features/view/view.js:16
-msgid "Inherited views — %s"
-msgstr "View kế thừa — %s"
+msgid "Inherited Views"
+msgstr "View kế thừa"
 
 #: src/features/view/view.js:30
 msgid "inactive"
@@ -1241,94 +1383,98 @@ msgid "Name · id · file"
 msgstr "Tên · id · file"
 
 #: src/features/view/view.js:32
-msgid "Combined arch (view #%s)"
+msgid "Combined Arch (View #%s)"
 msgstr "Arch đã gộp (view #%s)"
 
-#: src/features/view/view.js:37
-msgid "Action"
-msgstr "Action"
+#: src/features/view/view.js:33
+msgid "Every %s view of this model as an inheritance tree (the one shown highlighted, inactive ones included), and the combined arch."
+msgstr "Mọi view %s của model này dạng cây kế thừa (view đang hiển thị được tô sáng, có cả view không active), và arch đã gộp."
 
 #: src/features/view/view.js:46
 msgid "Open Action Record ↗"
 msgstr "Mở bản ghi action ↗"
 
 #: src/features/view/view.js:47
-msgid "Full action (JSON)"
+msgid "Full Action (JSON)"
 msgstr "Action đầy đủ (JSON)"
 
 #: src/features/view/view.js:51
-msgid "Form fields — invisible / readonly / required"
-msgstr "Field trên form — invisible / readonly / required"
+msgid "Form Fields"
+msgstr "Field trên form"
 
-#: src/features/view/view.js:53
-msgid "Context & domain"
+#: src/features/view/view.js:52
+msgid "invisible / readonly / required of every field of the form, evaluated on the record shown."
+msgstr "invisible / readonly / required của mọi field trên form, tính theo record đang hiển thị."
+
+#: src/features/view/view.js:54
+msgid "Context & Domain"
 msgstr "Context & domain"
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
 msgid "Context"
 msgstr "Context"
 
-#: src/features/view/view.js:53
+#: src/features/view/view.js:54
 msgid "Domain"
 msgstr "Domain"
 
-#: src/features/view/view.js:59
+#: src/features/view/view.js:60
 msgid "Cannot read the form."
 msgstr "Không đọc được form."
 
-#: src/features/view/view.js:65
+#: src/features/view/view.js:66
 msgid "not shown"
 msgstr "không hiển thị"
 
-#: src/features/view/view.js:71
+#: src/features/view/view.js:72
 msgid "The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible."
 msgstr "Field không tự ẩn nhưng không có trên màn hình: nằm trong tab notebook khác hoặc node cha (group/page/div) bị invisible."
 
-#: src/features/view/view.js:73
-msgid "Values used in the expressions"
-msgstr "Giá trị dùng trong biểu thức"
-
 #: src/features/view/view.js:74
-msgid "Full node"
+msgid "Expression Values"
+msgstr "Giá trị trong biểu thức"
+
+#: src/features/view/view.js:75
+msgid "Full Node"
 msgstr "Node đầy đủ"
 
-#: src/features/view/view.js:77
+#: src/features/view/view.js:78
 msgid "Filter name / label / widget"
 msgstr "Lọc tên / nhãn / widget"
 
-#: src/features/view/view.js:79
+#: src/features/view/view.js:80
 msgid "Click a field on the Odoo page (Esc to cancel)"
 msgstr "Click vào một field trên trang Odoo (Esc để huỷ)"
 
-#: src/features/view/view.js:80
+#: src/features/view/view.js:81
 msgid "Picking… (Esc to cancel)"
 msgstr "Đang chọn… (Esc để huỷ)"
 
-#: src/features/view/view.js:81
+#: src/features/view/view.js:82
 msgid "⌖ Pick on Page"
 msgstr "⌖ Chọn trên trang"
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Field · widget · label · state"
 msgstr "Field · widget · nhãn · trạng thái"
 
-#: src/features/view/view.js:88
+#: src/features/view/view.js:89
 msgid "Modifier expressions"
 msgstr "Biểu thức modifier"
 
-#: src/features/view/view.js:89
+#: src/features/view/view.js:90
 msgid "The form is read-only: every field is readonly."
 msgstr "Form đang ở chế độ chỉ đọc: mọi field đều readonly."
 
-#: src/panel/main.js:34
+#: src/panel/main.js:35
 msgid "Cannot read this tab: %s"
 msgstr "Không đọc được tab này: %s"
 
-#: src/panel/main.js:34
+#: src/panel/main.js:35
 msgid "The current tab is not an Odoo page."
 msgstr "Tab hiện tại không phải trang Odoo."
 
-#: src/panel/main.js:86
+#: src/panel/main.js:87
 msgid "Not an Odoo page"
 msgstr "Không phải trang Odoo"
 
@@ -1374,10 +1520,10 @@ msgid "Security"
 msgstr "Security"
 
 #: src/panel/panel.html:26
-msgid "Translations"
-msgstr "Translations"
+msgid "i18n"
+msgstr "i18n"
 
-#: src/panel/panel.html:28
+#: src/panel/panel.html:29
 msgid "Perf"
 msgstr "Perf"
 
@@ -1385,59 +1531,71 @@ msgstr "Perf"
 msgid "This page"
 msgstr "Trang hiện tại"
 
+#: src/popup/popup.html:19
 #: src/popup/popup.html:20
-msgid "Show / Hide Panel"
-msgstr "Hiện / ẩn panel"
-
-#: src/popup/popup.html:22
-#: src/popup/popup.html:23
 msgid "Debug Mode"
 msgstr "Chế độ debug"
 
-#: src/popup/popup.html:24
+#: src/popup/popup.html:21
 msgid "Keep it on for this Odoo"
 msgstr "Luôn bật cho Odoo này"
 
-#: src/popup/popup.html:27
+#: src/popup/popup.html:24
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: src/popup/popup.html:31
-#: src/popup/popup.html:32
+#: src/popup/popup.html:28
+#: src/popup/popup.html:29
 msgid "Theme"
 msgstr "Giao diện"
 
-#: src/popup/popup.html:35
+#: src/popup/popup.html:32
 msgid "Shortcuts"
 msgstr "Phím tắt"
 
-#: src/popup/popup.html:36
+#: src/popup/popup.html:33
 msgid "Change"
 msgstr "Đổi"
 
-#: src/popup/popup.html:38
+#: src/popup/popup.html:35
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Mẹo: ⌥/Alt + click vào một field trên trang Odoo để copy tên kỹ thuật."
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "System"
 msgstr "Hệ thống"
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Light"
 msgstr "Sáng"
 
-#: src/popup/popup.js:7
+#: src/popup/popup.js:9
 msgid "Dark"
 msgstr "Tối"
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "panel"
 msgstr "panel"
 
-#: src/popup/popup.js:31
+#: src/popup/popup.js:33
 msgid "debug"
 msgstr "debug"
+
+#: src/popup/popup.js:47
+msgid "Host"
+msgstr "Host"
+
+#: src/popup/popup.js:47
+msgid "Odoo version"
+msgstr "Phiên bản Odoo"
+
+#: src/popup/popup.js:47
+msgid "Database"
+msgstr "Database"
+
+#: src/popup/popup.js:74
+msgid "Turn Debug Off"
+msgstr "Tắt debug"
 
 #: src/shared/bridge.js:12
 msgid "No tab is open."
@@ -1447,6 +1605,6 @@ msgstr "Không có tab đang mở."
 msgid "Open /odoo/%s"
 msgstr "Mở /odoo/%s"
 
-#: src/shared/ui.js:104
+#: src/shared/ui.js:121
 msgid "Click to copy"
 msgstr "Bấm để copy"
