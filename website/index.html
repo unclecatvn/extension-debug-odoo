@@ -52,7 +52,7 @@
   body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
   html:not([lang="vi"]) [data-l="vi"], html[lang="vi"] [data-l="en"] { display: none; }
   a { color: inherit; }
-  img { max-width: 100%; height: auto; display: block; }
+  img, video { max-width: 100%; height: auto; display: block; }
   code { white-space: nowrap; font: .86em var(--mono); background: var(--surface-2); border: 1px solid var(--line); padding: .1em .4em; border-radius: 5px; }
   ::selection { background: var(--brand-deep); }
 
@@ -194,6 +194,11 @@
   .zoom-hint { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 8px;
     background: rgba(11, 10, 13, .82); border: 1px solid rgba(255, 255, 255, .14); color: #ededf0; font: 500 12px var(--mono); pointer-events: none; opacity: 0; transition: opacity .15s; }
   .window:hover .zoom-hint { opacity: 1; }
+  /* the film plays muted (browsers only autoplay it so): this turns its score on */
+  .sound { position: absolute; right: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; cursor: pointer;
+    background: rgba(11, 10, 13, .78); border: 1px solid rgba(255, 255, 255, .18); color: #ededf0; font: 600 13px var(--sans, system-ui); backdrop-filter: blur(8px); }
+  .sound:hover { background: rgba(11, 10, 13, .92); }
+  .sound:focus-visible { outline: 2px solid #d5a6c8; outline-offset: 2px; }
   @media (hover: none) { .zoom-hint { opacity: 1; } }
   html:has(#zoom[open]) { overflow: hidden; }
   #zoom { --text: #ededf0; --muted: #9a95a3; --line: rgba(255, 255, 255, .08); --line-strong: rgba(255, 255, 255, .14); --hover-line: rgba(255, 255, 255, .3); color-scheme: dark; color: var(--text); width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #08070a; overflow: auto; overscroll-behavior: contain; }
@@ -256,8 +261,8 @@
     </div>
     <div class="meta"><span>Chrome · Edge · Brave</span><span data-l="en">no backend</span><span data-l="vi">không backend</span><span data-l="en">no analytics</span><span data-l="vi">không analytics</span></div>
     <div class="window">
-      <div class="bar"><i></i><i></i><i></i><span>odoo · S00016</span></div>
-      <img src="screenshots/overview.png" width="2880" height="1800" alt="Odoo Debug panel open next to a sales order, half light theme, half dark theme">
+      <div class="bar"><i></i><i></i><i></i><span>odoo debug · intro</span></div>
+      <video src="intro.mp4" poster="intro-poster.jpg" width="1920" height="1080" autoplay muted loop playsinline aria-label="87-second film: the extension used on a real Odoo, the panel opened beside a sales order, fields filtered, an RPC call edited and sent again, ORM code typed and run, a user's access explained, a request's N+1 queries."></video>
     </div>
   </div>
 
@@ -285,8 +290,8 @@
           <div class="panel"><ul data-l="en"><li>Inheritance tree: primary + extensions, priority, source file</li><li>Combined arch, as the webclient receives it</li><li>Action details</li><li><code>invisible</code> / <code>readonly</code> / <code>required</code> evaluated like the webclient</li></ul><ul data-l="vi"><li>Cây kế thừa: primary + extension, priority, file nguồn</li><li>Arch đã gộp, đúng như webclient nhận được</li><li>Thông tin action</li><li><code>invisible</code> / <code>readonly</code> / <code>required</code> tính đúng như webclient</li></ul></div>
         </div>
         <div class="item">
-          <button role="tab" id="t-rpc" aria-selected="false" aria-controls="w-rpc"><span class="t">RPC</span><span class="h" data-l="en">Every call, from page load</span><span class="h" data-l="vi">Mọi lời gọi, từ lúc tải trang</span></button>
-          <div class="panel"><ul data-l="en"><li>Live log of JSON-RPC and JSON-2 calls with timing</li><li>Errors with the full Python traceback</li><li>“Why was it blocked?” jumps to Security for <code>AccessError</code>s</li></ul><ul data-l="vi"><li>Nhật ký trực tiếp JSON-RPC và JSON-2 kèm thời gian</li><li>Lỗi kèm đầy đủ traceback Python</li><li>“Vì sao bị chặn?” nhảy sang Security khi gặp <code>AccessError</code></li></ul></div>
+          <button role="tab" id="t-rpc" aria-selected="false" aria-controls="w-rpc"><span class="t">RPC</span><span class="h" data-l="en">Every call, edited and resent</span><span class="h" data-l="vi">Mọi lời gọi, sửa và gửi lại</span></button>
+          <div class="panel"><ul data-l="en"><li>Live log of JSON-RPC and JSON-2 calls with timing</li><li>Errors with the full Python traceback</li><li>“Why was it blocked?” jumps to Security for <code>AccessError</code>s</li><li>Edit &amp; Resend any call, or a New Request; Copy as cURL</li></ul><ul data-l="vi"><li>Nhật ký trực tiếp JSON-RPC và JSON-2 kèm thời gian</li><li>Lỗi kèm đầy đủ traceback Python</li><li>“Vì sao bị chặn?” nhảy sang Security khi gặp <code>AccessError</code></li><li>Sửa &amp; Gửi lại mọi lời gọi, hoặc Request mới; Sao chép dạng cURL</li></ul></div>
         </div>
         <div class="item">
           <button role="tab" id="t-code" aria-selected="false" aria-controls="w-code"><span class="t">Code</span><span class="h" data-l="en">The ORM, as the logged-in user</span><span class="h" data-l="vi">ORM, dưới quyền user đang đăng nhập</span></button>
@@ -432,6 +437,19 @@
     a.querySelector('span[data-l="vi"]').textContent = 'đã phát hành · xem có gì mới';
   }).catch(() => {});
 
+  // The hero's film: muted to autoplay; a button turns its sound on (and off), from the start.
+  for (const v of document.querySelectorAll('.window video')) {
+    const b = Object.assign(document.createElement('button'), { className: 'sound', type: 'button' });
+    const label = () => {
+      b.setAttribute('aria-pressed', String(!v.muted));
+      b.innerHTML = v.muted ? '🔇 <span data-l="en">Sound on</span><span data-l="vi">Bật tiếng</span>' : '🔊 <span data-l="en">Sound off</span><span data-l="vi">Tắt tiếng</span>';
+    };
+    b.onclick = () => { if (v.muted) v.currentTime = 0; v.muted = !v.muted; v.play(); label(); };
+    label();
+    v.after(b);
+  }
+  // The hero's film: still, with its controls, for people who ask for less motion.
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) for (const v of document.querySelectorAll('video[autoplay]')) { v.autoplay = false; v.pause(); v.controls = true; }
   // Zoomable screenshots. ponytail: native <dialog>, one zoom step + scroll to pan; pinch-zoom on phones comes from the browser.
   const zoom = document.getElementById('zoom');
   const zimg = zoom.querySelector('img');
@@ -448,6 +466,7 @@
   };
   document.querySelectorAll('.window').forEach((w) => {
     const img = w.querySelector('img');
+    if (!img) return; // the hero's video
     w.insertAdjacentHTML('beforeend', '<span class="zoom-hint">⤢ <span data-l="en">Click to zoom</span><span data-l="vi">Bấm để phóng to</span></span>');
     img.onclick = () => {
       zimg.src = img.currentSrc || img.src;

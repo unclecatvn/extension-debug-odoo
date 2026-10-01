@@ -17,7 +17,9 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
-<img src="website/screenshots/overview.png" alt="Odoo Debug panel open next to a sales order, half light theme, half dark theme" width="100%">
+<a href="https://unclecatvn.github.io/extension-debug-odoo/"><img src="website/intro-poster.jpg" alt="87-second film: the extension used on a real Odoo, the panel opened beside a sales order, fields filtered, an RPC call edited and sent again, ORM code typed and run, a user's access explained, a request's N+1 queries. Click to watch it on the website." width="100%"></a>
+
+▶ [Watch the 87-second film](https://unclecatvn.github.io/extension-debug-odoo/)
 
 </div>
 
@@ -32,13 +34,14 @@ shadow DOM so it never touches Odoo's styles.
 
 | Tab | What you get |
 |---|---|
-| **Record** | Identity & metadata (xmlids, `noupdate`, create / write user), every field with its type, value, module, storage, compute / related source, `groups=` and the fields it triggers a recompute of. |
+| **Record** | Identity (xmlids, `noupdate`, create / write user), every field with its type, value, module, storage, compute / related source, `groups=` and the fields it triggers a recompute of. |
 | **View** | Inheritance tree of the current view (primary + extensions, priority, source file), combined arch, action details, form field modifiers (`invisible` / `readonly` / `required`) evaluated like the webclient, *Pick on page*. |
-| **RPC** | Live log of JSON-RPC and JSON-2 calls from page load: timing, errors with tracebacks, and a jump to the Security tab for `AccessError`s. |
+| **RPC** | Live log of JSON-RPC and JSON-2 calls from page load: timing, errors with tracebacks, and a jump to the Security tab for `AccessError`s. **Edit & Resend** any call (route and JSON body) with the page's session, or start a **New Request**; **Copy as cURL** replays it outside the browser (a `call_kw` as the external API's `execute_kw`, with an API key). |
 | **Code** | ORM Console: JavaScript with an ORM-like `env` (`env['sale.order'].search(…)`, `read`, `mapped`, `write`, any public method…) run **as the logged-in user**, so the server applies their ACLs, record rules and active companies. Fields read and written like in Python (`return rec.state`, `rec.state = 'sent'`). Suggests the models of the installed modules, their fields and the recordset methods while you type. Read-only by default; **Allow Writes** lets writes through, and **Auto Refresh** then reloads the view on screen. Results as a table, prints, errors with server traceback, every call made. |
-| **Apps** | For a list of modules, typed or ticked in the list below an Odoo-like search bar (filters Installed / Not Installed, Apps / Extra, category, as facets): Activate (Update Apps List, then install with dependencies), Upgrade, Open Forms (Settings rights). |
-| **Security** | Three parts. **User**: search any user by name or login (yourself by default) and every card follows, or log in as them in an incognito window (your session stays): their groups (add / remove, needs Access Rights), risk audit. **Model**: rule by rule why each operation is allowed or blocked for that user (for yourself, with the server's exact `has_access` answer next to it), ACLs, fields hidden by `groups=`, configuration audit. **Instance**: session (db, version, `web.base.url`, `test_mode`; **Become Superuser** for Settings users), system parameters (secrets masked), checks (HTTPS, cookie flags, security headers, database manager). |
-| **Translations** | Exports the `.pot` template and one `.po` per language for several apps (the input searches the installed modules as you type; tick them or type their names) and languages (toggles of the active ones) with Odoo's own wizard, saved straight to `Downloads/<module>/i18n/`. |
+| **Apps** | For a list of modules, typed or ticked in the list below an Odoo-like search bar (filters Installed / Not Installed, Apps / Extra, category, as facets; Installed when the panel opens): Activate (Update Apps List, then install with dependencies), Upgrade, Open Forms (Settings rights); ⟳ **Update Apps List** on its own, under the bar. |
+| **Security** | Three parts. **User**: search any user by name or login (yourself by default) and every card follows, or log in as them in an incognito window (your session stays): their groups as a tree, each under the groups implying it (try / add / remove, needs Access Rights), risk audit. **Model**: rule by rule why each operation is allowed or blocked for that user (for yourself, with the server's exact `has_access` answer next to it), ACLs, fields hidden from the user (restricted to groups), configuration audit. **Instance**: session (db, version, `web.base.url`, `test_mode`; **Become Superuser** for Settings users), system parameters (secrets masked), checks (HTTPS, cookie flags, security headers, database manager). |
+| **i18n** | **Languages** (Settings rights): activates languages and loads, or reloads, their terms for every installed app (Odoo's Add Languages wizard, Overwrite Existing Terms optional). Exports the `.pot` template and one `.po` per language for several apps (the input searches the installed modules as you type; tick them or type their names) and languages (toggles of the active ones) with Odoo's own wizard, saved straight to `Downloads/<module>/i18n/`. |
+| **Menus** | The technical screens a developer opens all day, one click away without debug mode or the Technical menu: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (the list of OCA's `developer_menu`, with nothing to install; for Access Rights managers). A click opens the screen in the Odoo page, as its menu would; ↗ in a new tab. |
 | **Perf** | Odoo's built-in server profiler: start / stop, profiled requests, SQL summary with repeated queries (N+1 suspects), slowest queries, speedscope flame graph. |
 
 Plus: click any field name, model or xmlid in the panel to copy it, and <kbd>⌥ Alt</kbd> + click a field on the Odoo
@@ -49,7 +52,7 @@ page to copy its technical name.
 <table>
   <tr>
     <td width="50%"><b>View</b>: inheritance tree and combined arch<br><img src="website/screenshots/side-view.png" alt="View tab"></td>
-    <td width="50%"><b>RPC</b>: every call with its timing<br><img src="website/screenshots/side-rpc.png" alt="RPC tab"></td>
+    <td width="50%"><b>RPC</b>: every call with its timing, edited and sent again<br><img src="website/screenshots/side-rpc.png" alt="RPC tab"></td>
   </tr>
 </table>
 
@@ -86,15 +89,17 @@ The extension is not on the Chrome Web Store yet; install it unpacked (Chrome, E
 - **Open / close**: click the round button; the panel opens beside it, on the tab you were on, scrolled where you left it. Drag the button anywhere and the panel follows it; its position is kept per Odoo instance (dropped back near the bottom edge, it sticks to it again). Nothing shows on non-Odoo sites, and the toolbar icon is greyed out there.
 - **Minimize**: <kbd>−</kbd> in the panel header hides the panel back to the round button, which reopens it as it was.
 - **Full screen**: <kbd>⤢</kbd> in the panel header, <kbd>Esc</kbd> or <kbd>⤡</kbd> to leave. The layout is an editor's: tabs in a sidebar, one header line, no card frames, short blocks side by side, the Code editor beside its result, RPC and Perf as a list with the selected row's detail on the right. The round button hides meanwhile (<kbd>−</kbd> brings it back). Open state and full screen survive page reloads.
-- **Debug mode**: click the toolbar icon; its `off` / `debug` / `assets` switch shows the page's mode and reloads Odoo in the one picked. **Keep it on for this Odoo** reopens every page of that instance in debug, unless its URL says otherwise (`?debug=0`).
+- **Its own window**: <kbd>⧉</kbd> in the panel header (or *Open the Panel in Its Own Window* in the toolbar popup, or a shortcut you set in `chrome://extensions/shortcuts`) moves the panel into a separate window, to put beside the page or on another screen: you stay on the Odoo page, and the window follows it (navigation, reloads, RPCs, ⌖ Pick on Page). The page keeps only the round button, which brings the window to the front. <kbd>⧉</kbd> in the window puts the panel back into the page; closing the Odoo tab closes its window.
+- **Panel size**: drag the panel's corner away from the button to any width and height (double-click it: back to the default), kept per Odoo. Wide enough, it takes the full-screen layout.
+- **This page**: click the toolbar icon; it shows the page's host, Odoo version and database on one line, and its Off / Debug / Assets switch shows the page's debug mode and reloads Odoo in the one picked. **Keep it on for this Odoo** reopens every page of that instance in debug, unless its URL says otherwise (`?debug=0`).
 - **Shortcuts**: <kbd>⌥ Alt</kbd>+<kbd>⇧ Shift</kbd>+<kbd>O</kbd> shows / hides the panel, <kbd>⌥ Alt</kbd>+<kbd>⇧ Shift</kbd>+<kbd>D</kbd> turns debug on / off. Change them in `chrome://extensions/shortcuts` (*Change* in the toolbar popup).
 - **Cards**: each tab is a stack of cards, closed at first; a card loads its data once opened, and open / closed cards
   stay so across reloads. Click a list row to open its details (label, storage, module, full value…), again to close.
 - **Copy**: click a field name, model, xmlid or parameter in the panel; <kbd>⌥ Alt</kbd> + click a form field, label,
-  list cell or column header on the page. Masked secret values still copy the real value.
+  list cell or column header on the page, or a tracked change in the chatter (*Draft → Sent (Status)* copies `state`). Masked secret values still copy the real value.
 - **Reload data**: <kbd>⟳</kbd>. Stable server data (session info, `fields_get`, users) is cached until the page
   reloads; ACLs, rules, views and record values are always re-read.
-- **Settings**: click the toolbar icon (or right-click → *Options*): language (English, Tiếng Việt), color theme (Odoo system / light / dark, or an editor theme: GitHub Light / Dark, Solarized Light / Dark, Dracula, Monokai, One Dark Pro, Nord, Catppuccin Mocha), show / hide the panel.
+- **Settings**: click the toolbar icon (or right-click → *Options*): language (English, Tiếng Việt), color theme (Odoo system / light / dark, or an editor theme: GitHub Light / Dark, Solarized Light / Dark, Dracula, Monokai, One Dark Pro, Nord, Catppuccin Mocha).
 
 ### Compatibility
 
@@ -119,7 +124,7 @@ analytics and sends nothing anywhere else.
 | `cookies` | Report the session cookie's flags (`Secure`, `HttpOnly`, `SameSite`) in the Security tab. The value is never read. |
 | `storage` | Language and theme settings. |
 | `clipboardWrite` | Copy field names, xmlids and values. |
-| `downloads` | Save exported `.pot` / `.po` files to `Downloads/<module>/i18n/` (Translations tab). |
+| `downloads` | Save exported `.pot` / `.po` files to `Downloads/<module>/i18n/` (i18n tab). |
 | `declarativeContent` | Enable the toolbar icon on Odoo pages only. |
 
 Odoo data only reaches the DOM through `textContent`, and the panel page can't be framed by other sites.
@@ -167,6 +172,12 @@ ODOO_VERSION=18 ODOO_MODULES=sale_management,crm ODOO_ARGS= docker compose -f e2
 npm run screenshots
 ```
 
+The intro film is recorded from the same setup: a real session with the extension, every frame Chrome paints, then edited in `tools/intro.html` (the window on a dark stage, a camera following the action, captions). It gives `website/intro.mp4`, its poster `website/intro-poster.jpg` and a 1440p master in `store/`; ffmpeg needed:
+
+```bash
+npm run intro
+```
+
 ### Project structure
 
 ```
@@ -176,13 +187,13 @@ extension/                 the extension itself: exactly what the release zip co
   i18n/                    odoo_debug.pot + en.po, vi.po (read at runtime, no build step)
   src/
     background.js          toolbar icon enabled on Odoo pages only (declarativeContent)
-    popup/                 toolbar popup = options page: language, theme, show/hide the panel
-    content/               hook.js (MAIN world, records JSON-RPC), relay.js (forwards to the panel),
-                           bubble.js (draggable button + the panel's iframe in a shadow root, ⌥/Alt+click copy)
+    popup/                 toolbar popup = options page: language, theme; the page's host, version, db, debug mode
+    content/               hook.js (MAIN world, records JSON-RPC), bubble.js (draggable button + the panel's iframe
+                           in a shadow root, forwards the recorded RPCs to it, ⌥/Alt+click copy)
     panel/                 panel.html / main.js: header, tabs, binding to the tab it is embedded in
     shared/                bridge.js (page functions, RPC, cached reads), ui.js + ui.css (DOM, widgets, styles of the panel and popup),
                            page.js (core page functions), list.js, picker.js, i18n.js, odoo.js, settings.js
-    features/<tab>/        one folder per tab: record, view, rpc, code, security, translations, apps, perf
+    features/<tab>/        one folder per tab: record, view, rpc, code, security, translations, apps, menus, perf
       <tab>.js             the tab UI: render(section, state); big ones split into a file per part (code: suggest.js, help.js)
       page.js              functions injected into the Odoo page (self-contained, no imports)
       logic.js             pure logic, no chrome.* / DOM
@@ -191,6 +202,7 @@ tests/                     *.test.mjs, one per logic module
 e2e/                       panel.e2e.mjs (Puppeteer) + compose.yml (Odoo 18 / 19 + PostgreSQL) + odoo.mjs (login, open the panel)
 tools/i18n.mjs             npm run i18n: extract strings → .pot, merge into every .po
 tools/screenshots.mjs      npm run screenshots: retake website/screenshots/*.png from a real Odoo
+tools/intro.mjs            npm run intro: record a real session, edit it in tools/intro.html → website/intro.mp4
 ```
 
 Paths below are relative to `extension/`.
@@ -241,3 +253,7 @@ If Odoo Debug saves you time, ⭐ [star it on GitHub](https://github.com/uncleca
 ## Author
 
 Made by **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
+
+## License
+
+[MIT](LICENSE) © 2026 UncleCat

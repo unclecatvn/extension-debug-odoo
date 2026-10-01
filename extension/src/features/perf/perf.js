@@ -1,8 +1,9 @@
 // Perf tab: Odoo's built-in server profiler (/web/set_profiling → ir.profile rows), read back per request.
 import { sqlSummary, appFrame } from './logic.js';
 import { pageFetch } from '../../shared/page.js';
-import { exec, rpc, call, fieldsOf } from '../../shared/bridge.js';
-import { el, pre, pill, details, empty, card, errBox, expandable, filteredList, listHead, splitRow, masterDetail } from '../../shared/ui.js';
+import { execOrThrow, rpc, call, fieldsOf } from '../../shared/bridge.js';
+import { localTime } from '../../shared/odoo.js';
+import { el, pre, pill, details, empty, card, errBox, expandable, filteredList, listHead, splitRow, masterDetail, infoTip } from '../../shared/ui.js';
 import { _t, N_ } from '../../shared/i18n.js';
 
 const COLLECTORS = 'sql,traces_async';
@@ -11,8 +12,7 @@ const short = (file) => file.replace(/^.*?\/((odoo\/)?addons\/|odoo\/)/, '$1');
 const frame = (f) => (f ? `${short(f[0])}:${f[1]} ${f[2]}()` : '');
 
 async function setProfiling(on) {
-  const r = await exec(pageFetch, `/web/set_profiling?profile=${on ? 1 : 0}&collectors=${COLLECTORS}`);
-  if (!r || r.error) throw new Error(r?.error || _t('Cannot call /web/set_profiling'));
+  const r = await execOrThrow(pageFetch, N_('Cannot call /web/set_profiling'), `/web/set_profiling?profile=${on ? 1 : 0}&collectors=${COLLECTORS}`);
   if (r.status !== 200) throw new Error(r.text.replace(/^error: /, '') || `HTTP ${r.status}`);
   return JSON.parse(r.text);
 }
@@ -44,7 +44,7 @@ export function renderPerf(s, state) {
     }, session ? _t('Stop Profiling') : _t('Start Profiling'));
     const head = el('div', { class: 'pad row' },
       pill(session ? _t('RECORDING') : _t('off'), session ? 'ok' : ''),
-      el('span', { class: 'grow muted', title: session || '' }, session ? _t('since %s', session.slice(11, 19)) : ''),
+      el('span', { class: 'grow muted', title: session || '' }, session ? _t('since %s', localTime(session)) : ''),
       btn);
     const note = el('div', { class: 'pad-bottom note mt0' }, session
       ? _t('Each request of this session writes one ir.profile row; ⟳ reloads the list.')
@@ -83,7 +83,7 @@ function profileItem(r, origin) {
     splitRow([el('span', { class: 'row grow' }, requestName(r.name)),
       pill(`${r.sql_count} SQL`, slowSql ? 'err' : ''), el('span', { class: 'ms' }, ms(r.duration))],
     el('a', { class: 'btn', href: `${origin}/web/speedscope/${r.id}`, target: '_blank', rel: 'noopener', title: _t('Flame Graph (speedscope)') }, '↗')),
-    el('div', { class: 'meta', title: r.name }, [`#${r.id}`, r.create_date?.slice(11), 'cpu_duration' in r && `CPU ${ms(r.cpu_duration)}`].filter(Boolean).join(' · ')));
+    el('div', { class: 'meta', title: r.name }, [`#${r.id}`, localTime(r.create_date), 'cpu_duration' in r && `CPU ${ms(r.cpu_duration)}`].filter(Boolean).join(' · ')));
   li.dataset.q = r.name.toLowerCase();
   return expandable(li, async () => sqlDetail(r, await call('ir.profile', 'read', [[r.id], ['sql']])));
 }
@@ -96,12 +96,12 @@ function sqlDetail(r, [p]) {
   const q = (e, extra) => expandable(el('li', {},
     el('div', { class: 'row' }, extra, el('span', { class: 'grow meta' }, frame(appFrame(e.stack))), el('span', { class: 'ms' }, ms(e.time))),
     el('div', { class: 'mono muted' }, e.query.length > 200 ? `${e.query.slice(0, 200)}…` : e.query),
-    details(_t('Full SQL + stack'), pre(e.full_query || e.query), e.stack?.length ? pre(e.stack.map(frame).join('\n')) : null)));
+    details(_t('Full SQL + Stack'), pre(e.full_query || e.query), e.stack?.length ? pre(e.stack.map(frame).join('\n')) : null)));
   return el('div', {},
     el('div', { class: 'muted' }, _t('%s queries · SQL %s / total %s · Python ≈ %s', sum.count, ms(sum.time), ms(r.duration), ms(Math.max(0, r.duration - sum.time)))),
     sum.dups.length
-      ? details(_t('Repeated queries — N+1 suspects (%s)', sum.dups.length), listHead(_t('Count · caller · time'), _t('Query')), el('ul', { class: 'list' },
+      ? details(el('span', {}, _t('Repeated Queries (%s)', sum.dups.length), ' ', infoTip(_t('The same query run several times: N+1 suspects.'))), listHead(_t('Count · caller · time'), _t('Query')), el('ul', { class: 'list' },
         sum.dups.map((g) => q({ ...g.first, time: g.time }, pill(`${g.count}×`, g.count >= 5 ? 'err' : 'med')))))
       : el('div', { class: 'okline' }, _t('✓ No repeated query.')),
-    details(_t('Slowest queries (%s)', sum.slow.length), listHead(_t('Caller · time'), _t('Query')), el('ul', { class: 'list' }, sum.slow.map((e) => q(e, null)))));
+    details(_t('Slowest Queries (%s)', sum.slow.length), listHead(_t('Caller · time'), _t('Query')), el('ul', { class: 'list' }, sum.slow.map((e) => q(e, null)))));
 }

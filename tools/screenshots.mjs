@@ -65,9 +65,20 @@ await settings({ theme: 'light' });
 await writeFile(new URL('overview.png', OUT), await diagonal(light, dark, await panelBox()));
 console.log('overview');
 
-await show('view', ['Inherited views'], ['Combined arch']);
+await show('view', ['Inherited Views'], ['Combined Arch']);
 await shot('side-view');
-await show('rpc');
+await show('rpc'); // the form's web_read, edited and sent again: its answer under the editor
+await panel.$$eval('#rpc .list > li', (lis) => lis.find((li) => li.dataset.q === 'sale.order web_read').click());
+await panel.waitForSelector('#rpc .detail .btn');
+await panel.$eval('#rpc .detail .btn', (b) => b.click()); // Edit & Resend
+await panel.$eval('#rpc .detail .composer textarea', (t) => { // a smaller specification: the answer fits beside it
+  const body = JSON.parse(t.value);
+  body.params.kwargs.specification = { name: {}, state: {}, amount_total: {}, partner_id: { fields: { display_name: {} } } };
+  t.value = JSON.stringify(body, null, 2);
+});
+await click('#rpc .detail .composer button[type=submit]');
+await panel.waitForSelector('#rpc .detail .composer .pill', { timeout: 15_000 });
+await panel.$eval('#rpc .detail .composer textarea', (t) => { t.rows = 8; }); // the answer in sight too
 await shot('side-rpc');
 
 await show('code');
@@ -84,7 +95,7 @@ await panel.waitForFunction(() => document.querySelector('#code .output table'),
 await shot('side-code');
 
 await settings({ theme: 'dark' });
-await show('security', ['User risks', 'Why allowed']);
+await show('security', ['User Risks', 'Why Allowed']);
 await shot('side-security-dark');
 await settings({ theme: 'light' });
 
@@ -92,8 +103,8 @@ await settings({ theme: 'light' });
 await full(true);
 await show('record', ['Identity', 'Fields']);
 await shot('full-record');
-await show('security', ['Groups', 'User risks', 'Why allowed']); // Groups | User risks side by side
-await panel.$eval('#security .toolbar:has(+ .groups) input', (i) => { i.value = 'sales'; i.dispatchEvent(new Event('input')); }); // a few groups, with some to add
+await show('security', ['Groups', 'User Risks', 'Why Allowed']); // Groups | User risks side by side
+await panel.$eval('#security .groups-box input[type=search]', (i) => { i.value = 'sales'; i.dispatchEvent(new Event('input')); }); // a few groups, with some to add
 await shot('full-security');
 
 // Perf: start the profiler, reload the page (the panel comes back, full screen, on this tab) so its requests are

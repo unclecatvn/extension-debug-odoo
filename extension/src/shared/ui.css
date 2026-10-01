@@ -58,6 +58,7 @@ code, pre, .mono { font-family: var(--mono); font-size: 11px; }
 .brand { display: flex; align-items: center; gap: 8px; }
 .brand strong { font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
 .spacer { flex: 1; }
+.win-btns { display: flex; gap: 2px; padding-left: 6px; border-left: 1px solid var(--line); } /* kept together, apart from ⟳ */
 /* segmented control: a sunken track, the chosen option raised on it (popup: debug mode, language) */
 .seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: var(--r); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); }
 .seg button { border: 0; background: none; padding: 3px 10px; border-radius: 6px; font-size: 11px; color: var(--muted); }
@@ -78,9 +79,6 @@ code, pre, .mono { font-family: var(--mono); font-size: 11px; }
 .tabs button.active { flex-grow: 3; color: var(--fg); font-size: 12px; font-weight: 600; background: var(--surface); box-shadow: 0 1px 2px rgb(0 0 0 / .08), 0 0 0 1px var(--line); }
 .tabs button.active::before { background: var(--accent); }
 .tabs button:focus-visible, .icon-btn:focus-visible { outline: 0; box-shadow: var(--ring); }
-.count { display: inline-block; min-width: 16px; padding: 0 5px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 10px; font-weight: 600; line-height: 16px; text-align: center; }
-.count:empty { display: none; }
-.tabs button:not(.active) .count { margin-left: -4px; } /* an icon's badge */
 /* line icons (Lucide, ISC): masks, so they take the text color */
 [data-tab=record] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/><path d='M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8M10 9H8'/></svg>"); }
 [data-tab=view] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='18' height='18' x='3' y='3' rx='2'/><path d='M3 9h18M9 21V9'/></svg>"); }
@@ -89,8 +87,11 @@ code, pre, .mono { font-family: var(--mono); font-size: 11px; }
 [data-tab=security] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/></svg>"); }
 [data-tab=translations] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6'/></svg>"); }
 [data-tab=apps] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='7' height='7' x='3' y='3' rx='1'/><rect width='7' height='7' x='14' y='3' rx='1'/><rect width='7' height='7' x='14' y='14' rx='1'/><rect width='7' height='7' x='3' y='14' rx='1'/></svg>"); }
+[data-tab=menus] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12h16M4 6h16M4 18h16'/></svg>"); }
 [data-tab=perf] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>"); }
 #refresh { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8'/><path d='M21 3v5h-5'/></svg>"); }
+#popout { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/></svg>"); }
+#popout[aria-pressed=true] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4M12 13h9v8h-9z'/></svg>"); }
 #minimize { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/></svg>"); }
 #full { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7'/></svg>"); }
 #full[aria-pressed=true] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m14 10 7-7M20 10h-6V4M3 21l7-7M4 14h6v6'/></svg>"); }
@@ -102,7 +103,6 @@ main { flex: 1; min-height: 0; overflow: auto; container-type: inline-size; } /*
 .tab > .toolbar { padding-inline: 8px; } /* a tab without cards (RPC): its filter lines up with the rows */
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; margin: 0 8px 8px; overflow: clip; } /* clip, not hidden: hidden would trap sticky toolbars */
 /* cards are <details> (see block()): the title row opens / closes them */
-details.card { margin-top: 0; }
 .card > summary { display: flex; align-items: center; gap: 8px; padding: 10px 12px; list-style: none; color: var(--fg); }
 .card > summary::-webkit-details-marker { display: none; }
 /* chevron (two borders of a square): › closed, ⌄ open */
@@ -112,6 +112,13 @@ details.card { margin-top: 0; }
 .card > summary:hover { background: var(--hover); }
 .card > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .card h3 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: -.005em; }
+/* ⓘ after a title (infoTip): its text in a popover under it, styled like the other tooltips */
+.info-tip { display: inline-grid; place-items: center; width: 16px; height: 16px; flex: none; vertical-align: -3px; color: var(--muted); cursor: help; border-radius: 50%; }
+.info-tip::before { content: ''; width: 14px; height: 14px; background: currentColor; mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 16v-4M12 8h.01'/></svg>") center / contain no-repeat; }
+.info-tip:hover, .info-tip:focus-visible { color: var(--fg); }
+.info-tip:focus-visible { outline: 0; box-shadow: var(--ring); }
+.tip { position: fixed; inset: auto; margin: 0; max-width: min(300px, calc(100vw - 16px)); padding: 4px 8px; border: 0; border-radius: 6px;
+  background: light-dark(#1f1d24, #3d3a42); color: #fff; font-size: 11px; font-weight: normal; line-height: 1.35; white-space: normal; pointer-events: none; }
 .card-body { padding: 10px 12px; }
 .card-body:has(.list, .findings, table, .verdict) { padding: 0; }
 .loading { color: var(--muted); }
@@ -121,7 +128,6 @@ details.card { margin-top: 0; }
 .note { color: var(--muted); font-size: 11px; margin: 8px 0 0; }
 /* spacing inside a padding-less .card-body (lists, tables…) */
 .pad { padding: 8px 10px; }
-.pad-top { padding: 8px 10px 0; }
 .pad-bottom { padding: 0 10px 8px; }
 .pad-x { padding: 0 10px; }
 .mt { margin-top: 6px; }
@@ -142,7 +148,7 @@ details.card { margin-top: 0; }
 .card .toolbar:has(input[type=search]) { margin: 0; padding: 8px 10px; background: var(--surface); border-bottom: 1px solid var(--line); }
 .toolbar input, .card input[type=search] { flex: 1; min-width: 0; }
 input[type=search], select { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 5px 10px; transition: border-color .15s, box-shadow .15s; }
-input[type=search]:focus, select:focus { outline: 0; box-shadow: var(--ring); border-color: var(--accent); }
+input[type=search]:focus, select:focus { outline: 0; border-color: var(--accent); } /* fields: the border only, no ring around them */
 .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
 .chip[aria-pressed=true] { background: var(--fg); color: var(--surface); border-color: var(--fg); }
 .btn { border: 1px solid var(--line); background: var(--surface); color: var(--accent); border-radius: var(--r); padding: 3px 10px; text-decoration: none; font-weight: 500; }
@@ -161,20 +167,50 @@ input[type=search]:focus, select:focus { outline: 0; box-shadow: var(--ring); bo
 .list > li:hover { background: var(--hover); }
 .list > li:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .list > li[hidden] { display: none; }
-.groups > li { cursor: default; } /* Security › Groups: the buttons act, not the row */
+/* small action buttons (Security › Groups…): one height, one shape; primary = accent text, solid = filled, danger = red on hover */
+.btn.sm { padding: 0 9px; font-size: 11px; line-height: 20px; border-radius: 6px; white-space: nowrap; }
+.btn.ghost { color: var(--muted); border-color: transparent; background: none; }
+.btn.ghost:hover { color: var(--fg); background: var(--hover); border-color: transparent; }
+.btn.solid { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn.solid:hover { background: color-mix(in srgb, var(--accent) 88%, var(--fg)); }
+.btn.danger { color: var(--muted); }
+.btn.danger:hover { color: var(--err); background: var(--err-soft); border-color: color-mix(in srgb, var(--err) 35%, var(--line)); }
+/* Security › Groups: a tree of the user's groups, the flat list while searching */
+.groups-box .toolbar .btn { flex: none; }
+.gname { overflow-wrap: anywhere; }
+.gname .cat { color: var(--muted); }
+.gtree { list-style: none; margin: 0; padding: 0; }
+.gtree.root { padding: 4px 0; }
+.gtree .gtree { margin-left: 21px; border-left: 1px solid var(--line); } /* the guide line runs under the parent's twisty */
+.gnode { display: flex; align-items: center; gap: 6px; min-height: 30px; padding: 3px 10px 3px 6px; }
+.gtree .gtree .gnode { padding-left: 8px; }
+.gnode:hover { background: var(--hover); }
+.gnode.via-try .gname { color: var(--muted); font-style: italic; } /* only there through a group being tried */
+.gnode > .grow { flex: 1; }
+.gnode .pill[hidden] { display: none; } /* +N: only on a folded branch */
+/* Remove on every row is noise: it shows on the row under the pointer or the keyboard (a touch screen keeps it) */
+@media (hover: hover) { .gnode .btn.danger { opacity: 0; } .gnode:hover .btn.danger, .gnode:focus-within .btn.danger { opacity: 1; } }
+.gnode.branch { cursor: pointer; } /* a click anywhere on it opens its implied groups */
+.twisty { flex: none; width: 18px; height: 18px; padding: 0; border: 0; border-radius: 4px; background: none; display: grid; place-items: center; }
+button.twisty::before { content: ''; width: 5px; height: 5px; border: solid var(--muted); border-width: 0 1.5px 1.5px 0; transform: rotate(-45deg); transition: transform .15s; }
+button.twisty[aria-expanded=true]::before { transform: rotate(45deg); }
+button.twisty:hover { background: var(--hover); }
+button.twisty:focus-visible { outline: 0; box-shadow: var(--ring); }
+.groups > li { cursor: default; } /* the buttons act, not the row */
 .list.groups > li:not([hidden]) { display: block; } /* one line per group, button at the right edge, also in full screen (no 2-column table) */
-.groups > li.addable > .row > .grow { color: var(--muted); } /* a group the user doesn't have */
+.groups > li.addable .gname { color: var(--muted); } /* a group the user doesn't have */
 .groups > li > .row { align-items: center; }
-.groups .chip { padding: 0 8px; font-size: 11px; line-height: 16px; } /* as tall as the implied pill: even rows */
-.trybar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--accent-soft); font-size: 11px; } /* Security › Groups: tried groups, not written yet */
-.groups > li.trying .pill { margin-left: 6px; }
-.trybar .chip, .fix .chip { padding: 0 8px; font-size: 11px; line-height: 16px; }
+.groups > li .pill { margin-left: 6px; }
+.groups-box .note { margin: 0; border-top: 1px solid var(--line); }
+.menus .row.split { align-items: center; } /* Menus: a one-line label, ↗ level with it */
+.trybar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--accent-soft); font-size: 11px; } /* tried groups, not written yet */
+.fix .chip { padding: 0 8px; font-size: 11px; line-height: 16px; }
 .verdict .fix { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 4px; font-size: 11px; color: var(--muted); } /* the groups that would allow a blocked mode */
 /* Rows wrap instead of overflowing: long names, labels and pills move to the next line, nothing is cut. */
 .row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; min-width: 0; }
 .name { font-family: var(--mono); font-size: 11px; font-weight: 600; overflow-wrap: anywhere; }
 /* splitRow(): info wraps on the left, the action buttons keep the right column (top-aligned) on every row */
-.row.master-detail { flex-wrap: nowrap; align-items: flex-start; gap: 8px; }
+.row.split { flex-wrap: nowrap; align-items: flex-start; gap: 8px; }
 .actions { flex: none; display: flex; gap: 4px; align-items: center; }
 /* tree mark + name side by side: a long name wraps inside, the mark never sits alone on its line */
 .name.tree { display: inline-flex; gap: 4px; min-width: 0; }
@@ -244,20 +280,17 @@ tr.mine td { background: var(--ok-soft); }
 .verdict .why { color: var(--muted); font-size: 11px; overflow-wrap: anywhere; } /* long model / xmlid names */
 .verdict .allow { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); box-shadow: inset 3px 0 var(--ok); }
 .verdict .deny { border-color: color-mix(in srgb, var(--err) 45%, var(--line)); box-shadow: inset 3px 0 var(--err); }
-.verdict + .list { border-top: 1px solid var(--line); }
 
 pre { margin: 0; padding: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); white-space: pre-wrap; word-break: break-word; max-height: 50vh; overflow: auto; }
 details { margin-top: 6px; }
 summary { cursor: pointer; color: var(--muted); padding: 2px 0; }
 summary:hover { color: var(--fg); }
-.card-body > details:first-child { margin-top: 0; }
-/* forms (Translations tab) */
+/* forms (Translations, Apps) */
 .form label { display: flex; flex-direction: column; gap: 3px; font-weight: 600; }
 .form input[type=text] { font-weight: normal; font-family: var(--mono); font-size: 11px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 6px 10px; }
-.form input[type=text]:focus { outline: 0; box-shadow: var(--ring); border-color: var(--accent); }
+.form input[type=text]:focus { outline: 0; border-color: var(--accent); }
 .form .note { margin-top: 3px; }
 .btn:disabled { opacity: .5; cursor: progress; }
-.pad + .list { border-top: 1px solid var(--line); }
 .steps { list-style: none; margin: 10px 0 0; padding: 0; }
 .steps li { padding: 4px 0; border-top: 1px solid var(--line); }
 .steps .meta { white-space: pre-line; }
@@ -290,8 +323,15 @@ body.popup { width: 320px; height: auto; display: block; padding-bottom: 14px; b
 .pop-label { color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
 .popup .seg { display: flex; }
 .popup .seg button { flex: 1; padding: 5px 8px; font-size: 12px; }
-.popup .row > .btn { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
-.popup #host { color: var(--fg); }
+/* "This page": host, version, db on one line, each after its icon; the host gives way first when it doesn't fit */
+.popup .one-line { display: flex; gap: 12px; color: var(--fg); white-space: nowrap; overflow: hidden; }
+.popup .info { display: inline-flex; align-items: center; gap: 4px; min-width: 0; flex: none; }
+.popup .info:first-child { flex: 0 1 auto; }
+.popup .info > span { overflow: hidden; text-overflow: ellipsis; }
+.popup .info::before { content: ''; flex: none; width: 12px; height: 12px; background: var(--muted); mask: var(--icon) center / contain no-repeat; }
+[data-info=host] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20'/></svg>"); }
+[data-info=version] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z'/><circle cx='7.5' cy='7.5' r='1'/></svg>"); }
+[data-info=db] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='5' rx='9' ry='3'/><path d='M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0'/></svg>"); }
 .pop-select { width: 100%; padding: 5px 8px; font-size: 12px; }
 .pop-check { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; cursor: pointer; }
 #shortcuts { color: var(--muted); font-size: 12px; }
@@ -322,7 +362,7 @@ body.popup { width: 320px; height: auto; display: block; padding-bottom: 14px; b
 /* Editor: a transparent textarea over a <pre> with the same text in colours. Lines wrap: both layers must break them at
    the same places, so they share font, padding, wrapping and the scrollbar's room. Line numbers: ::before of each line. */
 .editor { display: flex; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r); }
-.editor:focus-within { box-shadow: var(--ring); border-color: var(--accent); }
+.editor:focus-within { border-color: var(--accent); }
 .writes-on .editor { border-color: var(--warn); }
 .editor-body { --gut: calc(var(--digits, 2) * 1ch + 14px); position: relative; flex: 1; min-width: 0; font: 11px/1.5 var(--mono);
   background: linear-gradient(to right, var(--surface) var(--gut), var(--line) var(--gut) calc(var(--gut) + 1px), transparent 0);
@@ -378,9 +418,9 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .suggest li .name { white-space: nowrap; }
 .suggest li .muted { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .suggest li[aria-selected=true] { background: var(--accent-soft); }
-/* Translations tab: installed modules to tick, scrolling inside the form */
+/* Translations, Apps: installed modules to tick, scrolling inside the form */
 .module-picker { margin-top: 4px; }
-.picker-head { flex-wrap: nowrap; align-items: center; gap: 8px; }
+.picker-head { flex-direction: column; align-items: stretch; gap: 4px; } /* the input (or search bar) its whole width, the count under it */
 .row.fill { flex-wrap: nowrap; gap: 8px; }
 .row.fill > .btn { flex: 1; text-align: center; padding: 8px 10px; font-size: 13px; font-weight: 600; } /* the whole width, easy to hit */
 /* Apps, Translations: the module list takes the height the panel has left, the buttons stay at its bottom (short panel: main scrolls) */
@@ -389,18 +429,28 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 :is(#apps, #translations) :is(.card-body, .card-body > .pad, .form) { flex: 1; min-height: 0; display: flex; flex-direction: column; }
 :is(#apps, #translations) .module-picker { flex: 1; min-height: 160px; display: flex; flex-direction: column; }
 :is(#apps, #translations) .module-picker .list { flex: 1; min-height: 0; max-height: none; }
+#translations > details.card { flex: none; display: block; margin-bottom: 8px; } /* Activate / Update Languages: above the export, as tall as its content */
+.form label.check { flex-direction: row; align-self: flex-start; align-items: center; gap: 6px; }
 .chip:disabled { cursor: default; opacity: .85; } /* Translations: the template chip, always on */
 /* Translations: many active languages scroll inside two rows of chips instead of squeezing the module list */
 .langs { max-height: 58px; overflow-y: auto; align-items: center; }
-/* Apps: Odoo's search bar, the filters as facets inside it and ▾ opening them */
-.searchbar { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 2px 2px 2px 6px;
-  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
-.searchbar:focus-within { box-shadow: var(--ring); border-color: var(--accent); }
+/* Apps: Odoo's search bar, the filters as facets inside it and ▾ opening them. It wraps as Odoo's does: the facets first,
+   the input on the next line when they fill one; ▾ on the right, as tall as the bar. */
+.searchbar { position: relative; display: flex; align-items: stretch; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; }
+.search-main { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 3px 4px; }
+.searchbar:focus-within { border-color: var(--accent); }
 .searchbar .facets { display: contents; }
-.facet { display: inline-flex; align-items: center; gap: 2px; padding: 1px 2px 1px 6px; border-radius: 4px; background: var(--accent-soft); color: var(--accent); font-size: 11px; font-weight: 600; white-space: nowrap; }
-.facet-x { border: 0; background: none; color: inherit; padding: 0 3px; line-height: 1; cursor: pointer; }
-.form .searchbar input[type=text] { flex: 1; min-width: 90px; border: 0; background: none; outline: none; padding: 4px 2px; }
-.search-toggle { align-self: stretch; min-height: 26px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--muted); padding: 0 10px; cursor: pointer; } /* ▾: easy to hit */
+/* a facet: coloured label (field name, or a funnel for a filter) | values joined by an italic "or" | × */
+.facet { display: inline-flex; align-items: stretch; max-width: 100%; border: 1px solid var(--line); border-radius: 4px; background: var(--surface);
+  color: var(--fg); font-size: 11px; line-height: 20px; white-space: nowrap; overflow: hidden; }
+.facet-label { flex: none; display: grid; place-items: center; min-width: 22px; padding: 0 6px; background: var(--accent); color: var(--on-accent); font-weight: 600; }
+.facet-label.filter::before { content: ''; width: 11px; height: 11px; background: currentColor; mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M3 4h18l-7 8.5V19l-4 2v-8.5z' fill='black'/></svg>") center / contain no-repeat; }
+.facet-values { min-width: 0; overflow: hidden; text-overflow: ellipsis; padding-left: 8px; }
+.facet-values em { margin: 0 4px; color: var(--muted); }
+.facet-x { flex: none; border: 0; background: none; color: var(--muted); padding: 0 8px; line-height: 1; cursor: pointer; }
+.facet-x:hover { color: var(--fg); }
+.form .searchbar input[type=text] { flex: 1; min-width: 120px; border: 0; background: none; outline: none; padding: 4px 2px; }
+.search-toggle { flex: none; min-height: 28px; border: 0; border-left: 1px solid var(--line); background: none; color: var(--muted); padding: 0 10px; cursor: pointer; } /* ▾: easy to hit */
 .search-toggle[aria-expanded=true] { color: var(--accent); background: var(--accent-soft); }
 .search-panel { position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 3; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
   padding: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
@@ -413,14 +463,27 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .search-item:hover { background: var(--hover); }
 .search-item[aria-pressed=true] { color: var(--accent); font-weight: 600; }
 .search-item[aria-pressed=true]::before { content: '✓ '; }
-.picker-head > input { flex: 1; min-width: 0; }
-.count-note { font-weight: normal; }
-.searchbar .count-note { font-size: 11px; white-space: nowrap; }
+/* a filter's count (n/total): on its own line under the input, on the right, so the input gets the whole width */
+.count-note { font-size: 11px; font-weight: normal; }
+.picker-head > .count-note { align-self: flex-end; }
+/* Apps: ⟳ Update Apps List on the left of the count */
+.picker-head > .count-line { align-self: flex-end; display: flex; align-items: center; gap: 8px; }
+.chip.update-list { display: inline-flex; align-items: center; gap: 4px; padding: 0 8px; font-size: 11px; line-height: 18px; }
+.chip.update-list::before { content: ''; width: 11px; height: 11px; background: currentColor; mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8'/><path d='M21 3v5h-5'/></svg>") center / contain no-repeat; }
+.toolbar > .count-note { flex-basis: 100%; margin-top: -2px; text-align: right; }
 .module-picker .list { max-height: 240px; overflow: auto; border: 1px solid var(--line); border-radius: 6px; }
 .module-picker label.pick { flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 6px; cursor: pointer; font-weight: normal; }
-.module-picker label.pick > .name { flex: none; }
-.module-picker label.pick > .muted { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* one line per module */
+.module-picker label.pick > .pick-text { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 16px; } /* one line per module, as tall as a .pill */
+.module-picker .pick-text .muted { margin-left: 6px; }
+.module-picker .pick-text :is(.name, .muted) { vertical-align: top; } /* two fonts on one baseline would make the line 17px, not the pill's 16 */
 .module-picker .list > li:not([hidden]) { display: block; } /* one line even in the wide 2-column layout */
+/* hover: the cut name + title show whole, drawn over the version (on the row's colour, opaque), under ↗ which stays usable;
+   the label clips them at the row's end, so the list never scrolls sideways */
+.module-picker label.pick { overflow: hidden; }
+.module-picker li:hover label.pick > .pick-text { overflow: visible; text-overflow: clip; position: relative; z-index: 1; }
+.module-picker li:hover .pick-text > span { display: inline-block; vertical-align: top; padding-right: 6px; border-radius: 4px; /* a block the version pill's height, centred like it */
+  background: linear-gradient(var(--hover), var(--hover)), var(--surface); }
+.module-picker li:hover label.pick > a { position: relative; z-index: 2; background-color: var(--surface); }
 
 /* masterDetail() (RPC, Perf): the pane beside the list only exists on a wide panel; narrow, rows unfold in place */
 .master-detail > .pane { display: none; }
@@ -438,8 +501,6 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
   .tabs { grid-area: nav; flex-direction: column; gap: 2px; margin: 0; padding: 12px 10px; overflow-y: auto; border-radius: 0; background: var(--bg); box-shadow: none; border-right: 1px solid var(--line); }
   .tabs button { flex: none; justify-content: flex-start; gap: 10px; height: 34px; padding: 0 10px; font-size: 13px; transition: none; }
   .tabs button.active { flex: none; font-size: 13px; font-weight: 500; }
-  .tabs button:hover:not(.active) { background: var(--hover); }
-  .tabs .count, .tabs button:not(.active) .count { margin-left: auto; }
   main { grid-area: main; background: var(--bg); }
 
   /* content: a grey canvas, each block a white panel (rounded, hairline border), tables inside with a tinted header row */
@@ -457,13 +518,11 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
   .card h3 { font-size: 13px; }
   .card-body { padding: 14px 16px; }
   .pad { padding: 12px 16px; }
-  .pad-top { padding: 12px 16px 0; }
   .pad-bottom { padding: 0 16px 12px; }
   .pad-x { padding: 0 16px; }
   .card .toolbar:has(input[type=search]) { padding: 10px 16px; }
   .list > li, .findings li { padding: 9px 16px; }
   .okline { padding: 12px 16px; }
-  .list > li:first-child { border-top: 0; }
   .list-head { padding: 8px 16px; background: color-mix(in srgb, var(--fg) 3%, var(--surface)); color: var(--muted); font-size: 11px; font-weight: 600;
     text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--line); }
   .list-head > span + span, .list > li > :not(.row, .detail) { border-left: 0; }

@@ -1,4 +1,4 @@
-// Pure helpers, no chrome.* / DOM: tested by the *.test.mjs next to this file.
+// Pure helpers, no chrome.* / DOM: tested by tests/rpc.test.mjs.
 
 /** Raw entry from hook.js → RPC log entry (request + response parsed), or null if it isn't an Odoo RPC. */
 export function parseRpc(raw) {

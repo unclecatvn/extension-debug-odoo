@@ -2,7 +2,8 @@
 import { parseRpc, parseRpcResponse, prettyJson, toCurl } from './logic.js';
 import { pageRpcLog, pageSend } from './page.js';
 import { exec, sessionInfo } from '../../shared/bridge.js';
-import { $, el, pre, errBox, pill, details, empty, expandable, listHead, masterDetail, copyText, WIDE } from '../../shared/ui.js';
+import { localTime } from '../../shared/odoo.js';
+import { el, pre, errBox, pill, details, empty, expandable, listHead, masterDetail, copyText, WIDE } from '../../shared/ui.js';
 import { _t } from '../../shared/i18n.js';
 
 const MAX = 300;
@@ -21,7 +22,7 @@ export function mountRpc(section, whyBlocked, page) {
     errBtn.setAttribute('aria-pressed', onlyErrors);
     for (const li of rows.children) applyFilter(li);
   });
-  const clear = el('button', { class: 'chip', onclick: () => { rows.replaceChildren(); rows.pane.replaceChildren(rows.pane.hint); count(); } }, _t('Clear'));
+  const clear = el('button', { class: 'chip', onclick: () => { rows.replaceChildren(); rows.pane.replaceChildren(rows.pane.hint); showEmpty(); } }, _t('Clear'));
   // New Request: a card above the log, a search_read on the page's model to start from
   const draft = el('div', {});
   const toggleDraft = () => {
@@ -50,7 +51,7 @@ function item(e) {
     el('div', { class: 'row' }, el('span', { class: 'dot' }), el('span', { class: 'name' }, e.method),
       el('span', { class: 'grow muted' }, e.model), e.error ? pill(denied ? '🔒 AccessError' : e.errorType?.split('.').pop() || _t('error'), 'err') : null,
       el('span', { class: 'ms' }, `${e.ms} ms`)),
-    el('div', { class: 'meta' }, `${(e.at || '').slice(11, 19)} · ${e.path}`));
+    el('div', { class: 'meta' }, `${localTime(e.at)} · ${e.path}`));
   li.dataset.q = `${e.model} ${e.method}`.toLowerCase();
   // detail: the actions, then the request (Parameters), then the answer (Result, or the error first). Edit & Resend turns the
   // request into its editor in place, which has its own Copy as cURL (of what is typed).
@@ -120,10 +121,8 @@ function curlBtn(req) {
   return b;
 }
 
-function count() {
-  const n = rows.children.length;
-  $('#rpc-count').textContent = n || '';
-  emptyMsg.hidden = n > 0;
+function showEmpty() {
+  emptyMsg.hidden = rows.children.length > 0;
 }
 
 /** raw: an entry of hook.js, as an object (page buffer) or its JSON text (live message). */
@@ -133,7 +132,7 @@ export function addRpc(raw) {
   if (!e) return;
   rows.prepend(item(e)); // newest first
   if (rows.children.length > MAX) rows.lastElementChild.remove();
-  count();
+  showEmpty();
 }
 
 /** Fills the log with what the page recorded before the panel opened. */
@@ -141,5 +140,5 @@ export async function reloadRpc() {
   const buf = await exec(pageRpcLog);
   rows.replaceChildren(); // after the await: live messages received meanwhile are in the buffer too
   if (Array.isArray(buf)) for (const raw of buf) addRpc(raw);
-  count();
+  showEmpty();
 }

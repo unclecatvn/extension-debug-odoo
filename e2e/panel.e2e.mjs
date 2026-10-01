@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { test, before, after } from 'node:test';
 import puppeteer from 'puppeteer';
-import { EXT, rpc, openForm, openPanel } from './odoo.mjs';
+import { ODOO, EXT, rpc, openForm, openPanel } from './odoo.mjs';
 
 const ext = (s) => String(s).includes('chrome-extension://');
 // element.click(), not a mouse click: Puppeteer misplaces those in an iframe inside a closed shadow root
@@ -76,23 +76,30 @@ test('Security tab: another user is found by login and picked, then back to mine
   await panel.waitForFunction(() => document.querySelector('#security .user-line b')?.textContent !== 'E2E Demo' && !document.querySelector('#security .picker .chip'), { timeout: 15_000 });
 });
 
-test('Security tab: a group is tried, applied to the user, then removed', async () => {
+test('Security tab: a group is found, tried, applied to the user, then removed from the tree', async () => {
   await click('.tabs [data-tab="security"]');
   await panel.evaluate(() => { window.confirm = () => true; });
   await panel.$$eval('#security details.card', (cs) => { cs.find((c) => c.querySelector('h3').textContent === 'Groups').open = true; });
-  // the button of the row `name` among `sel` rows, once it shows (the card re-renders after each write)
-  const press = (sel, name) => panel.waitForFunction((sel, n) => {
-    const li = [...document.querySelectorAll(`#security .groups > li${sel}`)].find((l) => !l.hidden && l.querySelector('.grow').textContent === n);
-    return li && (li.querySelector('button').click(), true);
-  }, { timeout: 15_000 }, sel, name);
-  await panel.waitForSelector('#security .groups');
-  const name = await panel.$eval('#security .groups > li.addable .grow', (n) => n.textContent); // a group the user doesn't have
-  await panel.$eval('#security .toolbar:has(+ .groups) input', (i, n) => { i.value = n; i.dispatchEvent(new Event('input')); }, name); // groups to add show while filtering
-  await press('.addable', name); // Try: simulated, nothing written yet
+  const search = '#security .groups-box input[type=search]';
+  await panel.waitForSelector(search);
+  const find = async (q) => (await panel.waitForSelector(search)).evaluate((i, q) => { i.value = q; i.dispatchEvent(new Event('input')); }, q); // the card may re-render meanwhile
+  // the button `btn` of the row `name` among `sel` rows, once it shows (the card re-renders after each write)
+  const press = (sel, name, btn = '.btn') => panel.waitForFunction((sel, n, btn) => {
+    const row = [...document.querySelectorAll(`#security ${sel}`)].find((r) => r.checkVisibility() && r.querySelector('.gname').textContent === n);
+    return row?.querySelector(btn) && (row.querySelector(btn).click(), true);
+  }, { timeout: 15_000 }, sel, name, btn);
+  await find('a'); // typing: the flat list, the groups the user doesn't have too
+  const name = await panel.$eval('#security .groups-box', (b) => b.querySelector('.gtree.root').hidden && b.querySelector('.groups > li.addable:not([hidden]) .gname').textContent);
+  assert.ok(name, 'the tree makes way for the list');
+  await find(name);
+  await press('.groups > li.addable', name); // Try: simulated, nothing written yet
   await panel.waitForSelector('#security .trybar');
-  await panel.$eval('#security .trybar .chip', (b) => b.click()); // Apply
-  await press(':not(.addable):not(.trying)', name); // added: the user's now, and nothing else implies it
-  await panel.waitForFunction((n) => [...document.querySelectorAll('#security .groups > li.addable .grow')].some((g) => g.textContent === n), { timeout: 15_000 }, name);
+  await (await panel.waitForSelector('#security .trybar .btn.solid')).click(); // Apply
+  // the user's now, at the top of the tree (nothing else implies it): Remove. Not any button: until Apply's write is back,
+  // the row is still the tried one, whose button is × Stop trying
+  await press('.gtree.root > li > .gnode', name, '.btn.danger');
+  await find(name);
+  await panel.waitForFunction((n) => [...document.querySelectorAll('#security .groups > li.addable .gname')].some((g) => g.textContent === n), { timeout: 15_000 }, name);
 });
 
 test('RPC tab: the calls the webclient made to load the form are listed', async () => {
@@ -114,6 +121,7 @@ test('RPC tab: a call is edited and sent again, a new request is sent, the answe
   await panel.$eval('#rpc .detail .btn', (b) => b.click()); // Edit & Resend
   const body = JSON.parse(await panel.$eval('#rpc .detail .composer textarea', (t) => t.value));
   assert.equal(body.params.method, 'web_read', 'the body as sent');
+  assert.equal(await panel.$eval('#rpc .detail .composer textarea', (t) => t.spellcheck), false, 'no spelling squiggles under JSON');
   assert.equal(await panel.$eval('#rpc .list > li:has(.composer)', (li) => li.classList.contains('open')), true, 'the row stays open');
   assert.deepEqual(await panel.$$eval('#rpc .detail:has(.composer) summary', (ss) => ss.map((n) => n.textContent)), ['Result'], 'the editor replaces the parameters');
   body.params.kwargs.specification = { login: {} };
@@ -129,12 +137,31 @@ test('RPC tab: a call is edited and sent again, a new request is sent, the answe
   await panel.$eval('#rpc .detail .composer textarea', (t, v) => { t.value = v; }, JSON.stringify(body));
   await panel.$$eval('#rpc .detail .composer .btn', (bs) => bs.find((b) => b.textContent === 'Copy as cURL').click());
   const curl = await panel.waitForFunction(() => window.copied, { timeout: 5_000 }).then((h) => h.jsonValue());
-  assert.match(curl, /^curl 'http:\/\/localhost:8069\/jsonrpc'/);
+  assert.ok(curl.startsWith(`curl '${ODOO}/jsonrpc'`), curl);
   assert.match(curl, /"execute_kw","args":\["e2e",2,"'"\$ODOO_API_KEY"'","res.users","web_read",\[\[2\]\]/);
 
   await panel.$$eval('#rpc .toolbar .chip', (bs) => bs.find((b) => b.textContent === 'New Request').click());
   const fresh = await send('#rpc .rpc-draft .composer', JSON.stringify({ jsonrpc: '2.0', params: { model: 'res.users', method: 'nope', args: [], kwargs: {} } }));
   assert.equal(fresh.pill, 'AttributeError');
+});
+
+test('RPC tab: a call the page makes while the panel is open is added, newest first', async () => {
+  await click('.tabs [data-tab="rpc"]');
+  const before = await panel.$$eval('#rpc .list > li', (ls) => ls.length);
+  await rpc(page, '/web/session/get_session_info', {});
+  await panel.waitForFunction(() => document.querySelector('#rpc .list .name')?.textContent === '/web/session/get_session_info', { timeout: 15_000 });
+  assert.equal(await panel.$$eval('#rpc .list > li', (ls) => ls.length), before + 1, 'listed once');
+});
+
+test('View tab: ⌖ Pick on Page, then a click on a field of the form, shows that field', async () => {
+  await click('.tabs [data-tab="view"]');
+  const pick = () => [...document.querySelectorAll('#view button')].find((b) => b.textContent === '⌖ Pick on Page');
+  await panel.$$eval('#view details.card', (cards) => cards.forEach((c) => { c.open = true; }));
+  await panel.waitForFunction(pick, { timeout: 30_000 });
+  await panel.evaluate(`(${pick})().click()`);
+  await page.waitForFunction(() => window.__odooDebugPick);
+  await page.click('.o_form_view .o_field_widget[name="login"]');
+  await panel.waitForFunction(() => [...document.querySelectorAll('#view input[type="search"]')].some((i) => i.value === 'login'), { timeout: 15_000 });
 });
 
 test('Code tab: a search runs as the logged-in user, writes are blocked by default', async () => {
@@ -244,13 +271,14 @@ test('Code tab: a pick replaces the word, also after a skipped closer and under 
 test('Translations tab: one input searches the installed modules and holds the ticked ones', async () => {
   await click('.tabs [data-tab="translations"]');
   await panel.waitForSelector('#translations .module-picker li');
-  const state = () => panel.$eval('#translations', (s) => ({
+  const EXPORT = '#translations > div.card'; // the untitled export card, not the Languages card above it
+  const state = () => panel.$eval(EXPORT, (s) => ({
     apps: s.querySelector('form input[type=text]').value,
     shown: [...s.querySelectorAll('.module-picker li:not([hidden])')].map((li) => li.dataset.name),
     ticked: [...s.querySelectorAll('.module-picker li input:checked')].map((b) => b.closest('li').dataset.name),
   }));
-  const type = (v) => panel.$eval('#translations form input[type=text]', (i, v) => { i.value = v; i.dispatchEvent(new Event('input')); }, v);
-  const key = (k) => panel.$eval('#translations form input[type=text]', (i, k) => i.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })), k);
+  const type = (v) => panel.$eval(`${EXPORT} form input[type=text]`, (i, v) => { i.value = v; i.dispatchEvent(new Event('input')); }, v);
+  const key = (k) => panel.$eval(`${EXPORT} form input[type=text]`, (i, k) => i.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true })), k);
   const tick = (name) => panel.$eval(`#translations .module-picker li[data-name="${name}"] input`, (b) => b.click());
 
   await type('web; base_imp');
@@ -264,18 +292,32 @@ test('Translations tab: one input searches the installed modules and holds the t
   await type('web; base_import; base_setu');
   await key('Enter');
   assert.equal((await state()).apps, 'web; base_import; base_setup; ', 'Enter picks the match, no export');
-  assert.equal(await panel.$eval('#translations .steps', (u) => u.childElementCount), 0);
+  assert.equal(await panel.$eval(`${EXPORT} .steps`, (u) => u.childElementCount), 0);
 
   await tick('web');
   assert.equal((await state()).apps, 'base_import; base_setup; ', 'unticking removes it');
 
   // languages are toggles; the button says how many files it will download (template + one .po per language, per app)
-  const button = () => panel.$eval('#translations button[type=submit]', (b) => b.textContent);
+  const button = () => panel.$eval(`${EXPORT} button[type=submit]`, (b) => b.textContent);
   assert.equal(await button(), 'Export & Download · 2 files');
-  await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.click());
-  assert.equal(await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.getAttribute('aria-pressed')), 'true');
+  await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.click());
+  assert.equal(await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.getAttribute('aria-pressed')), 'true');
   assert.equal(await button(), 'Export & Download · 4 files');
-  await panel.$eval('#translations .langs .chip:not(:disabled)', (c) => c.click()); // back off
+  await panel.$eval(`${EXPORT} .langs .chip:not(:disabled)`, (c) => c.click()); // back off
+});
+
+test('Translations tab: Languages card, the active languages as chips that toggle their code in the field', async () => {
+  const CARD = '#translations details.card[data-key="add-langs"]';
+  await panel.$eval(CARD, (d) => { d.open = true; }); // opened by an earlier test, and remembered: open it anyway
+  await panel.waitForSelector(`${CARD} form input[type=text]`);
+  const field = () => panel.$eval(`${CARD} form input[type=text]`, (i) => i.value);
+  const chip = () => panel.$eval(`${CARD} .chip`, (c) => { c.click(); return [c.textContent, c.getAttribute('aria-pressed')]; });
+  await panel.$eval(`${CARD} form input[type=text]`, (i) => { i.value = ''; i.dispatchEvent(new Event('input')); });
+  const [code, pressed] = await chip();
+  assert.equal(pressed, 'true');
+  assert.equal(await field(), code);
+  assert.deepEqual(await chip(), [code, 'false']);
+  assert.equal(await field(), '');
 });
 
 test('Apps tab: Odoo\'s filters (Installed by default), the word being typed searches inside them', async () => {
@@ -290,7 +332,7 @@ test('Apps tab: Odoo\'s filters (Installed by default), the word being typed sea
     if (bar.querySelector('.search-panel').hidden) bar.querySelector('.search-toggle').click();
     [...bar.querySelectorAll('.search-item')].find((b) => b.textContent.replace('✓ ', '') === label).click();
   }, label);
-  const facets = () => panel.$$eval('#apps .searchbar .facet', (fs) => fs.map((f) => f.firstChild.textContent));
+  const facets = () => panel.$$eval('#apps .searchbar .facet-values', (fs) => fs.map((f) => [...f.childNodes].map((n) => n.textContent).join(' ')));
 
   await type('');
   const installed = await shown();
@@ -314,6 +356,26 @@ test('Apps tab: Odoo\'s filters (Installed by default), the word being typed sea
   assert.ok((await shown()).some((m) => m.name === 'crm_sms'), 'a ticked module shows whatever the filters');
 });
 
+test('Apps tab: ⟳ Update Apps List beside the count draws the list again, the filters kept', async () => {
+  await click('.tabs [data-tab="apps"]');
+  await panel.waitForSelector('#apps .count-line .update-list');
+  await panel.$eval('#apps .update-list', (b) => b.click());
+  await panel.waitForFunction(() => /updated/.test(document.querySelector('#apps .steps .pill.ok')?.textContent || ''), { timeout: 120_000 });
+  assert.equal(await panel.$eval('#apps .steps li', (li) => li.firstChild.textContent), 'Update Apps List');
+  assert.deepEqual(await panel.$$eval('#apps .facet', (fs) => fs.map((f) => f.title)), ['Installed'], 'the filters are kept');
+});
+
+test('Menus tab: a click opens the technical screen in the Odoo page, as its menu would', async () => {
+  await click('.tabs [data-tab="menus"]');
+  await panel.waitForSelector('#menus .menus li');
+  assert.equal(await panel.$eval('#menus .menus li a', (a) => new URL(a.href).pathname), '/odoo/action-base.action_model_model', '↗: the same screen in a new tab');
+  await panel.$$eval('#menus .menus li', (lis) => lis.find((li) => li.querySelector('.grow > span').textContent === 'Record Rules').click());
+  await page.waitForFunction(() => document.querySelector('.o_list_view') && document.querySelector('.o_breadcrumb')?.textContent.includes('Record Rules'), { timeout: 30_000 });
+  await panel.waitForFunction(() => document.querySelector('#status')?.textContent.includes('ir.rule'), { timeout: 15_000 });
+  await page.goBack(); // the user form again, for what follows (not a page load: the panel stays)
+  await page.waitForSelector('.o_form_view');
+});
+
 test('every tab is in sight: the tab strip wraps instead of scrolling', async () => {
   const hidden = await panel.$$eval('.tabs button', (bs) => {
     const nav = bs[0].parentElement.getBoundingClientRect();
@@ -322,13 +384,57 @@ test('every tab is in sight: the tab strip wraps instead of scrolling', async ()
   assert.deepEqual(hidden, []);
 });
 
-test('toolbar popup: the debug mode of the page, switched from there', async () => {
+test('the panel is resized from its free corner, keeps that size after a reload, double-click: the default size', async () => {
+  const box = async () => (await panel.frameElement()).boundingBox();
+  const before = await box(); // beside the button at the bottom right: it grows from its top left corner
+  await page.mouse.move(before.x + 5, before.y + 5);
+  await page.mouse.down();
+  await page.mouse.move(before.x - 95, before.y - 45, { steps: 5 });
+  await page.mouse.up();
+  const after = await box();
+  assert.deepEqual([after.width - before.width, after.height - before.height], [100, 50]);
+  assert.equal(Math.round(after.x + after.width), Math.round(before.x + before.width), 'its side on the button stays put');
+  await page.reload();
+  await page.waitForSelector('.o_form_view');
+  panel = await page.waitForFrame((f) => f.url().endsWith('/src/panel/panel.html'), { timeout: 15_000 }); // reopened after a reload
+  await panel.waitForFunction(() => document.querySelector('#status')?.textContent.includes('res.users'), { timeout: 15_000 });
+  assert.equal((await box()).width, after.width, 'kept');
+  const b = await box();
+  await page.mouse.click(b.x + 5, b.y + 5, { count: 2 });
+  assert.equal((await box()).width, before.width, 'default again');
+});
+
+test('Security tab: a click on a group opens the groups it implies, Expand all opens every branch', async () => {
+  await click('.tabs [data-tab="security"]');
+  await panel.$$eval('#security details.card', (cs) => { cs.find((c) => c.querySelector('h3').textContent === 'Groups').open = true; });
+  // through waitForSelector: the card may re-render meanwhile (the branches opened stay open)
+  const $ = (sel) => panel.waitForSelector(`#security ${sel}`, { timeout: 15_000 });
+  const tap = async (sel) => (await $(sel)).evaluate((b) => b.click());
+  const opened = async () => (await $('.gtree.root')).evaluate((t) => t.querySelectorAll('.twisty[aria-expanded=true]').length);
+  const all = '.groups-box .toolbar .btn';
+  if (await (await $(all)).evaluate((b) => b.dataset.open === '1')) await tap(all); // a rerun: start folded
+  assert.equal(await opened(), 0, 'folded');
+  const first = '.gtree.root > li:has(> .gnode.branch)'; // admin: Settings implies others
+  assert.match(await (await $(`${first} > .gnode > .pill:not([hidden])`)).evaluate((p) => p.textContent), /^\+\d+$/, 'how many it implies');
+  await tap(`${first} > .gnode > .gname`); // the name, not the arrow
+  assert.equal(await opened(), 1);
+  assert.ok(await (await $(first)).evaluate((li) => li.querySelectorAll(':scope > .gtree > li').length > 0), 'its implied groups under it');
+  await tap(all);
+  assert.equal(await (await $(all)).evaluate((b) => b.textContent), 'Collapse all');
+  assert.equal(await (await $('.gtree.root')).evaluate((t) => t.querySelectorAll('.twisty[aria-expanded=false]').length), 0, 'every branch open, a group under several too');
+  await tap(all);
+  assert.equal(await opened(), 0);
+});
+
+test('toolbar popup: the page\'s database, and its debug mode switched from there', async () => {
   const [ext] = (await browser.extensions()).values();
   await ext.triggerAction(page);
   const popup = await (await browser.waitForTarget((t) => t.url().endsWith('/src/popup/popup.html'))).asPage();
+  await popup.waitForSelector('#page-info [data-info=db]');
+  assert.equal(await popup.$eval('#page-info [data-info=db]', (e) => e.textContent), process.env.ODOO_DB || 'e2e');
   await popup.waitForSelector('#debug button.on');
-  assert.equal(await popup.$eval('#debug button.on', (b) => b.textContent), 'off');
-  await Promise.all([page.waitForNavigation(), popup.$$eval('#debug button', (bs) => bs.find((b) => b.textContent === 'debug').click())]);
+  assert.equal(await popup.$eval('#debug button.on', (b) => b.textContent), 'Off');
+  await Promise.all([page.waitForNavigation(), popup.$$eval('#debug button', (bs) => bs.find((b) => b.textContent === 'Debug').click())]);
   assert.equal(await page.evaluate(() => window.odoo.debug), '1');
   await page.goto(page.url().replace('debug=1', 'debug=0')); // back to off for what follows
   await page.waitForSelector('.o_form_view');
@@ -386,6 +492,70 @@ test('after an update of the extension, the page opened before gets a working bu
   await click('#minimize');
   for (let i = 0; i < 50 && await frame.boundingBox(); i++) await new Promise((r) => setTimeout(r, 100));
   assert.equal(await frame.boundingBox(), null, 'minimized');
+});
+
+test('⌥/Alt + click copies the technical name: a field, the label of a readonly one, a tracked change in the chatter', async (t) => {
+  await page.browserContext().overridePermissions(new URL(page.url()).origin, ['clipboard-read', 'clipboard-write', 'clipboard-sanitized-write']);
+  const altClick = async (sel) => {
+    await page.evaluate(() => navigator.clipboard.writeText('-'));
+    const { x, y } = await page.$eval(sel, (n) => {
+      n.scrollIntoView({ block: 'center' });
+      const r = n.getBoundingClientRect();
+      return { x: r.x + Math.min(10, r.width / 2), y: r.y + r.height / 2 };
+    });
+    await page.keyboard.down('Alt');
+    await page.mouse.click(x, y);
+    await page.keyboard.up('Alt');
+    await new Promise((r) => setTimeout(r, 300));
+    return page.evaluate(() => navigator.clipboard.readText());
+  };
+  const [model] = await rpc(page, '/web/dataset/call_kw', { model: 'ir.model', method: 'search', args: [[['model', '=', 'res.partner']]], kwargs: {} });
+  await page.goto(`${new URL(page.url()).origin}/odoo/action-base.action_model_model/${model}`); // a base model: its name is readonly
+  await page.waitForSelector('.o_form_view .o_field_widget[name="model"]');
+  assert.equal(await altClick('.o_form_view .o_field_widget[name="model"]'), 'model');
+  assert.equal(await page.$eval('label.o_form_label[for^="model_"]', (l) => !!document.getElementById(l.htmlFor)), false, 'no input carries the id');
+  assert.equal(await altClick('label.o_form_label[for^="model_"]'), 'model');
+
+  const partner = (await rpc(page, '/web/session/get_session_info', {})).partner_id;
+  await rpc(page, '/web/dataset/call_kw', { model: 'res.partner', method: 'write', args: [[partner], { email: `e2e${Date.now()}@example.com` }], kwargs: {} });
+  await page.goto(`${new URL(page.url()).origin}/odoo/action-base.action_partner_form/${partner}`);
+  await page.waitForSelector('.o_form_view');
+  if (!await page.waitForSelector('.o-mail-Message-tracking', { timeout: 10_000 }).catch(() => null)) return t.skip('no chatter (mail not installed)');
+  const label = await page.$eval('.o-mail-Message-tracking .o-mail-Message-trackingField', (n) => n.textContent);
+  assert.equal(label, '(Email)');
+  assert.equal(await altClick('.o-mail-Message-tracking'), 'email');
+});
+
+test('⧉ opens the panel in its own window bound to the page, which keeps its RPCs coming after a reload; ⧉ there docks it back', async () => {
+  const PANEL = (f) => f.url().endsWith('/src/panel/panel.html');
+  await page.reload();
+  await page.waitForSelector('.o_form_view');
+  const inPage = page.frames().find(PANEL) || await openPanel(page);
+  await inPage.waitForSelector('#popout');
+  await inPage.$eval('#popout', (b) => b.click());
+  const win = await (await browser.waitForTarget((t) => t.url().includes('/src/panel/panel.html?tab='))).asPage();
+  const model = await inPage.$eval('#status .model', (n) => n.textContent); // the tests before may have left another record
+  await win.waitForFunction((m) => document.querySelector('#status .model')?.textContent === m, { timeout: 15_000 }, model);
+  assert.equal(await win.$('#minimize'), null, 'no minimize / full screen in the window');
+  await new Promise((r) => setTimeout(r, 500)); // the content script drops the iframe
+  assert.equal(page.frames().find(PANEL), undefined, 'the panel left the page');
+
+  await win.$eval('.tabs [data-tab="rpc"]', (b) => b.click());
+  const seen = (route) => win.waitForFunction((r) => [...document.querySelectorAll('#rpc .list .name')].some((n) => n.textContent === r), { timeout: 15_000 }, route);
+  await rpc(page, '/web/webclient/version_info', {});
+  await seen('/web/webclient/version_info');
+  await page.reload(); // the port goes with the page: connected again once it is loaded
+  await page.waitForSelector('.o_form_view');
+  await new Promise((r) => setTimeout(r, 1500));
+  assert.equal(page.frames().find(PANEL), undefined, 'still not in the page after a reload');
+  await rpc(page, '/web/session/get_session_info', {});
+  await seen('/web/session/get_session_info');
+
+  await win.$eval('#popout', (b) => b.click());
+  panel = await page.waitForFrame(PANEL, { timeout: 15_000 });
+  await panel.waitForFunction((m) => document.querySelector('#status .model')?.textContent === m, { timeout: 15_000 }, model);
+  await new Promise((r) => setTimeout(r, 500));
+  assert.ok(win.isClosed(), 'the window closed');
 });
 
 test('no error from the extension in the console', () => {

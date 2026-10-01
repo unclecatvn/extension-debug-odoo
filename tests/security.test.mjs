@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { aclGrants, rulesFor, rulesVerdict, modeVerdict, unblockers, ruleEvalContext, auditModel, checkInstance, userRisks } from '../extension/src/features/security/logic.js';
+import { aclGrants, rulesFor, rulesVerdict, modeVerdict, unblockers, ruleEvalContext, auditModel, checkInstance, userRisks, groupTree } from '../extension/src/features/security/logic.js';
 
 const P = (r, w, c, u) => ({ perm_read: r, perm_write: w, perm_create: c, perm_unlink: u });
 const mine = new Set([10, 11]);
@@ -64,3 +64,12 @@ const has = (set) => (n) => set.includes(n);
 assert.deepEqual(userRisks({ id: 2, login: 'admin', totp_enabled: false, share: false }, has(['group_system', 'group_erp_manager'])).map((x) => x.level), ['high', 'med', 'high']);
 assert.deepEqual(userRisks({ id: 9, login: 'e', totp_enabled: true, share: false, api_key_ids: [1] }, has(['group_user'])).map((x) => x.level), ['med']);
 assert.deepEqual(userRisks({ id: 9, login: 'p', share: true }, has(['group_portal'])).map((x) => x.level), ['info', 'info']);
+
+// admin → manager → user, sales manager → user: user under both
+const imp = { 1: [2], 2: [3], 4: [3], 3: [] };
+const gt = groupTree([1, 2, 3, 4], (id) => imp[id]);
+assert.deepEqual(gt.roots, [1, 4]);
+assert.deepEqual([gt.kidsOf(1), gt.kidsOf(2), gt.kidsOf(4), gt.kidsOf(3)], [[2], [3], [3], []]);
+assert.deepEqual([gt.below(1), gt.below(4), gt.below(3)], [2, 1, 0]);
+const gt19 = groupTree([2, 3], (id) => [id, ...imp[id]]); // 19: a group counts itself
+assert.deepEqual([gt19.roots, gt19.kidsOf(2), gt19.below(2)], [[2], [3], 1]);
