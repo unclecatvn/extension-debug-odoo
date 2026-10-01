@@ -69,15 +69,14 @@ await show('view', ['Inherited Views'], ['Combined Arch']);
 await shot('side-view');
 await show('rpc'); // the form's web_read, edited and sent again: its answer under the editor
 await panel.$$eval('#rpc .list > li', (lis) => lis.find((li) => li.dataset.q === 'sale.order web_read').click());
-await panel.waitForSelector('#rpc .detail .btn');
-await panel.$eval('#rpc .detail .btn', (b) => b.click()); // Edit & Resend
+await panel.waitForSelector('#rpc .detail .composer textarea'); // editable right away
 await panel.$eval('#rpc .detail .composer textarea', (t) => { // a smaller specification: the answer fits beside it
   const body = JSON.parse(t.value);
   body.params.kwargs.specification = { name: {}, state: {}, amount_total: {}, partner_id: { fields: { display_name: {} } } };
   t.value = JSON.stringify(body, null, 2);
 });
 await click('#rpc .detail .composer button[type=submit]');
-await panel.waitForSelector('#rpc .detail .composer .pill', { timeout: 15_000 });
+await panel.waitForFunction(() => document.querySelector('#rpc .detail .composer .answer')?.textContent.includes('HTTP'), { timeout: 15_000 }); // the recorded answer, replaced
 await panel.$eval('#rpc .detail .composer textarea', (t) => { t.rows = 8; }); // the answer in sight too
 await shot('side-rpc');
 

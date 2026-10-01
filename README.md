@@ -7,7 +7,7 @@
 **An in-page debug panel for Odoo developers.**<br>
 Inspect records, views, RPC calls, access rights and server performance without leaving the page you are debugging.
 
-[![Release](https://img.shields.io/github/v/release/unclecatvn/extension-debug-odoo?label=release)](https://github.com/unclecatvn/extension-debug-odoo/releases)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)
 [![Build](https://github.com/unclecatvn/extension-debug-odoo/actions/workflows/release.yml/badge.svg)](https://github.com/unclecatvn/extension-debug-odoo/actions/workflows/release.yml)
 [![GitHub stars](https://img.shields.io/github/stars/unclecatvn/extension-debug-odoo?style=social)](https://github.com/unclecatvn/extension-debug-odoo)
 ![Chrome](https://img.shields.io/badge/Chrome-Manifest%20V3-4285F4?logo=googlechrome&logoColor=white)
@@ -15,9 +15,9 @@ Inspect records, views, RPC calls, access rights and server performance without 
 
 **English** · [Tiếng Việt](README.vi.md)
 
-[Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Install](#installation) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** · [Website](https://unclecatvn.github.io/extension-debug-odoo/) · [Features](#features) · [Usage](#usage) · [Privacy](#privacy--permissions) · [Development](#development) · [Changelog](CHANGELOG.md)
 
-https://github.com/user-attachments/assets/ae9e90d5-f269-4fad-834b-8e5b88d7877f
+https://github.com/user-attachments/assets/a257c2f8-ee49-4b97-a7d9-72b04d7e5781
 
 </div>
 
@@ -34,13 +34,13 @@ shadow DOM so it never touches Odoo's styles.
 |---|---|
 | **Record** | Identity (xmlids, `noupdate`, create / write user), every field with its type, value, module, storage, compute / related source, `groups=` and the fields it triggers a recompute of. |
 | **View** | Inheritance tree of the current view (primary + extensions, priority, source file), combined arch, action details, form field modifiers (`invisible` / `readonly` / `required`) evaluated like the webclient, *Pick on page*. |
-| **RPC** | Live log of JSON-RPC and JSON-2 calls from page load: timing, errors with tracebacks, and a jump to the Security tab for `AccessError`s. **Edit & Resend** any call (route and JSON body) with the page's session, or start a **New Request**; **Copy as cURL** replays it outside the browser (a `call_kw` as the external API's `execute_kw`, with an API key). |
+| **RPC** | Live log of JSON-RPC and JSON-2 calls from page load: timing, errors with tracebacks, and a jump to the Security tab for `AccessError`s. **Edit and send again** any call right in its detail (route and JSON body, the recorded answer below it until then) with the page's session, or start a **New Request**; **Copy as cURL** replays it outside the browser (a `call_kw` as the external API's `execute_kw`, with an API key). |
 | **Code** | ORM Console: JavaScript with an ORM-like `env` (`env['sale.order'].search(…)`, `read`, `mapped`, `write`, any public method…) run **as the logged-in user**, so the server applies their ACLs, record rules and active companies. Fields read and written like in Python (`return rec.state`, `rec.state = 'sent'`). Suggests the models of the installed modules, their fields and the recordset methods while you type. Read-only by default; **Allow Writes** lets writes through, and **Auto Refresh** then reloads the view on screen. Results as a table, prints, errors with server traceback, every call made. |
 | **Apps** | For a list of modules, typed or ticked in the list below an Odoo-like search bar (filters Installed / Not Installed, Apps / Extra, category, as facets; Installed when the panel opens): Activate (Update Apps List, then install with dependencies), Upgrade, Open Forms (Settings rights); ⟳ **Update Apps List** on its own, under the bar. |
 | **Security** | Three parts. **User**: search any user by name or login (yourself by default) and every card follows, or log in as them in an incognito window (your session stays): their groups as a tree, each under the groups implying it (try / add / remove, needs Access Rights), risk audit. **Model**: rule by rule why each operation is allowed or blocked for that user (for yourself, with the server's exact `has_access` answer next to it), ACLs, fields hidden from the user (restricted to groups), configuration audit. **Instance**: session (db, version, `web.base.url`, `test_mode`; **Become Superuser** for Settings users), system parameters (secrets masked), checks (HTTPS, cookie flags, security headers, database manager). |
 | **i18n** | **Languages** (Settings rights): activates languages and loads, or reloads, their terms for every installed app (Odoo's Add Languages wizard, Overwrite Existing Terms optional). Exports the `.pot` template and one `.po` per language for several apps (the input searches the installed modules as you type; tick them or type their names) and languages (toggles of the active ones) with Odoo's own wizard, saved straight to `Downloads/<module>/i18n/`. |
 | **Menus** | The technical screens a developer opens all day, one click away without debug mode or the Technical menu: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (the list of OCA's `developer_menu`, with nothing to install; for Access Rights managers). A click opens the screen in the Odoo page, as its menu would; ↗ in a new tab. |
-| **Perf** | Odoo's built-in server profiler: start / stop, profiled requests, SQL summary with repeated queries (N+1 suspects), slowest queries, speedscope flame graph. |
+| **Perf** | Odoo's built-in server profiler, to find out why a screen is slow: requests slowest first, each with a diagnosis (N+1, database or Python) and what to do; the time by function of the modules (with its code line), the repeated queries and the slowest ones in words; speedscope flame graph. |
 
 Plus: click any field name, model or xmlid in the panel to copy it, and <kbd>⌥ Alt</kbd> + click a field on the Odoo
 page to copy its technical name.
@@ -63,7 +63,7 @@ page to copy its technical name.
 **Security**: the picked user's groups (add / remove), and why an operation is allowed or blocked, rule by rule.
 <img src="website/screenshots/full-security.png" alt="Security tab">
 
-**Perf**: profiled requests, with N+1 suspects and the slowest queries of each one. In full screen, as in RPC, the list stays on the left and the selected request opens on the right.
+**Perf**: profiled requests slowest first; the selected one says what slows it down and where in the code. In full screen, as in RPC, the list stays on the left and the selected request opens on the right.
 <img src="website/screenshots/full-perf.png" alt="Perf tab">
 
 <table>
@@ -74,13 +74,9 @@ page to copy its technical name.
 
 ## Installation
 
-The extension is not on the Chrome Web Store yet; install it unpacked (Chrome, Edge, Brave and other Chromium browsers):
+Install **[Odoo Debug from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** and click **Add to Chrome**. It works in Chrome, Edge, Brave and other Chromium browsers (Edge asks to allow extensions from other stores first), and updates itself.
 
-1. Download `odoo-debug-v<version>.zip` from [Releases](https://github.com/unclecatvn/extension-debug-odoo/releases) and unzip it
-   (or `git clone https://github.com/unclecatvn/extension-debug-odoo.git`).
-2. Open `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and select the unzipped folder (from a clone: the `extension/` folder).
-4. Open any Odoo page: a round button appears on the bottom edge.
+Then open any Odoo page: a round button appears on the bottom edge.
 
 ## Usage
 
@@ -252,7 +248,7 @@ Issues and pull requests are welcome. Before opening a PR:
 Found a bug? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) with your Odoo version, the
 page you were on and, if relevant, the RPC tab's error.
 
-Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement): UncleCat may license your contribution on any terms (as n8n's).
+Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement): UncleCat may license your contribution on any terms.
 
 ## Support the project
 
@@ -264,11 +260,9 @@ Made by **UncleCat** · [unclecatvn.com](https://unclecatvn.com/)
 
 ## License
 
-[Sustainable Use License](LICENSE) © 2026 UncleCat, the license [n8n](https://github.com/n8n-io/n8n) uses ("fair-code").
+[Sustainable Use License](LICENSE) © 2026 UncleCat.
 
 - **Free to use and modify** for personal or non-commercial use, or for your own company's internal work: an Odoo partner's developers can use it on their clients' projects.
 - **Free to share, only free of charge and for non-commercial purposes**, with the license and copyright notices kept.
 - **Not to sell**: no paid build of it on a store, no hosting or reselling it, no product or service built on it for a fee.
 - Want to use it commercially in a way that isn't allowed? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) or write via [unclecatvn.com](https://unclecatvn.com/) for a commercial license.
-
-Its code is public, but being restricted from selling, Odoo Debug is *source available* rather than open source in the OSI sense.

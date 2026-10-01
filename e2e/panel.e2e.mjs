@@ -113,17 +113,16 @@ test('RPC tab: a call is edited and sent again, a new request is sent, the answe
   const send = async (form, body) => {
     await panel.$eval(`${form} textarea`, (t, v) => { t.value = v; }, body);
     await panel.$eval(`${form} button[type=submit]`, (b) => b.click());
-    await panel.waitForFunction((f) => document.querySelector(`${f} .pill`), { timeout: 15_000 }, form);
+    await panel.waitForFunction((f) => document.querySelector(`${f} .answer`)?.textContent.includes('HTTP'), { timeout: 15_000 }, form); // a logged call shows its recorded answer until then
     return panel.$eval(form, (f) => ({ pill: f.querySelector('.pill').textContent, out: f.querySelector('pre')?.textContent, error: f.querySelector('.error')?.textContent }));
   };
   await panel.$$eval('#rpc .list > li', (lis) => lis.find((li) => li.querySelector('.name').textContent === 'web_read').click());
-  await panel.waitForSelector('#rpc .detail .btn');
-  await panel.$eval('#rpc .detail .btn', (b) => b.click()); // Edit & Resend
+  await panel.waitForSelector('#rpc .detail .composer textarea'); // editable right away, no Edit button
   const body = JSON.parse(await panel.$eval('#rpc .detail .composer textarea', (t) => t.value));
   assert.equal(body.params.method, 'web_read', 'the body as sent');
   assert.equal(await panel.$eval('#rpc .detail .composer textarea', (t) => t.spellcheck), false, 'no spelling squiggles under JSON');
   assert.equal(await panel.$eval('#rpc .list > li:has(.composer)', (li) => li.classList.contains('open')), true, 'the row stays open');
-  assert.deepEqual(await panel.$$eval('#rpc .detail:has(.composer) summary', (ss) => ss.map((n) => n.textContent)), ['Result'], 'the editor replaces the parameters');
+  assert.match(await panel.$eval('#rpc .detail .composer .answer', (a) => a.textContent), /Recorded at/, 'the recorded answer under the editor');
   body.params.kwargs.specification = { login: {} };
   const resent = await send('#rpc .detail .composer', JSON.stringify(body));
   assert.equal(resent.pill, 'ok', resent.error);
