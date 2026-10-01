@@ -1,5 +1,6 @@
 // MAIN-world content script, document_start: records Odoo JSON-RPC calls (XHR + fetch) before the
-// webclient loads, so the log works without DevTools. Only active on pages that define `odoo`.
+// webclient loads, so the log works without DevTools. Only active on pages that define `odoo`: elsewhere fetch / XHR
+// are left alone, or the page's own failures (a request blocked by its CSP, …) would be blamed on the extension.
 (() => {
   if (window.__odooDebugHook) return;
   const MAX = 300;
@@ -16,7 +17,7 @@
   const isOdoo = () => typeof window.odoo?.csrf_token === 'string';
   const cut = (t) => (typeof t === 'string' && t.length > BODY_MAX ? t.slice(0, BODY_MAX) : t);
   const wanted = (method, url, body) =>
-    method === 'POST' && isOdoo() && typeof body === 'string' && (body.includes('"jsonrpc"') || url.includes('/json/2/'));
+    method === 'POST' && typeof body === 'string' && (body.includes('"jsonrpc"') || url.includes('/json/2/'));
   const push = (e) => {
     buf.push(e);
     size += sizeOf(e);
@@ -41,39 +42,51 @@
     document.dispatchEvent(new CustomEvent('odoo-debug-field-names', { detail: JSON.stringify(names) }));
   });
 
-  const P = XMLHttpRequest.prototype;
-  const open = P.open;
-  const send = P.send;
-  P.open = function (method, url) {
-    try { this.__odooDebug = { method: String(method).toUpperCase(), url: new URL(url, location.href).href }; } catch { /* bad url */ }
-    return open.apply(this, arguments);
-  };
-  P.send = function (body) {
-    const d = this.__odooDebug;
-    if (d && wanted(d.method, d.url, body)) {
+  function install() {
+    const P = XMLHttpRequest.prototype;
+    const open = P.open;
+    const send = P.send;
+    P.open = function (method, url) {
+      try { this.__odooDebug = { method: String(method).toUpperCase(), url: new URL(url, location.href).href }; } catch { /* bad url */ }
+      return open.apply(this, arguments);
+    };
+    P.send = function (body) {
+      const d = this.__odooDebug;
+      if (d && wanted(d.method, d.url, body)) {
+        const t0 = performance.now();
+        const at = new Date().toISOString();
+        this.addEventListener('loadend', () => push({
+          ...d, body: cut(body), status: this.status, ms: Math.round(performance.now() - t0), at,
+          response: cut(this.responseType === '' || this.responseType === 'text' ? this.responseText : ''),
+        }));
+      }
+      return send.apply(this, arguments);
+    };
+
+    window.fetch = async function (input, init) {
+      let url, method, body;
+      try {
+        const req = input instanceof Request ? input : null;
+        url = new URL(req ? req.url : String(input), location.href).href;
+        method = String(init?.method || req?.method || 'GET').toUpperCase();
+        body = init?.body;
+      } catch { return origFetch.apply(this, arguments); }
+      if (!wanted(method, url, body)) return origFetch.apply(this, arguments);
       const t0 = performance.now();
       const at = new Date().toISOString();
-      this.addEventListener('loadend', () => push({
-        ...d, body: cut(body), status: this.status, ms: Math.round(performance.now() - t0), at,
-        response: cut(this.responseType === '' || this.responseType === 'text' ? this.responseText : ''),
-      }));
-    }
-    return send.apply(this, arguments);
-  };
+      const res = await origFetch.apply(this, arguments);
+      res.clone().text().then((t) => push({ method, url, body: cut(body), status: res.status, ms: Math.round(performance.now() - t0), at, response: cut(t) }), () => {});
+      return res;
+    };
+  }
 
-  window.fetch = async function (input, init) {
-    let url, method, body;
-    try {
-      const req = input instanceof Request ? input : null;
-      url = new URL(req ? req.url : String(input), location.href).href;
-      method = String(init?.method || req?.method || 'GET').toUpperCase();
-      body = init?.body;
-    } catch { return origFetch.apply(this, arguments); }
-    if (!wanted(method, url, body)) return origFetch.apply(this, arguments);
-    const t0 = performance.now();
-    const at = new Date().toISOString();
-    const res = await origFetch.apply(this, arguments);
-    res.clone().text().then((t) => push({ method, url, body: cut(body), status: res.status, ms: Math.round(performance.now() - t0), at, response: cut(t) }), () => {});
-    return res;
-  };
+  // web.layout defines `odoo` in an inline script at the top of <head>, before any script that could make an RPC: checked
+  // after each batch of parsed nodes, the hooks are in place before the next script runs. No `odoo` by DOMContentLoaded:
+  // not an Odoo page, never hooked.
+  if (isOdoo()) install();
+  else if (document.readyState === 'loading') {
+    const mo = new MutationObserver(() => { if (isOdoo()) { mo.disconnect(); install(); } });
+    mo.observe(document, { childList: true, subtree: true });
+    document.addEventListener('DOMContentLoaded', () => mo.disconnect());
+  }
 })();
