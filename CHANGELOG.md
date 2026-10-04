@@ -3,6 +3,18 @@
 Each version's section is its release notes (.github/workflows/release.yml). Keep each bullet on one line: GitHub turns
 every newline of the notes into a line break.
 
+## [2.1.0]
+
+Odoo 20.0 support: an adapter of its own, every server call, route and webclient internal the panel uses checked against the 20.0 sources (not yet run against a live 20 database).
+
+- **Security**: 20's ir.access (permissions OR-ed, restrictions AND-ed) read as ACLs and record rules: the same tables and simulation; no permission refuses, every _inherits parent checked, `time` back in domains, the new 'access' operator flagged as uncertain when simulating another user; an AccessError saying 'delete' read as unlink.
+- **Apps**: the uninstall preview on 20 (no show_all, applications listed apart); the modules left waiting run along with the next operation again, said per version.
+- **Perf**: profiling allowed or not read with get_str; sessions counted with formatted_read_group.
+- **Translations**: .po export with 20's binary read format.
+- **Record**: binaries shown as their size on 20 (no bin_size: read with load='web').
+- **Code**: JavaScript read_group on 20 calls formatted_read_group; exists() works (it is private on the server: checked with a search).
+- **RPC**: Copy as cURL for /json/2 knows 20's read_group, web_unlink, no exists.
+
 ## [2.0.0]
 
 The TypeScript rewrite of Odoo Debug, for Odoo 18.0 and 19.0: every difference between the two in one adapter, checked
