@@ -8,6 +8,7 @@ export const MENUS: readonly TechMenu[] = [
   { label: N_('Models'), action: 'base.action_model_model', model: 'ir.model' },
   { label: N_('Fields'), action: 'base.action_model_fields', model: 'ir.model.fields' },
   { label: N_('Record Rules'), action: 'base.action_rule', model: 'ir.rule' },
+  { label: N_('Access Rights'), action: 'base.ir_access_action', model: 'ir.access' }, // 20: ir.access replaces ir.model.access and ir.rule
   { label: N_('Views'), action: 'base.action_ui_view', model: 'ir.ui.view' },
   { label: N_('Menus'), action: 'base.grant_menu_access', model: 'ir.ui.menu' },
   { label: N_('Model Data'), action: 'base.action_model_data', model: 'ir.model.data' },

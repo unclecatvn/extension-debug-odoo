@@ -81,7 +81,7 @@ msgstr "Apps"
 
 #: src/entrypoints/panel/index.html:34
 #: src/features/apps/apps.module.ts:45
-#: src/features/menus/menus.logic.ts:12
+#: src/features/menus/menus.logic.ts:13
 msgid "Menus"
 msgstr "Menu"
 
@@ -331,7 +331,7 @@ msgid "Selection values"
 msgstr "Giá trị selection"
 
 #: src/features/apps/apps.module.ts:45
-#: src/features/menus/menus.logic.ts:11
+#: src/features/menus/menus.logic.ts:12
 msgid "Views"
 msgstr "View"
 
@@ -344,7 +344,7 @@ msgid "Server actions"
 msgstr "Server action"
 
 #: src/features/apps/apps.module.ts:46
-#: src/features/menus/menus.logic.ts:17
+#: src/features/menus/menus.logic.ts:18
 msgid "Reports"
 msgstr "Báo cáo"
 
@@ -1630,32 +1630,36 @@ msgstr "Gợi ý"
 msgid "Record Rules"
 msgstr "Record Rules"
 
-#: src/features/menus/menus.logic.ts:13
+#: src/features/menus/menus.logic.ts:11
+msgid "Access Rights"
+msgstr "Access Rights"
+
+#: src/features/menus/menus.logic.ts:14
 msgid "Model Data"
 msgstr "Model Data"
 
-#: src/features/menus/menus.logic.ts:14
+#: src/features/menus/menus.logic.ts:15
 msgid "Crons"
 msgstr "Crons"
 
-#: src/features/menus/menus.logic.ts:15
+#: src/features/menus/menus.logic.ts:16
 msgid "Actions Window"
 msgstr "Actions Window"
 
-#: src/features/menus/menus.logic.ts:16
+#: src/features/menus/menus.logic.ts:17
 msgid "Actions Server"
 msgstr "Actions Server"
 
-#: src/features/menus/menus.logic.ts:18
+#: src/features/menus/menus.logic.ts:19
 #: src/features/rpc/rpc.tab.ts:117
 msgid "Parameters"
 msgstr "Tham số"
 
-#: src/features/menus/menus.logic.ts:19
+#: src/features/menus/menus.logic.ts:20
 msgid "Sequences"
 msgstr "Sequences"
 
-#: src/features/menus/menus.logic.ts:20
+#: src/features/menus/menus.logic.ts:21
 msgid "Mail Templates"
 msgstr "Mail Templates"
 

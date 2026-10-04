@@ -18,3 +18,9 @@ test('actionPath, actionDomain', () => {
   assert.deepEqual(availableMenus(menus, rows).map((m) => m.label), ['Rules', 'Views'], "in the menus' order");
   assert.deepEqual(availableMenus(menus, []), []);
 });
+
+test('Record Rules until 19, Access Rights (ir.access) on 20: each shows where its action exists', () => {
+  const on = (names: string[]) => availableMenus(MENUS, names.map((name) => ({ module: 'base', name }))).map((m) => m.model);
+  assert.deepEqual(on(['action_rule']), ['ir.rule']);
+  assert.deepEqual(on(['ir_access_action']), ['ir.access']);
+});

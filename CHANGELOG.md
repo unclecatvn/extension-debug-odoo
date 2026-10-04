@@ -14,6 +14,7 @@ Odoo 20.0 support: an adapter of its own, every server call, route and webclient
 - **Record**: binaries shown as their size on 20 (no bin_size: read with load='web').
 - **Code**: JavaScript read_group on 20 calls formatted_read_group; exists() works (it is private on the server: checked with a search).
 - **RPC**: Copy as cURL for /json/2 knows 20's read_group, web_unlink, no exists.
+- **Menus**: Access Rights (ir.access) on 20, where Record Rules is gone.
 
 ## [2.0.0]
 
