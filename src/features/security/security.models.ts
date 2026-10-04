@@ -20,7 +20,7 @@ type RuleRow = NonNullable<Awaited<ReturnType<typeof readAllRules>>>[number];
 
 export function modelsView(body: HTMLElement, c: SecurityCtx) {
   fill(body, async () => {
-    const [sim, other, acls, rules, graph] = await Promise.all([c.sim, c.other, c.allAcls(), readAllRules(), groupGraph(c.a)]);
+    const [sim, other, acls, rules, graph] = await Promise.all([c.sim, c.other, c.allAcls(), readAllRules(c.a), groupGraph(c.a)]);
     if (!acls || !rules) return note(_t('The rights across models need Access Rights (base.group_erp_manager).'));
     const mine = modelRights(acls, sim.groupIds);
     const real = sim.tried.size ? modelRights(acls, sim.real) : mine;

@@ -50,10 +50,27 @@ export interface OdooAdapter {
     readonly usersField: string;
   };
 
+  /**
+   * Where access rights live.
+   * split:   ir.model.access (ACLs: a group, or none = every user, and four perm_* booleans) and ir.rule (record rules:
+   *          global ones AND-ed, group ones OR-ed).
+   * unified: ir.access (20): one row per group (a permission) or without one (a restriction), `operation` the letters of
+   *          'crud', `domain` the records it covers. The permissions of the user's groups are OR-ed (no domain: every
+   *          record), the restrictions AND-ed (models.py → _access_domain). Read as the split model: a permission is an ACL
+   *          and a group rule, a restriction a global rule (odoo/access.ts).
+   */
+  readonly access: 'split' | 'unified';
+
   readonly rules: {
-    /** ir.rule._compute_domain skips _inherits parents whose link field is not stored */
+    /** the rules of an _inherits parent are skipped when its link field is not stored (19: ir.rule._compute_domain) */
     readonly inheritsStoredOnly: boolean;
-    /** the names ir.rule._eval_context gives a rule's domain (the webclient's py_js knows more: `time` always) */
+    /** a model or a parent whose _inherits parents are not checked at all (`_check_inherits_access = False`, not readable
+     * over RPC): models by name, and parents every model inheriting them skips */
+    readonly inheritsUnchecked: { readonly models: readonly string[]; readonly parents: readonly string[] };
+    /** no group rule of the user's (a permission, in 20) refuses the records, instead of not restricting them */
+    readonly groupRulesRequired: boolean;
+    /** the names the server gives a rule's domain (ir.rule / ir.access._eval_context; the webclient's py_js knows more:
+     * `time` always) */
     readonly evalNames: readonly string[];
   };
 
@@ -70,12 +87,15 @@ export interface OdooAdapter {
     readonly speedscopeMany: boolean;
     /** /web/speedscope answers 404 once profiling is no longer enabled on the database */
     readonly speedscopeNeedsEnabled: boolean;
+    /** the ir.config_parameter method reading a string parameter (base.profiling_enabled_until) */
+    readonly paramGetter: 'get_param' | 'get_str';
   };
 
   readonly modules: {
     /** base.module.uninstall, the preview Odoo shows before an uninstall: the field taking the module (18: a many2one,
-     * one module; 19: a many2many) and the one listing every module removed with it (itself included) */
-    readonly uninstallWizard: { readonly moduleField: string; readonly many: boolean; readonly impactedField: string };
+     * one module; 19+: a many2many), the ones listing together every module removed with it (itself included; 20 lists
+     * the applications apart), and whether `show_all` must be set for applications to be listed (gone in 20) */
+    readonly uninstallWizard: { readonly moduleField: string; readonly many: boolean; readonly impactedFields: readonly string[]; readonly showAll: boolean };
     /** Odoo refuses an install / upgrade / uninstall while modules wait for one (to install / upgrade / remove);
      * false: it runs the waiting ones along with it */
     readonly refusesWhilePending: boolean;
@@ -89,6 +109,12 @@ export interface OdooAdapter {
     readonly readMethods: readonly string[];
     /** @api.model methods: called without ids */
     readonly modelMethods: readonly string[];
+    /** how rows are grouped and counted: read_group(domain, fields, groupby, orderby=, lazy=) answering dicts, or
+     * formatted_read_group(domain, groupby, aggregates, order=) (20: read_group answers tuples) */
+    readonly groupMethod: 'read_group' | 'formatted_read_group';
+    /** how read() gives a binary field without its content: context bin_size (its size as text), or load='web'
+     * ({ size, filename?, checksum }; 20 has no bin_size) */
+    readonly binaryRead: 'bin_size' | 'web';
   };
 
   /** the fields above, verified on the live database */

@@ -1,6 +1,8 @@
 // The server reads several tabs share. Those that only change on a page load are cached (extension/page-cache.ts);
 // ACLs and rules are not: they are what people edit while debugging.
 import { cached } from '../extension/page-cache.ts';
+import { aclOf, IR_ACCESS_FIELDS, ruleOf, type IrAccess } from './access.ts';
+import type { OdooAdapter } from './adapter.ts';
 import { MODES, type FieldsGet, type IrModelAccess, type IrModule, type IrRule, type SessionInfo } from './models.ts';
 import { call, rpc } from './rpc.ts';
 import type { Json } from '../contracts/json.ts';
@@ -17,8 +19,19 @@ export const installedModules = () => cached('modules', () => call<IrModule[]>('
 
 const PERMS = MODES.map((m) => `perm_${m}`);
 const ofModel = (model: string): Json[] => [[['model_id.model', '=', model]]];
-export const readAcls = (model: string) => call<IrModelAccess[]>('ir.model.access', 'search_read', ofModel(model), { fields: ['name', 'group_id', ...PERMS] });
-export const readRules = (model: string) => call<IrRule[]>('ir.rule', 'search_read', ofModel(model), { fields: ['name', 'groups', 'domain_force', 'global', ...PERMS] });
+
+/** A model's ACLs and record rules; on 20, its ir.access rows read as both (access.ts). */
+export async function readAccess(model: string, a: OdooAdapter): Promise<{ acls: IrModelAccess[]; rules: IrRule[] }> {
+  if (a.access === 'unified') {
+    const rows = await call<IrAccess[]>('ir.access', 'search_read', ofModel(model), { fields: IR_ACCESS_FIELDS });
+    return { acls: rows.flatMap((r) => aclOf(r) ?? []), rules: rows.map(ruleOf) };
+  }
+  const [acls, rules] = await Promise.all([
+    call<IrModelAccess[]>('ir.model.access', 'search_read', ofModel(model), { fields: ['name', 'group_id', ...PERMS] }),
+    call<IrRule[]>('ir.rule', 'search_read', ofModel(model), { fields: ['name', 'groups', 'domain_force', 'global', ...PERMS] }),
+  ]);
+  return { acls, rules };
+}
 
 /** Group xmlids → their names (res.groups.full_name, e.g. "Administration / Settings"), for the groups the user may
  * read. Each xmlid goes through ir.model.data.check_object_reference, which only reads the group itself: no Access

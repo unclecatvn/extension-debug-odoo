@@ -1,5 +1,6 @@
 // An AccessError as Odoo words it, read back: the model, records, operation, rules or groups it names. Two kinds, the
-// same text in 18.0 and 19.0:
+// same text in 18.0 and 19.0 (20.0, ir.access: the same but the operation 'delete' instead of 'unlink' and "Blame the
+// following accesses:"; the bullets and "(model: id)" are read as they are):
 //   acl   ir.model.access._make_access_error: "You are not allowed to modify 'Sales Order' (sale.order) records.\n\n
 //         This operation is allowed for the following groups:\n\t- Sales / User: All Documents\n\nContact your…"
 //   rule  ir.rule._make_access_error: "Uh-oh! …\n\nSorry, Marc Demo (id=7) doesn't have 'write' access to:\n
@@ -39,7 +40,8 @@ export function parseAccessError(text: string): AccessProblem | null {
   const user = USER.exec(msg);
   const kind = user || records.length ? 'rule' : /\n\s*-\s/.test(msg) || /You are not allowed to/.test(msg) ? 'acl' : null;
   const verb = /You are not allowed to (access|modify|create|delete) /.exec(msg)?.[1];
-  const op = /doesn't have '(read|write|create|unlink)' access/.exec(msg)?.[1] as Mode | undefined;
+  const said = /doesn't have '(read|write|create|unlink|delete)' access/.exec(msg)?.[1];
+  const op = (said === 'delete' ? 'unlink' : said) as Mode | undefined;
 
   const rules: string[] = [];
   const groups: string[] = [];
@@ -80,7 +82,7 @@ export function idsOfCall(args: unknown): number[] {
  * its own (it may do anything). */
 export function modeOfCall(method: string, args: unknown): Mode | null {
   if (method === 'web_save') return idsOfCall(args).length ? 'write' : 'create';
-  if (method === 'unlink') return 'unlink';
+  if (method === 'unlink' || method === 'web_unlink') return 'unlink'; // web_unlink: 20's webclient delete
   return READS.has(method) ? 'read' : WRITES.has(method) ? 'write' : CREATES.has(method) ? 'create' : null;
 }
 

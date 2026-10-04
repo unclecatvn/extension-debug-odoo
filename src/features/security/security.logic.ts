@@ -1,7 +1,8 @@
 // Security tab, pure part: Odoo's access checks redone for a user the panel simulates (ACLs, record rules combined as
 // ir.rule._compute_domain, _inherits parents included), the groups that would allow a refused operation and what else
-// they open, the groups by application, two users compared, the audits. Same rules in 18.0 and 19.0; what differs comes
-// from the adapter (implied groups, `time`, parents through a non-stored link). Tested by
+// they open, the groups by application, two users compared, the audits. Same rules in 18.0, 19.0 and 20.0 (whose
+// ir.access is read as ACLs and rules: odoo/access.ts); what differs comes from the adapter (implied groups, `time`,
+// parents through a non-stored link, no group rule refusing in 20). Tested by
 // tests/unit/features/security/security.logic.test.ts.
 import { _t } from '../../i18n/i18n.ts';
 import { parseGroups } from '../../odoo/groups.ts';
@@ -23,9 +24,9 @@ export const aclGrants = (acls: readonly IrModelAccess[], groupIds: ReadonlySet<
 export const rulesFor = (rules: readonly Rule[], groupIds: ReadonlySet<number>, mode: Mode) =>
   rules.filter((r) => allows(r, mode) && (r.global || r.groups.some((g) => groupIds.has(g))));
 
-/** AND of the global parts, OR of the group rules (none = no restriction from them). */
-function combine(globals: Tri[], groups: Tri[]): Tri {
-  const anyGroup: Tri = !groups.length || groups.includes(true) ? true : groups.every((g) => g === false) ? false : null;
+/** AND of the global parts, OR of the group rules (none = no restriction from them; `required`: none refuses). */
+function combine(globals: Tri[], groups: Tri[], required = false): Tri {
+  const anyGroup: Tri = groups.includes(true) || (!groups.length && !required) ? true : groups.every((g) => g === false) ? false : null;
   if (globals.includes(false) || anyGroup === false) return false;
   return globals.includes(null) || anyGroup === null ? null : true;
 }
@@ -40,25 +41,26 @@ const byParent = (rules: readonly Rule[]) => {
  * Whether the record passes the applicable rules, as ir.rule._compute_domain combines them: every global rule AND
  * any group rule; each _inherits parent's own combination counts as one more global rule.
  * `passed`: rule id → the record matches its domain (missing: could not be told).
+ * `required` (20, the adapter's groupRulesRequired): no group rule refuses — a parent the user has no permission on.
  */
-export function rulesVerdict(applicable: readonly Rule[], passed: ReadonlyMap<number, boolean>): Tri {
+export function rulesVerdict(applicable: readonly Rule[], passed: ReadonlyMap<number, boolean>, required = false): Tri {
   const own = applicable.filter((r) => !r.via);
-  const parents = [...byParent(applicable).values()].map((rs) => rulesVerdict(rs.map(({ via: _, ...r }) => r), passed));
+  const parents = [...byParent(applicable).values()].map((rs) => rulesVerdict(rs.map(({ via: _, ...r }) => r), passed, required));
   return combine([...own.filter((r) => r.global).map((r) => passed.get(r.id) ?? null), ...parents],
-    own.filter((r) => !r.global).map((r) => passed.get(r.id) ?? null));
+    own.filter((r) => !r.global).map((r) => passed.get(r.id) ?? null), required);
 }
 
 /** The applicable rules that refuse the record: failing global rules; every group rule when none passes; the failing
  * rules of a parent that refuses it. */
-export function failingRules(applicable: readonly Rule[], passed: ReadonlyMap<number, boolean>): Rule[] {
+export function failingRules(applicable: readonly Rule[], passed: ReadonlyMap<number, boolean>, required = false): Rule[] {
   const own = applicable.filter((r) => !r.via);
   const groups = own.filter((r) => !r.global);
   const out = own.filter((r) => r.global && passed.get(r.id) === false);
   if (groups.length && groups.every((r) => passed.get(r.id) === false)) out.push(...groups);
   for (const rs of byParent(applicable).values()) {
     const plain = rs.map(({ via: _, ...r }) => r);
-    if (rulesVerdict(plain, passed) !== false) continue;
-    const ids = new Set(failingRules(plain, passed).map((r) => r.id));
+    if (rulesVerdict(plain, passed, required) !== false) continue;
+    const ids = new Set(failingRules(plain, passed, required).map((r) => r.id));
     out.push(...rs.filter((r) => ids.has(r.id)));
   }
   return out;
@@ -73,12 +75,17 @@ export interface VerdictInput {
   /** the record checked against the rules; null: the model only (the ACLs) */
   resId: number | null;
   passed: ReadonlyMap<number, boolean>;
+  /** no group rule of the user's refuses (adapter: rules.groupRulesRequired) */
+  groupRulesRequired?: boolean;
+  /** the _inherits parents whose rules count (default: those `rules` name): with groupRulesRequired, one where the user
+   * has no group rule refuses the whole model (20: a parent's FALSE access domain) */
+  parents?: readonly string[];
 }
 
 export interface ModeVerdict {
   mode: Mode;
   ok: Tri;
-  why: 'superuser' | 'no-acl' | 'model-only' | 'rules';
+  why: 'superuser' | 'no-acl' | 'parent' | 'model-only' | 'rules';
   grants: IrModelAccess[];
   applicable: Rule[];
   failing: Rule[];
@@ -90,9 +97,15 @@ export function modeVerdict(input: VerdictInput, mode: Mode): ModeVerdict {
   if (input.superuser) return { ...base, ok: true, why: 'superuser' };
   const grants = aclGrants(input.acls, input.groupIds, mode);
   if (!grants.length) return { ...base, ok: false, why: 'no-acl' };
-  if (input.resId == null) return { ...base, grants, ok: true, why: 'model-only' };
   const applicable = rulesFor(input.rules, input.groupIds, mode);
-  return { mode, grants, applicable, ok: rulesVerdict(applicable, input.passed), failing: failingRules(applicable, input.passed), why: 'rules' };
+  const required = !!input.groupRulesRequired;
+  if (required) {
+    const parents = input.parents ?? [...new Set(input.rules.flatMap((r) => (r.via ? [r.via.model] : [])))];
+    const granted = new Set(applicable.flatMap((r) => (r.via && !r.global ? [r.via.model] : [])));
+    if (parents.some((m) => !granted.has(m))) return { ...base, grants, ok: false, why: 'parent' };
+  }
+  if (input.resId == null) return { ...base, grants, ok: true, why: 'model-only' };
+  return { mode, grants, applicable, ok: rulesVerdict(applicable, input.passed, required), failing: failingRules(applicable, input.passed, required), why: 'rules' };
 }
 
 export const verdicts = (input: VerdictInput) => MODES.map((m) => modeVerdict(input, m));
@@ -245,6 +258,11 @@ export function ruleEvalContext(u: EvalUser, companies: readonly number[]) {
   };
 }
 
+/** Whether an evaluated domain has 20's ('field', 'access', operation) condition, which the server resolves with the
+ * rights of whoever searches. */
+export const usesAccessOperator = (domain: readonly unknown[]): boolean =>
+  domain.some((t) => Array.isArray(t) && t.length === 3 && t[1] === 'access');
+
 /** Names a domain uses that the server's evaluation context lacks (the webclient's py_js has `time` anyway). */
 export function unavailableNames(domain: string, evalNames: readonly string[]): string[] {
   const code = domain.replace(/(['"]).*?\1/g, '');
@@ -321,7 +339,8 @@ export function auditModel(fields: FieldsGet, acls: readonly IrModelAccess[], ru
   for (const a of acls) {
     const g = a.group_id ? groupXml.get(a.group_id[0]) : undefined;
     if (!a.group_id) add(writes(a) ? 'high' : 'med', _t('ACL "%s" has no group → applies to EVERY user, portal/public included (%s).', a.name, perms(a)));
-    else if (g === 'base.group_public' || g === 'base.group_portal') add(writes(a) ? 'high' : 'low', _t('ACL "%s" grants %s to %s.', a.name, perms(a), g));
+    else if (g === 'base.group_public' || g === 'base.group_portal' || g === 'base.group_everyone') // everyone: 20, every user, portal/public included
+      add(writes(a) ? 'high' : g === 'base.group_everyone' ? 'med' : 'low', _t('ACL "%s" grants %s to %s.', a.name, perms(a), g));
   }
   const co = fields.company_id;
   if (co?.type === 'many2one' && co.relation === 'res.company' && !rules.some((r) => r.global && /company_id/.test(r.domain_force || '')))

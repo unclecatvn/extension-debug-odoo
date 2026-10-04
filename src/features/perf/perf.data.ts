@@ -26,8 +26,8 @@ export type Collector = (typeof COLLECTORS)[number];
 export const profilingState = () => rpc<{ profile_session?: string | null }>('/web/session/get_session_info', {}).then((i) => i.profile_session ?? null);
 
 /** Until when profiling is allowed on the database (ir.config_parameter base.profiling_enabled_until), null: not. */
-export async function enabledUntil(): Promise<string | null> {
-  const v = await call<string | false>('ir.config_parameter', 'get_param', ['base.profiling_enabled_until', '']);
+export async function enabledUntil(a: OdooAdapter): Promise<string | null> {
+  const v = await call<string | false>('ir.config_parameter', a.profiler.paramGetter, ['base.profiling_enabled_until', '']);
   return v && v > new Date().toISOString().replace('T', ' ').slice(0, 19) ? v : null;
 }
 
@@ -52,9 +52,11 @@ export const readProfiles = (a: OdooAdapter, session: string | null, limit = 200
   call<ProfileRow[]>('ir.profile', 'search_read', [session ? [['session', '=', session]] : []], { fields: [...a.profiler.listFields], limit, order: 'id desc' });
 
 /** The sessions that profiled something, with how many requests each (newest first). */
-export async function readSessions(): Promise<{ session: string; count: number }[]> {
-  const rows = await call<{ session: string | false; session_count?: number; __count?: number }[]>('ir.profile', 'read_group',
-    [[], ['session'], ['session']], { orderby: 'session desc', lazy: true });
+export async function readSessions(a: OdooAdapter): Promise<{ session: string; count: number }[]> {
+  const rows = await (a.orm.groupMethod === 'formatted_read_group'
+    ? call<{ session: string | false; session_count?: number; __count?: number }[]>('ir.profile', 'formatted_read_group', [[], ['session'], ['__count']], { order: 'session desc' })
+    : call<{ session: string | false; session_count?: number; __count?: number }[]>('ir.profile', 'read_group',
+      [[], ['session'], ['session']], { orderby: 'session desc', lazy: true }));
   return rows.flatMap((r) => (r.session ? [{ session: r.session, count: r.session_count ?? r.__count ?? 0 }] : []));
 }
 

@@ -1,6 +1,6 @@
 // Apps tab: the module operations, step by step in a log (the Modules view's picked modules, or the module opened).
-// Each refuses to start while modules wait for an operation: 19.0 would refuse it anyway, 18.0 would run the waiting
-// ones along with it (odoo/adapter.ts → modules.refusesWhilePending). On success the Odoo page reloads.
+// Each refuses to start while modules wait for an operation: 19.0 would refuse it anyway, 18.0 and 20.0 would run the
+// waiting ones along with it (odoo/adapter.ts → modules.refusesWhilePending). On success the Odoo page reloads.
 import { _t } from '../../i18n/i18n.ts';
 import type { OdooAdapter } from '../../odoo/adapter.ts';
 import { call } from '../../odoo/rpc.ts';
@@ -22,7 +22,7 @@ async function guardPending(a: OdooAdapter) {
   const list = waiting.map((m) => `${m.name} (${m.state})`).join(', ');
   throw new Error(a.modules.refusesWhilePending
     ? _t('Modules are waiting for an operation: %s. Odoo refuses another one until they are applied or cancelled (Pending).', list)
-    : _t('Modules are waiting for an operation: %s. Odoo 18 would run them along with this one: apply or cancel them first (Pending).', list));
+    : _t('Modules are waiting for an operation: %s. Odoo %s would run them along with this one: apply or cancel them first (Pending).', list, a.major));
 }
 
 /** Runs `fn` with the log, a failure ending its current step; the buttons `lock` are disabled meanwhile. */

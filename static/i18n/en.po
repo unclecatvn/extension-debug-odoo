@@ -321,7 +321,7 @@ msgstr "Models"
 
 #: src/features/apps/apps.module.ts:44
 #: src/features/menus/menus.logic.ts:9
-#: src/features/record/record.tab.ts:28
+#: src/features/record/record.tab.ts:30
 #: src/features/view/view.overview.ts:73
 msgid "Fields"
 msgstr "Fields"
@@ -365,6 +365,10 @@ msgstr "Scheduled actions"
 #: src/features/view/view.tpl.html:65
 msgid "Groups"
 msgstr "Groups"
+
+#: src/features/apps/apps.module.ts:48
+msgid "Accesses"
+msgstr "Accesses"
 
 #: src/features/apps/apps.module.ts:48
 #: src/features/security/security.groups.ts:123
@@ -923,8 +927,8 @@ msgid "Modules are waiting for an operation: %s. Odoo refuses another one until 
 msgstr "Modules are waiting for an operation: %s. Odoo refuses another one until they are applied or cancelled (Pending)."
 
 #: src/features/apps/apps.ops.ts:25
-msgid "Modules are waiting for an operation: %s. Odoo 18 would run them along with this one: apply or cancel them first (Pending)."
-msgstr "Modules are waiting for an operation: %s. Odoo 18 would run them along with this one: apply or cancel them first (Pending)."
+msgid "Modules are waiting for an operation: %s. Odoo %s would run them along with this one: apply or cancel them first (Pending)."
+msgstr "Modules are waiting for an operation: %s. Odoo %s would run them along with this one: apply or cancel them first (Pending)."
 
 #: src/features/apps/apps.ops.ts:44
 #: src/features/apps/apps.pending.ts:32
@@ -996,8 +1000,8 @@ msgid "Odoo refuses to install, upgrade or uninstall anything while modules wait
 msgstr "Odoo refuses to install, upgrade or uninstall anything while modules wait (\"Odoo is currently processing another module operation\")."
 
 #: src/features/apps/apps.pending.ts:20
-msgid "Odoo 18 runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here."
-msgstr "Odoo 18 runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here."
+msgid "Odoo %s runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here."
+msgstr "Odoo %s runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here."
 
 #: src/features/apps/apps.pending.ts:21
 msgid "No module is waiting for an operation."
@@ -1121,53 +1125,53 @@ msgstr "To uninstall"
 msgid "To install"
 msgstr "To install"
 
-#: src/features/code/code.data.ts:25
-#: src/features/code/code.data.ts:75
+#: src/features/code/code.data.ts:26
+#: src/features/code/code.data.ts:76
 #: src/features/menus/menus.tab.ts:42
-#: src/features/perf/perf.data.ts:86
+#: src/features/perf/perf.data.ts:88
 #: src/features/rpc/rpc.tab.ts:183
 #: src/odoo/rpc.ts:30
 msgid "No response — is this an Odoo page?"
 msgstr "No response — is this an Odoo page?"
 
-#: src/features/code/code.data.ts:39
+#: src/features/code/code.data.ts:40
 msgid "Unknown model: %s"
 msgstr "Unknown model: %s"
 
-#: src/features/code/code.data.ts:60
+#: src/features/code/code.data.ts:61
 msgid "The server action returned nothing: is this Odoo running it as code?"
 msgstr "The server action returned nothing: is this Odoo running it as code?"
 
-#: src/features/code/code.injected.ts:62
+#: src/features/code/code.injected.ts:65
 msgid "%s writes: blocked in read-only mode (choose \"Dry run\" or \"Allow writes\")"
 msgstr "%s writes: blocked in read-only mode (choose \"Dry run\" or \"Allow writes\")"
 
-#: src/features/code/code.injected.ts:84
+#: src/features/code/code.injected.ts:87
 msgid "Stopped after %s calls"
 msgstr "Stopped after %s calls"
 
-#: src/features/code/code.injected.ts:129
+#: src/features/code/code.injected.ts:132
 msgid "%s has no field %s"
 msgstr "%s has no field %s"
 
-#: src/features/code/code.injected.ts:162
-#: src/features/code/code.injected.ts:167
-#: src/features/code/code.injected.ts:186
-#: src/features/code/code.injected.ts:222
-#: src/features/code/code.injected.ts:294
+#: src/features/code/code.injected.ts:165
+#: src/features/code/code.injected.ts:170
+#: src/features/code/code.injected.ts:189
+#: src/features/code/code.injected.ts:225
+#: src/features/code/code.injected.ts:300
 msgid "%s.%s is not relational"
 msgstr "%s.%s is not relational"
 
-#: src/features/code/code.injected.ts:164
-#: src/features/code/code.injected.ts:260
+#: src/features/code/code.injected.ts:167
+#: src/features/code/code.injected.ts:263
 msgid "Expected singleton: %s"
 msgstr "Expected singleton: %s"
 
-#: src/features/code/code.injected.ts:208
+#: src/features/code/code.injected.ts:211
 msgid "%s is read from the server: await it before using its value"
 msgstr "%s is read from the server: await it before using its value"
 
-#: src/features/code/code.injected.ts:465
+#: src/features/code/code.injected.ts:471
 msgid "No view to refresh on this page"
 msgstr "No view to refresh on this page"
 
@@ -2054,62 +2058,62 @@ msgstr "Every profile of the database (Odoo deletes them after 30 days anyway)"
 msgid "change → recomputes %s"
 msgstr "change → recomputes %s"
 
-#: src/features/record/record.tab.ts:26
+#: src/features/record/record.tab.ts:28
 #: src/features/view/view.tab.ts:33
 msgid "This screen is not bound to a model."
 msgstr "This screen is not bound to a model."
 
-#: src/features/record/record.tab.ts:27
+#: src/features/record/record.tab.ts:29
 msgid "Identity & metadata"
 msgstr "Identity & metadata"
 
-#: src/features/record/record.tab.ts:45
+#: src/features/record/record.tab.ts:47
 msgid "(none / several records)"
 msgstr "(none / several records)"
 
-#: src/features/record/record.tab.ts:47
+#: src/features/record/record.tab.ts:49
 msgid "created by"
 msgstr "created by"
 
-#: src/features/record/record.tab.ts:47
+#: src/features/record/record.tab.ts:49
 msgid "last updated by"
 msgstr "last updated by"
 
-#: src/features/record/record.tab.ts:98
+#: src/features/record/record.tab.ts:108
 msgid "Click to copy the value"
 msgstr "Click to copy the value"
 
-#: src/features/record/record.tab.ts:113
+#: src/features/record/record.tab.ts:123
 #: src/features/view/view.field.ts:202
 msgid "%s fields"
 msgstr "%s fields"
 
-#: src/features/record/record.tab.ts:113
+#: src/features/record/record.tab.ts:123
 #: src/features/view/view.field.ts:202
 msgid "%s/%s fields"
 msgstr "%s/%s fields"
 
-#: src/features/record/record.tab.ts:114
+#: src/features/record/record.tab.ts:124
 msgid "Filter name / label / value / type / module"
 msgstr "Filter name / label / value / type / module"
 
-#: src/features/record/record.tab.ts:125
+#: src/features/record/record.tab.ts:135
 msgid "Field · type · value"
 msgstr "Field · type · value"
 
-#: src/features/record/record.tab.ts:125
+#: src/features/record/record.tab.ts:135
 msgid "Label · storage · compute · module"
 msgstr "Label · storage · compute · module"
 
-#: src/features/record/record.tab.ts:137
+#: src/features/record/record.tab.ts:147
 msgid "A computed field failed: values of the stored fields only."
 msgstr "A computed field failed: values of the stored fields only."
 
-#: src/features/record/record.tab.ts:142
+#: src/features/record/record.tab.ts:152
 msgid "Modules and indexes need Access Rights (base.group_erp_manager)."
 msgstr "Modules and indexes need Access Rights (base.group_erp_manager)."
 
-#: src/features/record/record.tab.ts:143
+#: src/features/record/record.tab.ts:153
 msgid "Modules and indexes unavailable: %s"
 msgstr "Modules and indexes unavailable: %s"
 
@@ -2338,12 +2342,16 @@ msgstr "Applied on %s: %s"
 msgid "Applied: no operation changed on this record."
 msgstr "Applied: no operation changed on this record."
 
-#: src/features/security/security.data.ts:240
+#: src/features/security/security.data.ts:246
 msgid "You cannot read this record yourself, so its rules cannot be checked."
 msgstr "You cannot read this record yourself, so its rules cannot be checked."
 
-#: src/features/security/security.data.ts:266
-#: src/features/security/security.data.ts:266
+#: src/features/security/security.data.ts:250
+msgid "Its 'access' condition is checked with your own rights, not the simulated user's: it cannot be told."
+msgstr "Its 'access' condition is checked with your own rights, not the simulated user's: it cannot be told."
+
+#: src/features/security/security.data.ts:275
+#: src/features/security/security.data.ts:275
 msgid "no result"
 msgstr "no result"
 
@@ -2618,124 +2626,124 @@ msgstr "Group set on the user"
 msgid "py_js is not loaded"
 msgstr "py_js is not loaded"
 
-#: src/features/security/security.logic.ts:320
+#: src/features/security/security.logic.ts:338
 #: src/features/security/security.model.ts:38
 msgid "No ACL: only the superuser can access this model."
 msgstr "No ACL: only the superuser can access this model."
 
-#: src/features/security/security.logic.ts:323
+#: src/features/security/security.logic.ts:341
 msgid "ACL \"%s\" has no group → applies to EVERY user, portal/public included (%s)."
 msgstr "ACL \"%s\" has no group → applies to EVERY user, portal/public included (%s)."
 
-#: src/features/security/security.logic.ts:324
+#: src/features/security/security.logic.ts:343
 msgid "ACL \"%s\" grants %s to %s."
 msgstr "ACL \"%s\" grants %s to %s."
 
-#: src/features/security/security.logic.ts:328
+#: src/features/security/security.logic.ts:347
 msgid "Has company_id but no global multi-company rule → records may leak across companies."
 msgstr "Has company_id but no global multi-company rule → records may leak across companies."
 
-#: src/features/security/security.logic.ts:330
+#: src/features/security/security.logic.ts:349
 msgid "Field \"%s\" looks sensitive but has no groups=."
 msgstr "Field \"%s\" looks sensitive but has no groups=."
 
-#: src/features/security/security.logic.ts:363
+#: src/features/security/security.logic.ts:382
 msgid "Not served over HTTPS."
 msgstr "Not served over HTTPS."
 
-#: src/features/security/security.logic.ts:364
+#: src/features/security/security.logic.ts:383
 msgid "Cannot read the session_id cookie."
 msgstr "Cannot read the session_id cookie."
 
-#: src/features/security/security.logic.ts:366
+#: src/features/security/security.logic.ts:385
 msgid "session_id cookie is not HttpOnly → readable by JS/XSS."
 msgstr "session_id cookie is not HttpOnly → readable by JS/XSS."
 
-#: src/features/security/security.logic.ts:367
+#: src/features/security/security.logic.ts:386
 msgid "session_id cookie lacks the Secure flag."
 msgstr "session_id cookie lacks the Secure flag."
 
-#: src/features/security/security.logic.ts:368
+#: src/features/security/security.logic.ts:387
 msgid "session_id cookie is SameSite=None → larger CSRF surface."
 msgstr "session_id cookie is SameSite=None → larger CSRF surface."
 
-#: src/features/security/security.logic.ts:371
+#: src/features/security/security.logic.ts:390
 msgid "Missing Strict-Transport-Security (HSTS) header."
 msgstr "Missing Strict-Transport-Security (HSTS) header."
 
-#: src/features/security/security.logic.ts:372
+#: src/features/security/security.logic.ts:391
 msgid "Missing X-Frame-Options / CSP frame-ancestors → clickjacking."
 msgstr "Missing X-Frame-Options / CSP frame-ancestors → clickjacking."
 
-#: src/features/security/security.logic.ts:373
+#: src/features/security/security.logic.ts:392
 msgid "Missing X-Content-Type-Options: nosniff."
 msgstr "Missing X-Content-Type-Options: nosniff."
 
-#: src/features/security/security.logic.ts:374
+#: src/features/security/security.logic.ts:393
 msgid "Missing Content-Security-Policy."
 msgstr "Missing Content-Security-Policy."
 
-#: src/features/security/security.logic.ts:375
+#: src/features/security/security.logic.ts:394
 msgid "Header %s discloses a version: %s"
 msgstr "Header %s discloses a version: %s"
 
-#: src/features/security/security.logic.ts:377
+#: src/features/security/security.logic.ts:396
 msgid "Database manager has NO master password (default \"admin\")!"
 msgstr "Database manager has NO master password (default \"admin\")!"
 
-#: src/features/security/security.logic.ts:378
+#: src/features/security/security.logic.ts:397
 msgid "/web/database/manager is reachable → block /web/database/* at the proxy or set list_db = False."
 msgstr "/web/database/manager is reachable → block /web/database/* at the proxy or set list_db = False."
 
-#: src/features/security/security.logic.ts:379
+#: src/features/security/security.logic.ts:398
 msgid "list_db is on: database names are exposed (%s)."
 msgstr "list_db is on: database names are exposed (%s)."
 
-#: src/features/security/security.logic.ts:380
+#: src/features/security/security.logic.ts:399
 msgid "Server version is public via /web/webclient/version_info: %s"
 msgstr "Server version is public via /web/webclient/version_info: %s"
 
-#: src/features/security/security.logic.ts:390
+#: src/features/security/security.logic.ts:409
 msgid "__system__ (superuser): bypasses every ACL and record rule."
 msgstr "__system__ (superuser): bypasses every ACL and record rule."
 
-#: src/features/security/security.logic.ts:391
+#: src/features/security/security.logic.ts:410
 msgid "Settings administrator (base.group_system)."
 msgstr "Settings administrator (base.group_system)."
 
-#: src/features/security/security.logic.ts:392
+#: src/features/security/security.logic.ts:411
 msgid "Access Rights manager (base.group_erp_manager): can grant itself any group."
 msgstr "Access Rights manager (base.group_erp_manager): can grant itself any group."
 
-#: src/features/security/security.logic.ts:393
+#: src/features/security/security.logic.ts:412
 msgid "Has Technical Features (base.group_no_one)."
 msgstr "Has Technical Features (base.group_no_one)."
 
-#: src/features/security/security.logic.ts:394
+#: src/features/security/security.logic.ts:413
 msgid "Public user."
 msgstr "Public user."
 
-#: src/features/security/security.logic.ts:394
+#: src/features/security/security.logic.ts:413
 msgid "Portal user (share)."
 msgstr "Portal user (share)."
 
-#: src/features/security/security.logic.ts:395
+#: src/features/security/security.logic.ts:414
 msgid "Login \"admin\" is the default, easy to guess."
 msgstr "Login \"admin\" is the default, easy to guess."
 
-#: src/features/security/security.logic.ts:396
+#: src/features/security/security.logic.ts:415
 msgid "auth_totp is not installed → no 2FA."
 msgstr "auth_totp is not installed → no 2FA."
 
-#: src/features/security/security.logic.ts:397
+#: src/features/security/security.logic.ts:416
 msgid "2FA (TOTP) is not enabled."
 msgstr "2FA (TOTP) is not enabled."
 
-#: src/features/security/security.logic.ts:398
+#: src/features/security/security.logic.ts:417
 msgid "%s API key(s): direct RPC calls with this user's rights."
 msgstr "%s API key(s): direct RPC calls with this user's rights."
 
-#: src/features/security/security.logic.ts:399
+#: src/features/security/security.logic.ts:418
 msgid "User is archived."
 msgstr "User is archived."
 
@@ -4107,7 +4115,7 @@ msgstr "Not shown"
 msgid "Expression error"
 msgstr "Expression error"
 
-#: src/odoo/detect.ts:32
+#: src/odoo/detect.ts:33
 msgid "Cannot read the Odoo version (%s)."
 msgstr "Cannot read the Odoo version (%s)."
 

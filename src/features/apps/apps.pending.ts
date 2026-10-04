@@ -1,7 +1,7 @@
 // Apps tab, view "Pending": the modules waiting for an operation (to install / to upgrade / to remove), usually left by
 // an operation that failed or was started from the Apps menu without "Apply". Odoo runs them at its next module
-// operation (18.0: along with it; 19.0 refuses one until they are gone). Apply them now, or cancel them all: Odoo's
-// "Apply Scheduled Upgrades" wizard (base.module.upgrade, same in 18.0 / 19.0).
+// operation (18.0, 20.0: along with it; 19.0 refuses one until they are gone). Apply them now, or cancel them all: Odoo's
+// "Apply Scheduled Upgrades" wizard (base.module.upgrade, same in 18.0 / 19.0 / 20.0).
 import { _t } from '../../i18n/i18n.ts';
 import { fill } from '../../ui/cards.ts';
 import { frag, note } from '../../ui/parts.ts';
@@ -17,7 +17,7 @@ export function pendingView(body: HTMLElement, c: AppsCtx) {
     const pending = pendingOf(await c.modules);
     const why = note(c.a.modules.refusesWhilePending
       ? _t('Odoo refuses to install, upgrade or uninstall anything while modules wait ("Odoo is currently processing another module operation").')
-      : _t('Odoo 18 runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here.'));
+      : _t('Odoo %s runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here.', c.a.major));
     if (!pending.length) return frag(note(_t('No module is waiting for an operation.')), why);
     const rows: MxRow[] = pending.map((m) => ({ label: [m.shortdesc || m.name], sub: m.name, q: m.name, cells: [statePill(m.state)] }));
     const { log: ul } = tpl('steps', { log: HTMLUListElement }).refs;

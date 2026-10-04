@@ -8,12 +8,13 @@ import { _t } from '../i18n/i18n.ts';
 import type { ExpectedField, OdooAdapter } from './adapter.ts';
 import { v18 } from './adapters/v18.ts';
 import { v19 } from './adapters/v19.ts';
+import { v20 } from './adapters/v20.ts';
 import { sessionInfo } from './reads.ts';
 import { call } from './rpc.ts';
 import { parseVersion, pickMajor, type OdooVersion, type Support, type SupportedMajor } from './version.ts';
 
 /** One adapter per supported major: a missing one fails type-checking (version.ts → SUPPORTED). */
-export const ADAPTERS: Readonly<Record<SupportedMajor, OdooAdapter>> = { 18: v18, 19: v19 };
+export const ADAPTERS: Readonly<Record<SupportedMajor, OdooAdapter>> = { 18: v18, 19: v19, 20: v20 };
 
 export interface OdooContext {
   version: OdooVersion;

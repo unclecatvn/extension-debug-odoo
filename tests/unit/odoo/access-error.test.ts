@@ -48,3 +48,12 @@ test('the access a call needs, and its ids', () => {
   assert.deepEqual(idsOfCall([[3, 4], ['name']]), [3, 4]);
   assert.deepEqual(idsOfCall([[['state', '=', 'draft']]]), []);
 });
+
+test('20 (ir.access): \'delete\' for unlink, "Blame the following accesses", web_unlink', () => {
+  const msg = "Uh-oh! Looks like you have stumbled upon some top-secret records.\n\nSorry, Marc Demo (id=7) doesn't have 'delete' access to:\n"
+    + '- Sales Order, S00042 (sale.order: 42)\n\nBlame the following accesses:\n- Personal Orders\n\n'
+    + 'If you really, really need access, perhaps you can win over your friendly administrator with a batch of freshly baked cookies.';
+  const p = parseAccessError(msg)!;
+  assert.deepEqual([p.kind, p.model, p.ids, p.mode, p.rules], ['rule', 'sale.order', [42], 'unlink', ['Personal Orders']]);
+  assert.equal(modeOfCall('web_unlink', [[42]]), 'unlink');
+});

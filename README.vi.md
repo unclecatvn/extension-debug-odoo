@@ -1,6 +1,6 @@
 # Odoo Debug
 
-**Đừng đoán nữa. Hãy xem vì sao Odoo làm như vậy.** Panel debug ngay trong trang cho Odoo 18.0 và 19.0: một extension
+**Đừng đoán nữa. Hãy xem vì sao Odoo làm như vậy.** Panel debug ngay trong trang cho Odoo 18.0, 19.0 và 20.0: một extension
 Chrome (Manifest V3) mở bên cạnh màn hình bạn đang xem và giải thích nó: bản ghi, view, các lời gọi lên server, ai được
 làm gì, và bản dịch.
 
@@ -35,7 +35,7 @@ Odoo Debug trả lời các câu hỏi này ngay trên màn hình, dưới dạn
 |---|---|
 | **Record** | Mọi field của bản ghi: định nghĩa, giá trị theo kiểu dữ liệu, cái gì tính lại nó, lọc nhanh, sao chép dạng JSON |
 | **View** | View được kể như một câu chuyện: view nào của module nào tạo nên nó, theo đúng thứ tự Odoo áp dụng; một field qua các view; arch tổng hợp |
-| **RPC** | Các lời gọi JSON-RPC của trang, kèm thời gian và lỗi; sửa và gửi lại; Copy as cURL cho external API (18: `/jsonrpc`, 19: `/json/2`) |
+| **RPC** | Các lời gọi JSON-RPC của trang, kèm thời gian và lỗi; sửa và gửi lại; Copy as cURL cho external API (18: `/jsonrpc`, 19 / 20: `/json/2`) |
 | **Security** | Quyền dạng bảng: ACL và rule của một bản ghi × đọc / ghi / tạo / xoá, domain được đánh giá với user; quyền trên mọi model; nhóm, nhóm cấp gì và ai đang có; thử một nhóm trước khi cấp; so sánh hai user |
 | **Translations** | Chữ đến từ đâu và sửa ở đâu; bản dịch của bản ghi và view theo từng ngôn ngữ; độ phủ `.po`, xuất và nhập; ngôn ngữ |
 | **Apps** | Module như menu Apps của Odoo (cùng bộ lọc, dạng facet): chọn nhiều module rồi Kích hoạt (Cập nhật danh sách ứng dụng + cài kèm phụ thuộc), Nâng cấp hoặc mở form; ⚠ khi manifest trên đĩa mới hơn database. Mở một module: mô tả (`index.html` hoặc README), manifest, phụ thuộc hai chiều (cài nó sẽ kéo theo những gì, gồm cả module tự cài, tính đúng như Odoo) và dạng sơ đồ, dữ liệu và model của nó, gỡ cài đặt có xem trước bằng chính wizard của Odoo; các thao tác đang treo, áp dụng hoặc huỷ (quyền Settings) |
@@ -43,7 +43,7 @@ Odoo Debug trả lời các câu hỏi này ngay trên màn hình, dưới dạn
 | **Perf** | Profiler có sẵn của Odoo, đọc lại: bật / tắt cho phiên của bạn, rồi xem SQL của từng request, dòng code gửi SQL, nghi vấn N+1, câu chậm nhất; so với một mốc (trước / sau khi sửa); profile riêng một lời gọi từ tab RPC; flame graph; dọn dẹp (quyền Settings) |
 | **Code** | ORM console chạy dưới quyền người đang đăng nhập, trên bản ghi đang mở / đang chọn (`record`, `records`, `model`): **JavaScript** trong trang (`env['sale.order'].search(…)`, chỉ đọc, chạy thử hoặc ghi) hoặc **Python** trên server bằng một server action tạm (chạy thử được rollback thật; cần quyền Settings); kết quả hiển thị theo kiểu dữ liệu (bản ghi, bảng theo kiểu field, ngày giờ theo múi giờ của bạn), copy dạng CSV / Markdown / JSON; snippet; gợi ý model, field, method |
 
-Phiên bản Odoo được nhận diện trên từng trang, và mọi khác biệt giữa 18.0 và 19.0 mà panel cần đều nằm ở một chỗ
+Phiên bản Odoo được nhận diện trên từng trang, và mọi khác biệt giữa 18.0, 19.0 và 20.0 mà panel cần đều nằm ở một chỗ
 (`src/odoo/adapters/`).
 
 ## Video demo
@@ -73,7 +73,7 @@ hành, dạng giải nén.
    2. Bật **Developer mode** (góc trên bên phải).
    3. Bấm **Load unpacked** và chọn thư mục vừa giải nén (thư mục chứa `manifest.json`).
    4. Nếu đang cài bản JavaScript của Odoo Debug, hãy tắt nó đi: cả hai đều thêm nút vào trang Odoo.
-3. **Sử dụng**: mở một trang bất kỳ của database Odoo 18 hoặc 19 (đã đăng nhập), rồi bấm nút **Odoo Debug** ở góc dưới
+3. **Sử dụng**: mở một trang bất kỳ của database Odoo 18, 19 hoặc 20 (đã đăng nhập), rồi bấm nút **Odoo Debug** ở góc dưới
    bên phải trang, hoặc nhấn **Alt+Shift+O**. Từ thanh tiêu đề của panel có thể phóng toàn màn hình hoặc tách ra cửa sổ
    riêng (dùng với màn hình thứ hai).
 4. **Cập nhật**: giải nén bản mới đè lên đúng thư mục cũ, bấm ⟳ trên thẻ của extension ở `chrome://extensions`, rồi tải

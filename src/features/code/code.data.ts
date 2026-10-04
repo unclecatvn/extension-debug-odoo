@@ -20,7 +20,8 @@ export async function screenOf(model: string | null | undefined, resId: number |
 }
 
 export async function runJs(code: string, mode: RunMode, a: OdooAdapter, screen: Screen, context: Record<string, unknown>, uid: number): Promise<RunResult> {
-  const opts: RunOptions = { mode, context, uid, readMethods: [...a.orm.readMethods], modelMethods: [...a.orm.modelMethods], screen };
+  const opts: RunOptions = { mode, context, uid, readMethods: [...a.orm.readMethods], modelMethods: [...a.orm.modelMethods],
+    groupMethod: a.orm.groupMethod, screen };
   const r = await exec(pageRunCode, code, opts as never);
   if (!r) throw new Error(_t('No response — is this an Odoo page?'));
   if (isExecError(r)) throw new Error(r.error);

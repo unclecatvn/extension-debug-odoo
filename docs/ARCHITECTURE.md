@@ -7,7 +7,7 @@ How the extension is built, for whoever works on it. Using it: [README](../READM
 | Part | State |
 |---|---|
 | Toolchain: TS 7 (one project per execution context), esbuild, Node tests, CI checks | ✅ |
-| Odoo version layer (`src/odoo/`): detection, adapters 18.0 / 19.0, self-check | ✅ |
+| Odoo version layer (`src/odoo/`): detection, adapters 18.0 / 19.0 / 20.0, self-check | ✅ |
 | Entrypoints: service worker, RPC recorder + relay, launcher button, panel shell, popup | ✅ |
 | Tab RPC: log, filter, Edit & Resend, New Request, Copy as cURL (18: `/jsonrpc` execute_kw · 19: `/json/2`, named arguments) | ✅ unit tests; Chrome against a simulated 18 / 19 |
 | Tab Record: identity, every field (definition, value, recomputes), filter + quick filters, copy a value / the record as JSON, ↗ many2one, selection labels | ✅ unit tests; Chrome against a simulated 18 / 19, admin and user |
@@ -18,6 +18,7 @@ How the extension is built, for whoever works on it. Using it: [README](../READM
 | Tab Menus: the technical screens of OCA's `developer_menu` (Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window / Server, Reports, Parameters, Sequences, Mail Templates; the ones whose action exists), for Access Rights managers; a click opens the action in the page (`doAction`, breadcrumbs cleared), ↗ in a new tab | ✅ unit tests; driven in headless Chrome against a throwaway 18 database |
 | Tab Perf, Odoo's own profiler (`ir.profile`): start / stop for the session (Odoo's wizard when the database doesn't allow it yet), the collectors (SQL; Python stacks; QWeb); the requests of a session (the panel's own left out: its calls carry `odoo_debug_panel=1`, which a JSON route ignores); a request opened: totals (queries, SQL, total, Python ≈, CPU on 19), the lines of code sending queries, N+1 suspects, the slowest, against a baseline (before / after a fix), flame graph (19: side by side); a call of the RPC tab profiled on its own ("⏱ Profile"); clean up (this session, yours, all) | ✅ unit tests; driven in headless Chrome against throwaway 18 / 19 databases |
 | Tab Code, an ORM console in two languages, as the logged-in user, on the screen's record / records / model (as a server action): JavaScript in the page (an ORM-like env over call_kw; read-only, dry run — writing calls listed, not sent — or writes) and Python on the server (a temporary `ir.actions.server`, `safe_eval`; a dry run rolled back for real, an error rolls everything back; Settings rights); results shown by type (recordsets, rows typed by `fields_get`, dates in the user's time zone…; CSV / Markdown / JSON); snippets built-in and saved per Odoo; colours, completion, smart typing | ✅ unit tests; driven in headless Chrome against throwaway 18 / 19 databases |
+| Odoo 20.0: every tab's server calls, routes and webclient internals checked against the 20.0 sources; ir.access read as ACLs + rules (`odoo/access.ts`), no bin_size, get_str, formatted_read_group, the uninstall wizard's applications | ✅ unit tests; not yet run against a live 20 database |
 | E2E against Odoo 18.0 / 19.0 (Docker) | ⏳ |
 
 ## Develop
@@ -103,12 +104,12 @@ No barrel `index.ts` re-exporting a folder: import the file you need. Named expo
 
 ## Odoo versions
 
-Supported: **18.0** and **19.0**. `src/odoo/` holds every difference between them:
+Supported: **18.0**, **19.0** and **20.0**. `src/odoo/` holds every difference between them:
 
 - `version.ts` reads `server_version_info` and picks the adapter: the version's own, else the closest older one
-  (saas~18.x → 18, a newer major → 19, flagged *untested* in the header), else the oldest (*unsupported*).
-- `adapter.ts` is the contract; `adapters/v18.ts` and `adapters/v19.ts` implement it, each value checked against that
-  version's sources.
+  (saas~19.x → 19, a newer major → 20, flagged *untested* in the header), else the oldest (*unsupported*).
+- `adapter.ts` is the contract; `adapters/v18.ts`, `adapters/v19.ts` and `adapters/v20.ts` implement it, each value
+  checked against that version's sources.
 - `detect.ts` → `odoo()` detects once per page load, then **self-checks** the fields the adapter relies on with
   `fields_get`: a customized database that differs from its major shows in the header instead of failing in a tab.
 

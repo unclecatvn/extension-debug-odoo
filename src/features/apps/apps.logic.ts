@@ -248,7 +248,7 @@ export interface XmlIdRow { id: number; model: string; name: string; res_id: num
 const KIND_ORDER = [
   'ir.model', 'ir.model.fields', 'ir.model.fields.selection', 'ir.ui.view', 'ir.ui.menu', 'ir.actions.act_window',
   'ir.actions.server', 'ir.actions.report', 'ir.actions.client', 'ir.actions.act_url', 'ir.cron', 'res.groups',
-  'ir.model.access', 'ir.rule', 'ir.model.constraint', 'ir.model.relation', 'ir.module.category', 'ir.asset',
+  'ir.access', 'ir.model.access', 'ir.rule', 'ir.model.constraint', 'ir.model.relation', 'ir.module.category', 'ir.asset',
 ];
 
 /** The xmlids of a module, by model, in KIND_ORDER then by size. */

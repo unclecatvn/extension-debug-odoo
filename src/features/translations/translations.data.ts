@@ -93,8 +93,9 @@ export interface ModuleRow { id: number; name: string; shortdesc: string }
 export async function exportPo(moduleIds: readonly number[], lang: string): Promise<{ name: string; data: Uint8Array }[]> {
   const id = await call<number>('base.language.export', 'create', [{ lang, format: 'tgz', modules: [[6, 0, [...moduleIds]]] }]);
   await call('base.language.export', 'act_getfile', [[id]]);
-  const [row] = await call<{ data: string | false }[]>('base.language.export', 'read', [[id], ['data']]);
-  return row?.data ? untar(await gunzip(b64ToBytes(row.data))) : [];
+  const [row] = await call<{ data: string | { content: string } | false }[]>('base.language.export', 'read', [[id], ['data']]);
+  const b64 = typeof row?.data === 'object' ? row.data.content : row?.data; // 20 reads a binary as { content, size, filename? }
+  return b64 ? untar(await gunzip(b64ToBytes(b64))) : [];
 }
 
 /** Loads a .po into the database (base.language.import): its terms in `lang`, replacing existing ones if asked. */

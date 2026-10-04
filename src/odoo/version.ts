@@ -1,7 +1,7 @@
 // Which Odoo the panel is talking to, and how far it can be trusted. Pure: tested by version.test.ts.
 
 /** The majors that have an adapter (adapters/v<major>.ts), oldest first. */
-export const SUPPORTED = [18, 19] as const;
+export const SUPPORTED = [18, 19, 20] as const;
 export type SupportedMajor = (typeof SUPPORTED)[number];
 
 export interface OdooVersion {
@@ -14,7 +14,7 @@ export interface OdooVersion {
 }
 
 /**
- * tested:      an adapter for that very major (18.0, 19.0)
+ * tested:      an adapter for that very major (18.0, 19.0, 20.0)
  * untested:    newer than every adapter, or a saas release: the closest older adapter is used, the header warns
  * unsupported: older than every adapter: the oldest one is used, every tab says what may fail
  */

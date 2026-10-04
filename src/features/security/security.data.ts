@@ -1,24 +1,27 @@
 // Security tab: what it reads from the server, and the simulation it runs on it (security.logic.ts does the deciding).
 // The ACLs, rules and ir.model are readable with Access Rights (base.group_erp_manager) only: below it each read gives
 // null and the parts say so; res.users and res.groups are readable by every internal user. Version differences come
-// from the adapter (groups fields, the application of a group, parents through a non-stored link, `time`).
+// from the adapter (groups fields, the application of a group, parents through a non-stored link, `time`; on 20 the
+// ACLs and rules are ir.access rows, read as both: odoo/access.ts).
 import type { Json } from '../../contracts/json.ts';
 import { cached } from '../../extension/page-cache.ts';
 import { exec, isExecError } from '../../extension/run-in-tab.ts';
+import { aclOf, IR_ACCESS_FIELDS, restricts, ruleOf, type IrAccess } from '../../odoo/access.ts';
 import type { OdooAdapter } from '../../odoo/adapter.ts';
 import { MODES, type FieldsGet, type IrModelAccess, type IrRule, type Many2one } from '../../odoo/models.ts';
-import { fieldsOf, groupIds, readAcls, readRules, sessionInfo } from '../../odoo/reads.ts';
+import { fieldsOf, groupIds, readAccess, sessionInfo } from '../../odoo/reads.ts';
 import { call, isAccessError } from '../../odoo/rpc.ts';
 import { pageCompanies, pageEvalDomains, type Evaluated } from './security.injected.ts';
 import {
-  definingModules, ruleEvalContext, unavailableNames, userPaths, verdicts, type AclRow, type ModeVerdict, type Rule, type Tri, type VerdictInput,
+  definingModules, ruleEvalContext, unavailableNames, usesAccessOperator, userPaths, verdicts, type AclRow, type ModeVerdict, type Rule, type Tri, type VerdictInput,
 } from './security.logic.ts';
 
 /** null when the server refuses for lack of rights; any other failure goes on. */
 export const unlessDenied = <T>(p: Promise<T>): Promise<T | null> => p.catch((e: unknown) => { if (isAccessError(e)) return null; throw e; });
 
 /** The groups the panel names: base's key groups, xmlid → id (check_object_reference: no Access Rights needed). */
-export const KEY_GROUPS = ['base.group_system', 'base.group_erp_manager', 'base.group_no_one', 'base.group_user', 'base.group_portal', 'base.group_public'] as const;
+export const KEY_GROUPS = ['base.group_system', 'base.group_erp_manager', 'base.group_no_one', 'base.group_user', 'base.group_portal', 'base.group_public',
+  'base.group_everyone'] as const; // group_everyone: 20, implied by user, portal and public
 export const keyGroups = async (): Promise<Map<string, number>> => {
   const ids = await groupIds(KEY_GROUPS);
   return new Map(KEY_GROUPS.flatMap((xmlid, i) => (ids[i] != null ? [[xmlid, ids[i]!] as const] : [])));
@@ -132,7 +135,8 @@ export async function simulate(uid: number, tried: ReadonlySet<number>, companie
   };
 }
 
-/** An _inherits parent: its rules join the model's (as one global rule) unless the adapter skips a non-stored link. */
+/** An _inherits parent: its rules join the model's (as one global rule) unless the adapter skips a non-stored link or
+ * the model doesn't check its parents. */
 export interface Parent { model: string; link: string; stored: boolean; counted: boolean }
 
 export interface ModelSecurity {
@@ -147,6 +151,7 @@ export interface ModelSecurity {
 /** The _inherits parents of `model` (ir.model.inherited_model_ids), each with the many2one the inherited fields go
  * through (fields_get: `related` = "<link>.<field>"). */
 async function parentsOf(model: string, fields: FieldsGet, a: OdooAdapter): Promise<Parent[]> {
+  const unchecked = a.rules.inheritsUnchecked;
   const [row] = await call<{ inherited_model_ids: number[] }[]>('ir.model', 'search_read', [[['model', '=', model]]], { fields: ['inherited_model_ids'] });
   if (!row?.inherited_model_ids.length) return [];
   const models = await call<{ model: string }[]>('ir.model', 'read', [row.inherited_model_ids, ['model']]);
@@ -156,17 +161,18 @@ async function parentsOf(model: string, fields: FieldsGet, a: OdooAdapter): Prom
     const [link, f] = links[0] ?? [];
     if (!link || !f) return [];
     const stored = f.store !== false;
-    return [{ model: parent, link, stored, counted: stored || !a.rules.inheritsStoredOnly }];
+    const checked = !unchecked.models.includes(model) && !unchecked.parents.includes(parent);
+    return [{ model: parent, link, stored, counted: checked && (stored || !a.rules.inheritsStoredOnly) }];
   });
 }
 
 /** Not cached: ACLs and rules are what people edit while debugging. */
 export async function modelSecurity(model: string, a: OdooAdapter): Promise<ModelSecurity> {
   const fields = await fieldsOf(model);
-  const [acls, own, parents] = await Promise.all([unlessDenied(readAcls(model)), unlessDenied(readRules(model)), unlessDenied(parentsOf(model, fields, a))]);
+  const [own, parents] = await Promise.all([unlessDenied(readAccess(model, a)), unlessDenied(parentsOf(model, fields, a))]);
   const theirs = await Promise.all((parents ?? []).filter((p) => p.counted).map(async (p) =>
-    ((await unlessDenied(readRules(p.model))) ?? []).map((r): Rule => ({ ...r, via: { model: p.model, link: p.link } }))));
-  return { fields, acls, rules: own && [...own, ...theirs.flat()], parents: parents ?? [] };
+    ((await unlessDenied(readAccess(p.model, a)))?.rules ?? []).map((r): Rule => ({ ...r, via: { model: p.model, link: p.link } }))));
+  return { fields, acls: own?.acls ?? null, rules: own && [...own.rules, ...theirs.flat()], parents: parents ?? [] };
 }
 
 /** Odoo's answer for yourself: has_access per operation, with the companies selected (null: no answer). */
@@ -240,9 +246,12 @@ export async function assess(model: string, resId: number | null, sim: Simulated
     if (!visible) return notes.set(r.id, N_('You cannot read this record yourself, so its rules cannot be checked.'));
     const domain = ev.domain as Json[];
     if (!domain.length) return passed.set(r.id, true);
+    // 20's ('field', 'access', operation) is resolved for whoever runs the search: the viewer, not the simulated user
+    if ((!sim.isMe || sim.tried.size) && usesAccessOperator(domain)) return notes.set(r.id, N_('Its \'access\' condition is checked with your own rights, not the simulated user\'s: it cannot be told.'));
     try { passed.set(r.id, (await count(r.via ? [[r.via.link, 'any', domain]] : domain)) > 0); } catch (e) { notes.set(r.id, (e as Error).message); }
   }));
-  const input: VerdictInput = { superuser: sim.superuser, groupIds: sim.groupIds, acls: sec.acls, rules, resId, passed };
+  const input: VerdictInput = { superuser: sim.superuser, groupIds: sim.groupIds, acls: sec.acls, rules, resId, passed,
+    groupRulesRequired: a.rules.groupRulesRequired, parents: sec.parents.filter((p) => p.counted).map((p) => p.model) };
   return { rights: true, input, verdicts: verdicts(input), server: await server, evaluated, notes };
 }
 
@@ -279,12 +288,10 @@ export interface GroupDetail {
 }
 
 export async function groupDetail(id: number, a: OdooAdapter): Promise<GroupDetail> {
-  const [[g], meta, acls, rules] = await Promise.all([
+  const [[g], meta, [acls, rules]] = await Promise.all([
     call<Record<string, unknown>[]>('res.groups', 'read', [[id], ['comment', 'implied_ids', a.groups.usersField]]),
     call<{ xmlid: string | false }[]>('res.groups', 'get_metadata', [[id]]).catch(() => []),
-    unlessDenied(call<AclRow[]>('ir.model.access', 'search_read', [[['group_id', '=', id]]], { fields: ['model_id', 'group_id', ...MODES.map((m) => `perm_${m}`)] })),
-    unlessDenied(call<(IrRule & { model_id: Many2one })[]>('ir.rule', 'search_read', [[['groups', 'in', [id]]]],
-      { fields: ['name', 'model_id', 'groups', 'global', 'domain_force', ...MODES.map((m) => `perm_${m}`)] })),
+    groupAccess(id, a),
   ]);
   const userIds = ((g?.[a.groups.usersField] as number[] | undefined) ?? []).slice(0, 500);
   const users = userIds.length ? await call<GroupDetail['users']>('res.users', 'read', [userIds, ['name', 'login', 'share']]).catch(() => []) : [];
@@ -292,22 +299,45 @@ export async function groupDetail(id: number, a: OdooAdapter): Promise<GroupDeta
     users: users.sort((x, y) => x.name.localeCompare(y.name)) };
 }
 
+/** A group's ACLs and rules (null: needs Access Rights). On 20 its permissions: each an ACL, a rule when it has a domain. */
+async function groupAccess(id: number, a: OdooAdapter): Promise<[AclRow[] | null, GroupDetail['rules']]> {
+  if (a.access === 'unified') {
+    const rows = await unlessDenied(readIrAccess([['group_id', '=', id]]));
+    return rows ? [rows.flatMap((r) => aclOf(r) ?? []), rows.filter((r) => restricts(r.domain)).map(ruleOf)] : [null, null];
+  }
+  return Promise.all([
+    unlessDenied(call<AclRow[]>('ir.model.access', 'search_read', [[['group_id', '=', id]]], { fields: ['model_id', 'group_id', ...MODES.map((m) => `perm_${m}`)] })),
+    unlessDenied(call<(IrRule & { model_id: Many2one })[]>('ir.rule', 'search_read', [[['groups', 'in', [id]]]],
+      { fields: ['name', 'model_id', 'groups', 'global', 'domain_force', ...MODES.map((m) => `perm_${m}`)] })),
+  ]);
+}
+
+type ModelAccess = IrAccess & { model_id: Many2one };
+const readIrAccess = (domain: Json[]) => call<ModelAccess[]>('ir.access', 'search_read', [domain], { fields: IR_ACCESS_FIELDS });
+
 /** How many users each group has (implied ones too). Not cached: groups are written in the tab. */
 export async function usersPerGroup(a: OdooAdapter): Promise<Map<number, number>> {
   const rows = await call<Record<string, unknown>[]>('res.groups', 'search_read', [[]], { fields: [a.groups.usersField] }).catch(() => []);
   return new Map(rows.map((r) => [r.id as number, ((r[a.groups.usersField] as number[] | undefined) ?? []).length]));
 }
 
-/** The ACL rows of the user's groups and of `adds`, every model: what adding them opens elsewhere. */
-export const aclRows = (groupIds: readonly number[]) => call<AclRow[]>('ir.model.access', 'search_read',
-  [['|', ['group_id', '=', false], ['group_id', 'in', [...groupIds]]]], { fields: ['model_id', 'group_id', ...MODES.map((m) => `perm_${m}`)] });
+/** The ACL rows of the user's groups and of `adds`, every model: what adding them opens elsewhere (20: their permissions). */
+export const aclRows = async (groupIds: readonly number[], a: OdooAdapter): Promise<AclRow[]> => (a.access === 'unified'
+  ? (await readIrAccess([['group_id', 'in', [...groupIds]]])).flatMap((r) => aclOf(r) ?? [])
+  : call<AclRow[]>('ir.model.access', 'search_read', [['|', ['group_id', '=', false], ['group_id', 'in', [...groupIds]]]],
+    { fields: ['model_id', 'group_id', ...MODES.map((m) => `perm_${m}`)] }));
 
-/** Every ACL row, every model (Access Rights). */
-export const readAllAcls = () => unlessDenied(call<AclRow[]>('ir.model.access', 'search_read', [[]], { fields: ['name', 'model_id', 'group_id', ...MODES.map((m) => `perm_${m}`)] }));
+/** Every ACL row, every model (Access Rights; 20: every permission). */
+export const readAllAcls = (a: OdooAdapter): Promise<AclRow[] | null> => unlessDenied(a.access === 'unified'
+  ? readIrAccess([['group_id', '!=', false]]).then((rows) => rows.flatMap((r) => aclOf(r) ?? []))
+  : call<AclRow[]>('ir.model.access', 'search_read', [[]], { fields: ['name', 'model_id', 'group_id', ...MODES.map((m) => `perm_${m}`)] }));
 
-/** Every record rule, every model: which models restrict a user's records (Access Rights). */
-export const readAllRules = () => unlessDenied(call<(IrRule & { model_id: Many2one })[]>('ir.rule', 'search_read', [[]],
-  { fields: ['name', 'model_id', 'groups', 'global', 'domain_force', ...MODES.map((m) => `perm_${m}`)] }));
+/** Every record rule, every model: which models restrict a user's records (Access Rights; 20: the restrictions and the
+ * permissions with a domain). */
+export const readAllRules = (a: OdooAdapter): Promise<(IrRule & { model_id: Many2one })[] | null> => unlessDenied(a.access === 'unified'
+  ? readIrAccess([]).then((rows) => rows.filter((r) => !r.group_id || restricts(r.domain)).map(ruleOf))
+  : call<(IrRule & { model_id: Many2one })[]>('ir.rule', 'search_read', [[]],
+    { fields: ['name', 'model_id', 'groups', 'global', 'domain_force', ...MODES.map((m) => `perm_${m}`)] }));
 
 /** ir.model by id: technical name, description, the modules defining or extending it (Access Rights). */
 export const readModels = (ids: readonly number[]) => ids.length

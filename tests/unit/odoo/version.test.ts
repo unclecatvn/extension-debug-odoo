@@ -15,6 +15,8 @@ test('the adapter and how far it is trusted', () => {
   assert.deepEqual(pick([18, 0]), { major: 18, support: 'tested' });
   assert.deepEqual(pick([19, 0]), { major: 19, support: 'tested' });
   assert.deepEqual(pick(['saas~18', 4]), { major: 18, support: 'untested' }); // between 18 and 19: the 18 adapter
-  assert.deepEqual(pick([20, 0]), { major: 19, support: 'untested' }); // newer: the newest adapter
+  assert.deepEqual(pick([20, 0]), { major: 20, support: 'tested' });
+  assert.deepEqual(pick(['saas~19', 2]), { major: 19, support: 'untested' });
+  assert.deepEqual(pick([21, 0]), { major: 20, support: 'untested' }); // newer: the newest adapter
   assert.deepEqual(pick([17, 0]), { major: 18, support: 'unsupported' }); // older: the oldest adapter
 });

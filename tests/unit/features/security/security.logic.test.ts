@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  definingModules, accessSummary, accessLevel, byApp, compareGroups, copyGroups, directGroups, failingRules, groupsSpecAllows, impliedBy, managerState, modeVerdict, newGrants, ruleEvalContext, rulesVerdict, shortGroupName, unavailableNames, unblockers, type Rule, type VerdictInput,
+  definingModules, accessSummary, accessLevel, byApp, compareGroups, copyGroups, directGroups, failingRules, groupsSpecAllows, impliedBy, managerState, modeVerdict, newGrants, ruleEvalContext, rulesVerdict, shortGroupName, unavailableNames, unblockers, usesAccessOperator, type Rule, type VerdictInput,
 } from '../../../../src/features/security/security.logic.ts';
 import type { IrModelAccess } from '../../../../src/odoo/models.ts';
 
@@ -147,4 +147,26 @@ test('accessLevel / accessSummary: a model\'s access in words, summed per module
   assert.equal(accessLevel(undefined), 'none');
   assert.deepEqual(accessSummary([{ level: 'full', rules: 1 }, { level: 'full', rules: 0 }, { level: 'read', rules: 2 }, { level: 'partial', rules: 0 }]),
     { full: 2, read: 1, partial: 1, ruled: 2 });
+});
+
+test('20 (ir.access as ACLs and rules): permissions OR-ed, one without domain opens every record; no permission on a parent refuses', () => {
+  const p = (o: Record<number, boolean>) => new Map(Object.entries(o).map(([k, v]) => [Number(k), v]));
+  // permissions: salesman (10) own orders (201), manager (11) every order (202, no domain); restriction: company (200)
+  const input: VerdictInput = { superuser: false, resId: 42, groupRulesRequired: true, groupIds: new Set([10, 11]),
+    acls: [acl(201, 10, 'rwc'), acl(202, 11, 'rwcd')], rules: [rule(200, []), rule(201, [10], 'rwc'), rule(202, [11])],
+    passed: p({ 200: true, 201: false, 202: true }) };
+  assert.equal(modeVerdict(input, 'write').ok, true);
+  assert.equal(modeVerdict({ ...input, passed: p({ 200: false, 201: true, 202: true }) }, 'write').ok, false); // the restriction
+  const parent = rule(300, [12], 'rwcd', { model: 'res.partner', link: 'partner_id' }); // a permission of a group the user lacks
+  const withParent = { ...input, rules: [...input.rules, parent], passed: p({ 200: true, 201: false, 202: true, 300: true }) };
+  assert.deepEqual([modeVerdict(withParent, 'read').ok, modeVerdict(withParent, 'read').why], [false, 'parent']);
+  assert.equal(modeVerdict({ ...withParent, resId: null }, 'read').ok, false); // refused at model level too
+  assert.equal(modeVerdict({ ...withParent, groupRulesRequired: false }, 'read').ok, true); // 18 / 19: no group rule, no restriction
+  assert.equal(modeVerdict({ ...input, parents: ['res.partner'] }, 'read').ok, false); // a parent with no ir.access at all
+  assert.equal(modeVerdict({ ...withParent, groupIds: new Set([10, 11, 12]) }, 'read').ok, true);
+});
+
+test('the access operator of 20 domains', () => {
+  assert.equal(usesAccessOperator(['|', ['move_id', 'access', 'read'], ['user_id', '=', 7]]), true);
+  assert.equal(usesAccessOperator([['user_id', '=', 7]]), false);
 });

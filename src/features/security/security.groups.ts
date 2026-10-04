@@ -26,7 +26,7 @@ const SHOWN_USERS = 60;
 
 export function groupsView(body: HTMLElement, c: SecurityCtx) {
   fill(body, async () => {
-    const [sim, other, graph, acls, rules, users] = await Promise.all([c.sim, c.other, groupGraph(c.a), c.allAcls(), readAllRules(), usersPerGroup(c.a)]);
+    const [sim, other, graph, acls, rules, users] = await Promise.all([c.sim, c.other, groupGraph(c.a), c.allAcls(), readAllRules(c.a), usersPerGroup(c.a)]);
     const out = box();
     const people = [sim, ...(other ? [other] : [])];
     const status = people.map((u) => statusOf(u, graph, c));
@@ -154,7 +154,7 @@ export function groupsView(body: HTMLElement, c: SecurityCtx) {
       if (!sim.groupIds.has(id) && d.acls) {
         parts.push(fold('if-added', _t('If added to %s', sim.user.name), '', async () => {
           const adds = [...graph.closure(id)].filter((x) => !sim.groupIds.has(x));
-          const gained = newGrants((await aclRows([...sim.groupIds, ...adds])) ?? [], sim.groupIds, adds);
+          const gained = newGrants((await aclRows([...sim.groupIds, ...adds], c.a)) ?? [], sim.groupIds, adds);
           return gained.length ? plainList(gained.map((x) => `${x.model}: ${x.modes.map(modeLabel).join(', ')}`)) : note(_t('No new right on any model.'));
         }));
       }

@@ -132,7 +132,7 @@ function sections(sim: Simulated, x: Assessment, graph: GroupGraph, other: Simul
     const link = rs[0]!.via!.link;
     out.push({ title: _t('Rules of %s, through %s', model, link), note: _t('counted as one global rule'), rows: [
       ...rs.map((r) => ruleRow(r, r.global || has(sim, r.groups))),
-      { label: [_t('→ for the user')], kind: 'sum', cells: MODES.map((m) => { const v = rulesVerdict(rulesFor(rs.map(({ via: _, ...r }) => r), input.groupIds, m), passed);
+      { label: [_t('→ for the user')], kind: 'sum', cells: MODES.map((m) => { const v = rulesVerdict(rulesFor(rs.map(({ via: _, ...r }) => r), input.groupIds, m), passed, input.groupRulesRequired);
         return { v, title: v === true ? _t('The parent record passes its rules') : v === false ? _t('The parent record doesn\'t pass its rules: refused') : _t('Could not be checked') }; }) },
     ] });
   }
@@ -168,7 +168,7 @@ function fixList(sim: Simulated, x: Assessment, graph: GroupGraph, c: SecurityCt
       cells: MODES.map((m) => (f.allows.includes(m) ? { v: true, plus: true, title: _t('Adding this group allows it') }
         : (x.verdicts.find((v) => v.mode === m)!.ok as Tri) === true ? { v: true, title: _t('Already allowed') } : { v: 'na' as const, title: _t('Still refused with this group') })),
       detail: async () => {
-        const gained = newGrants((await aclRows([...sim.groupIds, ...f.adds])) ?? [], sim.groupIds, f.adds);
+        const gained = newGrants((await aclRows([...sim.groupIds, ...f.adds], c.a)) ?? [], sim.groupIds, f.adds);
         if (!gained.length) return note(_t('No new right on other models.'));
         const lines = gained.slice(0, SHOWN_MODELS).map((g) => `${g.model}: ${g.modes.map(modeLabel).join(', ')}`);
         if (gained.length > SHOWN_MODELS) lines.push(_t('… and %s more', gained.length - SHOWN_MODELS));

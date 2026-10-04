@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { copyValue, describeField, fmtValue, linkedRecord, matchesAll, recordJson, reverseDeps, type QuickFilter } from '../../../../src/features/record/record.logic.ts';
+import { binarySizes, humanSize, copyValue, describeField, fmtValue, linkedRecord, matchesAll, recordJson, reverseDeps, type QuickFilter } from '../../../../src/features/record/record.logic.ts';
 import type { FieldsGet } from '../../../../src/odoo/models.ts';
 
 test('values as text', () => {
@@ -80,4 +80,9 @@ test('how a value shows, by field type', async () => {
   assert.equal(valueDisplay('json', { a: [1] }), 'json');
   assert.equal(valueDisplay('char', false), 'json'); // an empty char is false in Odoo: shown as the JSON false it is
   assert.equal(valueDisplay('float', 1.5), 'json');
+});
+
+test('binaries read with load=web (20) shown as bin_size would', () => {
+  assert.deepEqual([humanSize(512), humanSize(12636), humanSize(5 * 1024 * 1024)], ['512.00 bytes', '12.34 Kb', '5.00 Mb']);
+  assert.deepEqual(binarySizes({ image_1920: { size: 2048, checksum: 'x' }, datas: false }, ['image_1920', 'datas', 'missing']), { image_1920: '2.00 Kb', datas: false });
 });

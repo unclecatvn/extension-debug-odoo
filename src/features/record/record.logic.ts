@@ -80,6 +80,22 @@ export function linkedRecord(f: Pick<FieldInfo, 'type' | 'relation'>, v: unknown
   return f.type === 'many2one' && f.relation && Array.isArray(v) && Number.isInteger(v[0]) ? `${f.relation}/${v[0]}` : null;
 }
 
+/** A size as Odoo's human_size writes it (what bin_size gives): "12.34 Kb". */
+export function humanSize(size: number): string {
+  const units = ['bytes', 'Kb', 'Mb', 'Gb', 'Tb'];
+  let s = size, i = 0;
+  while (s >= 1024 && i < units.length - 1) { s /= 1024; i++; }
+  return `${s.toFixed(2)} ${units[i]}`;
+}
+
+/** Binaries read with load='web' (20: { size, filename?, checksum }) → their size as bin_size gives it; unset: false. */
+export function binarySizes(row: Record<string, unknown>, names: readonly string[]): Record<string, string | false> {
+  return Object.fromEntries(names.filter((n) => n in row).map((n) => {
+    const v = row[n] as { size?: number } | false;
+    return [n, v && typeof v.size === 'number' ? humanSize(v.size) : false];
+  }));
+}
+
 /** The record as JSON (Copy as JSON): the values read, in field order; binaries as read (their size, bin_size). */
 export function recordJson(values: Record<string, unknown>, fields: FieldsGet): string {
   return JSON.stringify(Object.fromEntries(Object.keys(fields).sort().filter((n) => n in values).map((n) => [n, values[n]])), null, 2);

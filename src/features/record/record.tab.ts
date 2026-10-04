@@ -1,11 +1,13 @@
 // Record tab: the identity of the current record (xmlids, who created / changed it) and every field of its model with
 // its definition and value: filter, quick filters, copy a name or a value, open the record a many2one points to, copy
-// the whole record as JSON. Same on 18.0 and 19.0 (get_metadata, fields_get, ir.model.fields, bin_size: checked in
-// both sources), so nothing from the adapter. Markup: record.tpl.html; pure part: record.logic.ts.
+// the whole record as JSON. Same on 18.0, 19.0 and 20.0 (get_metadata, fields_get, ir.model.fields: checked in the
+// sources) but how a binary is read without its content (adapter: orm.binaryRead). Markup: record.tpl.html; pure part:
+// record.logic.ts.
 import { _t, N_, translateDom } from '../../i18n/i18n.ts';
 import { cached } from '../../extension/page-cache.ts';
 import type { FieldsGet, IrModelField } from '../../odoo/models.ts';
 import { groupsLabel, parseGroups } from '../../odoo/groups.ts';
+import { odoo } from '../../odoo/detect.ts';
 import { fieldsOf, groupNames } from '../../odoo/reads.ts';
 import { call, isAccessError } from '../../odoo/rpc.ts';
 import { block, countText, filterBox } from '../../ui/cards.ts';
@@ -15,7 +17,7 @@ import { jsonView } from '../../ui/json-view.ts';
 import { expandable } from '../../ui/lists.ts';
 import { templates } from '../../ui/template.ts';
 import type { TabModule } from '../registry.ts';
-import { copyValue, describeField, fmtValue, linkedRecord, matchesAll, recordJson, reverseDeps, valueDisplay, QUICK_FILTERS, type QuickFilter } from './record.logic.ts';
+import { binarySizes, copyValue, describeField, fmtValue, linkedRecord, matchesAll, recordJson, reverseDeps, valueDisplay, QUICK_FILTERS, type QuickFilter } from './record.logic.ts';
 import html from './record.tpl.html';
 
 const tpl = templates(html, translateDom);
@@ -49,15 +51,23 @@ async function identity(model: string, resId: number | null) {
 }
 
 /** Every field of the record. read() without fields computes every non-stored one: a single compute that raises (often
- * the very bug being debugged) fails them all, so the stored fields are read again on their own, with the error kept. */
+ * the very bug being debugged) fails them all, so the stored fields are read again on their own, with the error kept.
+ * Binaries as their size: context bin_size, or (20) read apart with load='web', which gives no content. */
 async function readValues(model: string, resId: number, fields: FieldsGet): Promise<{ values: Record<string, unknown>; error?: unknown; partial?: boolean }> {
-  const read = (names?: string[]) => call<Record<string, unknown>[]>(model, 'read', [[resId], ...(names ? [names] : [])], { context: { bin_size: true } })
+  const web = (await odoo()).adapter.orm.binaryRead === 'web';
+  const binaries = web ? Object.keys(fields).filter((n) => fields[n]!.type === 'binary') : [];
+  const read = (names?: string[]) => call<Record<string, unknown>[]>(model, 'read', [[resId], ...(names ? [names] : [])], web ? {} : { context: { bin_size: true } })
     .then((r) => r[0] || {});
+  const sizes = binaries.length
+    ? call<Record<string, unknown>[]>(model, 'read', [[resId], binaries], { load: 'web' }).then((r) => binarySizes(r[0] || {}, binaries), () => ({}))
+    : Promise.resolve({});
+  const others = binaries.length ? Object.keys(fields).filter((n) => !binaries.includes(n)) : undefined;
   try {
-    return { values: await read() };
+    const [values, bins] = await Promise.all([read(others), sizes]);
+    return { values: { ...values, ...bins } };
   } catch (error) {
-    const stored = Object.entries(fields).filter(([, f]) => f.store).map(([name]) => name);
-    return read(stored).then((values) => ({ values, error, partial: true }), () => ({ values: {}, error }));
+    const stored = Object.entries(fields).filter(([n, f]) => f.store && !binaries.includes(n)).map(([name]) => name);
+    return Promise.all([read(stored), sizes]).then(([values, bins]) => ({ values: { ...values, ...bins }, error, partial: true }), () => ({ values: {}, error }));
   }
 }
 

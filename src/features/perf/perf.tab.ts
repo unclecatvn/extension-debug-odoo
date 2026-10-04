@@ -48,7 +48,7 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
   const info = await sessionInfo();
   if (!info.is_system) return note(_t('The Perf tab needs Settings rights (base.group_system): the profiles are ir.profile records.'));
   const a = odoo.adapter;
-  const [recording, until] = await Promise.all([profilingState(), enabledUntil().catch(() => null)]);
+  const [recording, until] = await Promise.all([profilingState(), enabledUntil(a).catch(() => null)]);
   const out = box();
   out.className = 'subview-body';
   out.append(recorder(recording, until, redraw));
@@ -63,7 +63,7 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
   }
 
   // ---------- which session ----------
-  const sessions = await readSessions().catch(() => []);
+  const sessions = await readSessions(a).catch(() => []);
   const today = new Date().toISOString().slice(0, 10);
   const mine = sessions.filter((x) => isSessionOf(x.session, info.name));
   const chosen = s.session === 'all' ? 'all'

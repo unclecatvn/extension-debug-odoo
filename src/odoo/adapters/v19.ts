@@ -20,7 +20,7 @@ const MODEL = [
 
 /** The ORM / web methods the webclient calls with positional arguments, as defined in 19.0 (odoo/orm/models.py,
  * addons/web/models/models.py, base/models/ir_ui_view.py). Used when /doc/<model>.json can't be read. */
-const SIGNATURES: Record<string, MethodSignature> = {
+export const SIGNATURES: Readonly<Record<string, MethodSignature>> = {
   read: { params: ['fields', 'load'], model: false },
   search_read: { params: ['domain', 'fields', 'offset', 'limit', 'order'], model: true },
   search: { params: ['domain', 'offset', 'limit', 'order'], model: true },
@@ -64,8 +64,11 @@ export const v19: OdooAdapter = {
     appField: 'privilege_id', // new res.groups.privilege; full_name = '<privilege> / <name>'
     usersField: 'all_user_ids', // user_ids holds only the users set in the group
   },
+  access: 'split',
   rules: {
     inheritsStoredOnly: true, // _compute_domain skips a non-stored _inherits link
+    inheritsUnchecked: { models: [], parents: [] },
+    groupRulesRequired: false,
     evalNames: ['user', 'company_ids', 'company_id'], // `time` is gone from ir.rule._eval_context
   },
   i18n: { webTranslationsPath: '/web/webclient/translations' }, // ?hash= instead of the segment: without it, everything comes back
@@ -73,16 +76,17 @@ export const v19: OdooAdapter = {
     listFields: ['name', 'session', 'duration', 'cpu_duration', 'sql_count', 'create_date'], // cpu_duration is new
     speedscopeMany: true, // /web/speedscope/<profile>: "1,2,3", the profiles side by side
     speedscopeNeedsEnabled: false,
+    paramGetter: 'get_param',
   },
   modules: {
-    uninstallWizard: { moduleField: 'module_ids', many: true, impactedField: 'impacted_module_ids' }, // several modules at once, renamed
+    uninstallWizard: { moduleField: 'module_ids', many: true, impactedFields: ['impacted_module_ids'], showAll: true }, // several modules at once, renamed
     refusesWhilePending: true, // _button_immediate_function: "Odoo is currently processing another module operation"
   },
   // /json/2/<model>/<method> (addons/rpc/controllers/json2.py, auto_install): binds NAMED arguments only
   // (signature.bind(records, **kwargs)), 422 when ids are given to an @api.model method. /jsonrpc still answers but is
   // deprecated, removed in Odoo 22 (documentation/19.0 external_api, "Migrating from XML-RPC / JSON-RPC").
   api: { kind: 'json2', signatures: SIGNATURES },
-  orm: { readMethods: READ, modelMethods: MODEL },
+  orm: { readMethods: READ, modelMethods: MODEL, groupMethod: 'read_group', binaryRead: 'bin_size' }, // read_group: @api.deprecated, still the dict API
   expects: [
     { model: 'res.users', field: 'group_ids', usedBy: 'Security: groups' },
     { model: 'res.users', field: 'all_group_ids', usedBy: 'Security: groups' },

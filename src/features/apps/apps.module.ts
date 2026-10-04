@@ -45,7 +45,7 @@ const KIND_LABEL: Record<string, string> = {
   'ir.ui.view': N_('Views'), 'ir.ui.menu': N_('Menus'), 'ir.actions.act_window': N_('Window actions'),
   'ir.actions.server': N_('Server actions'), 'ir.actions.report': N_('Reports'), 'ir.actions.client': N_('Client actions'),
   'ir.actions.act_url': N_('URL actions'), 'ir.cron': N_('Scheduled actions'), 'res.groups': N_('Groups'),
-  'ir.model.access': N_('Access rights (ACL)'), 'ir.rule': N_('Record rules'), 'ir.model.constraint': N_('Constraints'),
+  'ir.access': N_('Accesses'), 'ir.model.access': N_('Access rights (ACL)'), 'ir.rule': N_('Record rules'), 'ir.model.constraint': N_('Constraints'),
   'ir.model.relation': N_('Many2many tables'), 'ir.module.category': N_('Categories'), 'ir.asset': N_('Assets'),
 };
 

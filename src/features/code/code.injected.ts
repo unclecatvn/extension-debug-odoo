@@ -1,6 +1,6 @@
 // Code tab, functions run IN the Odoo page (MAIN world): only each function's own source text reaches it (npm run
-// check:page), no chrome.* (tsconfig.page.json). Arguments and results cross as JSON. Same in 18.0 and 19.0: what
-// differs (the public read methods, the @api.model ones) comes in as arguments (odoo/adapter.ts → orm).
+// check:page), no chrome.* (tsconfig.page.json). Arguments and results cross as JSON. Same in 18.0, 19.0 and 20.0: what
+// differs (the public read methods, the @api.model ones, how rows are grouped) comes in as arguments (odoo/adapter.ts → orm).
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export interface RunOptions {
@@ -12,6 +12,9 @@ export interface RunOptions {
   /** methods that only read (the rest writes), and the @api.model ones (called without ids): odoo/adapter.ts */
   readMethods: string[];
   modelMethods: string[];
+  /** what read_group(domain, fields, groupby) calls: read_group as it is, or formatted_read_group (20), `fields` as
+   * its aggregates */
+  groupMethod: 'read_group' | 'formatted_read_group';
   /** the screen: its model, the record opened, the records selected → record / records / model */
   screen: { model: string | null; resId: number | null; ids: number[] };
 }
@@ -268,7 +271,10 @@ export async function pageRunCode(code: string, opts: RunOptions): Promise<RunRe
     search_read(domain: unknown[] = [], fields?: string[], kwargs: Record<string, unknown> = {}) { return this._model('search_read', [domain], { ...(fields && { fields }), ...kwargs }); }
     search_count(domain: unknown[] = [], kwargs: Record<string, unknown> = {}) { return this._model('search_count', [domain], kwargs); }
     read(fields?: string[], kwargs: Record<string, unknown> = {}) { return this._records('read', [], { ...(fields && { fields }), ...kwargs }); }
-    read_group(domain: unknown[], fields: string[], groupby: string[], kwargs: Record<string, unknown> = {}) { return this._model('read_group', [domain, fields, groupby], kwargs); }
+    read_group(domain: unknown[], fields: string[], groupby: string[], kwargs: Record<string, unknown> = {}) {
+      return opts.groupMethod === 'formatted_read_group' ? this._model('formatted_read_group', [domain], { groupby, aggregates: fields, ...kwargs })
+        : this._model('read_group', [domain, fields, groupby], kwargs);
+    }
     fields_get(allfields?: string[], attributes?: string[]) {
       return this._model('fields_get', [], { ...(allfields && { allfields }), ...(attributes && { attributes }) });
     }
@@ -277,7 +283,7 @@ export async function pageRunCode(code: string, opts: RunOptions): Promise<RunRe
     write(vals: Record<string, unknown>) { return this._records('write', [vals]); }
     unlink() { return this._records('unlink'); }
     async copy(defaults?: Record<string, unknown>) { return this.browse(await this._records('copy', [], defaults ? { default: defaults } : {})); }
-    async exists() { return this.browse(await this._records('exists')); }
+    exists() { return this.filtered_domain([]); } // exists is @api.private: not callable over RPC
     async filtered_domain(domain: unknown[]) {
       if (!this._ids.length) return this;
       const found = new Set<number>(await this._model('search', [[['id', 'in', this._ids], ...domain]], { context: { active_test: false } }));

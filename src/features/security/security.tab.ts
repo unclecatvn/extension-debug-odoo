@@ -52,7 +52,7 @@ export const securityTab: TabModule = {
         page, a, s, subject, sim, sec, other,
         assessment: sec ? assessOf(sim, sec) : null,
         otherAssessment: sec && other ? assessOf(other, sec) : null,
-        allAcls: () => (acls ??= readAllAcls()),
+        allAcls: () => (acls ??= readAllAcls(c.a)),
         rerender: draw,
       };
       securityBar(section, c);

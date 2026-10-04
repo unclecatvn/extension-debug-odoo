@@ -1,6 +1,6 @@
 # Odoo Debug
 
-**Stop guessing. See why Odoo does what it does.** An in-page debug panel for Odoo 18.0 and 19.0: a Chrome extension
+**Stop guessing. See why Odoo does what it does.** An in-page debug panel for Odoo 18.0, 19.0 and 20.0: a Chrome extension
 (Manifest V3) that opens beside the screen you are on and explains it — the record, the view, the calls to the server,
 who may do what, and the translations.
 
@@ -36,7 +36,7 @@ Odoo Debug answers these on the screen itself, as tables, for the user you are �
 |---|---|
 | **Record** | Every field of the record: definition, value by type, what recomputes it, quick filters, copy as JSON |
 | **View** | The view told as a story: which views from which modules build it, in Odoo's order; one field through them; the combined arch |
-| **RPC** | The page's JSON-RPC calls with timing and errors; edit and resend; Copy as cURL for the external API (18: `/jsonrpc`, 19: `/json/2`) |
+| **RPC** | The page's JSON-RPC calls with timing and errors; edit and resend; Copy as cURL for the external API (18: `/jsonrpc`, 19 / 20: `/json/2`) |
 | **Security** | Rights as tables: a record's ACLs and rules × read / write / create / delete, with domains evaluated for the user; rights on every model; groups, what each grants and who has it; try a group before granting it; compare users |
 | **Translations** | Where a text comes from and where to change it; a record's and a view's translations per language; `.po` coverage, export and import; languages |
 | **Apps** | Modules as Odoo's Apps menu has them (same filters, as facets): pick several, then Activate (Update Apps List + install with dependencies), Upgrade or open their forms; ⚠ when a manifest on disk is newer than the database. A module opened: its description (`index.html` or README), manifest, dependencies both ways (what installing it brings, auto-installed modules included, as Odoo computes it) and as a diagram, its data and models, uninstall previewed with Odoo's own wizard; operations left pending, applied or cancelled (Settings rights) |
@@ -44,7 +44,7 @@ Odoo Debug answers these on the screen itself, as tables, for the user you are �
 | **Perf** | Odoo's own profiler, read back: start / stop for your session, then each request's SQL, the lines of code sending them, N+1 suspects, the slowest queries; compare with a baseline (before / after a fix); profile one call of the RPC tab on its own; flame graph; clean up (Settings rights) |
 | **Code** | An ORM console as the logged-in user, on the record opened / selected (`record`, `records`, `model`): **JavaScript** in the page (`env['sale.order'].search(…)`, read-only, dry run or writes) or **Python** on the server as a temporary server action (a dry run is rolled back for real; Settings rights); results shown by type (records, rows typed by their fields, dates in your time zone) and copied as CSV / Markdown / JSON; snippets; completion of models, fields and methods |
 
-The version of Odoo is detected on each page, and every difference between 18.0 and 19.0 the panel depends on lives in
+The version of Odoo is detected on each page, and every difference between 18.0, 19.0 and 20.0 the panel depends on lives in
 one place (`src/odoo/adapters/`).
 
 ## Demo
@@ -74,7 +74,7 @@ from its release, unpacked.
    2. Turn on **Developer mode** (top right).
    3. Click **Load unpacked** and choose the unzipped folder (the one holding `manifest.json`).
    4. If the JavaScript version of Odoo Debug is installed, turn it off: both would add their button to Odoo pages.
-3. **Use it**: open any page of an Odoo 18 or 19 database (logged in), then click the **Odoo Debug** button at the
+3. **Use it**: open any page of an Odoo 18, 19 or 20 database (logged in), then click the **Odoo Debug** button at the
    bottom right of the page, or press **Alt+Shift+O**. From its header the panel goes full screen or into its own
    window (for a second screen).
 4. **Update it**: unzip the new release over the same folder, click ⟳ on the extension's card in `chrome://extensions`,

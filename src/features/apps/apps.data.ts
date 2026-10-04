@@ -1,5 +1,5 @@
 // Apps tab: what it reads from and writes to the server. The same methods as Odoo's Apps menu (base/models/ir_module.py);
-// the uninstall preview is Odoo's own wizard (base.module.uninstall), whose fields differ in 18.0 / 19.0 (odoo/adapter.ts).
+// the uninstall preview is Odoo's own wizard (base.module.uninstall), whose fields differ in 18.0 / 19.0 / 20.0 (odoo/adapter.ts).
 // Every call needs Settings rights (base.group_system).
 import { exec, tabId } from '../../extension/run-in-tab.ts';
 import { pageReload } from '../../injected/navigation.ts';
@@ -73,10 +73,10 @@ export async function modulesOfModel(model: string): Promise<string[]> {
  * models whose every xmlid belongs to them (their tables and data are dropped). */
 export async function uninstallPreview(id: number, a: OdooAdapter): Promise<{ modules: number[]; models: { model: string; name: string }[] }> {
   const w = a.modules.uninstallWizard;
-  const wid = await call<number>('base.module.uninstall', 'create', [{ [w.moduleField]: w.many ? [[6, 0, [id]]] : id, show_all: true }]);
-  const [r] = await call<Record<string, number[]>[]>('base.module.uninstall', 'read', [[wid], [w.impactedField, 'model_ids']]);
+  const wid = await call<number>('base.module.uninstall', 'create', [{ [w.moduleField]: w.many ? [[6, 0, [id]]] : id, ...(w.showAll ? { show_all: true } : {}) }]);
+  const [r] = await call<Record<string, number[]>[]>('base.module.uninstall', 'read', [[wid], [...w.impactedFields, 'model_ids']]);
   const models = r?.model_ids?.length ? await call<{ model: string; name: string }[]>('ir.model', 'read', [r.model_ids, ['model', 'name']]) : [];
-  return { modules: r?.[w.impactedField] ?? [], models };
+  return { modules: w.impactedFields.flatMap((f) => r?.[f] ?? []), models };
 }
 
 // ---------- operations ----------
@@ -91,7 +91,7 @@ export const immediate = (op: 'install' | 'upgrade' | 'uninstall', ids: readonly
 export const readPending = () => call<{ id: number; name: string; state: AppModule['state'] }[]>('ir.module.module', 'search_read',
   [[['state', 'in', [...PENDING]]]], { fields: ['name', 'state'], order: 'name' });
 
-/** Apply Scheduled Upgrades (base.module.upgrade, same in 18.0 / 19.0): runs every waiting operation, or cancels them all. */
+/** Apply Scheduled Upgrades (base.module.upgrade, same in 18.0 / 19.0 / 20.0): runs every waiting operation, or cancels them all. */
 export async function scheduled(what: 'apply' | 'cancel') {
   const wid = await call<number>('base.module.upgrade', 'create', [{}]);
   await call('base.module.upgrade', what === 'apply' ? 'upgrade_module' : 'upgrade_module_cancel', [[wid]]);
