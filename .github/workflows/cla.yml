@@ -1,0 +1,20 @@
+name: CLA
+# A pull request is merged only when its author ticked the Contributor License Agreement box (CONTRIBUTING.md).
+on:
+  pull_request_target: # the base repository's copy of this file: a pull request cannot edit its own check
+    types: [opened, edited, reopened, synchronize]
+
+permissions: {}
+
+jobs:
+  agreed:
+    if: github.event.pull_request.user.login != github.repository_owner
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          grep -qiF '[x] I agree to the [Contributor License Agreement]' <<< "$BODY" || {
+            echo "::error::Tick \"I agree to the Contributor License Agreement\" in the pull request description (see CONTRIBUTING.md)."
+            exit 1
+          }
