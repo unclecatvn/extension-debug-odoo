@@ -1,0 +1,7 @@
+# Website
+
+Landing page for Odoo Debug: https://unclecatvn.github.io/extension-debug-odoo/
+
+Static files only (`index.html`, no build step). `.github/workflows/pages.yml` publishes this folder to GitHub Pages on every push to `main` that touches it. Preview locally with `python3 -m http.server -d website`.
+
+`screenshots/` is shared with the repository READMEs: regenerate an image once, both pick it up.

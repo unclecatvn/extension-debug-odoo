@@ -64,31 +64,21 @@ Shortcuts: **Alt+Shift+O** shows / hides the panel, **Alt+Shift+D** turns Odoo's
 
 ## Install
 
-In **Chrome** (or Edge, Brave, any Chromium browser). The extension is not on the Chrome Web Store: it is installed
-from its release, unpacked.
+Install **[Odoo Debug from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** and click **Add to Chrome**. It works in Chrome, Edge, Brave and other Chromium browsers (Edge asks to allow extensions from other stores first), and updates itself.
 
-1. **Download** `odoo-debug-v<version>.zip` from the [Releases](https://github.com/ngochung207/extension-debug-odoo/releases) and unzip it into a folder you keep (Chrome loads
-   the extension from there: don't delete it).
-2. **Load it in Chrome**
-   1. Open `chrome://extensions`.
-   2. Turn on **Developer mode** (top right).
-   3. Click **Load unpacked** and choose the unzipped folder (the one holding `manifest.json`).
-   4. If the JavaScript version of Odoo Debug is installed, turn it off: both would add their button to Odoo pages.
-3. **Use it**: open any page of an Odoo 18, 19 or 20 database (logged in), then click the **Odoo Debug** button at the
-   bottom right of the page, or press **Alt+Shift+O**. From its header the panel goes full screen or into its own
-   window (for a second screen).
-4. **Update it**: unzip the new release over the same folder, click ⟳ on the extension's card in `chrome://extensions`,
-   then reload the Odoo page.
+Then open any page of an Odoo 18, 19 or 20 database (logged in) and click the **Odoo Debug** button at the bottom right of the page, or press **Alt+Shift+O**. From its header the panel goes full screen or into its own window (for a second screen).
+
+A version not on the store yet: its `odoo-debug-v<version>.zip` from the [Releases](https://github.com/unclecatvn/extension-debug-odoo/releases), unzipped and loaded unpacked (`chrome://extensions` → **Developer mode** → **Load unpacked**); turn the store version off meanwhile, both would add their button to Odoo pages.
 
 ## Build from source
 
 Requirements: **Node.js 22.18 or later**.
 
 ```sh
-git clone -b ts https://github.com/ngochung207/extension-debug-odoo.git
+git clone https://github.com/unclecatvn/extension-debug-odoo.git
 cd extension-debug-odoo
 npm install
-npm run build   # → dist/: Load unpacked this folder (step 2 above)
+npm run build   # → dist/: Load unpacked this folder (chrome://extensions → Developer mode)
 ```
 
 After pulling new code: `npm run build`, then ⟳ in `chrome://extensions` and reload the Odoo page.
@@ -105,12 +95,23 @@ How the code is organized, the rules it follows and how the Odoo versions are ha
 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 To release: bump `version` in `static/manifest.json`, add its section to [CHANGELOG.md](CHANGELOG.md), push. CI checks,
-builds and publishes `odoo-debug-v<version>.zip` in the Releases (a pre-release from the `ts` branch).
+builds and publishes `odoo-debug-v<version>.zip` in the Releases; from `main` it is also uploaded to the Chrome Web Store and submitted for review (repository secrets `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`; Actions › Release › Run workflow sends it again after a refused submission).
+
+## Contributing
+
+Issues and pull requests are welcome. Before opening a pull request:
+
+1. `npm run check` passes and `npm run i18n` leaves `static/i18n/` unchanged (CI checks both).
+2. New strings are translated in `static/i18n/vi.po`.
+3. It was tried on at least one Odoo instance; say which version in the pull request.
+
+Found a bug? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) with the Odoo version, the page you were on and, if any, the error from the RPC tab. Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement).
 
 ## License
 
-Odoo Debug is free software: you can redistribute it and/or modify it under the terms of the
-**GNU Lesser General Public License v3.0** ([LICENSE](LICENSE), which builds on the GNU GPL v3.0 in [COPYING](COPYING)),
-the license of Odoo Community. It contains no Odoo source code: it talks to Odoo through its web routes and RPC.
+[Sustainable Use License](LICENSE) © 2026 UncleCat.
 
-Copyright © 2026 Trinh Ngoc Hung.
+- **Free to use and modify** for personal or non-commercial use, or for your own company's internal work: an Odoo partner's developers can use it on their clients' projects.
+- **Free to share, only free of charge and for non-commercial purposes**, with the license and copyright notices kept.
+- **Not to sell**: no paid build of it on a store, no hosting or reselling it, no product or service built on it for a fee.
+- Want to use it commercially in a way that isn't allowed? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) or write via [unclecatvn.com](https://unclecatvn.com/) for a commercial license.

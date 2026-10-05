@@ -2,7 +2,7 @@
   "name": "odoo-debug",
   "private": true,
   "type": "module",
-  "license": "LGPL-3.0-only",
+  "license": "SEE LICENSE IN LICENSE",
   "description": "Odoo Debug, an in-page debug panel for Odoo 18 / 19 (Chrome extension, Manifest V3).",
   "engines": {
     "node": ">=22.18"

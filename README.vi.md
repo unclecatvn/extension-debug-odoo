@@ -63,31 +63,21 @@ Phím tắt: **Alt+Shift+O** ẩn / hiện panel, **Alt+Shift+D** bật / tắt 
 
 ## Cài đặt
 
-Trên **Chrome** (hoặc Edge, Brave, mọi trình duyệt Chromium). Extension chưa có trên Chrome Web Store: cài từ bản phát
-hành, dạng giải nén.
+Cài **[Odoo Debug từ Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** rồi bấm **Thêm vào Chrome** (Add to Chrome). Chạy được trên Chrome, Edge, Brave và các trình duyệt nhân Chromium khác (Edge sẽ hỏi cho phép cài extension từ store khác trước), và tự cập nhật.
 
-1. **Tải** `odoo-debug-v<phiên bản>.zip` ở trang [Releases](https://github.com/ngochung207/extension-debug-odoo/releases) rồi giải nén vào một thư mục cố định (Chrome nạp
-   extension từ thư mục đó: đừng xoá nó).
-2. **Nạp vào Chrome**
-   1. Mở `chrome://extensions`.
-   2. Bật **Developer mode** (góc trên bên phải).
-   3. Bấm **Load unpacked** và chọn thư mục vừa giải nén (thư mục chứa `manifest.json`).
-   4. Nếu đang cài bản JavaScript của Odoo Debug, hãy tắt nó đi: cả hai đều thêm nút vào trang Odoo.
-3. **Sử dụng**: mở một trang bất kỳ của database Odoo 18, 19 hoặc 20 (đã đăng nhập), rồi bấm nút **Odoo Debug** ở góc dưới
-   bên phải trang, hoặc nhấn **Alt+Shift+O**. Từ thanh tiêu đề của panel có thể phóng toàn màn hình hoặc tách ra cửa sổ
-   riêng (dùng với màn hình thứ hai).
-4. **Cập nhật**: giải nén bản mới đè lên đúng thư mục cũ, bấm ⟳ trên thẻ của extension ở `chrome://extensions`, rồi tải
-   lại trang Odoo.
+Sau đó mở một trang bất kỳ của database Odoo 18, 19 hoặc 20 (đã đăng nhập) rồi bấm nút **Odoo Debug** ở góc dưới bên phải trang, hoặc nhấn **Alt+Shift+O**. Từ thanh tiêu đề của panel có thể phóng toàn màn hình hoặc tách ra cửa sổ riêng (dùng với màn hình thứ hai).
+
+Bản chưa lên store: tải `odoo-debug-v<phiên bản>.zip` ở trang [Releases](https://github.com/unclecatvn/extension-debug-odoo/releases), giải nén rồi nạp dạng giải nén (`chrome://extensions` → bật **Developer mode** → **Load unpacked**); trong lúc đó tắt bản từ store, vì cả hai đều thêm nút vào trang Odoo.
 
 ## Build từ mã nguồn
 
 Cần có: **Node.js 22.18 trở lên**.
 
 ```sh
-git clone -b ts https://github.com/ngochung207/extension-debug-odoo.git
+git clone https://github.com/unclecatvn/extension-debug-odoo.git
 cd extension-debug-odoo
 npm install
-npm run build   # → dist/: Load unpacked thư mục này (bước 2 ở trên)
+npm run build   # → dist/: Load unpacked thư mục này (chrome://extensions → Developer mode)
 ```
 
 Sau khi kéo code mới: `npm run build`, bấm ⟳ ở `chrome://extensions` rồi tải lại trang Odoo.
@@ -103,12 +93,23 @@ npm run i18n    # cập nhật .pot / .po sau khi thêm chuỗi cần dịch
 Cách tổ chức mã nguồn, các quy tắc và cách xử lý từng phiên bản Odoo: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 Phát hành: tăng `version` trong `static/manifest.json`, thêm mục tương ứng vào [CHANGELOG.md](CHANGELOG.md), rồi push. CI
-kiểm tra, build và đăng `odoo-debug-v<phiên bản>.zip` lên Releases (là pre-release nếu từ nhánh `ts`).
+kiểm tra, build và đăng `odoo-debug-v<phiên bản>.zip` lên Releases; từ `main` còn tải lên Chrome Web Store và gửi duyệt (secret của repo `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`; Actions › Release › Run workflow gửi lại sau khi bị từ chối).
+
+## Đóng góp
+
+Rất hoan nghênh issue và pull request. Trước khi mở PR:
+
+1. `npm run check` chạy qua và `npm run i18n` không làm thay đổi `static/i18n/` (CI kiểm tra cả hai).
+2. Chuỗi mới đã được dịch trong `static/i18n/vi.po`.
+3. Đã thử trên ít nhất một instance Odoo; ghi rõ phiên bản trong PR.
+
+Gặp lỗi? [Mở issue](https://github.com/unclecatvn/extension-debug-odoo/issues) kèm phiên bản Odoo, trang bạn đang mở và, nếu có, lỗi trong tab RPC. Mở pull request nghĩa là đồng ý với [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement) một câu.
 
 ## Giấy phép
 
-Odoo Debug là phần mềm tự do: bạn được phân phối lại và/hoặc sửa đổi theo **GNU Lesser General Public License v3.0**
-([LICENSE](LICENSE), dựa trên GNU GPL v3.0 trong [COPYING](COPYING)), cùng giấy phép với Odoo Community. Extension không
-chứa mã nguồn Odoo: nó làm việc với Odoo qua các route web và RPC.
+[Sustainable Use License](LICENSE) © 2026 UncleCat.
 
-Copyright © 2026 Trinh Ngoc Hung.
+- **Được dùng và sửa miễn phí** cho mục đích cá nhân, phi thương mại, hoặc cho công việc nội bộ của chính công ty bạn: lập trình viên của một đối tác Odoo dùng trên dự án của khách hàng vẫn được.
+- **Được chia sẻ, nhưng chỉ miễn phí và cho mục đích phi thương mại**, giữ nguyên thông báo license và bản quyền.
+- **Không được bán**: không đưa bản thu phí lên store, không host hay bán lại, không làm sản phẩm hay dịch vụ thu phí dựa trên nó.
+- Muốn dùng thương mại theo cách không được phép ở trên? [Mở issue](https://github.com/unclecatvn/extension-debug-odoo/issues) hoặc liên hệ qua [unclecatvn.com](https://unclecatvn.com/) để có license thương mại.
