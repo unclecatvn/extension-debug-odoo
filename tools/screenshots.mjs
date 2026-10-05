@@ -55,6 +55,16 @@ async function shot(name) {
 
 // ---------- beside the form ----------
 await show('record', ['identity', 'fields']);
+// a field and what recomputes it: the website's Record card
+const filterFields = (q) => panel.$eval('#record details.card[data-key=fields] input[type=search]', (i, q) => { i.value = q; i.dispatchEvent(new Event('input', { bubbles: true })); }, q);
+await filterFields('amount_total');
+await sleep(400);
+await panel.$$eval('#record .list > li:not([hidden])', (lis) => lis.find((li) => li.querySelector('.name')?.textContent === 'amount_total')?.querySelector('.pill')?.click());
+await sleep(700);
+await card('record', await shot(), '#record details.card[data-key=fields] .card-body', { maxH: 300 });
+await panel.$$eval('#record .list > li.open .pill', (ps) => ps.forEach((p) => p.click()));
+await filterFields('');
+await sleep(400);
 const light = await shot();
 await settings({ theme: 'dark' });
 await sleep(1200); // the panel re-themed (storage → settings → every open panel)
@@ -69,8 +79,10 @@ await clickText('#view details.card[data-key=field] button', '⌖ Pick on Page')
 await sleep(400);
 await pickOnPage(await page.$eval('.o_field_widget[name=partner_id]', (n) => { const b = n.getBoundingClientRect(); return [b.x + 30, b.y + b.height / 2]; }));
 await panel.waitForFunction(() => /state in \['cancel', 'sale'\]/.test(document.querySelector('#view details.card[data-key=field]')?.textContent || ''), { timeout: 15_000 });
-await panel.$eval('#view details.card[data-key=field]', (c) => c.scrollIntoView({ block: 'start' }));
-await shot('side-view');
+// a wheel first: the panel gives up putting back the tab's last scroll position, which would undo this one
+await panel.$eval('main', (m) => m.dispatchEvent(new WheelEvent('wheel')));
+await panel.$eval('#view details.card[data-key=field]', (c) => [...c.querySelectorAll('h4')].find((h) => /^now/i.test(h.textContent.trim()))?.scrollIntoView({ block: 'start' }));
+await card('view', await shot('side-view'), '#view details.card[data-key=field]', { from: 'Now', maxH: 360 });
 
 // i18n: "Order Date" picked on the page: where it comes from, where to change it (shown full screen below)
 await show('translations', null, '#translations .subview-body');
@@ -80,7 +92,7 @@ await pickOnPage(await page.$$eval('.o_form_view label', (ls) => { const b = ls.
 await panel.waitForFunction(() => /date_order/.test(document.querySelector('#translations .subview-body')?.textContent || ''), { timeout: 15_000 });
 
 await show('menus', null, '#menus .list.menus li');
-await shot('side-menus');
+await card('menus', await shot('side-menus'), '#menus .list.menus', { maxH: 250 });
 
 await show('rpc'); // the form's web_read, edited and sent again right in its detail: its answer under the editor
 await panel.$$eval('#rpc .list > li', (lis) => lis.find((li) => li.dataset.q === 'sale.order web_read').click());
@@ -93,7 +105,7 @@ await panel.$eval('#rpc .detail form.composer textarea', (t) => { // a smaller s
 await click('#rpc .detail form.composer button[type=submit]');
 await panel.waitForFunction(() => document.querySelector('#rpc .detail form.composer .answer')?.textContent.includes('HTTP'), { timeout: 15_000 });
 await panel.$eval('#rpc .detail form.composer textarea', (t) => { t.rows = 8; }); // the answer in sight too
-await shot('side-rpc');
+await card('rpc', await shot('side-rpc'), '#rpc .detail form.composer', { maxH: 420 });
 
 await show('code'); // a change tried in a Python dry run: the new totals, then everything rolled back
 await clickText('#code .seg button', 'Python');
@@ -104,31 +116,37 @@ await panel.$eval('#code textarea.code', (t) => {
 });
 await click('#code .console-acts .btn.primary');
 await panel.waitForFunction(() => document.querySelector('#code .output table'), { timeout: 15_000 });
-await shot('side-code');
+await card('code', await shot('side-code'), '#code .output', { maxH: 300 });
 
 await settings({ theme: 'dark' });
 await sleep(1200);
 await show('security', null, '#security .subview table.matrix'); // this order: ACLs and rules × operations
 await shot('side-security-dark');
 await settings({ theme: 'light' });
+await sleep(1200);
 
-// ---------- full screen ----------
-await full(true);
-await show('record', ['identity', 'fields']);
-await shot('full-record');
 // Security: why Marc Demo can't open this order (the rule refusing), and the group that would let him
-await show('security', null, '#security .user-search input');
 await panel.$eval('#security .user-search input', (i) => i.focus());
 await page.keyboard.type('marc', { delay: 40 });
 await panel.waitForSelector('#security .user-search .suggest:not([hidden]) li', { timeout: 15_000 });
 await page.keyboard.press('Enter');
 await panel.waitForFunction(() => /Personal Orders/.test(document.querySelector('#security .subview table.matrix')?.textContent || ''), { timeout: 20_000 });
 await sleep(800);
+const scrollToRules = () => panel.$eval('main', (m) => m.dispatchEvent(new WheelEvent('wheel'))).then(() => panel.$$eval('#security .subview table.matrix tr', (rs) => rs.find((r) => /Group rules/.test(r.textContent))?.scrollIntoView({ block: 'start' })));
+await scrollToRules();
+await card('security', await shot(), '#security .subview-body', { from: 'Group rules', maxH: 520 });
+
+// ---------- full screen ----------
+await full(true);
+await show('record', ['identity', 'fields']);
+await shot('full-record');
+await show('security', null, '#security .subview table.matrix'); // Marc Demo still: the same, full screen
+await sleep(600);
 await panel.$$eval('#security .subview table.matrix tr', (rs) => rs.find((r) => /Global rules/.test(r.textContent))?.scrollIntoView({ block: 'start' }));
 await shot('full-security');
 
 await show('translations');
-await shot('full-i18n');
+await card('i18n', await shot('full-i18n'), '#translations .subview-body table.matrix', { maxH: 200 });
 
 // Apps: what installing website_sale brings, as Odoo computes it
 await show('apps', null, '#apps .searchbar input');
@@ -143,7 +161,7 @@ await panel.$$eval('#apps .groups-pane details.fold', (ds) => ds.forEach((d) => 
 }));
 await panel.waitForFunction(() => /also installs/i.test(document.querySelector('#apps .groups-pane')?.textContent || ''), { timeout: 20_000 });
 await sleep(600);
-await shot('full-apps');
+await card('apps', await shot('full-apps'), '#apps .groups-pane', { from: 'Installing it also installs', maxH: 120 });
 
 // Perf: start the profiler, reload the page (the panel comes back, full screen, on this tab) so its requests are
 // recorded, then open the slowest call: its diagnosis in the pane beside the list.
@@ -163,10 +181,34 @@ await panel.$$eval('#perf table.matrix tr[data-id]', (rs) => (rs.find((r) => /we
 await panel.waitForSelector('#perf .groups-pane .perf-diag', { timeout: 15_000 });
 await sleep(800);
 await panel.$eval('main', (m) => { m.scrollTop = 0; });
-await shot('full-perf');
+await card('perf', await shot('full-perf'), '#perf .groups-pane', { maxH: 245 });
 await clickText('#perf .perf-recorder .btn', 'Stop Profiling');
 
 await browser.close();
+
+/** A close-up of `sel` (in the panel) cut out of the screenshot `png`: the website's feature card `card-<name>.png`.
+ * `from`: start at the first element whose text starts so; at most `maxH` CSS px tall, within the panel. */
+async function card(name, png, sel, { from = null, maxH = 400, pad = 10 } = {}) {
+  const f = await (await panel.frameElement()).boundingBox();
+  const r = await panel.$eval(sel, (n, from) => {
+    const b = n.getBoundingClientRect();
+    const start = from && [...n.querySelectorAll('*')].find((x) => !x.children.length && x.textContent.trim().toLowerCase().startsWith(from.toLowerCase()));
+    const top = start ? start.getBoundingClientRect().top : b.top;
+    return { x: b.left, y: top, w: b.width, h: b.bottom - top };
+  }, from);
+  const x0 = Math.max(f.x, f.x + r.x - pad), y0 = Math.max(f.y, f.y + r.y - pad);
+  const x1 = Math.min(f.x + f.width, f.x + r.x + r.w + pad), y1 = Math.min(f.y + f.height, y0 + Math.min(r.h, maxH) + 2 * pad);
+  const c = await browser.newPage();
+  const out = await c.evaluate(async (b64, clip, scale) => {
+    const img = await new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.src = `data:image/png;base64,${b64}`; });
+    const cv = Object.assign(document.createElement('canvas'), { width: Math.round(clip.w * scale), height: Math.round(clip.h * scale) });
+    cv.getContext('2d').drawImage(img, clip.x * scale, clip.y * scale, clip.w * scale, clip.h * scale, 0, 0, cv.width, cv.height);
+    return cv.toDataURL('image/png').split(',')[1];
+  }, Buffer.from(png).toString('base64'), { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }, 2);
+  await c.close();
+  await writeFile(new URL(`card-${name}.png`, OUT), Buffer.from(out, 'base64'));
+  console.log(`card-${name}`);
+}
 
 /** A click on the Odoo page at [x, y] (the panel's ⌖ Pick on Page waits for it). */
 async function pickOnPage([x, y]) {
