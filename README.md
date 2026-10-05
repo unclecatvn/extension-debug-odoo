@@ -1,114 +1,92 @@
+<div align="center">
+
+<img src="static/icons/icon-128.png" width="96" height="96" alt="Odoo Debug">
+
 # Odoo Debug
 
-**Stop guessing. See why Odoo does what it does.** An in-page debug panel for Odoo 18.0, 19.0 and 20.0: a Chrome extension
-(Manifest V3) that opens beside the screen you are on and explains it — the record, the view, the calls to the server,
-who may do what, and the translations.
+**Stop guessing. See why Odoo does what it does.**
 
-[Tiếng Việt](README.vi.md) · [User guide](https://odoo-debug.unclecatvn.com/) · [Architecture](docs/ARCHITECTURE.md)
+A free Chrome extension to debug Odoo 18, 19 and 20, with its panel right on the Odoo page.
 
-## The problem
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white&color=714b67)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) [![License](https://img.shields.io/badge/license-Sustainable%20Use-714b67)](LICENSE)
 
-Odoo's own debug mode shows *that* something happens, rarely *why*:
+**[Add to Chrome](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** · [Website](https://odoo-debug.unclecatvn.com/) · [Features](#features) · [Tiếng Việt](README.vi.md)
 
-- **A user can't open or edit a record.** The AccessError names a model and, at best, a rule. Finding which ACL is
-  missing, which record rule refuses the record, what its domain evaluates to for that user, and which group would fix
-  it — without granting more than needed — means reading `ir.model.access`, `ir.rule` and `res.groups` by hand.
-- **A field is hidden, read-only or missing on a form.** Its modifiers come from several views inherited from several
-  modules, in an order only `ir.ui.view._combine` knows.
-- **A screen is slow or a call fails.** The browser's network tab shows JSON-RPC payloads, not the model, method and
-  server error behind them, nor a way to replay the call against the external API.
-- **A text is not translated.** Is it a field value, a view term, or a code string in some module's `.po`? Each is fixed
-  somewhere else.
+</div>
 
-Odoo Debug answers these on the screen itself, as tables, for the user you are — or any user you pick.
-
-## Who it is for
-
-- **Odoo developers** debugging their modules: fields, computes, view inheritance, RPC calls, record rules.
-- **Functional consultants and system operators** handling "I can't do X" tickets: rights per user, record and model,
-  what a group grants, comparing two users, translations.
-- **Administrators** reviewing a database: who holds sensitive groups, what each group opens, how the instance is
-  exposed on the web.
-
-## What it shows
-
-| Tab | What for |
-|---|---|
-| **Record** | Every field of the record: definition, value by type, what recomputes it, quick filters, copy as JSON |
-| **View** | The view told as a story: which views from which modules build it, in Odoo's order; one field through them; the combined arch |
-| **RPC** | The page's JSON-RPC calls with timing and errors; a call opens as its request, edited and sent again right there; Copy as cURL for the external API (18: `/jsonrpc`, 19 / 20: `/json/2`) |
-| **Security** | Rights as tables: a record's ACLs and rules × read / write / create / delete, with domains evaluated for the user; rights on every model; groups, what each grants and who has it; try a group before granting it; compare users |
-| **Translations** | Where a text comes from and where to change it; a record's and a view's translations per language; `.po` coverage, export and import; languages |
-| **Apps** | Modules as Odoo's Apps menu has them (same filters, as facets): pick several, then Activate (Update Apps List + install with dependencies), Upgrade or open their forms; ⚠ when a manifest on disk is newer than the database. A module opened: its description (`index.html` or README), manifest, dependencies both ways (what installing it brings, auto-installed modules included, as Odoo computes it) and as a diagram, its data and models, uninstall previewed with Odoo's own wizard; operations left pending, applied or cancelled (Settings rights) |
-| **Menus** | The technical screens a developer opens all day, one click away without debug mode or the Technical menu: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (the list of OCA's `developer_menu`, with nothing to install; for Access Rights managers). A click opens the screen in the Odoo page, as its menu would; ↗ in a new tab. |
-| **Perf** | Odoo's own profiler, read back: start / stop for your session, then the requests slowest first, each one's diagnosis (what to look at first: N+1, the database or Python), the time by function of the modules, its SQL in words, the lines of code sending them, N+1 suspects, the slowest queries; compare with a baseline (before / after a fix); profile one call of the RPC tab on its own; flame graph; clean up (Settings rights) |
-| **Code** | An ORM console as the logged-in user, on the record opened / selected (`record`, `records`, `model`): **JavaScript** in the page (`env['sale.order'].search(…)`, read-only, dry run or writes) or **Python** on the server as a temporary server action (a dry run is rolled back for real; Settings rights); results shown by type (records, rows typed by their fields, dates in your time zone) and copied as CSV / Markdown / JSON; snippets; completion of models, fields and methods |
-
-The version of Odoo is detected on each page, and every difference between 18.0, 19.0 and 20.0 the panel depends on lives in
-one place (`src/odoo/adapters/`).
-
-## Demo
+**Watch the tour** (2½ min): every tab answering a real question on a sales order.
 
 <!-- website/intro.mp4 (npm run intro), uploaded as a GitHub attachment: GitHub plays no video from the repository.
      A new film: drag it into any comment box, put the user-attachments link it gives in place of this one. -->
 https://github.com/user-attachments/assets/d6254395-fac7-4999-ac39-f0c72e547428
 
-Every tab answering a real question on a sales order: why a field is read-only, why a user can't open the order, what
-installing a module brings, why a screen is slow… Screenshots of every tab are on the
-[Odoo Debug page](https://odoo-debug.unclecatvn.com/).
+## Why
 
-## User guide
+Odoo's developer mode shows *what* is on the screen. Odoo Debug shows *why*: which module adds a field, which inherited view made it read-only, which RPC call failed and with what traceback, which record rule blocks a user, which request fires 50 SQL queries.
 
-The guide — features tab by tab, shortcuts, privacy — is at
-**https://odoo-debug.unclecatvn.com/**.
+It answers on the page itself, for the user you are or any user you pick. Made for Odoo developers, functional consultants handling "I can't do X" tickets, and administrators reviewing a database.
 
-Shortcuts: **Alt+Shift+O** shows / hides the panel, **Alt+Shift+D** turns Odoo's debug mode on / off, and one to open the panel in its own window can be set (change them at
-`chrome://extensions/shortcuts`). ⌥/Alt + click a field, its label, a list cell or column header, or a tracked change in the chatter, on the Odoo page: its technical name is copied.
+## Features
+
+| Tab | The question it answers |
+|---|---|
+| **Record** | What is this field? Its type, value, module, and what recomputes it. |
+| **View** | Why is this field read-only? The condition, its value right now, and the inherited view that set it. |
+| **RPC** | What did that call send? Every JSON-RPC call with its timing and error; edit it and send it again, or copy it as cURL. |
+| **Security** | Why can't this user open this record? The ACL or record rule that refuses, and the group that would allow it, tried before it is granted. |
+| **Translations** | Where does this text come from? Its source and where to change it; `.po` coverage, export and import. |
+| **Apps** | What will this install bring? Every module it installs and auto-installs, as Odoo computes it; install, upgrade, uninstall previewed. |
+| **Menus** | Where is that technical screen? Models, views, rules, crons, actions… one click, without debug mode. |
+| **Perf** | Why is this screen slow? Odoo's profiler read back: N+1 queries and the line running them, where the time goes, before / after a fix. |
+| **Code** | What would this change do? An ORM console in JavaScript or Python, with a dry run that saves nothing. |
+
+Screenshots of every tab: [odoo-debug.unclecatvn.com](https://odoo-debug.unclecatvn.com/#features).
 
 ## Install
 
-Install **[Odoo Debug from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** and click **Add to Chrome**. It works in Chrome, Edge, Brave and other Chromium browsers (Edge asks to allow extensions from other stores first), and updates itself.
+1. Install **[Odoo Debug from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)**. It works in Chrome, Edge, Brave and other Chromium browsers (Edge: allow extensions from other stores first), and updates itself.
+2. Open a page of an Odoo 18, 19 or 20 database, logged in.
+3. Click the **Odoo Debug** button at the bottom right, or press **Alt+Shift+O**. From its header the panel goes full screen or into its own window.
 
-Then open any page of an Odoo 18, 19 or 20 database (logged in) and click the **Odoo Debug** button at the bottom right of the page, or press **Alt+Shift+O**. From its header the panel goes full screen or into its own window (for a second screen).
+### Shortcuts
 
-A version not on the store yet: its `odoo-debug-v<version>.zip` from the [Releases](https://github.com/unclecatvn/extension-debug-odoo/releases), unzipped and loaded unpacked (`chrome://extensions` → **Developer mode** → **Load unpacked**); turn the store version off meanwhile, both would add their button to Odoo pages.
+| Shortcut | Does |
+|---|---|
+| **Alt+Shift+O** | Show / hide the panel |
+| **Alt+Shift+D** | Turn Odoo's debug mode on / off |
+| **⌥/Alt + click** | On a field, its label, a list cell or column header, or a tracked change in the chatter: copy its technical name |
 
-## Build from source
+Change them, or add one that opens the panel in its own window, at `chrome://extensions/shortcuts`.
 
-Requirements: **Node.js 22.18 or later**.
+<details>
+<summary>A version not on the store yet</summary>
 
-```sh
-git clone https://github.com/unclecatvn/extension-debug-odoo.git
-cd extension-debug-odoo
-npm install
-npm run build   # → dist/: Load unpacked this folder (chrome://extensions → Developer mode)
-```
+Download `odoo-debug-v<version>.zip` from the [Releases](https://github.com/unclecatvn/extension-debug-odoo/releases), unzip it, then `chrome://extensions` → **Developer mode** → **Load unpacked**. Turn the store version off meanwhile: both would add their button to Odoo pages.
 
-After pulling new code: `npm run build`, then ⟳ in `chrome://extensions` and reload the Odoo page.
+</details>
 
-### Working on it
+## Compatibility
 
-```sh
-npm run watch   # rebuilds dist/ on every save (then ⟳ in chrome://extensions)
-npm run check   # what CI runs: type check, unit tests, build, page-function / markup / import checks
-npm run i18n    # refreshes the .pot / .po after adding a translatable string
-```
+- **Odoo:** 18.0, 19.0, 20.0, detected on each page
+- **Browsers:** Chrome, Edge, Brave and other Chromium browsers (Manifest V3)
+- **Languages:** English, Tiếng Việt
+- **Not supported:** Odoo 17 and earlier; Firefox and Safari
 
-How the code is organized, the rules it follows and how the Odoo versions are handled:
-[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+## Privacy
 
-To release: bump `version` in `static/manifest.json`, add its section to [CHANGELOG.md](CHANGELOG.md), push. CI checks,
-builds and publishes `odoo-debug-v<version>.zip` in the Releases; from `main` it is also uploaded to the Chrome Web Store and submitted for review (repository secrets `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`; Actions › Release › Run workflow sends it again after a refused submission).
+- Talks only to the Odoo server of the tab you are on, with your own session: no backend, no analytics, no tracking.
+- Reads by default. It writes only on your click, as your user: a group applied, a module installed, a translation edited, Python run in its writes mode.
+- Never reads the session cookie's value, only its flags.
+
+Every permission and what it is for: [odoo-debug.unclecatvn.com/#privacy](https://odoo-debug.unclecatvn.com/#privacy).
 
 ## Contributing
 
-Issues and pull requests are welcome. Before opening a pull request:
+Bug reports and pull requests are welcome.
 
-1. `npm run check` passes and `npm run i18n` leaves `static/i18n/` unchanged (CI checks both).
-2. New strings are translated in `static/i18n/vi.po`.
-3. It was tried on at least one Odoo instance; say which version in the pull request.
-
-Found a bug? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) with the Odoo version, the page you were on and, if any, the error from the RPC tab. Opening a pull request means agreeing to the one-sentence [Contributor License Agreement](CONTRIBUTING.md#contributor-license-agreement).
+- **Found a bug?** [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) with the Odoo version, the page you were on and, if any, the error from the RPC tab.
+- **Want to change the code?** Building from source, the checks and the pull request checklist are in [CONTRIBUTING.md](CONTRIBUTING.md); how the code is organized, in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+- **What changed:** [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
@@ -117,4 +95,5 @@ Found a bug? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/
 - **Free to use and modify** for personal or non-commercial use, or for your own company's internal work: an Odoo partner's developers can use it on their clients' projects.
 - **Free to share, only free of charge and for non-commercial purposes**, with the license and copyright notices kept.
 - **Not to sell**: no paid build of it on a store, no hosting or reselling it, no product or service built on it for a fee.
-- Want to use it commercially in a way that isn't allowed? [Open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) or write via [unclecatvn.com](https://unclecatvn.com/) for a commercial license.
+
+For a commercial license, [open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) or write via [unclecatvn.com](https://unclecatvn.com/).

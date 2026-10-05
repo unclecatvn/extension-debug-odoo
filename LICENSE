@@ -3,6 +3,8 @@
 Odoo Debug, copyright (c) 2026 UncleCat, is available under the "Sustainable Use License" below; the licensor is UncleCat.
 All third-party components it includes stay under the license given by their owners.
 
+For a few hours on 1 October 2026 (the v1.3.0 release and the commits around it), the repository held an MIT License file. That license is withdrawn and no longer offered: every version of Odoo Debug, earlier ones included, is available only under the terms below.
+
 ## Sustainable Use License
 
 Version 1.0

@@ -43,7 +43,7 @@ Odoo 20.0: an adapter of its own, every server call, route and webclient interna
 - **RPC: a call is edited right in its detail.** No more *Edit & Resend*: the route and JSON body are the editor straight away, the recorded answer below them; *Send* (or <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Enter</kbd>) replaces it with the new one.
 - **"Open source" becomes "source available"** on the website, the README and the intro film, the project being restricted from selling.
 
-## [1.3.0] - 2026-10-01
+## 1.3.0 - 2026-10-01
 
 Thanks to [@anhbtit](https://github.com/anhbtit) (AnhBT) for the Menus tab, i18n › Languages and the many improvements and fixes of [#10](https://github.com/unclecatvn/extension-debug-odoo/pull/10), marked (#10) below.
 
@@ -199,7 +199,6 @@ First public release. Chrome extension (Manifest V3) for Odoo 18 / 19 developers
 - `odoo.conf` is not readable from a browser by design; nothing in the extension tries to.
 
 [1.4.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.4.0
-[1.3.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.3.0
 [1.2.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.2.0
 [1.1.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.1.0
 [1.0.0]: https://github.com/unclecatvn/extension-debug-odoo/releases/tag/v1.0.0
