@@ -1,6 +1,6 @@
 // npm run screenshots: regenerates website/screenshots/*.png from a real Odoo, with the built extension (dist/: npm run
 // build first) in headless Chrome, 1440×900 at 2×. Needs the Odoo of tools/compose.yml (Sales + CRM with demo data:
-// sale.sale_order_16). Leaves the server profiler on in that database (the Perf shot): throw it away afterwards (down -v).
+// sale.sale_order_7, Marc Demo's rights on it). Leaves the server profiler on in that database (the Perf shot): throw it away afterwards (down -v).
 import { writeFile } from 'node:fs/promises';
 import puppeteer from 'puppeteer';
 import { ODOO, EXT, rpc, openForm, openPanel, isPanel, settingsOf } from './odoo.mjs';
@@ -19,7 +19,7 @@ const settings = await settingsOf(browser); // the panel applies the theme live
 await settings({ lang: 'en', theme: 'light' });
 
 await openForm(browser, page, 'action-base.action_res_users/2'); // any form: logs in and warms the webclient up
-const [, soId] = await rpc(page, '/web/dataset/call_kw', { model: 'ir.model.data', method: 'check_object_reference', args: ['sale', 'sale_order_16'], kwargs: {} });
+const [, soId] = await rpc(page, '/web/dataset/call_kw', { model: 'ir.model.data', method: 'check_object_reference', args: ['sale', 'sale_order_7'], kwargs: {} });
 await page.goto(`${ODOO}/odoo/action-sale.action_orders/${soId}`);
 await page.waitForSelector('.o_form_view');
 let panel = await openPanel(page);
@@ -63,9 +63,24 @@ await settings({ theme: 'light' });
 await writeFile(new URL('overview.png', OUT), await diagonal(light, dark, await panelBox()));
 console.log('overview');
 
-await show('view', ['overview', 'composition']);
-await panel.$eval('#view details.card[data-key=composition]', (c) => c.scrollIntoView({ block: 'start' }));
+// View: the customer picked on the page, why it is read-only and which views it goes through
+await show('view', ['overview', 'composition', 'field']);
+await clickText('#view details.card[data-key=field] button', '⌖ Pick on Page');
+await sleep(400);
+await pickOnPage(await page.$eval('.o_field_widget[name=partner_id]', (n) => { const b = n.getBoundingClientRect(); return [b.x + 30, b.y + b.height / 2]; }));
+await panel.waitForFunction(() => /state in \['cancel', 'sale'\]/.test(document.querySelector('#view details.card[data-key=field]')?.textContent || ''), { timeout: 15_000 });
+await panel.$eval('#view details.card[data-key=field]', (c) => c.scrollIntoView({ block: 'start' }));
 await shot('side-view');
+
+// i18n: "Order Date" picked on the page: where it comes from, where to change it (shown full screen below)
+await show('translations', null, '#translations .subview-body');
+await clickText('#translations button', '⌖ Pick on Page');
+await sleep(400);
+await pickOnPage(await page.$$eval('.o_form_view label', (ls) => { const b = ls.find((x) => x.textContent.trim().startsWith('Order Date')).getBoundingClientRect(); return [b.x + 30, b.y + b.height / 2]; }));
+await panel.waitForFunction(() => /date_order/.test(document.querySelector('#translations .subview-body')?.textContent || ''), { timeout: 15_000 });
+
+await show('menus', null, '#menus .list.menus li');
+await shot('side-menus');
 
 await show('rpc'); // the form's web_read, edited and sent again right in its detail: its answer under the editor
 await panel.$$eval('#rpc .list > li', (lis) => lis.find((li) => li.dataset.q === 'sale.order web_read').click());
@@ -80,13 +95,11 @@ await panel.waitForFunction(() => document.querySelector('#rpc .detail form.comp
 await panel.$eval('#rpc .detail form.composer textarea', (t) => { t.rows = 8; }); // the answer in sight too
 await shot('side-rpc');
 
-await show('code');
+await show('code'); // a change tried in a Python dry run: the new totals, then everything rolled back
+await clickText('#code .seg button', 'Python');
+await clickText('#code .seg button', 'Dry run');
 await panel.$eval('#code textarea.code', (t) => {
-  t.value = [
-    "const orders = await env['sale.order'].search([['state', '=', 'sale']], { limit: 5 });",
-    'for (const so of orders) print(so.name, so.partner_id.name);',
-    "return orders.read(['name', 'partner_id', 'amount_total']);",
-  ].join('\n');
+  t.value = "record.order_line.write({'discount': 10})\nreturn record.read(['amount_untaxed', 'amount_total'])";
   t.dispatchEvent(new Event('input')); // the editor paints on input
 });
 await click('#code .console-acts .btn.primary');
@@ -103,13 +116,34 @@ await settings({ theme: 'light' });
 await full(true);
 await show('record', ['identity', 'fields']);
 await shot('full-record');
-await show('security', null, '#security .subview-head .seg');
-await clickText('#security .subview-head .seg button', 'Groups'); // the groups as a tree, one opened beside them
-await panel.waitForSelector('#security .subview-body .groups-md', { timeout: 30_000 });
+// Security: why Marc Demo can't open this order (the rule refusing), and the group that would let him
+await show('security', null, '#security .user-search input');
+await panel.$eval('#security .user-search input', (i) => i.focus());
+await page.keyboard.type('marc', { delay: 40 });
+await panel.waitForSelector('#security .user-search .suggest:not([hidden]) li', { timeout: 15_000 });
+await page.keyboard.press('Enter');
+await panel.waitForFunction(() => /Personal Orders/.test(document.querySelector('#security .subview table.matrix')?.textContent || ''), { timeout: 20_000 });
 await sleep(800);
-await panel.$$eval('#security .groups-list .matrix tr.opens, #security .groups-list .gnode', (rs) => rs[0]?.click());
-await sleep(1500);
+await panel.$$eval('#security .subview table.matrix tr', (rs) => rs.find((r) => /Global rules/.test(r.textContent))?.scrollIntoView({ block: 'start' }));
 await shot('full-security');
+
+await show('translations');
+await shot('full-i18n');
+
+// Apps: what installing website_sale brings, as Odoo computes it
+await show('apps', null, '#apps .searchbar input');
+for (const x of await panel.$$('#apps .searchbar .facet-x')) await x.evaluate((b) => b.click()); // every module
+await panel.$eval('#apps .searchbar input', (i) => { i.value = 'website_sale;'; i.dispatchEvent(new Event('input', { bubbles: true })); });
+await sleep(600);
+await panel.$$eval('#apps table.matrix tr[data-id]', (rs) => rs.find((r) => !r.hidden && /^website_sale ·/.test(r.querySelector('.mx-label')?.innerText.split('\n').at(-1) || ''))?.querySelector('.mx-label').click());
+await panel.waitForFunction(() => /website_sale/.test(document.querySelector('#apps .groups-pane')?.textContent || ''), { timeout: 15_000 });
+await panel.$$eval('#apps .groups-pane details.fold', (ds) => ds.forEach((d) => {
+  const open = /^Depends/.test(d.querySelector('summary').textContent.trim());
+  if (d.open !== open) { d.open = open; d.dispatchEvent(new Event('toggle')); }
+}));
+await panel.waitForFunction(() => /also installs/i.test(document.querySelector('#apps .groups-pane')?.textContent || ''), { timeout: 20_000 });
+await sleep(600);
+await shot('full-apps');
 
 // Perf: start the profiler, reload the page (the panel comes back, full screen, on this tab) so its requests are
 // recorded, then open the slowest call: its diagnosis in the pane beside the list.
@@ -133,6 +167,13 @@ await shot('full-perf');
 await clickText('#perf .perf-recorder .btn', 'Stop Profiling');
 
 await browser.close();
+
+/** A click on the Odoo page at [x, y] (the panel's ⌖ Pick on Page waits for it). */
+async function pickOnPage([x, y]) {
+  await page.mouse.move(x, y);
+  await sleep(200);
+  await page.mouse.click(x, y);
+}
 
 /** The panel's box in CSS px (its iframe sits in a closed shadow root: found from the frame). */
 async function panelBox() {
