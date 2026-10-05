@@ -103,8 +103,6 @@ export function modelsView(body: HTMLElement, c: SecurityCtx) {
       button(_t('Collapse All'), () => foldAll(true), 'chip', _t('Fold every module back to its line')),
       ...(sim.tried.size ? [toggle('added', _t('Only what the tried groups add'))] : []), ...(theirs ? [toggle('differs', _t('Only differences'))] : []), count);
     apply();
-    // module titles stay in sight while scrolling, under the sticky toolbar
-    new ResizeObserver(() => table.style.setProperty('--mx-sticky-top', `${bar.offsetHeight}px`)).observe(bar);
     const legend = note(theirs ? _t('Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it.', sim.user.name, other!.user.name)
       : _t('✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it.'));
     legend.classList.add('legend');

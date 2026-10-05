@@ -84,7 +84,33 @@ export function matrix(first: string, heads: readonly string[], sections: readon
     for (const r of s.rows) sec.body.append(...row(r, span, focus, table, pane));
     table.append(sec.body);
   }
+  stickHead(table);
   return table;
+}
+
+/** The column names stay in sight while the table scrolls by: under the sticky bar above the table if there is one (a
+ * filter bar, Apps' search bar), else at the top (panel.css: --mx-sticky-top; --mx-head-h for the section titles sticking
+ * under them). Measured once the table is laid out, again whenever that bar changes height (it wraps). */
+function stickHead(table: HTMLTableElement) {
+  let bar: HTMLElement | null | undefined;
+  const ro = new ResizeObserver(() => {
+    if (!table.isConnected) return;
+    if (bar === undefined && (bar = stickyAbove(table))) ro.observe(bar);
+    const top = bar ? bar.offsetHeight + (parseFloat(getComputedStyle(bar).top) || 0) : 0;
+    table.style.setProperty('--mx-sticky-top', `${top}px`);
+    table.style.setProperty('--mx-head-h', `${table.tHead?.offsetHeight ?? 0}px`);
+  });
+  ro.observe(table);
+}
+
+/** The nearest element sticking above `el`: a sticky earlier sibling of it or of one of its ancestors, within its tab. */
+function stickyAbove(el: Element): HTMLElement | null {
+  for (let n: Element | null = el; n && !n.classList.contains('tab'); n = n.parentElement) {
+    for (let s = n.previousElementSibling; s; s = s.previousElementSibling) {
+      if (s instanceof HTMLElement && getComputedStyle(s).position === 'sticky') return s;
+    }
+  }
+  return null;
 }
 
 function row(r: MxRow, span: number, focus: number, table: HTMLTableElement, pane?: HTMLElement): HTMLTableRowElement[] {

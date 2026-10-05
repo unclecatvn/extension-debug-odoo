@@ -95,32 +95,32 @@ msgstr "Perf"
 msgid "Code"
 msgstr "Code"
 
-#: src/entrypoints/panel/index.ts:51
-#: src/entrypoints/panel/index.ts:52
+#: src/entrypoints/panel/index.ts:49
+#: src/entrypoints/panel/index.ts:50
 msgid "Cannot read this tab: %s"
 msgstr "Cannot read this tab: %s"
 
-#: src/entrypoints/panel/index.ts:51
+#: src/entrypoints/panel/index.ts:49
 msgid "The current tab is not an Odoo page."
 msgstr "The current tab is not an Odoo page."
 
-#: src/entrypoints/panel/index.ts:54
+#: src/entrypoints/panel/index.ts:52
 msgid "Not available on Odoo %s: %s"
 msgstr "Not available on Odoo %s: %s"
 
-#: src/entrypoints/panel/index.ts:101
+#: src/entrypoints/panel/index.ts:99
 msgid "Odoo %s is not tested: the panel uses its Odoo %s support, some cards may fail."
 msgstr "Odoo %s is not tested: the panel uses its Odoo %s support, some cards may fail."
 
-#: src/entrypoints/panel/index.ts:102
+#: src/entrypoints/panel/index.ts:100
 msgid "Odoo %s is older than every supported version: some cards may fail."
 msgstr "Odoo %s is older than every supported version: some cards may fail."
 
-#: src/entrypoints/panel/index.ts:103
+#: src/entrypoints/panel/index.ts:101
 msgid "This database lacks fields the panel expects for Odoo %s: %s"
 msgstr "This database lacks fields the panel expects for Odoo %s: %s"
 
-#: src/entrypoints/panel/index.ts:107
+#: src/entrypoints/panel/index.ts:106
 msgid "Odoo %s, supported"
 msgstr "Odoo %s, supported"
 
@@ -133,63 +133,83 @@ msgstr "Not an Odoo page"
 msgid "This page"
 msgstr "This page"
 
-#: src/entrypoints/popup/index.html:20
-msgid "Show / Hide Panel"
-msgstr "Show / Hide Panel"
+#: src/entrypoints/popup/index.html:19
+msgid "Open the Panel in Its Own Window"
+msgstr "Open the Panel in Its Own Window"
 
-#: src/entrypoints/popup/index.html:22
-#: src/entrypoints/popup/index.html:23
+#: src/entrypoints/popup/index.html:20
+#: src/entrypoints/popup/index.html:21
 msgid "Debug Mode"
 msgstr "Debug Mode"
 
-#: src/entrypoints/popup/index.html:24
+#: src/entrypoints/popup/index.html:22
 msgid "Keep it on for this Odoo"
 msgstr "Keep it on for this Odoo"
 
-#: src/entrypoints/popup/index.html:27
+#: src/entrypoints/popup/index.html:25
 #: src/features/translations/translations.langs.ts:55
 msgid "Language"
 msgstr "Language"
 
-#: src/entrypoints/popup/index.html:31
-#: src/entrypoints/popup/index.html:32
+#: src/entrypoints/popup/index.html:29
+#: src/entrypoints/popup/index.html:30
 msgid "Theme"
 msgstr "Theme"
 
-#: src/entrypoints/popup/index.html:35
+#: src/entrypoints/popup/index.html:33
 msgid "Shortcuts"
 msgstr "Shortcuts"
 
-#: src/entrypoints/popup/index.html:36
+#: src/entrypoints/popup/index.html:34
 #: src/features/perf/perf.request.ts:122
 #: src/features/security/security.groups.ts:263
 msgid "Change"
 msgstr "Change"
 
-#: src/entrypoints/popup/index.html:38
+#: src/entrypoints/popup/index.html:36
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 
-#: src/entrypoints/popup/index.ts:11
+#: src/entrypoints/popup/index.ts:15
 #: src/features/security/security.tab.ts:65
 msgid "System"
 msgstr "System"
 
-#: src/entrypoints/popup/index.ts:11
+#: src/entrypoints/popup/index.ts:15
 msgid "Light"
 msgstr "Light"
 
-#: src/entrypoints/popup/index.ts:11
+#: src/entrypoints/popup/index.ts:15
 msgid "Dark"
 msgstr "Dark"
 
-#: src/entrypoints/popup/index.ts:46
+#: src/entrypoints/popup/index.ts:51
 msgid "panel"
 msgstr "panel"
 
-#: src/entrypoints/popup/index.ts:46
+#: src/entrypoints/popup/index.ts:51
+msgid "window"
+msgstr "window"
+
+#: src/entrypoints/popup/index.ts:51
 msgid "debug"
 msgstr "debug"
+
+#: src/entrypoints/popup/index.ts:77
+msgid "Host"
+msgstr "Host"
+
+#: src/entrypoints/popup/index.ts:78
+msgid "Odoo version"
+msgstr "Odoo version"
+
+#: src/entrypoints/popup/index.ts:78
+msgid "Database"
+msgstr "Database"
+
+#: src/entrypoints/popup/index.ts:109
+msgid "Turn Debug Off"
+msgstr "Turn Debug Off"
 
 #: src/extension/run-in-tab.ts:16
 msgid "No tab is open."
@@ -1558,71 +1578,71 @@ msgstr "Read-only"
 msgid "Allow writes"
 msgstr "Allow writes"
 
-#: src/features/code/code.tab.ts:57
-msgid "Runs on:"
-msgstr "Runs on:"
-
-#: src/features/code/code.tab.ts:58
-msgid "no model on this screen: record, records and model are empty"
-msgstr "no model on this screen: record, records and model are empty"
-
-#: src/features/code/code.tab.ts:61
-msgid "record #%s"
-msgstr "record #%s"
-
-#: src/features/code/code.tab.ts:61
-msgid "no record opened"
-msgstr "no record opened"
-
-#: src/features/code/code.tab.ts:62
-msgid "%s selected"
-msgstr "%s selected"
-
-#: src/features/code/code.tab.ts:64
-msgid "Read the selection again"
-msgstr "Read the selection again"
-
-#: src/features/code/code.tab.ts:72
-msgid "Run"
-msgstr "Run"
-
-#: src/features/code/code.tab.ts:72
-msgid "Run (⌘/Ctrl+Enter)"
-msgstr "Run (⌘/Ctrl+Enter)"
-
-#: src/features/code/code.tab.ts:74
-msgid "Auto Refresh"
-msgstr "Auto Refresh"
-
-#: src/features/code/code.tab.ts:74
-msgid "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
-msgstr "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
-
-#: src/features/code/code.tab.ts:99
-msgid "Snippets"
-msgstr "Snippets"
-
-#: src/features/code/code.tab.ts:99
-msgid "Ready-made snippets, and the ones you saved for this Odoo"
-msgstr "Ready-made snippets, and the ones you saved for this Odoo"
-
-#: src/features/code/code.tab.ts:100
-msgid "Guide: available variables, recordset API, examples"
-msgstr "Guide: available variables, recordset API, examples"
-
-#: src/features/code/code.tab.ts:101
+#: src/features/code/code.tab.ts:56
 msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
 msgstr "Runs as %s (uid %s): their access rights, record rules and companies apply."
 
-#: src/features/code/code.tab.ts:116
+#: src/features/code/code.tab.ts:58
+msgid "Runs on:"
+msgstr "Runs on:"
+
+#: src/features/code/code.tab.ts:59
+msgid "no model on this screen: record, records and model are empty"
+msgstr "no model on this screen: record, records and model are empty"
+
+#: src/features/code/code.tab.ts:62
+msgid "record #%s"
+msgstr "record #%s"
+
+#: src/features/code/code.tab.ts:62
+msgid "no record opened"
+msgstr "no record opened"
+
+#: src/features/code/code.tab.ts:63
+msgid "%s selected"
+msgstr "%s selected"
+
+#: src/features/code/code.tab.ts:65
+msgid "Read the selection again"
+msgstr "Read the selection again"
+
+#: src/features/code/code.tab.ts:73
+msgid "Run"
+msgstr "Run"
+
+#: src/features/code/code.tab.ts:73
+msgid "Run (⌘/Ctrl+Enter)"
+msgstr "Run (⌘/Ctrl+Enter)"
+
+#: src/features/code/code.tab.ts:75
+msgid "Auto Refresh"
+msgstr "Auto Refresh"
+
+#: src/features/code/code.tab.ts:75
+msgid "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
+msgstr "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
+
+#: src/features/code/code.tab.ts:100
+msgid "Snippets"
+msgstr "Snippets"
+
+#: src/features/code/code.tab.ts:100
+msgid "Ready-made snippets, and the ones you saved for this Odoo"
+msgstr "Ready-made snippets, and the ones you saved for this Odoo"
+
+#: src/features/code/code.tab.ts:101
+msgid "Guide: available variables, recordset API, examples"
+msgstr "Guide: available variables, recordset API, examples"
+
+#: src/features/code/code.tab.ts:117
 msgid "Name of the snippet:"
 msgstr "Name of the snippet:"
 
-#: src/features/code/code.tab.ts:152
+#: src/features/code/code.tab.ts:153
 msgid "Python runs as a server action: it needs Settings rights (base.group_system)."
 msgstr "Python runs as a server action: it needs Settings rights (base.group_system)."
 
-#: src/features/code/code.tpl.html:35
+#: src/features/code/code.tpl.html:36
 msgid "Suggestions"
 msgstr "Suggestions"
 
@@ -2433,7 +2453,7 @@ msgid "Brought by (groups implying it)"
 msgstr "Brought by (groups implying it)"
 
 #: src/features/security/security.groups.ts:123
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "%s models"
 msgstr "%s models"
 
@@ -2478,7 +2498,7 @@ msgstr "The rule doesn't cover this operation"
 
 #: src/features/security/security.groups.ts:143
 #: src/features/security/security.model.ts:49
-#: src/features/security/security.models.ts:159
+#: src/features/security/security.models.ts:157
 msgid "Rule"
 msgstr "Rule"
 
@@ -2881,119 +2901,119 @@ msgstr "Only what the tried groups add"
 msgid "Only differences"
 msgstr "Only differences"
 
-#: src/features/security/security.models.ts:108
+#: src/features/security/security.models.ts:106
 msgid "Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
 msgstr "Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
 
-#: src/features/security/security.models.ts:109
+#: src/features/security/security.models.ts:107
 msgid "✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
 msgstr "✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
 
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "1 model"
 msgstr "1 model"
 
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "%s every operation"
 msgstr "%s every operation"
 
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "%s read only"
 msgstr "%s read only"
 
-#: src/features/security/security.models.ts:118
+#: src/features/security/security.models.ts:116
 msgid "%s some operations"
 msgstr "%s some operations"
 
-#: src/features/security/security.models.ts:118
+#: src/features/security/security.models.ts:116
 msgid "%s limited by rules"
 msgstr "%s limited by rules"
 
-#: src/features/security/security.models.ts:129
+#: src/features/security/security.models.ts:127
 msgid "%s can %s %s."
 msgstr "%s can %s %s."
 
-#: src/features/security/security.models.ts:129
+#: src/features/security/security.models.ts:127
 msgid "%s has no access to %s."
 msgstr "%s has no access to %s."
 
-#: src/features/security/security.models.ts:130
+#: src/features/security/security.models.ts:128
 msgid "Not %s."
 msgstr "Not %s."
 
-#: src/features/security/security.models.ts:131
+#: src/features/security/security.models.ts:129
 msgid "1 record rule decides which records: only the ones it allows."
 msgstr "1 record rule decides which records: only the ones it allows."
 
-#: src/features/security/security.models.ts:132
+#: src/features/security/security.models.ts:130
 msgid "%s record rules decide which records: only the ones they allow."
 msgstr "%s record rules decide which records: only the ones they allow."
 
-#: src/features/security/security.models.ts:132
+#: src/features/security/security.models.ts:130
 msgid "No record rule: every record."
 msgstr "No record rule: every record."
 
-#: src/features/security/security.models.ts:133
+#: src/features/security/security.models.ts:131
 msgid "%s: %s."
 msgstr "%s: %s."
 
-#: src/features/security/security.models.ts:133
+#: src/features/security/security.models.ts:131
 msgid "no access"
 msgstr "no access"
 
-#: src/features/security/security.models.ts:139
+#: src/features/security/security.models.ts:137
 msgid "Every user (an ACL without a group)"
 msgstr "Every user (an ACL without a group)"
 
-#: src/features/security/security.models.ts:140
+#: src/features/security/security.models.ts:138
 msgid "being tried"
 msgstr "being tried"
 
-#: src/features/security/security.models.ts:141
+#: src/features/security/security.models.ts:139
 msgid "This ACL grants %s"
 msgstr "This ACL grants %s"
 
-#: src/features/security/security.models.ts:141
+#: src/features/security/security.models.ts:139
 msgid "Not granted by this ACL"
 msgstr "Not granted by this ACL"
 
-#: src/features/security/security.models.ts:148
+#: src/features/security/security.models.ts:146
 msgid "global: applies to every user"
 msgstr "global: applies to every user"
 
-#: src/features/security/security.models.ts:148
+#: src/features/security/security.models.ts:146
 msgid "for the group %s"
 msgstr "for the group %s"
 
-#: src/features/security/security.models.ts:149
+#: src/features/security/security.models.ts:147
 msgid "Limits the records for %s"
 msgstr "Limits the records for %s"
 
-#: src/features/security/security.models.ts:149
+#: src/features/security/security.models.ts:147
 msgid "Doesn't apply to %s"
 msgstr "Doesn't apply to %s"
 
-#: src/features/security/security.models.ts:156
+#: src/features/security/security.models.ts:154
 msgid "Access rights (ACL): who grants what"
 msgstr "Access rights (ACL): who grants what"
 
-#: src/features/security/security.models.ts:157
+#: src/features/security/security.models.ts:155
 msgid "Granted by"
 msgstr "Granted by"
 
-#: src/features/security/security.models.ts:157
+#: src/features/security/security.models.ts:155
 msgid "No ACL of this user's groups grants anything on this model."
 msgstr "No ACL of this user's groups grants anything on this model."
 
-#: src/features/security/security.models.ts:158
+#: src/features/security/security.models.ts:156
 msgid "An operation is allowed when at least one of these ACLs grants it."
 msgstr "An operation is allowed when at least one of these ACLs grants it."
 
-#: src/features/security/security.models.ts:159
+#: src/features/security/security.models.ts:157
 msgid "Record rules: which records"
 msgstr "Record rules: which records"
 
-#: src/features/security/security.models.ts:160
+#: src/features/security/security.models.ts:158
 msgid "For an operation, a record must match every global rule and at least one of the group rules. Click a rule for its domain; the Record view evaluates them on a record."
 msgstr "For an operation, a record must match every global rule and at least one of the group rules. Click a rule for its domain; the Record view evaluates them on a record."
 

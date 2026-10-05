@@ -16,7 +16,6 @@ import { $ } from '../../ui/dom.ts';
 import { clearForms } from '../../ui/form-state.ts';
 import { templates } from '../../ui/template.ts';
 import { startTooltips } from '../../ui/tooltip.ts';
-import { startClock } from './clock.ts';
 import html from './panel.tpl.html';
 
 const settings = await loadSettings();
@@ -24,7 +23,6 @@ await loadLang(settings.lang); // before anything renders: every _t() below need
 document.documentElement.lang = lang;
 translateDom();
 startTooltips();
-startClock($<HTMLTimeElement>('#clock-time'), $('#clock-date'), lang);
 const tpl = templates(html, translateDom);
 /** In its own window: the tab it inspects (?tab=), else null (in the page). */
 const ownWindowOf = Number(new URLSearchParams(location.search).get('tab')) || null;
@@ -103,7 +101,8 @@ function showVersion() {
     mismatches.length && _t('This database lacks fields the panel expects for Odoo %s: %s', adapter.major,
       mismatches.map((m) => `${m.model}.${m.field} (${m.usedBy})`).join(', ')),
   ].filter((w): w is string => !!w);
-  const p = pill(`Odoo ${version.label}${warnings.length ? ' ⚠' : ''}`, warnings.length ? 'med' : '');
+  const short = `${version.saas ? 'saas~' : ''}${version.major}.${version.minor}`; // the build date in the tooltip: the header stays short
+  const p = pill(`Odoo ${short}${warnings.length ? ' ⚠' : ''}`, warnings.length ? 'med' : '');
   p.title = warnings.join('\n') || _t('Odoo %s, supported', version.label);
   box.replaceChildren(p);
 }

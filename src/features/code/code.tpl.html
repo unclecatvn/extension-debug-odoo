@@ -1,12 +1,13 @@
 <!-- features/code/code.*.ts: the Code tab, an ORM console (styles: ui/panel.css, "Code tab").
-     The bar (language, mode, run, snippets, guide), the screen it runs on, the editor, the guide, the result.
+     The bar (how it runs: language, mode · what to do: snippets, guide, run), who it runs as and on what, the editor,
+     the guide, the result.
      data-ref: filled by the code, text only. -->
 
 <template data-tpl="console">
   <div class="card console-card">
     <div class="card-body">
       <div class="console" data-ref="root">
-        <div class="row console-bar" data-ref="bar"></div>
+        <div class="row console-bar" data-ref="bar"><div class="row console-opts" data-ref="opts"></div><div class="row console-acts" data-ref="acts"></div></div>
         <div class="row console-screen muted" data-ref="screen"></div>
         <div data-ref="editor"></div>
         <div class="code-help" data-ref="guide" hidden></div>

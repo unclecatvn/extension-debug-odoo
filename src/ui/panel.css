@@ -65,12 +65,6 @@ code, pre, .mono { font-family: var(--mono); font-size: var(--fs-sm); line-heigh
 .win-btns { display: flex; gap: 2px; padding-left: 6px; border-left: 1px solid var(--line); } /* kept together, apart from ⟳ */
 .brand { display: flex; align-items: center; gap: 8px; }
 .brand strong { font-size: var(--fs-md); font-weight: 600; letter-spacing: -.01em; }
-/* the clock under the name: the time in the accent colour, digits of equal width (no jump at each minute), the date muted */
-.brand-text { display: flex; flex-direction: column; gap: 1px; line-height: 1.2; }
-.clock { display: flex; align-items: baseline; gap: 5px; font-size: var(--fs-xs); color: var(--muted); white-space: nowrap; cursor: default; }
-.clock time { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: .02em; }
-.clock-dot { opacity: .6; }
-@media (max-width: 899.98px) { .clock-dot, #clock-date { display: none; } } /* narrow panel: the time only (the date on hover), the header stays one line */
 .spacer { flex: 1; }
 /* segmented control: a sunken track, the chosen option raised on it (popup: debug mode, language) */
 .seg { display: inline-flex; gap: 2px; padding: 2px; border-radius: var(--r); background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); }
@@ -87,9 +81,10 @@ code, pre, .mono { font-family: var(--mono); font-size: var(--fs-sm); line-heigh
 .tabs { display: flex; gap: 2px; margin: 0 8px 8px; padding: 3px; border-radius: 10px; background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); }
 .tabs button { flex: 1 1 0; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 0; height: 30px; padding: 0 6px;
   border: 0; border-radius: 7px; background: none; color: var(--muted); font-size: 0; white-space: nowrap; transition: flex-grow .15s, color .15s; }
+.tabs button > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; } /* no room left: "Transl…", never out of the button */
 .tabs button::before { content: ''; flex: none; width: 16px; height: 16px; background: currentColor; mask: var(--icon) center / contain no-repeat; }
 .tabs button:hover:not(.active) { color: var(--fg); background: var(--hover); }
-.tabs button.active { flex-grow: 3; color: var(--fg); font-size: var(--fs-sm); font-weight: 600; background: var(--surface); box-shadow: 0 1px 2px rgb(0 0 0 / .08), 0 0 0 1px var(--line); }
+.tabs button.active { flex: 3 1 auto; min-width: 28px; color: var(--fg); font-size: var(--fs-sm); font-weight: 600; background: var(--surface); box-shadow: 0 1px 2px rgb(0 0 0 / .08), 0 0 0 1px var(--line); }
 .tabs button.active::before { background: var(--accent); }
 .tabs button:focus-visible, .icon-btn:focus-visible { outline: 0; box-shadow: var(--ring); }
 /* line icons (Lucide, ISC): masks, so they take the text color */
@@ -305,8 +300,14 @@ body.popup { width: 320px; height: auto; display: block; padding-bottom: 14px; b
 .pop-label { color: var(--muted); font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px; }
 .popup .seg { display: flex; }
 .popup .seg button { flex: 1; padding: 5px 8px; font-size: var(--fs-sm); }
-.popup .row > .btn { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
-.popup #host { color: var(--fg); }
+.popup .one-line { display: flex; gap: 12px; color: var(--fg); white-space: nowrap; overflow: hidden; }
+.popup .info { display: inline-flex; align-items: center; gap: 4px; min-width: 0; flex: none; }
+.popup .info:first-child { flex: 0 1 auto; }
+.popup .info > span { overflow: hidden; text-overflow: ellipsis; }
+.popup .info::before { content: ''; flex: none; width: 12px; height: 12px; background: var(--muted); mask: var(--icon) center / contain no-repeat; }
+[data-info=host] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20'/></svg>"); }
+[data-info=version] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z'/><circle cx='7.5' cy='7.5' r='1'/></svg>"); }
+[data-info=db] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='5' rx='9' ry='3'/><path d='M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0'/></svg>"); }
 .pop-select { width: 100%; padding: 5px 8px; font-size: var(--fs-sm); }
 .pop-check { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: var(--fs-sm); cursor: pointer; }
 #shortcuts { color: var(--muted); font-size: var(--fs-sm); }
@@ -321,7 +322,6 @@ body.popup { width: 320px; height: auto; display: block; padding-bottom: 14px; b
 .console { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
 .console-bar { flex-wrap: nowrap; align-items: center; gap: 10px; }
 .console-bar > * { flex: none; white-space: nowrap; } /* a label never breaks: the user's name gives way first */
-.console-bar .who { flex: 1 1 0; min-width: 0; text-align: right; overflow: hidden; text-overflow: ellipsis; font-family: var(--mono); font-size: var(--fs-xs); }
 .btn.round { width: 24px; height: 24px; padding: 0; border-radius: 50%; font-weight: 700; }
 .btn.primary { background: var(--accent); color: var(--surface); font-weight: 600; }
 .btn.primary:hover { filter: brightness(1.1); background: var(--accent); border-color: var(--accent); }
@@ -619,7 +619,8 @@ label.check { display: inline-flex; align-items: center; gap: 4px; color: var(--
 /* the permission table: a row per check / model / group, a narrow column per operation or user */
 table.matrix { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); border-collapse: separate; border-spacing: 0; }
 .matrix th, .matrix td { padding: var(--row-y) 12px; border-top: 1px solid var(--line); vertical-align: middle; }
-.matrix thead th { border-top: 0; color: var(--muted); font-size: var(--fs-xs); font-weight: 600; white-space: nowrap; }
+.matrix thead th { position: sticky; top: var(--mx-sticky-top, 0px); z-index: 1; background: var(--surface); border-top: 0; color: var(--muted); font-size: var(--fs-xs); font-weight: 600; white-space: nowrap; }
+.matrix thead th:not(.focus) { box-shadow: inset 0 -1px var(--line); } /* its line under it, also while rows scroll beneath */
 .matrix thead th:first-child { color: var(--fg); font-family: var(--mono); font-size: var(--fs-sm); }
 .matrix th.c, .matrix td.c { width: 58px; padding-inline: 4px; text-align: center; white-space: nowrap; }
 .matrix td.c.act { width: 1%; padding-inline: 8px; }
@@ -802,7 +803,12 @@ button[data-tip] { cursor: pointer; }
 .strong { font-weight: 600; }
 
 /* ---------- Code tab (features/code): the bar, the screen it runs on, snippets, typed results ---------- */
-#code .console-bar { flex-wrap: wrap; row-gap: 6px; } /* more tools than the JS version's: they wrap */
+#code .console-bar { flex-wrap: wrap; justify-content: space-between; gap: 6px 10px; } /* how it runs | what to do: two groups, the second wraps under */
+#code .console-opts, #code .console-acts { align-items: center; gap: 6px 8px; }
+#code .console-opts { flex-shrink: 1; min-width: 0; } /* narrow: language and mode wrap onto two lines */
+#code .console-acts { flex-wrap: nowrap; }
+#code .console-acts { margin-left: auto; } /* at the right, also once wrapped */
+.console-screen .who { margin-left: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--mono); }
 #code .console-bar .seg { flex-wrap: nowrap; }
 .console-screen { flex: none; align-items: center; gap: 8px; font-size: var(--fs-xs); }
 .console-screen .chip { padding: 0 8px; line-height: 18px; }
@@ -852,7 +858,7 @@ pre.value-text { margin: 0; font-size: var(--fs-sm); font-weight: 400; white-spa
 textarea.code { max-height: none; }
 textarea.code:focus-visible { box-shadow: none; }
 /* Security › By model: a module's title stays in sight while its models scroll by (under the sticky filter bar) */
-#security table.by-model tbody.foldable:not(.folded) .mx-section th { position: sticky; top: var(--mx-sticky-top, 0px); z-index: 1; }
+#security table.by-model tbody.foldable:not(.folded) .mx-section th { position: sticky; top: calc(var(--mx-sticky-top, 0px) + var(--mx-head-h, 0px)); z-index: 1; } /* under the column names (matrix.ts) */
 #security table.by-model .mx-section th { padding-block: 8px; }
 #security table.by-model .mx-note { font-weight: 400; }
 .model-sentence { color: var(--fg); font-size: var(--fs-sm); }

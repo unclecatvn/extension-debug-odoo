@@ -30,7 +30,8 @@ async function forget(tabId: number) {
   await saveWindows(map);
 }
 
-async function detach(tabId: number) {
+/** Opens the panel of `tabId` in its own window, or brings that window to the front. */
+export async function detach(tabId: number) {
   const existing = await windowOf(tabId);
   if (existing != null) { await chrome.windows.update(existing, { focused: true }); return; }
   const { [BOUNDS_KEY]: bounds = DEFAULT_BOUNDS } = (await chrome.storage.local.get(BOUNDS_KEY)) as { [BOUNDS_KEY]?: Bounds };

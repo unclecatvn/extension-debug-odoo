@@ -95,32 +95,32 @@ msgstr "Perf"
 msgid "Code"
 msgstr "Code"
 
-#: src/entrypoints/panel/index.ts:51
-#: src/entrypoints/panel/index.ts:52
+#: src/entrypoints/panel/index.ts:49
+#: src/entrypoints/panel/index.ts:50
 msgid "Cannot read this tab: %s"
 msgstr "Không đọc được tab này: %s"
 
-#: src/entrypoints/panel/index.ts:51
+#: src/entrypoints/panel/index.ts:49
 msgid "The current tab is not an Odoo page."
 msgstr "Tab hiện tại không phải trang Odoo."
 
-#: src/entrypoints/panel/index.ts:54
+#: src/entrypoints/panel/index.ts:52
 msgid "Not available on Odoo %s: %s"
 msgstr "Không dùng được trên Odoo %s: %s"
 
-#: src/entrypoints/panel/index.ts:101
+#: src/entrypoints/panel/index.ts:99
 msgid "Odoo %s is not tested: the panel uses its Odoo %s support, some cards may fail."
 msgstr "Odoo %s chưa được kiểm thử: panel dùng phần hỗ trợ Odoo %s, một số card có thể lỗi."
 
-#: src/entrypoints/panel/index.ts:102
+#: src/entrypoints/panel/index.ts:100
 msgid "Odoo %s is older than every supported version: some cards may fail."
 msgstr "Odoo %s cũ hơn mọi phiên bản được hỗ trợ: một số card có thể lỗi."
 
-#: src/entrypoints/panel/index.ts:103
+#: src/entrypoints/panel/index.ts:101
 msgid "This database lacks fields the panel expects for Odoo %s: %s"
 msgstr "Database này thiếu các field panel cần cho Odoo %s: %s"
 
-#: src/entrypoints/panel/index.ts:107
+#: src/entrypoints/panel/index.ts:106
 msgid "Odoo %s, supported"
 msgstr "Odoo %s, được hỗ trợ"
 
@@ -133,63 +133,83 @@ msgstr "Không phải trang Odoo"
 msgid "This page"
 msgstr "Trang hiện tại"
 
-#: src/entrypoints/popup/index.html:20
-msgid "Show / Hide Panel"
-msgstr "Hiện / ẩn panel"
+#: src/entrypoints/popup/index.html:19
+msgid "Open the Panel in Its Own Window"
+msgstr "Mở panel trong cửa sổ riêng"
 
-#: src/entrypoints/popup/index.html:22
-#: src/entrypoints/popup/index.html:23
+#: src/entrypoints/popup/index.html:20
+#: src/entrypoints/popup/index.html:21
 msgid "Debug Mode"
 msgstr "Chế độ debug"
 
-#: src/entrypoints/popup/index.html:24
+#: src/entrypoints/popup/index.html:22
 msgid "Keep it on for this Odoo"
 msgstr "Luôn bật cho Odoo này"
 
-#: src/entrypoints/popup/index.html:27
+#: src/entrypoints/popup/index.html:25
 #: src/features/translations/translations.langs.ts:55
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: src/entrypoints/popup/index.html:31
-#: src/entrypoints/popup/index.html:32
+#: src/entrypoints/popup/index.html:29
+#: src/entrypoints/popup/index.html:30
 msgid "Theme"
 msgstr "Giao diện"
 
-#: src/entrypoints/popup/index.html:35
+#: src/entrypoints/popup/index.html:33
 msgid "Shortcuts"
 msgstr "Phím tắt"
 
-#: src/entrypoints/popup/index.html:36
+#: src/entrypoints/popup/index.html:34
 #: src/features/perf/perf.request.ts:122
 #: src/features/security/security.groups.ts:263
 msgid "Change"
 msgstr "Đổi"
 
-#: src/entrypoints/popup/index.html:38
+#: src/entrypoints/popup/index.html:36
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Mẹo: ⌥/Alt + click vào một field trên trang Odoo để copy tên kỹ thuật."
 
-#: src/entrypoints/popup/index.ts:11
+#: src/entrypoints/popup/index.ts:15
 #: src/features/security/security.tab.ts:65
 msgid "System"
 msgstr "Hệ thống"
 
-#: src/entrypoints/popup/index.ts:11
+#: src/entrypoints/popup/index.ts:15
 msgid "Light"
 msgstr "Sáng"
 
-#: src/entrypoints/popup/index.ts:11
+#: src/entrypoints/popup/index.ts:15
 msgid "Dark"
 msgstr "Tối"
 
-#: src/entrypoints/popup/index.ts:46
+#: src/entrypoints/popup/index.ts:51
 msgid "panel"
 msgstr "panel"
 
-#: src/entrypoints/popup/index.ts:46
+#: src/entrypoints/popup/index.ts:51
+msgid "window"
+msgstr "cửa sổ"
+
+#: src/entrypoints/popup/index.ts:51
 msgid "debug"
 msgstr "debug"
+
+#: src/entrypoints/popup/index.ts:77
+msgid "Host"
+msgstr "Host"
+
+#: src/entrypoints/popup/index.ts:78
+msgid "Odoo version"
+msgstr "Phiên bản Odoo"
+
+#: src/entrypoints/popup/index.ts:78
+msgid "Database"
+msgstr "Database"
+
+#: src/entrypoints/popup/index.ts:109
+msgid "Turn Debug Off"
+msgstr "Tắt debug"
 
 #: src/extension/run-in-tab.ts:16
 msgid "No tab is open."
@@ -1558,71 +1578,71 @@ msgstr "Chỉ đọc"
 msgid "Allow writes"
 msgstr "Cho phép ghi"
 
-#: src/features/code/code.tab.ts:57
-msgid "Runs on:"
-msgstr "Chạy trên:"
-
-#: src/features/code/code.tab.ts:58
-msgid "no model on this screen: record, records and model are empty"
-msgstr "màn hình này không có model: record, records và model đều rỗng"
-
-#: src/features/code/code.tab.ts:61
-msgid "record #%s"
-msgstr "bản ghi #%s"
-
-#: src/features/code/code.tab.ts:61
-msgid "no record opened"
-msgstr "chưa mở bản ghi nào"
-
-#: src/features/code/code.tab.ts:62
-msgid "%s selected"
-msgstr "đang chọn %s"
-
-#: src/features/code/code.tab.ts:64
-msgid "Read the selection again"
-msgstr "Đọc lại các bản ghi đang chọn"
-
-#: src/features/code/code.tab.ts:72
-msgid "Run"
-msgstr "Chạy"
-
-#: src/features/code/code.tab.ts:72
-msgid "Run (⌘/Ctrl+Enter)"
-msgstr "Chạy (⌘/Ctrl+Enter)"
-
-#: src/features/code/code.tab.ts:74
-msgid "Auto Refresh"
-msgstr "Tự làm mới"
-
-#: src/features/code/code.tab.ts:74
-msgid "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
-msgstr "Sau một lần chạy có ghi dữ liệu, tải lại dữ liệu của view đang mở (soft_reload của Odoo) mà không tải lại trang"
-
-#: src/features/code/code.tab.ts:99
-msgid "Snippets"
-msgstr "Snippet"
-
-#: src/features/code/code.tab.ts:99
-msgid "Ready-made snippets, and the ones you saved for this Odoo"
-msgstr "Các snippet có sẵn, và các snippet bạn đã lưu cho Odoo này"
-
-#: src/features/code/code.tab.ts:100
-msgid "Guide: available variables, recordset API, examples"
-msgstr "Hướng dẫn: biến có sẵn, API recordset, ví dụ"
-
-#: src/features/code/code.tab.ts:101
+#: src/features/code/code.tab.ts:56
 msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
 msgstr "Chạy với user %s (uid %s): áp dụng đúng quyền truy cập, record rule và công ty của user đó."
 
-#: src/features/code/code.tab.ts:116
+#: src/features/code/code.tab.ts:58
+msgid "Runs on:"
+msgstr "Chạy trên:"
+
+#: src/features/code/code.tab.ts:59
+msgid "no model on this screen: record, records and model are empty"
+msgstr "màn hình này không có model: record, records và model đều rỗng"
+
+#: src/features/code/code.tab.ts:62
+msgid "record #%s"
+msgstr "bản ghi #%s"
+
+#: src/features/code/code.tab.ts:62
+msgid "no record opened"
+msgstr "chưa mở bản ghi nào"
+
+#: src/features/code/code.tab.ts:63
+msgid "%s selected"
+msgstr "đang chọn %s"
+
+#: src/features/code/code.tab.ts:65
+msgid "Read the selection again"
+msgstr "Đọc lại các bản ghi đang chọn"
+
+#: src/features/code/code.tab.ts:73
+msgid "Run"
+msgstr "Chạy"
+
+#: src/features/code/code.tab.ts:73
+msgid "Run (⌘/Ctrl+Enter)"
+msgstr "Chạy (⌘/Ctrl+Enter)"
+
+#: src/features/code/code.tab.ts:75
+msgid "Auto Refresh"
+msgstr "Tự làm mới"
+
+#: src/features/code/code.tab.ts:75
+msgid "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
+msgstr "Sau một lần chạy có ghi dữ liệu, tải lại dữ liệu của view đang mở (soft_reload của Odoo) mà không tải lại trang"
+
+#: src/features/code/code.tab.ts:100
+msgid "Snippets"
+msgstr "Snippet"
+
+#: src/features/code/code.tab.ts:100
+msgid "Ready-made snippets, and the ones you saved for this Odoo"
+msgstr "Các snippet có sẵn, và các snippet bạn đã lưu cho Odoo này"
+
+#: src/features/code/code.tab.ts:101
+msgid "Guide: available variables, recordset API, examples"
+msgstr "Hướng dẫn: biến có sẵn, API recordset, ví dụ"
+
+#: src/features/code/code.tab.ts:117
 msgid "Name of the snippet:"
 msgstr "Tên snippet:"
 
-#: src/features/code/code.tab.ts:152
+#: src/features/code/code.tab.ts:153
 msgid "Python runs as a server action: it needs Settings rights (base.group_system)."
 msgstr "Python chạy dưới dạng server action: cần quyền Settings (base.group_system)."
 
-#: src/features/code/code.tpl.html:35
+#: src/features/code/code.tpl.html:36
 msgid "Suggestions"
 msgstr "Gợi ý"
 
@@ -2433,7 +2453,7 @@ msgid "Brought by (groups implying it)"
 msgstr "Được kéo theo bởi (nhóm bao gồm nhóm này)"
 
 #: src/features/security/security.groups.ts:123
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "%s models"
 msgstr "%s model"
 
@@ -2478,7 +2498,7 @@ msgstr "Rule không áp cho thao tác này"
 
 #: src/features/security/security.groups.ts:143
 #: src/features/security/security.model.ts:49
-#: src/features/security/security.models.ts:159
+#: src/features/security/security.models.ts:157
 msgid "Rule"
 msgstr "Rule"
 
@@ -2881,119 +2901,119 @@ msgstr "Chỉ phần nhóm đang thử thêm vào"
 msgid "Only differences"
 msgstr "Chỉ chỗ khác nhau"
 
-#: src/features/security/security.models.ts:108
+#: src/features/security/security.models.ts:106
 msgid "Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
 msgstr "Mỗi ô: %s | %s. ✓ có ACL cấp quyền thao tác đó, · không có. Rules: số record rule giới hạn bản ghi. Bấm một module để mở, bấm một model để xem điều gì quyết định quyền."
 
-#: src/features/security/security.models.ts:109
+#: src/features/security/security.models.ts:107
 msgid "✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
 msgstr "✓ có ACL cấp quyền thao tác đó, · không có; +✓ do group đang thử thêm vào. Rules: số record rule giới hạn bản ghi. Bấm một module để mở, bấm một model để xem điều gì quyết định quyền."
 
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "1 model"
 msgstr "1 model"
 
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "%s every operation"
 msgstr "%s đủ mọi thao tác"
 
-#: src/features/security/security.models.ts:117
+#: src/features/security/security.models.ts:115
 msgid "%s read only"
 msgstr "%s chỉ đọc"
 
-#: src/features/security/security.models.ts:118
+#: src/features/security/security.models.ts:116
 msgid "%s some operations"
 msgstr "%s một số thao tác"
 
-#: src/features/security/security.models.ts:118
+#: src/features/security/security.models.ts:116
 msgid "%s limited by rules"
 msgstr "%s bị rule giới hạn"
 
-#: src/features/security/security.models.ts:129
+#: src/features/security/security.models.ts:127
 msgid "%s can %s %s."
 msgstr "%s được %s %s."
 
-#: src/features/security/security.models.ts:129
+#: src/features/security/security.models.ts:127
 msgid "%s has no access to %s."
 msgstr "%s không có quyền gì trên %s."
 
-#: src/features/security/security.models.ts:130
+#: src/features/security/security.models.ts:128
 msgid "Not %s."
 msgstr "Không được %s."
 
-#: src/features/security/security.models.ts:131
+#: src/features/security/security.models.ts:129
 msgid "1 record rule decides which records: only the ones it allows."
 msgstr "1 record rule quyết định bản ghi nào: chỉ những bản ghi nó cho phép."
 
-#: src/features/security/security.models.ts:132
+#: src/features/security/security.models.ts:130
 msgid "%s record rules decide which records: only the ones they allow."
 msgstr "%s record rule quyết định bản ghi nào: chỉ những bản ghi chúng cho phép."
 
-#: src/features/security/security.models.ts:132
+#: src/features/security/security.models.ts:130
 msgid "No record rule: every record."
 msgstr "Không có record rule: mọi bản ghi."
 
-#: src/features/security/security.models.ts:133
+#: src/features/security/security.models.ts:131
 msgid "%s: %s."
 msgstr "%s: %s."
 
-#: src/features/security/security.models.ts:133
+#: src/features/security/security.models.ts:131
 msgid "no access"
 msgstr "không có quyền"
 
-#: src/features/security/security.models.ts:139
+#: src/features/security/security.models.ts:137
 msgid "Every user (an ACL without a group)"
 msgstr "Mọi người dùng (ACL không gắn group)"
 
-#: src/features/security/security.models.ts:140
+#: src/features/security/security.models.ts:138
 msgid "being tried"
 msgstr "đang thử"
 
-#: src/features/security/security.models.ts:141
+#: src/features/security/security.models.ts:139
 msgid "This ACL grants %s"
 msgstr "ACL này cấp quyền %s"
 
-#: src/features/security/security.models.ts:141
+#: src/features/security/security.models.ts:139
 msgid "Not granted by this ACL"
 msgstr "ACL này không cấp"
 
-#: src/features/security/security.models.ts:148
+#: src/features/security/security.models.ts:146
 msgid "global: applies to every user"
 msgstr "toàn cục: áp dụng cho mọi người dùng"
 
-#: src/features/security/security.models.ts:148
+#: src/features/security/security.models.ts:146
 msgid "for the group %s"
 msgstr "cho group %s"
 
-#: src/features/security/security.models.ts:149
+#: src/features/security/security.models.ts:147
 msgid "Limits the records for %s"
 msgstr "Giới hạn bản ghi khi %s"
 
-#: src/features/security/security.models.ts:149
+#: src/features/security/security.models.ts:147
 msgid "Doesn't apply to %s"
 msgstr "Không áp dụng khi %s"
 
-#: src/features/security/security.models.ts:156
+#: src/features/security/security.models.ts:154
 msgid "Access rights (ACL): who grants what"
 msgstr "Quyền truy cập (ACL): ai cấp quyền gì"
 
-#: src/features/security/security.models.ts:157
+#: src/features/security/security.models.ts:155
 msgid "Granted by"
 msgstr "Được cấp bởi"
 
-#: src/features/security/security.models.ts:157
+#: src/features/security/security.models.ts:155
 msgid "No ACL of this user's groups grants anything on this model."
 msgstr "Không ACL nào thuộc các group của người dùng này cấp quyền gì trên model này."
 
-#: src/features/security/security.models.ts:158
+#: src/features/security/security.models.ts:156
 msgid "An operation is allowed when at least one of these ACLs grants it."
 msgstr "Một thao tác được phép khi ít nhất một ACL ở trên cấp quyền cho nó."
 
-#: src/features/security/security.models.ts:159
+#: src/features/security/security.models.ts:157
 msgid "Record rules: which records"
 msgstr "Record rule: những bản ghi nào"
 
-#: src/features/security/security.models.ts:160
+#: src/features/security/security.models.ts:158
 msgid "For an operation, a record must match every global rule and at least one of the group rules. Click a rule for its domain; the Record view evaluates them on a record."
 msgstr "Với một thao tác, bản ghi phải khớp mọi rule toàn cục và ít nhất một rule theo group. Bấm một rule để xem domain; view Record đánh giá chúng trên một bản ghi cụ thể."
 

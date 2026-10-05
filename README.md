@@ -59,7 +59,7 @@ one place (`src/odoo/adapters/`).
 The guide — features tab by tab, shortcuts, privacy — is at
 **https://unclecatvn.github.io/extension-debug-odoo/**.
 
-Shortcuts: **Alt+Shift+O** shows / hides the panel, **Alt+Shift+D** turns Odoo's debug mode on / off (change them at
+Shortcuts: **Alt+Shift+O** shows / hides the panel, **Alt+Shift+D** turns Odoo's debug mode on / off, and one to open the panel in its own window can be set (change them at
 `chrome://extensions/shortcuts`).
 
 ## Install

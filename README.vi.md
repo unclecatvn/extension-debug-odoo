@@ -58,7 +58,7 @@ Phiên bản Odoo được nhận diện trên từng trang, và mọi khác bi�
 Hướng dẫn chi tiết từng tab, phím tắt và quyền riêng tư:
 **https://unclecatvn.github.io/extension-debug-odoo/**.
 
-Phím tắt: **Alt+Shift+O** ẩn / hiện panel, **Alt+Shift+D** bật / tắt chế độ debug của Odoo (đổi ở
+Phím tắt: **Alt+Shift+O** ẩn / hiện panel, **Alt+Shift+D** bật / tắt chế độ debug của Odoo, có thể đặt thêm phím mở panel trong cửa sổ riêng (đổi ở
 `chrome://extensions/shortcuts`).
 
 ## Cài đặt

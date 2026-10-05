@@ -43,7 +43,7 @@ export const codeTab: TabModule = {
 
 async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
   const info = await sessionInfo();
-  const cloned = tpl('console', { root: HTMLDivElement, bar: HTMLDivElement, screen: HTMLDivElement, editor: HTMLDivElement, guide: HTMLDivElement, output: HTMLDivElement });
+  const cloned = tpl('console', { root: HTMLDivElement, bar: HTMLDivElement, opts: HTMLDivElement, acts: HTMLDivElement, screen: HTMLDivElement, editor: HTMLDivElement, guide: HTMLDivElement, output: HTMLDivElement });
   const r = cloned.refs;
   const lang = () => last.lang;
   const key = () => codeKey(page.origin, lang());
@@ -51,8 +51,9 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
   ed.ta.placeholder = _t(PLACEHOLDER[lang()]);
   const fmt: Fmt = { origin: page.origin, lang: String(info.user_context?.lang ?? navigator.language), tz: String(info.user_context?.tz ?? '') };
 
-  // ---------- the screen the code runs on ----------
+  // ---------- the screen the code runs on, and as whom ----------
   let screen: Screen = { model: page.model ?? null, resId: page.resId ?? null, ids: [] };
+  const who = text(`${info.username || info.name} · uid ${info.uid}`, 'muted who', _t('Runs as %s (uid %s): their access rights, record rules and companies apply.', info.username || info.name, info.uid));
   const drawScreen = () => {
     const parts: (Node | string)[] = [text(_t('Runs on:'), '')];
     if (!screen.model) parts.push(text(_t('no model on this screen: record, records and model are empty'), 'muted'));
@@ -62,7 +63,7 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
       if (screen.ids.length) parts.push(text(_t('%s selected', screen.ids.length), 'muted', screen.ids.slice(0, 40).join(', ')));
     }
     parts.push(button('⟳', () => void readScreen(), 'chip', _t('Read the selection again')));
-    r.screen.replaceChildren(...parts);
+    r.screen.replaceChildren(...parts, who);
   };
   const readScreen = async () => { screen = await screenOf(page.model, page.resId); drawScreen(); return screen; };
   drawScreen();
@@ -98,8 +99,8 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
   };
   const snippetsBtn = asideBtn('snippets', _t('Snippets'), _t('Ready-made snippets, and the ones you saved for this Odoo'));
   const guideBtn = asideBtn('guide', '?', _t('Guide: available variables, recordset API, examples'));
-  const who = text(`${info.username || info.name} · uid ${info.uid}`, 'muted who', _t('Runs as %s (uid %s): their access rights, record rules and companies apply.', info.username || info.name, info.uid));
-  r.bar.append(run, langSeg, modeSlot, refreshBox, snippetsBtn, guideBtn, who);
+  r.opts.append(langSeg, modeSlot, refreshBox); // how it runs
+  r.acts.append(snippetsBtn, guideBtn, run); // what to do: Run last, where the eye ends
   drawMode();
 
   // ---------- the guide / the snippets ----------

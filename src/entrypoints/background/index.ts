@@ -2,7 +2,7 @@
 // update, keyboard shortcuts, the panel in its own window (detached-panel.ts).
 import type { ExtMessage } from '../../contracts/messages.ts';
 import { pageToggleDebug } from '../../injected/debug-mode.ts';
-import { listenDetachedPanels } from './detached-panel.ts';
+import { detach, listenDetachedPanels } from './detached-panel.ts';
 
 listenDetachedPanels();
 
@@ -38,5 +38,6 @@ chrome.runtime.onInstalled.addListener(async ({ reason }) => {
 chrome.commands.onCommand.addListener((command, tab) => {
   if (tab?.id == null) return;
   if (command === 'toggle-panel') chrome.tabs.sendMessage(tab.id, { type: 'odoo-toggle' } satisfies ExtMessage).catch(() => {});
+  if (command === 'popout-panel') void detach(tab.id);
   if (command === 'toggle-debug') chrome.scripting.executeScript({ target: { tabId: tab.id }, world: 'MAIN', func: pageToggleDebug }).catch(() => {});
 });

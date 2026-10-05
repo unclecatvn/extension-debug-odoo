@@ -1,9 +1,13 @@
-// Toolbar popup (only enabled on Odoo pages, see entrypoints/background) and options page: language, theme, panel toggle,
-// debug mode, shortcuts.
+// Toolbar popup (only enabled on Odoo pages, see entrypoints/background) and options page: language, theme, shortcuts, and
+// (popup only) the page's host, Odoo version, database, the panel in its own window, debug mode.
 import type { ExtMessage } from '../../contracts/messages.ts';
 import { THEMES, applyTheme, isTheme, loadSettings, type Theme } from '../../extension/settings.ts';
 import { LANGS, N_, _t, lang, loadLang, translateDom } from '../../i18n/i18n.ts';
 import { pageDebug, pageDebugMode } from '../../injected/debug-mode.ts';
+import { setTab } from '../../extension/run-in-tab.ts';
+import type { Json } from '../../contracts/json.ts';
+import { sessionInfo } from '../../odoo/reads.ts';
+import { rpc } from '../../odoo/rpc.ts';
 import { $ } from '../../ui/dom.ts';
 import { templates } from '../../ui/template.ts';
 import html from './popup.tpl.html';
@@ -19,11 +23,12 @@ translateDom();
 const tpl = templates(html, translateDom);
 $('#version').textContent = `v${chrome.runtime.getManifest().version}`;
 
-/** Segmented control: one button per [value, label], `current` highlighted. */
-function segmented<V extends string>(box: HTMLElement, options: [V, string][], current: V, onPick: (v: V) => void) {
-  box.replaceChildren(...options.map(([value, label]) => {
+/** Segmented control: one button per [value, label, title?], `current` highlighted. */
+function segmented<V extends string>(box: HTMLElement, options: [V, string, string?][], current: V, onPick: (v: V) => void) {
+  box.replaceChildren(...options.map(([value, label, title]) => {
     const { button } = tpl('seg-option', { button: HTMLButtonElement }).refs;
     button.textContent = label;
+    if (title) button.title = title;
     button.classList.toggle('on', value === current);
     button.setAttribute('aria-checked', String(value === current));
     button.addEventListener('click', () => { segmented(box, options, value, onPick); onPick(value); });
@@ -43,7 +48,7 @@ themeBox.value = isTheme(saved.theme) ? saved.theme : 'auto';
 themeBox.addEventListener('change', () => { applyTheme(themeBox.value); void chrome.storage.local.set({ theme: themeBox.value }); }); // every open panel follows
 
 // Keyboard shortcuts (manifest "commands"): as set in chrome://extensions/shortcuts, where Change leads.
-const COMMANDS: Record<string, string> = { 'toggle-panel': N_('panel'), 'toggle-debug': N_('debug') };
+const COMMANDS: Record<string, string> = { 'toggle-panel': N_('panel'), 'popout-panel': N_('window'), 'toggle-debug': N_('debug') };
 const all = await chrome.commands.getAll();
 const keys = Object.keys(COMMANDS).map((name) => all.find((c) => c.name === name)).filter((c) => !!c); // panel first
 $('#shortcuts').replaceChildren(...keys.map((c) => {
@@ -59,9 +64,24 @@ type DebugMode = '0' | '1' | 'assets';
 const [tab] = chrome.extension.getViews({ type: 'popup' }).includes(window) ? await chrome.tabs.query({ active: true, currentWindow: true }) : [];
 if (tab?.id != null) {
   const tabId = tab.id;
-  $('#host').textContent = tab.url ? new URL(tab.url).host : '';
-  $('#toggle').addEventListener('click', () => {
-    chrome.tabs.sendMessage(tabId, { type: 'odoo-toggle' } satisfies ExtMessage).catch(() => {}); // content script missing: page opened before install
+  setTab(tab); // sessionInfo() / rpc() below run in this tab, with its session
+  // one line: host, version, database, each after its icon, the full value on hover
+  const host = tab.url ? new URL(tab.url).host : '';
+  const info = (kind: string, text: string, title: string) => {
+    const r = tpl('info', { info: HTMLSpanElement, text: HTMLSpanElement }).refs;
+    r.info.dataset.info = kind;
+    r.info.title = `${title}: ${text}`;
+    r.text.textContent = text;
+    return r.info;
+  };
+  const show = (version?: string, db?: string) => $('#page-info').replaceChildren(info('host', host, _t('Host')),
+    ...(version ? [info('version', version, _t('Odoo version'))] : []), ...(db ? [info('db', db, _t('Database'))] : []));
+  show('…');
+  // Logged in: the session info has both. Logged out (login page): the version only, the database comes with a session.
+  sessionInfo().then((i) => show(i.server_version, i.db),
+    () => rpc<{ server_version?: Json }>('/web/webclient/version_info', {}).then((v) => show(String(v.server_version ?? '')), () => show()));
+  $('#detach').addEventListener('click', () => { // entrypoints/background/detached-panel.ts opens it (or brings it to the front)
+    chrome.runtime.sendMessage({ type: 'odoo-detach', tabId } satisfies ExtMessage).catch(() => {});
     window.close();
   });
   // Odoo's debug mode of this tab: reloads it with ?debug=0 / 1 / assets (Odoo keeps it in the session)
@@ -86,7 +106,7 @@ if (tab?.id != null) {
     await keep(box.checked && (current === '0' ? '1' : current));
     if (box.checked && current === '0') await setMode('1');
   });
-  segmented<DebugMode>($('#debug'), [['0', 'off'], ['1', 'debug'], ['assets', 'assets']], current, async (mode) => {
+  segmented<DebugMode>($('#debug'), [['0', 'Off', _t('Turn Debug Off')], ['1', 'Debug', '?debug=1'], ['assets', 'Assets', '?debug=assets']], current, async (mode) => {
     if (box.checked) await keep(mode); // off: not kept any more
     await setMode(mode);
   });
