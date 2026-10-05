@@ -817,6 +817,25 @@ button[data-tip] { cursor: pointer; }
 .perf-query { display: flex; flex-direction: column; gap: 8px; }
 .perf-query pre { max-height: 260px; overflow: auto; }
 .perf-cleanup { align-items: center; gap: 6px; margin-top: 8px; }
+.perf-steps { margin: 0; padding-left: 18px; color: var(--muted); font-size: var(--fs-xs); line-height: 1.6; }
+/* a request's diagnosis: what to look at first, then its time split SQL / Python */
+.perf-diag { padding: 8px 10px; border-radius: 8px; font-size: var(--fs-sm); line-height: 1.45; }
+.perf-diag > div { color: var(--fg); margin-top: 2px; gap: 4px; align-items: baseline; }
+.perf-diag.ok { background: var(--ok-soft); color: var(--ok); }
+.perf-diag.med { background: var(--warn-soft); color: var(--warn); }
+.perf-diag.err { background: var(--err-soft); color: var(--err); }
+.perf-diag.info { background: var(--info-soft); color: var(--info); }
+.perf-time { align-items: center; gap: 8px; flex-wrap: nowrap; font-size: var(--fs-xs); white-space: nowrap; }
+.perf-split { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--hover); }
+.perf-split > .sql, .perf-key.sql::before { background: var(--info); }
+.perf-split > .py, .perf-key.py::before { background: var(--accent); }
+.perf-key::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; }
+/* code as code: function() module/path.py:line (a click copies the place), the source line */
+.perf-loc { font-family: var(--mono); font-size: var(--fs-xs); text-align: left; }
+.perf-code { margin: 4px 0 0; padding: 4px 8px; border-radius: 6px; background: var(--hover); font-family: var(--mono); font-size: var(--fs-xs); white-space: pre-wrap; overflow-wrap: anywhere; }
+.perf-diag .perf-code { flex-basis: 100%; background: color-mix(in srgb, var(--surface) 60%, transparent); }
+.perf-says code, .perf-diag code { font-family: var(--mono); font-size: var(--fs-xs); padding: 0 3px; border-radius: 4px; background: var(--hover); }
+.perf-calls { align-items: baseline; gap: 2px 8px; }
 .ok-text { color: var(--ok); }
 .err-text { color: var(--err); }
 .strong { font-weight: 600; }

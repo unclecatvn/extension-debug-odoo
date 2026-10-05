@@ -36,12 +36,12 @@ Odoo Debug answers these on the screen itself, as tables, for the user you are �
 |---|---|
 | **Record** | Every field of the record: definition, value by type, what recomputes it, quick filters, copy as JSON |
 | **View** | The view told as a story: which views from which modules build it, in Odoo's order; one field through them; the combined arch |
-| **RPC** | The page's JSON-RPC calls with timing and errors; edit and resend; Copy as cURL for the external API (18: `/jsonrpc`, 19 / 20: `/json/2`) |
+| **RPC** | The page's JSON-RPC calls with timing and errors; a call opens as its request, edited and sent again right there; Copy as cURL for the external API (18: `/jsonrpc`, 19 / 20: `/json/2`) |
 | **Security** | Rights as tables: a record's ACLs and rules × read / write / create / delete, with domains evaluated for the user; rights on every model; groups, what each grants and who has it; try a group before granting it; compare users |
 | **Translations** | Where a text comes from and where to change it; a record's and a view's translations per language; `.po` coverage, export and import; languages |
 | **Apps** | Modules as Odoo's Apps menu has them (same filters, as facets): pick several, then Activate (Update Apps List + install with dependencies), Upgrade or open their forms; ⚠ when a manifest on disk is newer than the database. A module opened: its description (`index.html` or README), manifest, dependencies both ways (what installing it brings, auto-installed modules included, as Odoo computes it) and as a diagram, its data and models, uninstall previewed with Odoo's own wizard; operations left pending, applied or cancelled (Settings rights) |
 | **Menus** | The technical screens a developer opens all day, one click away without debug mode or the Technical menu: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (the list of OCA's `developer_menu`, with nothing to install; for Access Rights managers). A click opens the screen in the Odoo page, as its menu would; ↗ in a new tab. |
-| **Perf** | Odoo's own profiler, read back: start / stop for your session, then each request's SQL, the lines of code sending them, N+1 suspects, the slowest queries; compare with a baseline (before / after a fix); profile one call of the RPC tab on its own; flame graph; clean up (Settings rights) |
+| **Perf** | Odoo's own profiler, read back: start / stop for your session, then the requests slowest first, each one's diagnosis (what to look at first: N+1, the database or Python), the time by function of the modules, its SQL in words, the lines of code sending them, N+1 suspects, the slowest queries; compare with a baseline (before / after a fix); profile one call of the RPC tab on its own; flame graph; clean up (Settings rights) |
 | **Code** | An ORM console as the logged-in user, on the record opened / selected (`record`, `records`, `model`): **JavaScript** in the page (`env['sale.order'].search(…)`, read-only, dry run or writes) or **Python** on the server as a temporary server action (a dry run is rolled back for real; Settings rights); results shown by type (records, rows typed by their fields, dates in your time zone) and copied as CSV / Markdown / JSON; snippets; completion of models, fields and methods |
 
 The version of Odoo is detected on each page, and every difference between 18.0, 19.0 and 20.0 the panel depends on lives in
@@ -60,7 +60,7 @@ The guide — features tab by tab, shortcuts, privacy — is at
 **https://unclecatvn.github.io/extension-debug-odoo/**.
 
 Shortcuts: **Alt+Shift+O** shows / hides the panel, **Alt+Shift+D** turns Odoo's debug mode on / off, and one to open the panel in its own window can be set (change them at
-`chrome://extensions/shortcuts`).
+`chrome://extensions/shortcuts`). ⌥/Alt + click a field, its label, a list cell or column header, or a tracked change in the chatter, on the Odoo page: its technical name is copied.
 
 ## Install
 

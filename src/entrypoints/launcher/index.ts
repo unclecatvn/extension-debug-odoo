@@ -170,18 +170,42 @@ type Pos = { x: number; bottom: true } | { x: number; y: number; bottom: false }
   /** Technical name of the field under `t`: form widget (or its label), list cell or list column header. */
   function fieldName(t: Element): string | null {
     const label = t.closest<HTMLLabelElement>('label[for]');
-    const n = ((label && document.getElementById(label.htmlFor)) || t).closest<HTMLElement>('.o_field_widget[name], td.o_data_cell[name], th[data-name]');
+    const input = label && document.getElementById(label.htmlFor);
+    // a readonly field renders no input carrying the label's id, Odoo's `${name}_${n}`
+    if (label && !input && label.matches('.o_form_label')) return label.htmlFor.replace(/_\d+$/, '');
+    const n = (input || t).closest<HTMLElement>('.o_field_widget[name], td.o_data_cell[name], th[data-name]');
     return n ? n.getAttribute('name') || n.dataset.name || null : null;
+  }
+
+  /** Label of the field on the chatter tracking line under `t` ("Draft → Sent (Status)": Status), or null. */
+  function trackingLabel(t: Element): string | null {
+    const s = t.closest('.o-mail-Message-tracking')?.querySelector('.o-mail-Message-trackingField')?.textContent?.trim();
+    return s ? s.replace(/^\((.*)\)$/, '$1') : null;
+  }
+
+  /** Technical names of the current model's fields labelled `label` (the chatter shows only the label), asked to the
+   * rpc-recorder (MAIN world: Odoo's field service); [] when it doesn't answer (a tab open before an update). */
+  function namesOf(label: string): Promise<string[]> {
+    return new Promise((resolve) => {
+      const done = (e: CustomEvent<string>) => { clearTimeout(timer); resolve(JSON.parse(e.detail) as string[]); };
+      const timer = setTimeout(() => { document.removeEventListener('odoo-debug-field-names', done); resolve([]); }, 3000);
+      document.addEventListener('odoo-debug-field-names', done, { once: true });
+      document.dispatchEvent(new CustomEvent('odoo-debug-field-of', { detail: label }));
+    });
   }
 
   async function altClick(e: MouseEvent) {
     if (!e.altKey || e.button !== 0 || !(e.target instanceof Element)) return;
     const name = fieldName(e.target);
-    if (!name) return;
+    const label = name ? null : trackingLabel(e.target);
+    if (!name && !label) return;
     e.preventDefault(); // ⌥+click on a link would download it
     e.stopImmediatePropagation();
     const at = { x: e.clientX, y: e.clientY };
-    toast((await copy(name)) ? `✓ ${name}` : `✗ ${name}`, at);
+    const names = name ? [name] : await namesOf(label!);
+    if (!names.length) return toast(`✗ ${label}`, at);
+    // ponytail: two fields with the same label: the first is copied, the toast names both
+    toast(`${(await copy(names[0]!)) ? '✓' : '✗'} ${names.join(' · ')}`, at);
   }
 
   async function copy(text: string): Promise<boolean> {

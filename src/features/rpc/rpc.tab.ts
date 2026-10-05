@@ -10,10 +10,10 @@ import { pageSend } from '../../injected/json-rpc.ts';
 import { methodSignature } from '../../odoo/method-doc.ts';
 import { reportCallToProfile } from '../../odoo/profile-call.ts';
 import { sessionInfo } from '../../odoo/reads.ts';
-import { copyText, details, errBox, listHead, loading, pill, pre } from '../../ui/components.ts';
+import { copyText, errBox, listHead, loading, pill, pre } from '../../ui/components.ts';
 import { openDepthFor } from '../../ui/json.ts';
 import { jsonView } from '../../ui/json-view.ts';
-import { WIDE, expandable, masterDetail, resetPane } from '../../ui/lists.ts';
+import { expandable, masterDetail, resetPane } from '../../ui/lists.ts';
 import { templates } from '../../ui/template.ts';
 import type { PanelContext, TabModule } from '../registry.ts';
 import { pageRpcLog } from './rpc.injected.ts';
@@ -47,7 +47,7 @@ export const rpcTab: TabModule = {
 
     rows = tpl('rows', { list: HTMLUListElement }).refs.list;
     emptyLog = tpl('empty-log').root;
-    section.append(bar.bar, draft, masterDetail(rows, _t('Select a call to see its parameters and result.')), emptyLog);
+    section.append(bar.bar, draft, masterDetail(rows, _t('Select a call to edit its parameters, send it again and see its result.')), emptyLog);
     await reload();
   },
   onMessage(msg: ExtMessage) {
@@ -103,43 +103,41 @@ function row(e: RpcEntry): HTMLLIElement {
   return li;
 }
 
-/** A call opened: its actions, then the request (Parameters) and the answer (Result, or the error first). Edit & Resend
- * turns the request into its editor in place, which has its own Copy as cURL (of what is typed). */
+/** A call opened: its request, editable right away (Send posts it again), then its answer: the recorded one until sent
+ * again. Its actions beside Send: Copy as cURL, ⏱ Profile, and for a refused call, why (Security). */
 function detail(e: RpcEntry): HTMLElement {
-  const { root, refs } = tpl('call-detail', { edit: HTMLButtonElement, why: HTMLButtonElement, profile: HTMLButtonElement, body: HTMLDivElement });
-  refs.profile.addEventListener('click', (ev) => { // the Perf tab sends it again with the profiler on, and opens its profile
+  const profile = tpl('profile', { button: HTMLButtonElement }).refs.button;
+  profile.addEventListener('click', (ev) => { // the Perf tab sends it again with the profiler on, and opens its profile
     ev.stopPropagation();
     reportCallToProfile({ route: e.route, body: e.body, label: `${e.method} ${e.model}`.trim() });
     panel.rerender('perf');
   });
-  if (e.bodyCut) { refs.profile.disabled = true; refs.profile.title = _t('Cut at 200 KB by the recorder: Edit & Resend it to profile it whole.'); }
-  const unfolded = (d: HTMLDetailsElement) => { d.open = WIDE.matches; return d; }; // in the pane beside the list there is room
-  const params = unfolded(details(_t('Parameters'), ...cutNote(e.bodyCut), readable({ args: e.args, kwargs: e.kwargs })));
-  const curl = curlButton(() => ({ route: e.route, body: e.body }));
-  refs.edit.after(curl);
-  refs.edit.addEventListener('click', (ev) => {
-    ev.stopPropagation(); // removed, the button is out of the row: the row would take the click as its own and close
-    refs.edit.remove();
-    curl.remove();
-    params.replaceWith(composer(e.route, e.body));
-  });
-  if (isAccessDenied(e)) refs.why.addEventListener('click', () => { // the Security tab diagnoses it: the error's model, records, operation
-    const p = parseAccessError(e.error ?? '');
-    reportAccessProblem({ kind: p?.kind ?? null, user: p?.user ?? null, rules: p?.rules ?? [], groups: p?.groups ?? [],
-      model: e.model || p?.model || null, ids: p?.ids.length ? p.ids : idsOfCall(e.args), mode: modeOfCall(e.method, e.args) ?? p?.mode ?? null });
-    panel.rerender('security');
-  });
-  else refs.why.remove();
-  if (e.error) refs.body.append(errBox({ message: e.error, traceback: e.traceback }), params);
-  else refs.body.append(params, unfolded(details(_t('Result'), ...cutNote(e.answerCut), readable(e.result))));
-  return root;
+  if (e.bodyCut) { profile.disabled = true; profile.title = _t('Cut at 200 KB by the recorder: its body is not whole, it cannot be profiled.'); }
+  const extra: HTMLElement[] = [profile];
+  if (isAccessDenied(e)) {
+    const why = tpl('why', { button: HTMLButtonElement }).refs.button;
+    why.addEventListener('click', () => { // the Security tab diagnoses it: the error's model, records, operation
+      const p = parseAccessError(e.error ?? '');
+      reportAccessProblem({ kind: p?.kind ?? null, user: p?.user ?? null, rules: p?.rules ?? [], groups: p?.groups ?? [],
+        model: e.model || p?.model || null, ids: p?.ids.length ? p.ids : idsOfCall(e.args), mode: modeOfCall(e.method, e.args) ?? p?.mode ?? null });
+      panel.rerender('security');
+    });
+    extra.unshift(why);
+  }
+  const head = tpl('sent-head', { pill: HTMLSpanElement, info: HTMLSpanElement });
+  head.refs.pill.replaceWith(e.error ? pill(e.errorType?.split('.').pop() || _t('error'), 'err') : pill('ok', 'ok'));
+  head.refs.info.textContent = _t('Recorded at %s · %s ms', (e.at || '').slice(11, 19), e.ms);
+  const answer = e.error ? [errBox({ message: e.error, traceback: e.traceback })] : [...cutNote(e.answerCut), readable(e.result)];
+  const form = composer(e.route, e.body, [head.root, ...answer], extra);
+  form.prepend(...cutNote(e.bodyCut));
+  return form;
 }
 
 /** Over 200 KB, the recorder keeps the start of a body / an answer only: say so, and how to get it whole. */
 function cutNote(cut: boolean): Node[] {
   if (!cut) return [];
   const { root, refs } = tpl('cut-note', { text: HTMLDivElement });
-  refs.text.textContent = _t('Cut at 200 KB by the recorder, so shown as text: Edit & Resend gets it whole.');
+  refs.text.textContent = _t('Cut at 200 KB by the recorder: only its start is kept.');
   return [root];
 }
 
@@ -163,8 +161,9 @@ function toggleDraft(slot: HTMLElement, button: HTMLButtonElement) {
   button.setAttribute('aria-pressed', String(on));
 }
 
-/** A request as sent, editable (route, JSON body): Send (or Ctrl/⌘ + Enter) posts it with the page's session. */
-function composer(route: string, body: string): HTMLFormElement {
+/** A request as sent, editable (route, JSON body): Send (or Ctrl/⌘ + Enter) posts it with the page's session, the answer
+ * shows below in place of `answer` (the recorded one, if any). `extra`: more actions, after Copy as cURL. */
+function composer(route: string, body: string, answer: Node[] = [], extra: HTMLElement[] = []): HTMLFormElement {
   const json = prettyJson(body);
   const { form, route: path, text, send, out } = tpl('composer', {
     form: HTMLFormElement, route: HTMLInputElement, text: HTMLTextAreaElement, send: HTMLButtonElement, out: HTMLDivElement,
@@ -172,7 +171,8 @@ function composer(route: string, body: string): HTMLFormElement {
   path.value = route;
   text.value = json;
   text.rows = Math.min(18, Math.max(6, json.split('\n').length));
-  send.after(curlButton(() => ({ route: path.value.trim(), body: text.value })));
+  send.after(curlButton(() => ({ route: path.value.trim(), body: text.value })), ...extra);
+  out.append(...answer);
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     try { JSON.parse(text.value); } catch (err) { out.replaceChildren(errBox({ message: _t('Invalid JSON: %s', (err as Error).message) })); return; }

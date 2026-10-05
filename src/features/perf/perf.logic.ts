@@ -42,7 +42,9 @@ export function sessionLabel(session: string, today: string): string {
 /** The same statement, whatever the spacing: what groups the queries of one loop. */
 export const normalizeQuery = (q: string) => q.replace(/\s+/g, ' ').trim();
 
-const FRAMEWORK = /\/odoo\/(orm\/|tools\/|service\/|modules\/|(models|fields|api|sql_db|http|osv\/\w+)\.py)|\/(site|dist)-packages\/(?!odoo\/addons)|\/python3?\.\d+\//;
+// the ORM and server, the libraries (site-packages, except a pip-installed odoo's addons) and Python's own (threading…,
+// and the modules frozen into the interpreter since 3.11: "<frozen genericpath>")
+const FRAMEWORK = /\/odoo\/(orm\/|tools\/|service\/|modules\/|(models|fields|api|sql_db|http|osv\/\w+)\.py)|\/(site|dist)-packages\/(?!odoo\/addons)|\/lib\/python3[.\d]*\/(?!(site|dist)-packages\/)|^<frozen /;
 /** The innermost frame outside the ORM and the framework: the line of an addon that caused the query. */
 export function appFrame(stack: readonly Frame[] = []): Frame | null {
   for (let i = stack.length - 1; i >= 0; i--) if (!FRAMEWORK.test(stack[i]![0])) return stack[i]!;
@@ -130,6 +132,69 @@ export function compare(base: { row: ProfileRow; sum: SqlSummary }, other: { row
     added: [...after.values()].filter((g) => !before.has(g.query)),
     kept: [...after.values()].filter((g) => before.has(g.query)).map((g) => ({ query: g.query, before: before.get(g.query)!.count, after: g.count })),
   };
+}
+
+/** One sample of the profiler's Python stacks (ir.profile.traces_async): when (s), and the stack then. */
+export interface Sample { start: number; stack?: Frame[] }
+
+/** ir.profile.traces_async (JSON text) → its samples; [] when absent or not JSON. */
+export function parseSamples(text: string | false | null | undefined): Sample[] {
+  if (!text) return [];
+  try {
+    const v = JSON.parse(text) as unknown;
+    return Array.isArray(v) ? v.filter((e): e is Sample => !!e && typeof (e as Sample).start === 'number') : [];
+  } catch { return []; }
+}
+
+// Static files and the webclient's own plumbing: nothing to optimise in a module, out of the list unless asked.
+const ASSET = /^\/(web\/(static|assets|image|content|manifest|service-worker|webclient\/(locale|translations))|bus\/websocket_worker_bundle)|\.(js|css|png|jpe?g|svg|ico|woff2?)(\?|$)/;
+export const isAsset = (name: string) => ASSET.test(name);
+
+/** What to look at first in a request of `duration` s: 'n1' (one statement run 5× or more: it grows with the
+ * records, even when fast), 'fast' (< 100 ms), 'sql' (the database takes half the time or more) or 'python'. */
+export type Diagnosis = 'n1' | 'fast' | 'sql' | 'python';
+export function diagnose(duration: number, sum: SqlSummary): Diagnosis {
+  if ((sum.repeated[0]?.count ?? 0) >= 5) return 'n1';
+  if (duration < 0.1) return 'fast';
+  return sum.time >= duration / 2 ? 'sql' : 'python';
+}
+
+/** A SQL statement → what it does, for a sentence: op 'read' | 'create' | 'write' | 'delete' | 'other' and its table. */
+export function describeQuery(query = ''): { op: 'read' | 'create' | 'write' | 'delete' | 'other'; table: string } {
+  const q = query.replace(/\s+/g, ' ');
+  const m = /^\s*(?:WITH\b.*?\)\s*)?(SELECT|INSERT INTO|UPDATE|DELETE FROM)\b/i.exec(q);
+  const ops = { SELECT: 'read', 'INSERT INTO': 'create', UPDATE: 'write', 'DELETE FROM': 'delete' } as const;
+  const op = m ? ops[m[1]!.toUpperCase() as keyof typeof ops] : 'other';
+  const re = { read: /\bFROM\s+"?(\w+)"?/i, create: /\bINTO\s+"?(\w+)"?/i, write: /\bUPDATE\s+"?(\w+)"?/i, delete: /\bFROM\s+"?(\w+)"?/i, other: null }[op];
+  const from = m ? q.slice(m.index + m[0].length - m[1]!.length) : q; // after a WITH: the statement's own table
+  return { op, table: re?.exec(from)?.[1] ?? '' };
+}
+
+/** A function of the modules a request spent time in: its frame (first line seen), the module functions above it
+ * (`path`), the time from the Python samples (`sampled`) and from the queries it ran (`sql`, `count`), `time` the
+ * larger of the two. */
+export interface Hotspot { frame: Frame; path: Frame[]; sampled: number; sql: number; count: number; time: number }
+/** Where a request's time goes, per function outside the framework (appFrame() of each stack), slowest first: a sample
+ * lasts until the next one; the queries add their time to the function that ran them. */
+export function hotspots(samples: readonly Sample[] = [], queries: readonly SqlEntry[] = [], n = 8): Hotspot[] {
+  const spots = new Map<string, Omit<Hotspot, 'time'>>();
+  const spot = (stack: readonly Frame[]) => {
+    const f = appFrame(stack);
+    if (!f || FRAMEWORK.test(f[0])) return null; // only the framework (waiting, dispatching…): no module code to point at
+    const key = `${f[0]}\0${f[2]}`;
+    if (!spots.has(key)) spots.set(key, { frame: f, path: stack.filter((x) => x !== f && !FRAMEWORK.test(x[0])), sampled: 0, sql: 0, count: 0 });
+    return spots.get(key)!;
+  };
+  samples.forEach((e, i) => {
+    const next = samples[i + 1];
+    const s = next && e.stack?.length ? spot(e.stack) : null;
+    if (s) s.sampled += next!.start - e.start;
+  });
+  for (const q of queries) {
+    const s = spot(q.stack ?? []);
+    if (s) { s.sql += q.time ?? 0; s.count++; }
+  }
+  return [...spots.values()].map((s) => ({ ...s, time: Math.max(s.sampled, s.sql) })).sort((a, b) => b.time - a.time).slice(0, n);
 }
 
 /** Seconds → "12 ms" / "1.24 s". */

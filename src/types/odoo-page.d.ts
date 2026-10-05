@@ -14,7 +14,7 @@ declare global {
   }
 
   interface OwlRoot {
-    env?: { services?: { action?: ActionService } };
+    env?: { services?: { action?: ActionService; field?: { loadFields(model: string): Promise<Record<string, { string?: string }>> } } };
     __owl__?: unknown;
   }
 

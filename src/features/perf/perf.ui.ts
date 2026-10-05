@@ -79,13 +79,6 @@ export function queryDetail(e: SqlEntry): HTMLElement {
   return r.box;
 }
 
-/** A statement in a table cell: one line, clipped; the whole of it on hover. */
-export function queryText(q: string, max = 140): HTMLSpanElement {
-  const t = text(q.length > max ? `${q.slice(0, max)}…` : q, 'mono');
-  if (q.length > max) tip(t, q.slice(0, 1200));
-  return t;
-}
-
 /** A <select> of [value, label]; `onPick` when another is chosen. */
 export function select(options: readonly [string, string][], current: string, onPick: (v: string) => void, label: string): HTMLSelectElement {
   const { select: s } = tpl('select', { select: HTMLSelectElement }).refs;

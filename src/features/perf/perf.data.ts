@@ -9,7 +9,7 @@ import type { Json } from '../../contracts/json.ts';
 import type { OdooAdapter } from '../../odoo/adapter.ts';
 import { call, rpc } from '../../odoo/rpc.ts';
 import { pageGet } from './perf.injected.ts';
-import { parseSql, type ProfileRow, type SqlEntry } from './perf.logic.ts';
+import { parseSamples, parseSql, type ProfileRow, type Sample, type SqlEntry } from './perf.logic.ts';
 
 /** Profiling is not allowed on the database (base.profiling_enabled_until passed or unset): allowProfiling() first. */
 export class NotAllowedError extends Error {
@@ -64,6 +64,12 @@ export async function readSessions(a: OdooAdapter): Promise<{ session: string; c
 export async function readSql(id: number): Promise<SqlEntry[]> {
   const [r] = await call<{ sql: string | false }[]>('ir.profile', 'read', [[id], ['sql']]);
   return parseSql(r?.sql);
+}
+
+/** One request's Python samples (ir.profile.traces_async: JSON, read on demand; [] when not collected). */
+export async function readSamples(id: number): Promise<Sample[]> {
+  const [r] = await call<{ traces_async: string | false }[]>('ir.profile', 'read', [[id], ['traces_async']]);
+  return parseSamples(r?.traces_async);
 }
 
 export const deleteProfiles = (ids: readonly number[]) => call('ir.profile', 'unlink', [[...ids]]);

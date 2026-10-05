@@ -161,7 +161,7 @@ msgid "Shortcuts"
 msgstr "Phím tắt"
 
 #: src/entrypoints/popup/index.html:34
-#: src/features/perf/perf.request.ts:122
+#: src/features/perf/perf.request.ts:227
 #: src/features/security/security.groups.ts:263
 msgid "Change"
 msgstr "Đổi"
@@ -283,7 +283,7 @@ msgid "2 levels"
 msgstr "2 cấp"
 
 #: src/features/apps/apps.graph.ts:59
-#: src/features/perf/perf.tab.ts:214
+#: src/features/perf/perf.tab.ts:224
 msgid "All"
 msgstr "Tất cả"
 
@@ -1109,6 +1109,7 @@ msgstr "Mô tả module"
 #: src/features/code/code.result.ts:234
 #: src/features/code/code.result.ts:272
 #: src/features/rpc/rpc.tab.ts:98
+#: src/features/rpc/rpc.tab.ts:128
 #: src/features/rpc/rpc.tab.ts:186
 msgid "error"
 msgstr "lỗi"
@@ -1148,7 +1149,7 @@ msgstr "Chờ cài"
 #: src/features/code/code.data.ts:26
 #: src/features/code/code.data.ts:76
 #: src/features/menus/menus.tab.ts:42
-#: src/features/perf/perf.data.ts:88
+#: src/features/perf/perf.data.ts:94
 #: src/features/rpc/rpc.tab.ts:183
 #: src/odoo/rpc.ts:30
 msgid "No response — is this an Odoo page?"
@@ -1676,7 +1677,6 @@ msgid "Actions Server"
 msgstr "Actions Server"
 
 #: src/features/menus/menus.logic.ts:19
-#: src/features/rpc/rpc.tab.ts:117
 msgid "Parameters"
 msgstr "Tham số"
 
@@ -1711,190 +1711,299 @@ msgstr "Database này chưa cho phép profiling: hãy cho phép trước."
 msgid "Cannot call /web/set_profiling"
 msgstr "Không gọi được /web/set_profiling"
 
-#: src/features/perf/perf.request.ts:48
+#: src/features/perf/perf.request.ts:52
 msgid "Flame Graph ↗"
 msgstr "Flame graph ↗"
 
-#: src/features/perf/perf.request.ts:49
+#: src/features/perf/perf.request.ts:53
 msgid "Odoo 18 shows it only while profiling is allowed on the database"
 msgstr "Odoo 18 chỉ hiện khi database còn đang cho phép profiling"
 
-#: src/features/perf/perf.request.ts:49
+#: src/features/perf/perf.request.ts:53
 msgid "Odoo's speedscope view of this request"
 msgstr "Trang speedscope của Odoo cho request này"
 
-#: src/features/perf/perf.request.ts:51
+#: src/features/perf/perf.request.ts:55
 msgid "Baseline ✓"
 msgstr "Mốc ✓"
 
-#: src/features/perf/perf.request.ts:51
+#: src/features/perf/perf.request.ts:55
 msgid "Set as Baseline"
 msgstr "Đặt làm mốc"
 
-#: src/features/perf/perf.request.ts:52
+#: src/features/perf/perf.request.ts:56
 msgid "Stop comparing with this request"
 msgstr "Thôi so sánh với request này"
 
-#: src/features/perf/perf.request.ts:52
+#: src/features/perf/perf.request.ts:56
 msgid "Compare the other requests with this one (before a fix)"
 msgstr "So sánh các request khác với request này (trước khi sửa)"
 
-#: src/features/perf/perf.request.ts:54
+#: src/features/perf/perf.request.ts:58
 msgid "Side by Side ↗"
 msgstr "Đặt cạnh nhau ↗"
 
-#: src/features/perf/perf.request.ts:54
+#: src/features/perf/perf.request.ts:58
 msgid "Both flame graphs in speedscope"
 msgstr "Cả hai flame graph trong speedscope"
 
-#: src/features/perf/perf.request.ts:56
+#: src/features/perf/perf.request.ts:60
 msgid "Delete"
 msgstr "Xoá"
 
-#: src/features/perf/perf.request.ts:57
+#: src/features/perf/perf.request.ts:61
 msgid "Delete this profile (#%s)?"
 msgstr "Xoá profile này (#%s)?"
 
-#: src/features/perf/perf.request.ts:59
+#: src/features/perf/perf.request.ts:63
 msgid "Delete this ir.profile record"
 msgstr "Xoá bản ghi ir.profile này"
 
-#: src/features/perf/perf.request.ts:63
+#: src/features/perf/perf.request.ts:67
 msgid "queries"
 msgstr "câu SQL"
 
-#: src/features/perf/perf.request.ts:63
+#: src/features/perf/perf.request.ts:67
 msgid "SQL queries of the request"
 msgstr "Số câu SQL của request"
 
-#: src/features/perf/perf.request.ts:64
+#: src/features/perf/perf.request.ts:68
 msgid "in SQL"
 msgstr "trong SQL"
 
-#: src/features/perf/perf.request.ts:64
+#: src/features/perf/perf.request.ts:68
 msgid "Time spent in the database"
 msgstr "Thời gian ở database"
 
-#: src/features/perf/perf.request.ts:65
+#: src/features/perf/perf.request.ts:69
 msgid "total"
 msgstr "tổng"
 
-#: src/features/perf/perf.request.ts:65
+#: src/features/perf/perf.request.ts:69
 msgid "Real time of the request on the server"
 msgstr "Thời gian thực của request trên server"
 
-#: src/features/perf/perf.request.ts:66
+#: src/features/perf/perf.request.ts:70
 msgid "Python"
 msgstr "Python"
 
-#: src/features/perf/perf.request.ts:66
+#: src/features/perf/perf.request.ts:70
 msgid "The rest: Python, waiting, and the profiler itself"
 msgstr "Phần còn lại: Python, chờ đợi, và chính profiler"
 
-#: src/features/perf/perf.request.ts:67
+#: src/features/perf/perf.request.ts:71
 msgid "CPU time of the server process (Odoo 19)"
 msgstr "Thời gian CPU của tiến trình server (Odoo 19)"
 
-#: src/features/perf/perf.request.ts:71
+#: src/features/perf/perf.request.ts:75
+msgid "By code: where the time goes"
+msgstr "Theo code: thời gian đi đâu"
+
+#: src/features/perf/perf.request.ts:76
 msgid "No SQL recorded for this request (the SQL collector was off?)."
 msgstr "Request này không có SQL nào được ghi (collector SQL bị tắt?)."
 
-#: src/features/perf/perf.request.ts:73
+#: src/features/perf/perf.request.ts:78
 msgid "Lines of code sending queries"
 msgstr "Dòng code gửi SQL"
 
-#: src/features/perf/perf.request.ts:74
+#: src/features/perf/perf.request.ts:79
 msgid "Repeated queries: N+1 suspects"
 msgstr "Câu SQL lặp lại: nghi vấn N+1"
 
-#: src/features/perf/perf.request.ts:75
 #: src/features/perf/perf.request.ts:80
-#: src/features/perf/perf.request.ts:97
+#: src/features/perf/perf.request.ts:86
+#: src/features/perf/perf.request.ts:202
 msgid "Statement"
 msgstr "Câu lệnh"
 
-#: src/features/perf/perf.request.ts:75
-#: src/features/perf/perf.request.ts:97
+#: src/features/perf/perf.request.ts:80
+#: src/features/perf/perf.request.ts:202
 msgid "Runs"
 msgstr "Số lần"
 
-#: src/features/perf/perf.request.ts:75
 #: src/features/perf/perf.request.ts:80
-#: src/features/perf/perf.request.ts:90
-#: src/features/perf/perf.tab.ts:108
+#: src/features/perf/perf.request.ts:86
+#: src/features/perf/perf.request.ts:172
+#: src/features/perf/perf.request.ts:195
+#: src/features/perf/perf.tab.ts:117
 msgid "Time"
 msgstr "Thời gian"
 
-#: src/features/perf/perf.request.ts:76
+#: src/features/perf/perf.request.ts:81
 msgid "Odoo itself"
 msgstr "Chính Odoo"
 
-#: src/features/perf/perf.request.ts:79
+#: src/features/perf/perf.request.ts:83
+msgid "The same SQL sent several times. If a count follows the number of records shown (10 records → 10×), it is an N+1: the code reads records one by one where one query could read them all."
+msgstr "Cùng một câu SQL được gửi nhiều lần. Nếu số lần tăng theo số bản ghi đang hiển thị (10 bản ghi → 10×), đó là N+1: code đọc từng bản ghi một, trong khi một câu truy vấn có thể đọc hết."
+
+#: src/features/perf/perf.request.ts:84
 msgid "✓ No statement runs twice."
 msgstr "✓ Không câu lệnh nào chạy hai lần."
 
-#: src/features/perf/perf.request.ts:80
+#: src/features/perf/perf.request.ts:86
 msgid "Slowest queries"
 msgstr "Câu SQL chậm nhất"
 
+#: src/features/perf/perf.request.ts:89
+msgid "✓ No slow query (the slowest took %s): the database is not the problem here."
+msgstr "✓ Không có truy vấn chậm (chậm nhất %s): database không phải vấn đề ở đây."
+
 #: src/features/perf/perf.request.ts:90
+msgid "The slowest took %s. Check the columns it filters or joins on have an index, and that it does not read more rows than needed."
+msgstr "Truy vấn chậm nhất mất %s. Kiểm tra các cột dùng để lọc hoặc join đã có index chưa, và nó có đọc nhiều dòng hơn cần thiết không."
+
+#: src/features/perf/perf.request.ts:116
+msgid "Reads %s"
+msgstr "Đọc bảng %s"
+
+#: src/features/perf/perf.request.ts:116
+msgid "Creates in %s"
+msgstr "Tạo bản ghi trong %s"
+
+#: src/features/perf/perf.request.ts:116
+msgid "Updates %s"
+msgstr "Cập nhật bảng %s"
+
+#: src/features/perf/perf.request.ts:116
+msgid "Deletes from %s"
+msgstr "Xoá trong bảng %s"
+
+#: src/features/perf/perf.request.ts:120
+msgid "Runs a SQL query"
+msgstr "Chạy một câu SQL"
+
+#: src/features/perf/perf.request.ts:135
+msgid "N+1: one query runs %s× in this request"
+msgstr "N+1: một câu truy vấn chạy %s lần trong request này"
+
+#: src/features/perf/perf.request.ts:136
+msgid "%s runs it once per record: read them all at once instead (a recordset, mapped(), read_group…)."
+msgstr "%s chạy nó một lần cho mỗi bản ghi: hãy đọc tất cả một lần (recordset, mapped(), read_group…)."
+
+#: src/features/perf/perf.request.ts:137
+msgid "Most of the time is in the database (%s of %s)"
+msgstr "Phần lớn thời gian nằm ở database (%s trên %s)"
+
+#: src/features/perf/perf.request.ts:138
+msgid "See the slowest queries below: a missing index, a large join, a search on a non-stored field…"
+msgstr "Xem các câu truy vấn chậm nhất bên dưới: thiếu index, join lớn, tìm kiếm trên field không lưu (non-stored)…"
+
+#: src/features/perf/perf.request.ts:139
+msgid "Most of the time is in Python (≈ %s of %s)"
+msgstr "Phần lớn thời gian nằm ở Python (≈ %s trên %s)"
+
+#: src/features/perf/perf.request.ts:140
+msgid "The SQL is not the problem: see which code takes the time below, or every function in the Flame Graph."
+msgstr "SQL không phải nguyên nhân: xem đoạn code nào tốn thời gian ở bên dưới, hoặc từng hàm trong Flame Graph."
+
+#: src/features/perf/perf.request.ts:141
+msgid "✓ Fast request (%s)"
+msgstr "✓ Request nhanh (%s)"
+
+#: src/features/perf/perf.request.ts:141
+msgid "Nothing to optimise here."
+msgstr "Không cần tối ưu gì ở đây."
+
+#: src/features/perf/perf.request.ts:155
+msgid "SQL %s"
+msgstr "SQL %s"
+
+#: src/features/perf/perf.request.ts:156
+msgid "Python ≈ %s"
+msgstr "Python ≈ %s"
+
+#: src/features/perf/perf.request.ts:159
+msgid "SQL %s, Python ≈ %s"
+msgstr "SQL %s, Python ≈ %s"
+
+#: src/features/perf/perf.request.ts:168
+msgid "The functions of the modules (outside the ORM and the server) the time went to, SQL they ran included. Sampled every 10 ms or so: approximate."
+msgstr "Các hàm của module (ngoài ORM và server) mà thời gian tiêu vào, tính cả SQL chúng chạy. Lấy mẫu khoảng 10 ms một lần: chỉ là ước lượng."
+
+#: src/features/perf/perf.request.ts:169
+msgid "No time in the modules' code: the server itself (routing, ORM) took it."
+msgstr "Không tốn thời gian trong code của module: thời gian nằm ở chính server (routing, ORM)."
+
+#: src/features/perf/perf.request.ts:170
+msgid "No Python samples: this request was recorded without them (Collect: Python stacks)."
+msgstr "Không có mẫu Python: request này được ghi lại mà không có chúng (Thu thập: Stack Python)."
+
+#: src/features/perf/perf.request.ts:172
+msgid "Function"
+msgstr "Hàm"
+
+#: src/features/perf/perf.request.ts:174
+msgid "≈ %s in Python, %s in %s SQL queries"
+msgstr "≈ %s ở Python, %s cho %s câu SQL"
+
+#: src/features/perf/perf.request.ts:174
+msgid "≈ %s in Python, no SQL"
+msgstr "≈ %s ở Python, không có SQL"
+
+#: src/features/perf/perf.request.ts:187
+msgid "Called by"
+msgstr "Được gọi từ"
+
+#: src/features/perf/perf.request.ts:195
 msgid "Line of code"
 msgstr "Dòng code"
 
-#: src/features/perf/perf.request.ts:90
-#: src/features/perf/perf.request.ts:123
+#: src/features/perf/perf.request.ts:195
+#: src/features/perf/perf.request.ts:228
 msgid "Queries"
 msgstr "Số câu"
 
-#: src/features/perf/perf.request.ts:90
+#: src/features/perf/perf.request.ts:195
 msgid "Statements"
 msgstr "Câu lệnh khác nhau"
 
-#: src/features/perf/perf.request.ts:91
+#: src/features/perf/perf.request.ts:196
 msgid "Odoo itself (no addon line in the stack)"
 msgstr "Chính Odoo (stack không đi qua dòng nào của addon)"
 
-#: src/features/perf/perf.request.ts:102
+#: src/features/perf/perf.request.ts:207
 msgid "The line of an addon under the ORM that caused the queries. Many queries from one line, one statement repeated: a loop reading record by record (N+1)."
 msgstr "Dòng code của addon (ngay dưới ORM) đã gây ra các câu SQL. Nhiều câu từ một dòng, một câu lệnh lặp lại: một vòng lặp đọc từng bản ghi một (N+1)."
 
-#: src/features/perf/perf.request.ts:109
+#: src/features/perf/perf.request.ts:214
 msgid "The baseline was deleted."
 msgstr "Mốc đã bị xoá."
 
-#: src/features/perf/perf.request.ts:116
+#: src/features/perf/perf.request.ts:221
 msgid "✓ Gone: %s"
 msgstr "✓ Đã hết: %s"
 
-#: src/features/perf/perf.request.ts:117
+#: src/features/perf/perf.request.ts:222
 msgid "✗ New: %s"
 msgstr "✗ Mới xuất hiện: %s"
 
-#: src/features/perf/perf.request.ts:118
+#: src/features/perf/perf.request.ts:223
 msgid "%s× → %s×: %s"
 msgstr "%s× → %s×: %s"
 
-#: src/features/perf/perf.request.ts:119
+#: src/features/perf/perf.request.ts:224
 msgid "Against the baseline #%s"
 msgstr "So với mốc #%s"
 
-#: src/features/perf/perf.request.ts:122
+#: src/features/perf/perf.request.ts:227
 msgid "Baseline"
 msgstr "Mốc"
 
-#: src/features/perf/perf.request.ts:122
+#: src/features/perf/perf.request.ts:227
 msgid "This one"
 msgstr "Request này"
 
-#: src/features/perf/perf.request.ts:123
+#: src/features/perf/perf.request.ts:228
 msgid "Total"
 msgstr "Tổng"
 
-#: src/features/perf/perf.request.ts:123
+#: src/features/perf/perf.request.ts:228
 msgid "In SQL"
 msgstr "Trong SQL"
 
-#: src/features/perf/perf.request.ts:125
+#: src/features/perf/perf.request.ts:230
 msgid "Repeated statements: the same as the baseline."
 msgstr "Câu lệnh lặp lại: giống như mốc."
 
@@ -1903,185 +2012,205 @@ msgid "The Perf tab needs Settings rights (base.group_system): the profiles are 
 msgstr "Tab Perf cần quyền Settings (base.group_system): profile là các bản ghi ir.profile."
 
 #: src/features/perf/perf.tab.ts:75
-#: src/features/perf/perf.tab.ts:214
+#: src/features/perf/perf.tab.ts:224
 msgid "Every session"
 msgstr "Mọi phiên"
 
-#: src/features/perf/perf.tab.ts:83
+#: src/features/perf/perf.tab.ts:86
 msgid "Profile session"
 msgstr "Phiên profile"
 
-#: src/features/perf/perf.tab.ts:84
+#: src/features/perf/perf.tab.ts:87
 msgid "Filter requests…"
 msgstr "Lọc request…"
 
-#: src/features/perf/perf.tab.ts:85
+#: src/features/perf/perf.tab.ts:88
 msgid "Read the profiles again"
 msgstr "Đọc lại các profile"
 
-#: src/features/perf/perf.tab.ts:89
-msgid "Recording: use the Odoo page, then ⟳. Every request of this session writes a profile."
-msgstr "Đang ghi: thao tác trên trang Odoo rồi bấm ⟳. Mỗi request của phiên này ghi một profile."
+#: src/features/perf/perf.tab.ts:90
+msgid "Static Files (%s)"
+msgstr "File tĩnh (%s)"
 
 #: src/features/perf/perf.tab.ts:90
+msgid "Scripts, images, manifest…: nothing to optimise in a module"
+msgstr "Script, ảnh, manifest…: không có gì để tối ưu trong module"
+
+#: src/features/perf/perf.tab.ts:97
+msgid "Recording: do the slow action on the Odoo page, then ⟳. Every request of this session writes a profile."
+msgstr "Đang ghi: làm thao tác bị chậm trên trang Odoo, rồi bấm ⟳. Mỗi request của phiên này ghi một profile."
+
+#: src/features/perf/perf.tab.ts:98
 msgid "No request in this session."
 msgstr "Phiên này chưa có request nào."
 
-#: src/features/perf/perf.tab.ts:90
+#: src/features/perf/perf.tab.ts:98
 msgid "No profile yet: Start, use the Odoo page, then come back here."
 msgstr "Chưa có profile: bấm Bắt đầu, thao tác trên trang Odoo, rồi quay lại đây."
 
-#: src/features/perf/perf.tab.ts:96
-msgid "Choose a request: its queries, the lines sending them and the N+1 suspects show here."
-msgstr "Chọn một request: các câu SQL, dòng code gửi chúng và nghi vấn N+1 hiện ở đây."
+#: src/features/perf/perf.tab.ts:104
+msgid "Click a request to see where its time goes."
+msgstr "Bấm vào một request để xem thời gian của nó tiêu vào đâu."
 
-#: src/features/perf/perf.tab.ts:100
+#: src/features/perf/perf.tab.ts:108
 msgid "baseline"
 msgstr "mốc"
 
-#: src/features/perf/perf.tab.ts:108
+#: src/features/perf/perf.tab.ts:117
 msgid "Request"
 msgstr "Request"
 
-#: src/features/perf/perf.tab.ts:108
+#: src/features/perf/perf.tab.ts:117
 msgid "At"
 msgstr "Lúc"
 
-#: src/features/perf/perf.tab.ts:110
+#: src/features/perf/perf.tab.ts:119
 msgid "%s requests"
 msgstr "%s request"
 
-#: src/features/perf/perf.tab.ts:120
+#: src/features/perf/perf.tab.ts:130
 msgid "RECORDING"
 msgstr "ĐANG ĐO"
 
-#: src/features/perf/perf.tab.ts:120
+#: src/features/perf/perf.tab.ts:130
 msgid "off"
 msgstr "tắt"
 
-#: src/features/perf/perf.tab.ts:121
+#: src/features/perf/perf.tab.ts:131
 msgid "since %s"
 msgstr "từ %s"
 
-#: src/features/perf/perf.tab.ts:128
+#: src/features/perf/perf.tab.ts:138
 msgid "Stop Profiling"
 msgstr "Tắt profiling"
 
-#: src/features/perf/perf.tab.ts:128
+#: src/features/perf/perf.tab.ts:138
 msgid "Start Profiling"
 msgstr "Bật profiling"
 
-#: src/features/perf/perf.tab.ts:148
+#: src/features/perf/perf.tab.ts:158
 msgid "Collect:"
 msgstr "Thu thập:"
 
-#: src/features/perf/perf.tab.ts:149
+#: src/features/perf/perf.tab.ts:159
 msgid "Every query, its time and stack: always"
 msgstr "Mọi câu SQL, thời gian và stack: luôn bật"
 
-#: src/features/perf/perf.tab.ts:150
+#: src/features/perf/perf.tab.ts:160
 msgid "Python stacks"
 msgstr "Stack Python"
 
-#: src/features/perf/perf.tab.ts:150
+#: src/features/perf/perf.tab.ts:160
 msgid "The Python stack sampled every few ms: the flame graph"
 msgstr "Stack Python được lấy mẫu vài ms một lần: dùng cho flame graph"
 
-#: src/features/perf/perf.tab.ts:151
+#: src/features/perf/perf.tab.ts:161
 msgid "The QWeb directives rendered and their time (reports, website pages)"
 msgstr "Các directive QWeb được render và thời gian (báo cáo, trang website)"
 
-#: src/features/perf/perf.tab.ts:153
+#: src/features/perf/perf.tab.ts:163
 msgid "Every request of this session writes one profile (ir.profile); the panel's own are left out of the list."
 msgstr "Mỗi request của phiên này ghi một profile (ir.profile); request của chính panel được ẩn khỏi danh sách."
 
-#: src/features/perf/perf.tab.ts:154
+#: src/features/perf/perf.tab.ts:164
 msgid "Odoo's own profiler: SQL and Python of every request of this session, read back here (Settings rights)."
 msgstr "Profiler có sẵn của Odoo: SQL và Python của mọi request trong phiên này, đọc lại ở đây (quyền Settings)."
 
-#: src/features/perf/perf.tab.ts:155
+#: src/features/perf/perf.tab.ts:165
 msgid "Allowed on this database until %s."
 msgstr "Database cho phép profiling tới %s."
 
-#: src/features/perf/perf.tab.ts:155
+#: src/features/perf/perf.tab.ts:165
 msgid "Not allowed on this database yet: Start asks for how long."
 msgstr "Database chưa cho phép profiling: bấm Bắt đầu sẽ hỏi cho phép trong bao lâu."
 
-#: src/features/perf/perf.tab.ts:163
+#: src/features/perf/perf.tab.ts:173
 msgid "Cannot change what the profiler collects."
 msgstr "Không đổi được các collector của profiler."
 
-#: src/features/perf/perf.tab.ts:169
+#: src/features/perf/perf.tab.ts:179
 msgid "Profiling is not allowed on this database. Allow it for:"
 msgstr "Database chưa cho phép profiling. Cho phép trong:"
 
-#: src/features/perf/perf.tab.ts:170
+#: src/features/perf/perf.tab.ts:180
 msgid "5 minutes"
 msgstr "5 phút"
 
-#: src/features/perf/perf.tab.ts:170
+#: src/features/perf/perf.tab.ts:180
 msgid "1 hour"
 msgstr "1 giờ"
 
-#: src/features/perf/perf.tab.ts:170
+#: src/features/perf/perf.tab.ts:180
 msgid "1 day"
 msgstr "1 ngày"
 
-#: src/features/perf/perf.tab.ts:171
+#: src/features/perf/perf.tab.ts:181
 msgid "(writes base.profiling_enabled_until)"
 msgstr "(ghi base.profiling_enabled_until)"
 
-#: src/features/perf/perf.tab.ts:176
+#: src/features/perf/perf.tab.ts:186
 msgid "Profiling"
 msgstr "Đang profile"
 
-#: src/features/perf/perf.tab.ts:181
+#: src/features/perf/perf.tab.ts:191
 msgid "Sent (HTTP %s), but no profile of it was found."
 msgstr "Đã gửi (HTTP %s), nhưng không tìm thấy profile của nó."
 
-#: src/features/perf/perf.tab.ts:184
+#: src/features/perf/perf.tab.ts:194
 msgid "HTTP %s · %s · %s queries · opened below"
 msgstr "HTTP %s · %s · %s câu SQL · đã mở bên dưới"
 
-#: src/features/perf/perf.tab.ts:196
+#: src/features/perf/perf.tab.ts:206
 msgid "Profiled"
 msgstr "Đã profile"
 
-#: src/features/perf/perf.tab.ts:203
+#: src/features/perf/perf.tab.ts:213
 msgid "Nothing to delete."
 msgstr "Không có gì để xoá."
 
-#: src/features/perf/perf.tab.ts:204
+#: src/features/perf/perf.tab.ts:214
 msgid "%s: delete %s profiles (ir.profile)? The panel's own reads, not listed, are among them."
 msgstr "%s: xoá %s profile (ir.profile)? Trong đó có cả các request của panel, vốn không hiện trong danh sách."
 
-#: src/features/perf/perf.tab.ts:211
+#: src/features/perf/perf.tab.ts:221
 msgid "Clean up:"
 msgstr "Dọn dẹp:"
 
-#: src/features/perf/perf.tab.ts:212
+#: src/features/perf/perf.tab.ts:222
 msgid "This session (%s)"
 msgstr "Phiên này (%s)"
 
-#: src/features/perf/perf.tab.ts:212
+#: src/features/perf/perf.tab.ts:222
 msgid "This session"
 msgstr "Phiên này"
 
-#: src/features/perf/perf.tab.ts:213
+#: src/features/perf/perf.tab.ts:223
 msgid "Mine"
 msgstr "Của tôi"
 
-#: src/features/perf/perf.tab.ts:213
+#: src/features/perf/perf.tab.ts:223
 msgid "Your sessions"
 msgstr "Các phiên của bạn"
 
-#: src/features/perf/perf.tab.ts:213
+#: src/features/perf/perf.tab.ts:223
 msgid "Every session of %s"
 msgstr "Mọi phiên của %s"
 
-#: src/features/perf/perf.tab.ts:214
+#: src/features/perf/perf.tab.ts:224
 msgid "Every profile of the database (Odoo deletes them after 30 days anyway)"
 msgstr "Mọi profile trong database (dù sao Odoo cũng tự xoá sau 30 ngày)"
+
+#: src/features/perf/perf.tpl.html:11
+msgid "Start profiling (Odoo's built-in profiler, administrators only)."
+msgstr "Bật profiling (profiler có sẵn của Odoo, chỉ dành cho quản trị viên)."
+
+#: src/features/perf/perf.tpl.html:12
+msgid "Do the slow action on the Odoo page: open the record, save, confirm…"
+msgstr "Làm thao tác bị chậm trên trang Odoo: mở bản ghi, lưu, xác nhận…"
+
+#: src/features/perf/perf.tpl.html:13
+msgid "Come back and refresh: the requests show slowest first; click one to see why it is slow."
+msgstr "Quay lại đây và làm mới: request chậm nhất nằm trên cùng; bấm vào một request để xem vì sao nó chậm."
 
 #: src/features/record/record.logic.ts:62
 msgid "change → recomputes %s"
@@ -2188,23 +2317,20 @@ msgid "Time · route"
 msgstr "Giờ · route"
 
 #: src/features/rpc/rpc.tab.ts:50
-msgid "Select a call to see its parameters and result."
-msgstr "Chọn một lời gọi để xem tham số và kết quả."
+msgid "Select a call to edit its parameters, send it again and see its result."
+msgstr "Chọn một lời gọi để sửa tham số, gửi lại và xem kết quả."
 
 #: src/features/rpc/rpc.tab.ts:115
-msgid "Cut at 200 KB by the recorder: Edit & Resend it to profile it whole."
-msgstr "Bị recorder cắt ở 200 KB: dùng Edit & Resend để profile bản đầy đủ."
+msgid "Cut at 200 KB by the recorder: its body is not whole, it cannot be profiled."
+msgstr "Bộ ghi đã cắt ở 200 KB: body không còn nguyên vẹn, không profile được."
 
-#: src/features/rpc/rpc.tab.ts:134
-#: src/features/security/security.record.ts:144
-#: src/features/security/security.record.ts:145
-#: src/features/security/security.record.ts:148
-msgid "Result"
-msgstr "Kết quả"
+#: src/features/rpc/rpc.tab.ts:129
+msgid "Recorded at %s · %s ms"
+msgstr "Ghi lúc %s · %s ms"
 
-#: src/features/rpc/rpc.tab.ts:142
-msgid "Cut at 200 KB by the recorder, so shown as text: Edit & Resend gets it whole."
-msgstr "Recorder đã cắt ở 200 KB nên hiện dạng chữ: dùng Edit & Resend để lấy bản đầy đủ."
+#: src/features/rpc/rpc.tab.ts:140
+msgid "Cut at 200 KB by the recorder: only its start is kept."
+msgstr "Bộ ghi đã cắt ở 200 KB: chỉ giữ phần đầu."
 
 #: src/features/rpc/rpc.tab.ts:178
 msgid "Invalid JSON: %s"
@@ -2244,39 +2370,35 @@ msgstr "Các lời gọi Odoo trả lời từ cache của nó (view, action…)
 msgid "Close"
 msgstr "Đóng"
 
-#: src/features/rpc/rpc.tpl.html:59
-msgid "Edit & Resend"
-msgstr "Sửa & Gửi lại"
-
-#: src/features/rpc/rpc.tpl.html:60
+#: src/features/rpc/rpc.tpl.html:57
 msgid "Why was it blocked? → Security"
 msgstr "Vì sao bị chặn? → Security"
 
-#: src/features/rpc/rpc.tpl.html:61
+#: src/features/rpc/rpc.tpl.html:60
 msgid "⏱ Profile → Perf"
 msgstr "⏱ Profile → Perf"
 
-#: src/features/rpc/rpc.tpl.html:61
+#: src/features/rpc/rpc.tpl.html:60
 msgid "Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)"
 msgstr "Gửi lại với profiler của Odoo đang bật: xem SQL, dòng code gửi SQL, nghi vấn N+1 (Perf)"
 
-#: src/features/rpc/rpc.tpl.html:70
+#: src/features/rpc/rpc.tpl.html:67
 msgid "Route"
 msgstr "Route"
 
-#: src/features/rpc/rpc.tpl.html:71
+#: src/features/rpc/rpc.tpl.html:68
 msgid "Body (JSON)"
 msgstr "Body (JSON)"
 
-#: src/features/rpc/rpc.tpl.html:73
+#: src/features/rpc/rpc.tpl.html:70
 msgid "Send"
 msgstr "Gửi"
 
-#: src/features/rpc/rpc.tpl.html:74
+#: src/features/rpc/rpc.tpl.html:71
 msgid "Ctrl/⌘ + Enter"
 msgstr "Ctrl/⌘ + Enter"
 
-#: src/features/rpc/rpc.tpl.html:92
+#: src/features/rpc/rpc.tpl.html:89
 msgid "Copy as cURL"
 msgstr "Sao chép dạng cURL"
 
@@ -3175,6 +3297,12 @@ msgstr "%s bị chặn"
 #: src/features/security/security.record.ts:143
 msgid "Not certain: a rule could not be checked"
 msgstr "Chưa chắc chắn: có rule không kiểm tra được"
+
+#: src/features/security/security.record.ts:144
+#: src/features/security/security.record.ts:145
+#: src/features/security/security.record.ts:148
+msgid "Result"
+msgstr "Kết quả"
 
 #: src/features/security/security.record.ts:146
 msgid "Odoo's own answer for you, same companies"

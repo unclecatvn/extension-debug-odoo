@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
-  appFrame, callerOf, compare, FRAMEWORK_CALLER, delta, frameText, isOwnRequest, isSessionOf, ms, normalizeQuery, parseSql, requestName, sessionLabel, shortFile, sqlSummary,
-  type Frame, type ProfileRow, type SqlEntry,
+  appFrame, callerOf, compare, describeQuery, diagnose, FRAMEWORK_CALLER, delta, frameText, hotspots, isAsset, isOwnRequest, isSessionOf, ms, normalizeQuery, parseSamples,
+  parseSql, requestName, sessionLabel, shortFile, sqlSummary, type Frame, type ProfileRow, type SqlEntry,
 } from '../../../../src/features/perf/perf.logic.ts';
 
 const ORM: Frame = ['/srv/odoo/odoo/orm/models.py', 3000, 'read', ''];
@@ -86,4 +86,44 @@ test('ms / delta / normalizeQuery', () => {
   assert.equal(delta(2, 2), '±0');
   assert.equal(delta(0.3, 0.1, ms), '−200 ms');
   assert.equal(normalizeQuery('SELECT  a\n\tFROM t '), 'SELECT a FROM t');
+});
+
+test('appFrame: a pip-installed Odoo\'s addons are addons, Python\'s own library is framework', () => {
+  const pip: Frame = ['/venv/lib/python3.12/site-packages/odoo/addons/sale/models/sale_order.py', 9, '_compute', ''];
+  assert.deepEqual(appFrame([pip, ['/usr/lib/python3.12/threading.py', 3, 'wait', '']]), pip);
+  assert.deepEqual(appFrame([pip, ['<frozen genericpath>', 19, 'exists', '']]), pip, 'a frozen module of the interpreter is Python\'s own');
+});
+
+test('isAsset: static files and the webclient\'s plumbing, not the calls', () => {
+  assert.ok(isAsset('/web/service-worker.js') && isAsset('/web/image?model=res.users&field=avatar_128&id=2') && isAsset('/bus/websocket_worker_bundle?v=18.0-7'));
+  assert.ok(!isAsset('/web/dataset/call_kw/sale.order/web_read') && !isAsset('/odoo/orders/16') && !isAsset('/mail/data'));
+});
+
+test('diagnose: N+1 first (even fast), then fast, then where the time goes', () => {
+  const dup = (n: number) => sqlSummary(Array.from({ length: n }, () => q('SELECT 1', 0.001, LOOP)));
+  assert.equal(diagnose(0.02, dup(5)), 'n1');
+  assert.equal(diagnose(0.02, dup(2)), 'fast');
+  assert.equal(diagnose(1, sqlSummary([q('SELECT 1', 0.6, LOOP)])), 'sql');
+  assert.equal(diagnose(1, sqlSummary([q('SELECT 1', 0.1, LOOP)])), 'python');
+});
+
+test('describeQuery: what a statement does, on which table', () => {
+  assert.deepEqual(describeQuery('SELECT "res_partner"."id" FROM "res_partner" WHERE 1'), { op: 'read', table: 'res_partner' });
+  assert.deepEqual(describeQuery('UPDATE "sale_order" SET "x" = 1'), { op: 'write', table: 'sale_order' });
+  assert.deepEqual(describeQuery('INSERT INTO "mail_message" ("a") VALUES (1)'), { op: 'create', table: 'mail_message' });
+  assert.deepEqual(describeQuery('WITH t AS (SELECT 1 FROM a) DELETE FROM "b" WHERE 1'), { op: 'delete', table: 'b' });
+  assert.deepEqual(describeQuery('SAVEPOINT x'), { op: 'other', table: '' });
+});
+
+test('hotspots: a sample lasts until the next one; the stdlib and the ORM are skipped for the module code under them', () => {
+  const ctl: Frame = ['/x/odoo/addons/web/controllers/dataset.py', 1, 'call_kw', ''];
+  const mine: Frame = ['/x/odoo/addons/sale/models/so.py', 9, '_compute', 'for so in self:'];
+  const orm: Frame = ['/x/odoo/odoo/models.py', 5, 'read', ''];
+  const thr: Frame = ['/usr/lib/python3.12/threading.py', 3, 'wait', ''];
+  const hs = hotspots([{ start: 0, stack: [ctl, mine, orm] }, { start: 0.3, stack: [ctl] }, { start: 0.4, stack: [thr] }, { start: 0.5, stack: [] }],
+    [{ query: 'A', stack: [ctl, mine, orm], time: 0.1 }, { query: 'A', stack: [ctl, mine, orm], time: 0.05 }]);
+  assert.deepEqual(hs.map((h) => [h.frame[2], +h.time.toFixed(2), +h.sql.toFixed(2), h.count, h.path.map((f) => f[2])]),
+    [['_compute', 0.3, 0.15, 2, ['call_kw']], ['call_kw', 0.1, 0, 0, []]]);
+  assert.deepEqual(parseSamples('[{"start":1,"stack":[]},{"x":1}]'), [{ start: 1, stack: [] }]);
+  assert.deepEqual(parseSamples('not json'), []);
 });

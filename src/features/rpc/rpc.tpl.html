@@ -52,28 +52,25 @@
   </li>
 </template>
 
-<!-- A call opened: its actions, then the request and the answer (added by the code). -->
-<template data-tpl="call-detail">
-  <div>
-    <div class="row actions-bar" data-ref="actions">
-      <button type="button" class="btn" data-ref="edit" data-i18n="text">Edit &amp; Resend</button>
-      <button type="button" class="btn" data-ref="why" data-i18n="text">Why was it blocked? → Security</button>
-      <button type="button" class="btn" data-ref="profile" title="Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)" data-i18n="text,title">⏱ Profile → Perf</button>
-    </div>
-    <div data-ref="body"></div>
-  </div>
+<!-- A call opened is its request in the composer, editable right away; these go in its actions. -->
+<template data-tpl="why">
+  <button type="button" class="btn" data-ref="button" data-i18n="text">Why was it blocked? → Security</button>
+</template>
+<template data-tpl="profile">
+  <button type="button" class="btn" data-ref="button" title="Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)" data-i18n="text,title">⏱ Profile → Perf</button>
 </template>
 
-<!-- A request as sent, editable: Send (or Ctrl/⌘ + Enter) posts it with the page's session; the answer shows below. -->
+<!-- A request as sent, editable: Send (or Ctrl/⌘ + Enter) posts it with the page's session; the answer shows below, in
+     place of the recorded one. -->
 <template data-tpl="composer">
   <form class="composer" data-ref="form">
     <input type="text" spellcheck="false" data-ref="route" aria-label="Route" data-i18n="aria-label">
     <textarea spellcheck="false" data-ref="text" aria-label="Body (JSON)" data-i18n="aria-label"></textarea>
     <div class="row actions-bar" data-ref="actions">
       <button type="submit" class="btn primary" data-ref="send" data-i18n="text">Send</button>
-      <span class="muted" data-i18n="text">Ctrl/⌘ + Enter</span>
+      <span class="muted" data-ref="hint" data-i18n="text">Ctrl/⌘ + Enter</span>
     </div>
-    <div data-ref="out"></div>
+    <div class="answer" data-ref="out"></div>
   </form>
 </template>
 

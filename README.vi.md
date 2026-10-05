@@ -35,12 +35,12 @@ Odoo Debug trả lời các câu hỏi này ngay trên màn hình, dưới dạn
 |---|---|
 | **Record** | Mọi field của bản ghi: định nghĩa, giá trị theo kiểu dữ liệu, cái gì tính lại nó, lọc nhanh, sao chép dạng JSON |
 | **View** | View được kể như một câu chuyện: view nào của module nào tạo nên nó, theo đúng thứ tự Odoo áp dụng; một field qua các view; arch tổng hợp |
-| **RPC** | Các lời gọi JSON-RPC của trang, kèm thời gian và lỗi; sửa và gửi lại; Copy as cURL cho external API (18: `/jsonrpc`, 19 / 20: `/json/2`) |
+| **RPC** | Các lời gọi JSON-RPC của trang, kèm thời gian và lỗi; mở một lời gọi là sửa và gửi lại ngay tại đó; Copy as cURL cho external API (18: `/jsonrpc`, 19 / 20: `/json/2`) |
 | **Security** | Quyền dạng bảng: ACL và rule của một bản ghi × đọc / ghi / tạo / xoá, domain được đánh giá với user; quyền trên mọi model; nhóm, nhóm cấp gì và ai đang có; thử một nhóm trước khi cấp; so sánh hai user |
 | **Translations** | Chữ đến từ đâu và sửa ở đâu; bản dịch của bản ghi và view theo từng ngôn ngữ; độ phủ `.po`, xuất và nhập; ngôn ngữ |
 | **Apps** | Module như menu Apps của Odoo (cùng bộ lọc, dạng facet): chọn nhiều module rồi Kích hoạt (Cập nhật danh sách ứng dụng + cài kèm phụ thuộc), Nâng cấp hoặc mở form; ⚠ khi manifest trên đĩa mới hơn database. Mở một module: mô tả (`index.html` hoặc README), manifest, phụ thuộc hai chiều (cài nó sẽ kéo theo những gì, gồm cả module tự cài, tính đúng như Odoo) và dạng sơ đồ, dữ liệu và model của nó, gỡ cài đặt có xem trước bằng chính wizard của Odoo; các thao tác đang treo, áp dụng hoặc huỷ (quyền Settings) |
 | **Menus** | Các màn hình kỹ thuật mà developer mở suốt ngày, chỉ một cú bấm, không cần bật debug mode hay vào menu Technical: Models, Fields, Record Rules, Views, Menus, Model Data, Crons, Actions Window, Actions Server, Reports, Parameters, Sequences, Mail Templates (danh sách của module `developer_menu` bên OCA, không phải cài gì; dành cho user có quyền Access Rights). Bấm một dòng là mở màn hình đó ngay trên trang Odoo, như bấm menu; ↗ để mở ở tab mới. |
-| **Perf** | Profiler có sẵn của Odoo, đọc lại: bật / tắt cho phiên của bạn, rồi xem SQL của từng request, dòng code gửi SQL, nghi vấn N+1, câu chậm nhất; so với một mốc (trước / sau khi sửa); profile riêng một lời gọi từ tab RPC; flame graph; dọn dẹp (quyền Settings) |
+| **Perf** | Profiler có sẵn của Odoo, đọc lại: bật / tắt cho phiên của bạn, rồi xem các request (chậm nhất trước), chẩn đoán từng request (nên xem gì trước: N+1, database hay Python), thời gian theo hàm của các module, SQL diễn giải bằng lời, dòng code gửi SQL, nghi vấn N+1, câu chậm nhất; so với một mốc (trước / sau khi sửa); profile riêng một lời gọi từ tab RPC; flame graph; dọn dẹp (quyền Settings) |
 | **Code** | ORM console chạy dưới quyền người đang đăng nhập, trên bản ghi đang mở / đang chọn (`record`, `records`, `model`): **JavaScript** trong trang (`env['sale.order'].search(…)`, chỉ đọc, chạy thử hoặc ghi) hoặc **Python** trên server bằng một server action tạm (chạy thử được rollback thật; cần quyền Settings); kết quả hiển thị theo kiểu dữ liệu (bản ghi, bảng theo kiểu field, ngày giờ theo múi giờ của bạn), copy dạng CSV / Markdown / JSON; snippet; gợi ý model, field, method |
 
 Phiên bản Odoo được nhận diện trên từng trang, và mọi khác biệt giữa 18.0, 19.0 và 20.0 mà panel cần đều nằm ở một chỗ
@@ -59,7 +59,7 @@ Hướng dẫn chi tiết từng tab, phím tắt và quyền riêng tư:
 **https://unclecatvn.github.io/extension-debug-odoo/**.
 
 Phím tắt: **Alt+Shift+O** ẩn / hiện panel, **Alt+Shift+D** bật / tắt chế độ debug của Odoo, có thể đặt thêm phím mở panel trong cửa sổ riêng (đổi ở
-`chrome://extensions/shortcuts`).
+`chrome://extensions/shortcuts`). ⌥/Alt + click vào một field, nhãn của nó, ô hoặc tiêu đề cột trong list, hay một dòng thay đổi trong chatter trên trang Odoo: tên kỹ thuật được copy.
 
 ## Cài đặt
 

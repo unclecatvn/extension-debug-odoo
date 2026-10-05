@@ -34,6 +34,18 @@ type Tracked = XMLHttpRequest & { __odooDebug?: { method: string; url: string } 
     if (isOdoo()) document.dispatchEvent(new CustomEvent('odoo-debug-ready', { detail: window.odoo!.debug || '' }));
   });
 
+  // The launcher (⌥/Alt + click on a chatter tracking line) asks the technical names of the fields labelled `detail` on the
+  // current model: labels from Odoo's field service, in the user's language, the ones the tracking line shows.
+  document.addEventListener('odoo-debug-field-of', async (e) => {
+    let names: string[] = [];
+    try {
+      const env = window.odoo!.__WOWL_DEBUG__!.root!.env!;
+      const fields = await env.services!.field!.loadFields(env.services!.action!.currentController!.props!.resModel!);
+      names = Object.keys(fields).filter((n) => fields[n]!.string === e.detail);
+    } catch { /* not the webclient, or no current model */ }
+    document.dispatchEvent(new CustomEvent('odoo-debug-field-names', { detail: JSON.stringify(names) }));
+  });
+
   const P = XMLHttpRequest.prototype;
   const open = P.open;
   const send = P.send;

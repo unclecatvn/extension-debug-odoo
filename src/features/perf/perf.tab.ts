@@ -23,7 +23,7 @@ import {
   allowProfiling, deleteProfiles, NotAllowedError, enabledUntil, profileCall, profileIdsOf, profilingState, readProfiles, readSessions, setProfiling, type Collector,
 } from './perf.data.ts';
 import { pageGet } from './perf.injected.ts';
-import { isOwnRequest, isSessionOf, ms, sessionLabel, type ProfileRow } from './perf.logic.ts';
+import { isAsset, isOwnRequest, isSessionOf, ms, sessionLabel, type ProfileRow } from './perf.logic.ts';
 import { MANY_SQL, nameNodes, requestDetail, type RequestEnv } from './perf.request.ts';
 import { collectors, forgetAll, keepCollectors, stateOf, type PerfState } from './perf.state.ts';
 import { box, button, row, select, text, tpl } from './perf.ui.ts';
@@ -74,7 +74,10 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
   if (recording && !sessions.some((x) => x.session === recording)) options.unshift([recording, `● ${sessionLabel(recording, today)} (0)`]);
   options.push(['all', _t('Every session')]);
 
-  const rows = chosen ? (await readProfiles(a, chosen === 'all' ? null : chosen)).filter((r) => !isOwnRequest(r.name)) : [];
+  const read = chosen ? (await readProfiles(a, chosen === 'all' ? null : chosen)).filter((r) => !isOwnRequest(r.name)) : [];
+  // the slowest first; static files (scripts, images…: nothing to optimise in a module) only when asked
+  const assets = read.filter((r) => isAsset(r.name)).length;
+  const rows = (s.assets ? read : read.filter((r) => !isAsset(r.name))).sort((x, y) => y.duration - x.duration);
   const byId = new Map(rows.map((r) => [r.id, r]));
   const env: RequestEnv = { s, a, origin: page.origin, allowed: !!until, rows: byId, rerender: redraw };
 
@@ -83,24 +86,30 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
   if (options.length > 1) bar.append(select(options, chosen ?? 'all', (v) => { s.session = v; s.selected = null; redraw(); }, _t('Profile session')));
   const f = filterBox([], _t('Filter requests…'));
   bar.append(f.input, count, button('⟳', redraw, 'chip', _t('Read the profiles again')));
+  if (assets) {
+    const toggle = button(_t('Static Files (%s)', assets), () => { s.assets = !s.assets; redraw(); }, 'chip', _t('Scripts, images, manifest…: nothing to optimise in a module'));
+    toggle.setAttribute('aria-pressed', String(s.assets));
+    bar.append(toggle);
+  }
 
   if (!rows.length) {
     out.append(bar, note(recording
-      ? _t('Recording: use the Odoo page, then ⟳. Every request of this session writes a profile.')
+      ? _t('Recording: do the slow action on the Odoo page, then ⟳. Every request of this session writes a profile.')
       : chosen ? _t('No request in this session.') : _t('No profile yet: Start, use the Odoo page, then come back here.')));
     return frag(out, cleanup(chosen, info.name, rows, s, redraw));
   }
 
   // ---------- the requests, the one opened beside them ----------
   const md = tpl('perf-md', { root: HTMLDivElement, list: HTMLDivElement, pane: HTMLElement }).refs;
-  md.pane.append(note(_t('Choose a request: its queries, the lines sending them and the N+1 suspects show here.')));
+  md.pane.append(note(_t('Click a request to see where its time goes.')));
   const cpu = rows.some((r) => r.cpu_duration !== undefined);
   const tableRows: MxRow[] = rows.map((r) => ({
     id: String(r.id),
     label: [...(s.baseline === r.id ? [pill(_t('baseline'), 'accent')] : []), ...nameNodes(r.name)],
     sub: `#${r.id}${chosen === 'all' ? ` · ${r.session}` : ''}`,
     q: `${r.name} ${r.id}`,
-    cells: [r.sql_count > MANY_SQL ? pill(String(r.sql_count), 'err') : String(r.sql_count), ms(r.duration),
+    cells: [r.sql_count > MANY_SQL ? pill(String(r.sql_count), 'err') : String(r.sql_count),
+      r.duration >= 0.3 ? pill(ms(r.duration), r.duration >= 1 ? 'err' : 'med') : ms(r.duration), // slow: ≥ 300 ms, very: ≥ 1 s
       ...(cpu ? [ms(r.cpu_duration)] : []), r.create_date ? r.create_date.slice(11, 19) : ''],
     open: r.id === s.selected,
     detail: () => { s.selected = r.id; return requestDetail(r, env); },
@@ -116,7 +125,8 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
 
 /** On / off, what it collects, until when the database allows it. */
 function recorder(recording: string | null, until: string | null, redraw: () => void): HTMLElement {
-  const r = tpl('recorder', { root: HTMLDivElement, pill: HTMLSpanElement, since: HTMLSpanElement, actions: HTMLSpanElement, collectors: HTMLDivElement, note: HTMLDivElement, out: HTMLDivElement }).refs;
+  const r = tpl('recorder', { root: HTMLDivElement, pill: HTMLSpanElement, since: HTMLSpanElement, actions: HTMLSpanElement, collectors: HTMLDivElement, note: HTMLDivElement, steps: HTMLOListElement, out: HTMLDivElement }).refs;
+  r.steps.hidden = !!recording; // off: how to find out why a screen is slow
   r.pill.replaceWith(pill(recording ? _t('RECORDING') : _t('off'), recording ? 'ok' : ''));
   r.since.textContent = recording ? _t('since %s', recording.slice(11, 19)) : '';
   const fail = (e: unknown) => r.out.replaceChildren(errBox(e));
