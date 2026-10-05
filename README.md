@@ -4,7 +4,7 @@
 (Manifest V3) that opens beside the screen you are on and explains it — the record, the view, the calls to the server,
 who may do what, and the translations.
 
-[Tiếng Việt](README.vi.md) · [User guide](https://unclecatvn.github.io/extension-debug-odoo/) · [Architecture](docs/ARCHITECTURE.md)
+[Tiếng Việt](README.vi.md) · [User guide](https://odoo-debug.unclecatvn.com/) · [Architecture](docs/ARCHITECTURE.md)
 
 ## The problem
 
@@ -55,12 +55,12 @@ https://github.com/user-attachments/assets/d6254395-fac7-4999-ac39-f0c72e547428
 
 Every tab answering a real question on a sales order: why a field is read-only, why a user can't open the order, what
 installing a module brings, why a screen is slow… Screenshots of every tab are on the
-[Odoo Debug page](https://unclecatvn.github.io/extension-debug-odoo/).
+[Odoo Debug page](https://odoo-debug.unclecatvn.com/).
 
 ## User guide
 
 The guide — features tab by tab, shortcuts, privacy — is at
-**https://unclecatvn.github.io/extension-debug-odoo/**.
+**https://odoo-debug.unclecatvn.com/**.
 
 Shortcuts: **Alt+Shift+O** shows / hides the panel, **Alt+Shift+D** turns Odoo's debug mode on / off, and one to open the panel in its own window can be set (change them at
 `chrome://extensions/shortcuts`). ⌥/Alt + click a field, its label, a list cell or column header, or a tracked change in the chatter, on the Odoo page: its technical name is copied.

@@ -3,15 +3,35 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Odoo Debug · in-page debug panel for Odoo</title>
+<title>Odoo Debug: Chrome extension to debug Odoo 18, 19, 20</title>
 <meta name="author" content="UncleCat">
-<meta name="description" content="Free Chrome extension for Odoo developers: which module adds each field, view inheritance, live RPC log with tracebacks, why a record rule blocks a user, N+1 SQL queries. Right on the Odoo page.">
+<meta name="description" content="Odoo Debug, the free Chrome extension to debug Odoo: toggle debug mode, see which module adds a field, view inheritance, a live RPC log with tracebacks, why a record rule blocks a user, N+1 SQL queries. Right on the Odoo page.">
+<link rel="canonical" href="https://odoo-debug.unclecatvn.com/">
 <meta name="theme-color" content="#0b0a0d">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Odoo Debug · in-page debug panel for Odoo">
+<meta property="og:site_name" content="Odoo Debug">
+<meta property="og:title" content="Odoo Debug: Chrome extension to debug Odoo">
 <meta property="og:description" content="Records, views, RPC calls, access rights and server performance, right on the Odoo page. Free, source available.">
-<meta property="og:url" content="https://unclecatvn.github.io/extension-debug-odoo/">
-<meta property="og:image" content="https://unclecatvn.github.io/extension-debug-odoo/screenshots/overview.png">
+<meta property="og:url" content="https://odoo-debug.unclecatvn.com/">
+<meta property="og:image" content="https://odoo-debug.unclecatvn.com/screenshots/overview.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Odoo Debug",
+  "alternateName": ["Odoo Debug extension", "Odoo debug Chrome extension"],
+  "description": "Free Chrome extension to debug Odoo 18, 19 and 20: debug mode toggle, record and field inspector, view inheritance, RPC log, access rights and record rules, server profiler.",
+  "url": "https://odoo-debug.unclecatvn.com/",
+  "downloadUrl": "https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk",
+  "image": "https://odoo-debug.unclecatvn.com/screenshots/overview.png",
+  "applicationCategory": "DeveloperApplication",
+  "applicationSubCategory": "Browser extension",
+  "operatingSystem": "Chrome, Edge, Brave",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": { "@type": "Person", "name": "UncleCat", "url": "https://unclecatvn.com/" },
+  "sameAs": ["https://github.com/unclecatvn/extension-debug-odoo", "https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"]
+}
+</script>
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect x='4' y='4' width='120' height='120' rx='28' fill='%23714b67'/%3E%3Cg stroke='%23fff' stroke-width='8' stroke-linecap='round' fill='none'%3E%3Cpath d='M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25'/%3E%3C/g%3E%3Cpath d='M44 46 a20 17 0 0 1 40 0 z' fill='%23fff'/%3E%3Crect x='36' y='50' width='56' height='60' rx='28' fill='%23fff'/%3E%3Cpath d='M64 60 V100' stroke='%23553250' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='98' cy='30' r='12' fill='%2321B799' stroke='%23fff' stroke-width='5'/%3E%3C/svg%3E">
 <script>/* saved theme before first paint: no flash */ try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
@@ -187,6 +207,11 @@
   dt { color: var(--faint); font: 13px/1.9 var(--mono); padding-right: 20px; }
   dl > :nth-child(-n+3) { border-top: 0; }
   @media (max-width: 900px) { .bento { grid-template-columns: 1fr; } }
+  /* FAQ: native <details>, no script */
+  .faq { margin-top: 40px; border-top: 1px solid var(--line); }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary { cursor: pointer; padding: 20px 0; font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
+  .faq details p { margin: 0 0 20px; color: var(--muted); max-width: 46em; }
   @media (max-width: 560px) { .card { padding: 20px; } }
 
   /* Closing */
@@ -241,6 +266,7 @@
       <a href="#features"><span data-l="en">Features</span><span data-l="vi">Tính năng</span></a>
       <a href="#install"><span data-l="en">Install</span><span data-l="vi">Cài đặt</span></a>
       <a href="#privacy"><span data-l="en">Privacy</span><span data-l="vi">Quyền riêng tư</span></a>
+      <a href="#faq">FAQ</a>
       <a href="https://github.com/unclecatvn/extension-debug-odoo/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
     <div class="end">
@@ -260,8 +286,8 @@
     </a>
     <h1 data-l="en">Stop guessing. See <span class="grad">why</span> Odoo does what it does.</h1>
     <h1 data-l="vi">Đừng đoán nữa. Thấy ngay <span class="grad">vì sao</span> Odoo chạy như vậy.</h1>
-    <p class="lead" data-l="en">A debug panel right on the Odoo page: which module adds a field, which inherited view changed the form, which RPC failed, which record rule blocks a user, which request fires 50 SQL queries.</p>
-    <p class="lead" data-l="vi">Bảng debug ngay trên trang Odoo: module nào thêm field, view kế thừa nào sửa form, RPC nào lỗi, record rule nào chặn user, request nào bắn ra 50 câu SQL.</p>
+    <p class="lead" data-l="en">Odoo Debug is a free Chrome extension to debug Odoo, with its panel right on the Odoo page: which module adds a field, which inherited view changed the form, which RPC failed, which record rule blocks a user, which request fires 50 SQL queries.</p>
+    <p class="lead" data-l="vi">Odoo Debug là extension Chrome miễn phí để debug Odoo, với bảng debug ngay trên trang Odoo: module nào thêm field, view kế thừa nào sửa form, RPC nào lỗi, record rule nào chặn user, request nào bắn ra 50 câu SQL.</p>
     <div class="ctas">
       <a class="btn primary" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><svg><use href="#dl"/></svg><span data-l="en">Add to Chrome</span><span data-l="vi">Thêm vào Chrome</span></a>
       <a class="btn ghost" href="https://github.com/unclecatvn/extension-debug-odoo"><svg class="star-ic"><use href="#star"/></svg><span data-l="en">Star on GitHub</span><span data-l="vi">Star trên GitHub</span><span class="stars" hidden></span></a>
@@ -419,6 +445,26 @@
           <dt>toolbar</dt><dd><span data-l="en">The icon lit on Odoo pages only (declarativeContent)</span><span data-l="vi">Icon chỉ sáng trên trang Odoo (declarativeContent)</span></dd>
         </dl>
       </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <span class="label">FAQ</span>
+    <h2 data-l="en">Debugging Odoo, answered</h2>
+    <h2 data-l="vi">Debug Odoo: hỏi và đáp</h2>
+    <div class="faq">
+      <details data-l="en"><summary>How do I turn on debug mode in Odoo?</summary><p>Add <code>?debug=1</code> to the URL (<code>?debug=assets</code> for unminified assets), or go to Settings → Activate the developer mode. With Odoo Debug, pick Off / Debug / Assets from the toolbar icon, or press <b>Alt+Shift+D</b>.</p></details>
+      <details data-l="vi"><summary>Làm sao bật debug mode trong Odoo?</summary><p>Thêm <code>?debug=1</code> vào URL (<code>?debug=assets</code> để tải assets chưa nén), hoặc vào Settings → Activate the developer mode. Với Odoo Debug, chọn Off / Debug / Assets từ icon trên thanh công cụ, hoặc nhấn <b>Alt+Shift+D</b>.</p></details>
+      <details data-l="en"><summary>Is there a Chrome extension to debug Odoo?</summary><p>Yes: Odoo Debug, free on the Chrome Web Store, for Chrome, Edge, Brave and other Chromium browsers. It adds a debug panel to every Odoo 18, 19 and 20 page, beyond what developer mode shows.</p></details>
+      <details data-l="vi"><summary>Có extension Chrome nào để debug Odoo không?</summary><p>Có: Odoo Debug, miễn phí trên Chrome Web Store, dùng được trên Chrome, Edge, Brave và trình duyệt nhân Chromium khác. Nó thêm bảng debug vào mọi trang Odoo 18, 19 và 20, sâu hơn những gì developer mode cho thấy.</p></details>
+      <details data-l="en"><summary>How do I find which module adds a field or changes a view in Odoo?</summary><p>Open the Record tab: each field shows its type, value, the module that defines it and what recomputes it. The View tab shows the inherited views that changed the form, and which one made a field read-only or invisible.</p></details>
+      <details data-l="vi"><summary>Làm sao biết module nào thêm field hay sửa view trong Odoo?</summary><p>Mở tab Record: mỗi field hiện kiểu, giá trị, module định nghĩa nó và cái gì tính lại nó. Tab View hiện các view kế thừa đã sửa form, và view nào làm field chỉ đọc hay ẩn đi.</p></details>
+      <details data-l="en"><summary>How do I debug RPC calls and errors in Odoo?</summary><p>The RPC tab logs every JSON-RPC call the page makes, with its parameters, result and Python traceback. Edit a call and send it again, or copy it as cURL.</p></details>
+      <details data-l="vi"><summary>Làm sao debug lời gọi RPC và lỗi trong Odoo?</summary><p>Tab RPC ghi lại mọi lời gọi JSON-RPC của trang, kèm tham số, kết quả và traceback Python. Sửa lời gọi rồi gửi lại, hoặc copy dưới dạng cURL.</p></details>
+      <details data-l="en"><summary>Why can't a user access a record in Odoo?</summary><p>The Security tab names the access right or record rule that refuses, and the group that would allow it. Try that group in a simulation before granting it.</p></details>
+      <details data-l="vi"><summary>Vì sao user không truy cập được record trong Odoo?</summary><p>Tab Security chỉ ra access right hoặc record rule đang từ chối, và group nào sẽ cho phép. Thử group đó ở chế độ giả lập trước khi cấp thật.</p></details>
+      <details data-l="en"><summary>How do I find slow SQL queries or N+1 problems in Odoo?</summary><p>The Perf tab profiles a request with Odoo's profiler, flags N+1 queries and points to the line running them.</p></details>
+      <details data-l="vi"><summary>Làm sao tìm câu SQL chậm hay lỗi N+1 trong Odoo?</summary><p>Tab Perf profile một request bằng profiler của Odoo, đánh dấu truy vấn N+1 và chỉ ra dòng code chạy chúng.</p></details>
     </div>
   </section>
 

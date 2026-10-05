@@ -4,7 +4,7 @@
 Chrome (Manifest V3) mở bên cạnh màn hình bạn đang xem và giải thích nó: bản ghi, view, các lời gọi lên server, ai được
 làm gì, và bản dịch.
 
-[English](README.md) · [Hướng dẫn sử dụng](https://unclecatvn.github.io/extension-debug-odoo/) · [Kiến trúc](docs/ARCHITECTURE.md)
+[English](README.md) · [Hướng dẫn sử dụng](https://odoo-debug.unclecatvn.com/) · [Kiến trúc](docs/ARCHITECTURE.md)
 
 ## Vấn đề
 
@@ -54,12 +54,12 @@ https://github.com/user-attachments/assets/d6254395-fac7-4999-ac39-f0c72e547428
 
 Từng tab trả lời một câu hỏi thật trên một đơn bán hàng: vì sao field bị readonly, vì sao user không mở được đơn, cài một
 module sẽ kéo theo những gì, vì sao màn hình chậm… Ảnh chụp từng tab có trên
-[trang Odoo Debug](https://unclecatvn.github.io/extension-debug-odoo/).
+[trang Odoo Debug](https://odoo-debug.unclecatvn.com/).
 
 ## Hướng dẫn sử dụng
 
 Hướng dẫn chi tiết từng tab, phím tắt và quyền riêng tư:
-**https://unclecatvn.github.io/extension-debug-odoo/**.
+**https://odoo-debug.unclecatvn.com/**.
 
 Phím tắt: **Alt+Shift+O** ẩn / hiện panel, **Alt+Shift+D** bật / tắt chế độ debug của Odoo, có thể đặt thêm phím mở panel trong cửa sổ riêng (đổi ở
 `chrome://extensions/shortcuts`). ⌥/Alt + click vào một field, nhãn của nó, ô hoặc tiêu đề cột trong list, hay một dòng thay đổi trong chatter trên trang Odoo: tên kỹ thuật được copy.
