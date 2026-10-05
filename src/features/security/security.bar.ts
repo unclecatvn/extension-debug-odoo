@@ -52,6 +52,12 @@ export function securityBar(parent: HTMLElement, c: SecurityCtx) {
       void c.sim.then((sim) => { if (uid !== sim.user.id) { s.compare = uid; c.rerender(); } });
     }));
   }
+  // archived users too, in both searches: one box under them
+  const arch = tpl('archived', { label: HTMLLabelElement, box: HTMLInputElement }).refs;
+  arch.box.checked = archived.value;
+  arch.box.addEventListener('change', () => archived.set(arch.box.checked));
+  arch.label.title = _t('Archived users too, in both searches');
+  fact('').append(arch.label);
 
   parent.append(r.bar);
   void c.sim.then(async (sim) => {
@@ -69,6 +75,7 @@ async function who(sim: Simulated, c: SecurityCtx, out: HTMLElement) {
   if (!sim.isMe && u.active) r.name.replaceWith(loginAs(u.name, u.login, (await sessionInfo()).db, c.page.url, out));
   else { r.name.textContent = u.name; r.name.classList.add('strong'); }
   r.meta.textContent = _t('%s · #%s · %s groups', u.login, u.id, sim.groupIds.size);
+  r.meta.title = r.meta.textContent; // one line under the name, cut when long (panel.css)
   r.root.append(...[
     sim.isMe && pill(_t('me'), 'accent'),
     sim.superuser && pill(_t('superuser'), 'err'),

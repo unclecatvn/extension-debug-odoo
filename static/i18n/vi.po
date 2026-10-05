@@ -831,7 +831,7 @@ msgid "Demo data loaded"
 msgstr "Đã nạp dữ liệu demo"
 
 #: src/features/apps/apps.module.ts:275
-#: src/features/code/code.result.ts:156
+#: src/features/code/code.result.ts:160
 #: src/features/security/security.groups.ts:151
 #: src/features/security/security.record.ts:174
 #: src/features/translations/translations.modules.ts:139
@@ -1106,8 +1106,8 @@ msgid "Module description"
 msgstr "Mô tả module"
 
 #: src/features/apps/apps.ui.ts:83
-#: src/features/code/code.result.ts:228
-#: src/features/code/code.result.ts:266
+#: src/features/code/code.result.ts:234
+#: src/features/code/code.result.ts:272
 #: src/features/rpc/rpc.tab.ts:98
 #: src/features/rpc/rpc.tab.ts:186
 msgid "error"
@@ -1205,7 +1205,7 @@ msgstr "sai"
 
 #: src/features/code/code.result.ts:48
 #: src/features/code/code.result.ts:80
-#: src/features/code/code.result.ts:153
+#: src/features/code/code.result.ts:157
 msgid "%s records"
 msgstr "%s bản ghi"
 
@@ -1217,155 +1217,160 @@ msgstr "nhị phân · %s"
 msgid "Not created: a dry run answers create() with an id no record has"
 msgstr "Chưa tạo: chạy thử trả về cho create() một id không thuộc bản ghi nào"
 
-#: src/features/code/code.result.ts:131
+#: src/features/code/code.result.ts:138
 msgid "Download CSV"
 msgstr "Tải CSV"
 
-#: src/features/code/code.result.ts:138
+#: src/features/code/code.result.ts:139
+#: src/features/view/view.tpl.html:42
+msgid "Copy"
+msgstr "Copy"
+
+#: src/features/code/code.result.ts:139
 msgid "Copy CSV"
 msgstr "Copy CSV"
 
-#: src/features/code/code.result.ts:138
+#: src/features/code/code.result.ts:139
 msgid "Copy Markdown"
 msgstr "Copy Markdown"
 
-#: src/features/code/code.result.ts:138
+#: src/features/code/code.result.ts:140
 msgid "Copy JSON"
 msgstr "Copy JSON"
 
-#: src/features/code/code.result.ts:153
+#: src/features/code/code.result.ts:157
 msgid "recordset"
 msgstr "recordset"
 
-#: src/features/code/code.result.ts:160
+#: src/features/code/code.result.ts:164
 msgid "rows of %s"
 msgstr "dòng của %s"
 
-#: src/features/code/code.result.ts:160
+#: src/features/code/code.result.ts:164
 msgid "table"
 msgstr "bảng"
 
-#: src/features/code/code.result.ts:160
+#: src/features/code/code.result.ts:164
 msgid "%s rows (first %s shown)"
 msgstr "%s dòng (hiện %s dòng đầu)"
 
-#: src/features/code/code.result.ts:160
+#: src/features/code/code.result.ts:164
 msgid "%s rows"
 msgstr "%s dòng"
 
-#: src/features/code/code.result.ts:166
+#: src/features/code/code.result.ts:171
 msgid "list"
 msgstr "danh sách"
 
-#: src/features/code/code.result.ts:166
+#: src/features/code/code.result.ts:171
 #: src/ui/json-view.ts:57
 msgid "%s items"
 msgstr "%s phần tử"
 
-#: src/features/code/code.result.ts:174
+#: src/features/code/code.result.ts:180
 msgid "dict"
 msgstr "dict"
 
-#: src/features/code/code.result.ts:174
+#: src/features/code/code.result.ts:180
 #: src/ui/json-view.ts:57
 msgid "%s keys"
 msgstr "%s khoá"
 
-#: src/features/code/code.result.ts:185
+#: src/features/code/code.result.ts:191
 msgid "%s bytes"
 msgstr "%s byte"
 
-#: src/features/code/code.result.ts:189
+#: src/features/code/code.result.ts:195
 msgid "JSON"
 msgstr "JSON"
 
-#: src/features/code/code.result.ts:199
+#: src/features/code/code.result.ts:205
 msgid "nothing"
 msgstr "không có gì"
 
-#: src/features/code/code.result.ts:206
+#: src/features/code/code.result.ts:212
 msgid "text · %s characters"
 msgstr "chữ · %s ký tự"
 
-#: src/features/code/code.result.ts:228
+#: src/features/code/code.result.ts:234
 msgid "ok"
 msgstr "ok"
 
-#: src/features/code/code.result.ts:229
+#: src/features/code/code.result.ts:235
 #: src/features/view/view.overview.ts:64
 msgid "read-only"
 msgstr "chỉ đọc"
 
-#: src/features/code/code.result.ts:229
+#: src/features/code/code.result.ts:235
 msgid "dry run"
 msgstr "chạy thử"
 
-#: src/features/code/code.result.ts:229
+#: src/features/code/code.result.ts:235
 msgid "writes committed"
 msgstr "đã ghi thật"
 
-#: src/features/code/code.result.ts:230
-#: src/features/code/code.result.ts:266
+#: src/features/code/code.result.ts:236
+#: src/features/code/code.result.ts:272
 msgid "%s ms"
 msgstr "%s ms"
 
-#: src/features/code/code.result.ts:231
+#: src/features/code/code.result.ts:237
 msgid "%s calls"
 msgstr "%s lời gọi"
 
-#: src/features/code/code.result.ts:232
+#: src/features/code/code.result.ts:238
 msgid "%s writes not sent"
 msgstr "%s lệnh ghi không gửi"
 
-#: src/features/code/code.result.ts:233
+#: src/features/code/code.result.ts:239
 msgid "%s write calls"
 msgstr "%s lời gọi ghi"
 
-#: src/features/code/code.result.ts:234
+#: src/features/code/code.result.ts:240
 msgid "page refreshed"
 msgstr "đã làm mới trang"
 
-#: src/features/code/code.result.ts:234
+#: src/features/code/code.result.ts:240
 msgid "page not refreshed"
 msgstr "chưa làm mới trang"
 
-#: src/features/code/code.result.ts:238
+#: src/features/code/code.result.ts:244
 msgid "Dry run: the code ran for real, then everything it changed was rolled back."
 msgstr "Chạy thử: code đã chạy thật, rồi mọi thay đổi của nó được rollback."
 
-#: src/features/code/code.result.ts:239
+#: src/features/code/code.result.ts:245
 msgid "Dry run: the writing calls below were listed, not sent; reads after them show the values before."
 msgstr "Chạy thử: các lệnh ghi bên dưới chỉ được liệt kê, không gửi đi; các lần đọc sau đó vẫn thấy giá trị cũ."
 
-#: src/features/code/code.result.ts:248
+#: src/features/code/code.result.ts:254
 msgid "No return value: end with return … to see one."
 msgstr "Không có giá trị trả về: kết thúc bằng return … để xem kết quả."
 
-#: src/features/code/code.result.ts:257
+#: src/features/code/code.result.ts:263
 msgid "Line %s"
 msgstr "Dòng %s"
 
-#: src/features/code/code.result.ts:257
+#: src/features/code/code.result.ts:263
 msgid "Go to Line"
 msgstr "Đến dòng"
 
-#: src/features/code/code.result.ts:258
+#: src/features/code/code.result.ts:264
 msgid "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
 msgstr "Content-Security-Policy của trang này không cho chạy code (proxy trước Odoo đã thêm script-src)."
 
-#: src/features/code/code.result.ts:259
+#: src/features/code/code.result.ts:265
 msgid "Nothing was saved: the error rolled back everything the code had changed."
 msgstr "Không có gì được lưu: lỗi đã rollback mọi thay đổi của code."
 
-#: src/features/code/code.result.ts:265
+#: src/features/code/code.result.ts:271
 msgid "not sent"
 msgstr "không gửi"
 
-#: src/features/code/code.result.ts:265
+#: src/features/code/code.result.ts:271
 msgid "write"
 msgstr "ghi"
 
-#: src/features/code/code.result.ts:269
+#: src/features/code/code.result.ts:275
 msgid "Calls (%s)"
 msgstr "Lời gọi (%s)"
 
@@ -1634,11 +1639,11 @@ msgstr "Các snippet có sẵn, và các snippet bạn đã lưu cho Odoo này"
 msgid "Guide: available variables, recordset API, examples"
 msgstr "Hướng dẫn: biến có sẵn, API recordset, ví dụ"
 
-#: src/features/code/code.tab.ts:117
+#: src/features/code/code.tab.ts:119
 msgid "Name of the snippet:"
 msgstr "Tên snippet:"
 
-#: src/features/code/code.tab.ts:153
+#: src/features/code/code.tab.ts:155
 msgid "Python runs as a server action: it needs Settings rights (base.group_system)."
 msgstr "Python chạy dưới dạng server action: cần quyền Settings (base.group_system)."
 
@@ -2306,63 +2311,67 @@ msgstr "Thôi so sánh"
 msgid "Another user, to compare…"
 msgstr "User khác để so sánh…"
 
-#: src/features/security/security.bar.ts:71
+#: src/features/security/security.bar.ts:59
+msgid "Archived users too, in both searches"
+msgstr "Gồm cả user đã lưu trữ, cho cả hai ô tìm kiếm"
+
+#: src/features/security/security.bar.ts:77
 msgid "%s · #%s · %s groups"
 msgstr "%s · #%s · %s nhóm"
 
-#: src/features/security/security.bar.ts:73
+#: src/features/security/security.bar.ts:80
 msgid "me"
 msgstr "tôi"
 
-#: src/features/security/security.bar.ts:74
+#: src/features/security/security.bar.ts:81
 msgid "superuser"
 msgstr "superuser"
 
-#: src/features/security/security.bar.ts:75
+#: src/features/security/security.bar.ts:82
 #: src/features/security/security.ui.ts:135
 msgid "public"
 msgstr "public"
 
-#: src/features/security/security.bar.ts:75
+#: src/features/security/security.bar.ts:82
 #: src/features/security/security.ui.ts:135
 msgid "portal"
 msgstr "portal"
 
-#: src/features/security/security.bar.ts:76
+#: src/features/security/security.bar.ts:83
 #: src/features/security/security.ui.ts:135
 msgid "archived"
 msgstr "đã lưu trữ"
 
-#: src/features/security/security.bar.ts:90
+#: src/features/security/security.bar.ts:97
 msgid "The current company (the first one on)"
 msgstr "Công ty hiện tại (công ty bật đầu tiên)"
 
-#: src/features/security/security.bar.ts:94
+#: src/features/security/security.bar.ts:101
 msgid "as in the page's switcher"
 msgstr "giống bộ chọn công ty trên trang"
 
-#: src/features/security/security.bar.ts:94
+#: src/features/security/security.bar.ts:101
 msgid "their default company: their switcher can't be seen from here"
 msgstr "công ty mặc định của họ: không xem được bộ chọn công ty của họ từ đây"
 
-#: src/features/security/security.bar.ts:102
+#: src/features/security/security.bar.ts:109
 msgid "Trying %s: every view is simulated with it, nothing is written."
 msgstr "Đang thử %s: mọi màn hình được mô phỏng với nhóm này, chưa ghi gì."
 
-#: src/features/security/security.bar.ts:104
+#: src/features/security/security.bar.ts:111
 #: src/features/security/security.groups.ts:229
 msgid "Add %s to %s?"
 msgstr "Thêm %s cho %s?"
 
-#: src/features/security/security.bar.ts:118
+#: src/features/security/security.bar.ts:125
 msgid "Applied…"
 msgstr "Đã áp…"
 
-#: src/features/security/security.bar.ts:123
+#: src/features/security/security.bar.ts:130
 msgid "Applied on %s: %s"
 msgstr "Đã áp trên %s: %s"
 
-#: src/features/security/security.bar.ts:124
+#: src/features/security/security.bar.ts:131
 msgid "Applied: no operation changed on this record."
 msgstr "Đã áp: không thao tác nào thay đổi trên bản ghi này."
 
@@ -3345,43 +3354,43 @@ msgstr "Bản ghi #%s"
 msgid "By model"
 msgstr "Theo model"
 
-#: src/features/security/security.tpl.html:23
+#: src/features/security/security.tpl.html:27
 msgid "Archived too"
 msgstr "Gồm đã lưu trữ"
 
-#: src/features/security/security.tpl.html:35
+#: src/features/security/security.tpl.html:38
 msgid "Apply"
 msgstr "Áp dụng"
 
-#: src/features/security/security.tpl.html:36
+#: src/features/security/security.tpl.html:39
 msgid "Discard"
 msgstr "Bỏ thử"
 
-#: src/features/security/security.tpl.html:58
+#: src/features/security/security.tpl.html:61
 msgid "Diagnose an access error message"
 msgstr "Chẩn đoán thông báo lỗi phân quyền"
 
-#: src/features/security/security.tpl.html:60
+#: src/features/security/security.tpl.html:63
 msgid "Paste the message of the error dialog (debug mode adds the records and the rules)"
 msgstr "Dán nội dung hộp thoại lỗi (chế độ debug có thêm bản ghi và rule)"
 
-#: src/features/security/security.tpl.html:60
+#: src/features/security/security.tpl.html:63
 msgid "Access error message"
 msgstr "Thông báo lỗi phân quyền"
 
-#: src/features/security/security.tpl.html:61
+#: src/features/security/security.tpl.html:64
 msgid "Diagnose"
 msgstr "Chẩn đoán"
 
-#: src/features/security/security.tpl.html:68
+#: src/features/security/security.tpl.html:71
 msgid "As written"
 msgstr "Domain gốc"
 
-#: src/features/security/security.tpl.html:69
+#: src/features/security/security.tpl.html:72
 msgid "For the user"
 msgstr "Với user"
 
-#: src/features/security/security.tpl.html:108
+#: src/features/security/security.tpl.html:111
 msgid "✓ No issue found."
 msgstr "✓ Không phát hiện vấn đề."
 
@@ -3405,7 +3414,7 @@ msgstr "Đang thử: chỉ mô phỏng, chưa ghi gì"
 msgid "cannot evaluate: %s"
 msgstr "không eval được: %s"
 
-#: src/features/security/security.ui.ts:164
+#: src/features/security/security.ui.ts:163
 msgid "Log in as %s in an incognito window"
 msgstr "Đăng nhập thành %s trong cửa sổ ẩn danh"
 
@@ -4105,10 +4114,6 @@ msgstr "search: %s"
 #: src/features/view/view.tpl.html:83
 msgid "Show this line in the own arch"
 msgstr "Xem dòng này trong arch riêng"
-
-#: src/features/view/view.tpl.html:42
-msgid "Copy"
-msgstr "Copy"
 
 #: src/features/view/view.tpl.html:48
 #: src/features/view/view.tpl.html:48

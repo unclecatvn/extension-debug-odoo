@@ -13,15 +13,18 @@
   <div class="fact"><dt data-ref="label"></dt><dd class="row" data-ref="value"></dd></div>
 </template>
 
-<!-- A user searched on the server (name or login), archived ones too when ticked. -->
+<!-- A user searched on the server (name or login), archived ones too when the bar's box is ticked. -->
 <template data-tpl="user-search">
   <span class="row user-pick" data-ref="root">
     <span class="user-search" data-ref="search">
       <input type="search" data-ref="input" spellcheck="false" autocomplete="off">
       <ul class="suggest" role="listbox" data-ref="list" hidden></ul>
     </span>
-    <label class="check"><input type="checkbox" data-ref="archived"> <span data-i18n="text">Archived too</span></label>
   </span>
+</template>
+<!-- Under the searches of the bar: archived users too, in both. -->
+<template data-tpl="archived">
+  <label class="check archived-box" data-ref="label"><input type="checkbox" data-ref="box"> <span data-i18n="text">Archived too</span></label>
 </template>
 <template data-tpl="suggest-item">
   <li role="option" data-ref="item"><span class="name" data-ref="name"></span><span class="muted" data-ref="meta"></span></li>

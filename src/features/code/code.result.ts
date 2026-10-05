@@ -122,20 +122,24 @@ async function modelFields(model: string): Promise<FieldsGet | null> {
   return fg;
 }
 
-/** Copy CSV / Markdown / JSON, download CSV. */
+/** Copy CSV / Markdown / JSON, download CSV: in the value's head line, beside what it is. */
 function exportBar(rows: readonly Record<string, unknown>[], value: unknown): HTMLElement {
-  const copy = (label: string, make: () => string) => {
-    const b = button(label, () => { void copyText(make()).then(() => { b.classList.add('copied'); setTimeout(() => b.classList.remove('copied'), 1000); }); }, 'chip');
+  // short labels (the format), the full action on hover: they fit beside what the value is
+  const copy = (label: string, hint: string, make: () => string) => {
+    const b = button(label, () => { void copyText(make()).then(() => { b.classList.add('copied'); setTimeout(() => b.classList.remove('copied'), 1000); }); }, 'chip', hint);
     return b;
   };
-  const download = button(_t('Download CSV'), () => {
+  const download = button('⤓ CSV', () => {
     const url = URL.createObjectURL(new Blob([`﻿${toCsv(rows)}`], { type: 'text/csv;charset=utf-8' }));
     const a = link('', url);
     a.download = `odoo-debug-${new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-')}.csv`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
-  }, 'chip');
-  return row(copy(_t('Copy CSV'), () => toCsv(rows)), copy(_t('Copy Markdown'), () => toMarkdown(rows)), copy(_t('Copy JSON'), () => toJson(value)), download);
+  }, 'chip', _t('Download CSV'));
+  const tools = row(text(_t('Copy'), 'muted'), copy('CSV', _t('Copy CSV'), () => toCsv(rows)), copy('Markdown', _t('Copy Markdown'), () => toMarkdown(rows)),
+    copy('JSON', _t('Copy JSON'), () => toJson(value)), download);
+  tools.classList.add('value-tools'); // at the right of the value's head line (panel.css)
+  return tools;
 }
 
 /** A value shown as what it is (see the header). */
@@ -152,13 +156,14 @@ export async function valueView(v: unknown, f: Fmt): Promise<HTMLElement> {
     const rows = rs.ids.slice(0, MAX_ROWS).map((id, i) => ({ id, display_name: names?.[i] ?? '' }));
     head(pill(_t('recordset'), 'accent'), text(rs.$recordset, 'mono'), text(_t('%s records', n), 'muted'));
     const fields = await modelFields(rs.$recordset);
-    if (rows.length) r.body.append(table(rows, f, fields), exportBar(rows, v));
+    if (rows.length) { r.body.append(table(rows, f, fields)); head(exportBar(rows, v)); }
     if (n > rows.length) r.body.append(text(_t('… and %s more', n - rows.length), 'muted'));
   } else if (kind === 'rows' || kind === 'table') {
     const model = kind === 'rows' ? (v as { $rows: string }).$rows : null;
     const rows = kind === 'rows' ? (v as { rows: Record<string, unknown>[] }).rows : (v as Record<string, unknown>[]);
     head(pill(model ? _t('rows of %s', model) : _t('table'), 'accent'), text(rows.length > MAX_ROWS ? _t('%s rows (first %s shown)', rows.length, MAX_ROWS) : _t('%s rows', rows.length), 'muted'));
-    r.body.append(table(rows, f, model ? await modelFields(model) : null), exportBar(rows, v));
+    r.body.append(table(rows, f, model ? await modelFields(model) : null));
+    head(exportBar(rows, v));
   } else if (kind === 'number' || kind === 'string' || kind === 'boolean' || kind === 'null' || kind === 'date' || kind === 'datetime') {
     r.body.append(big(v, kind, f));
   } else if (kind === 'list') {
@@ -167,7 +172,8 @@ export async function valueView(v: unknown, f: Fmt): Promise<HTMLElement> {
     const scalars = list.every((x) => x === null || ['string', 'number', 'boolean'].includes(typeof x));
     if (scalars && list.length) {
       const rows = list.map((x) => ({ value: x }));
-      r.body.append(table(rows, f, null), exportBar(rows, v));
+      r.body.append(table(rows, f, null));
+      head(exportBar(rows, v));
     } else r.body.append(jsonView(v, 2));
   } else if (kind === 'dict') {
     const obj = v as Record<string, unknown>;

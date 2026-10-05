@@ -43,7 +43,7 @@ export const codeTab: TabModule = {
 
 async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
   const info = await sessionInfo();
-  const cloned = tpl('console', { root: HTMLDivElement, bar: HTMLDivElement, opts: HTMLDivElement, acts: HTMLDivElement, screen: HTMLDivElement, editor: HTMLDivElement, guide: HTMLDivElement, output: HTMLDivElement });
+  const cloned = tpl('console', { root: HTMLDivElement, bar: HTMLDivElement, acts: HTMLDivElement, screen: HTMLDivElement, editor: HTMLDivElement, guide: HTMLDivElement, output: HTMLDivElement });
   const r = cloned.refs;
   const lang = () => last.lang;
   const key = () => codeKey(page.origin, lang());
@@ -99,8 +99,10 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
   };
   const snippetsBtn = asideBtn('snippets', _t('Snippets'), _t('Ready-made snippets, and the ones you saved for this Odoo'));
   const guideBtn = asideBtn('guide', '?', _t('Guide: available variables, recordset API, examples'));
-  r.opts.append(langSeg, modeSlot, refreshBox); // how it runs
   r.acts.append(snippetsBtn, guideBtn, run); // what to do: Run last, where the eye ends
+  langSeg.classList.add('console-lang');
+  modeSlot.classList.add('console-mode');
+  r.acts.before(langSeg, modeSlot, refreshBox); // how it runs (narrow panel: language beside the actions, mode below; panel.css)
   drawMode();
 
   // ---------- the guide / the snippets ----------

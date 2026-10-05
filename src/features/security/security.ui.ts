@@ -106,11 +106,11 @@ export function facts(entries: [string, unknown][]): HTMLElement {
  * A user search box: typing searches res.users on the server (name or login, 20 matches, archived too when ticked);
  * ↑ ↓ Enter or a click picks one. 250 ms between searches; an older answer never replaces a newer one.
  */
-export function userSearch(a: OdooAdapter, archived: { value: boolean; set(v: boolean): void }, placeholder: string, onPick: (uid: number) => void): HTMLElement {
-  const r = tpl('user-search', { root: HTMLSpanElement, input: HTMLInputElement, list: HTMLUListElement, archived: HTMLInputElement }).refs;
+/** `archived`: archived users too (the bar's box, shared by its searches). */
+export function userSearch(a: OdooAdapter, archived: { value: boolean }, placeholder: string, onPick: (uid: number) => void): HTMLElement {
+  const r = tpl('user-search', { root: HTMLSpanElement, input: HTMLInputElement, list: HTMLUListElement }).refs;
   r.input.placeholder = placeholder;
   r.input.setAttribute('aria-label', placeholder);
-  r.archived.checked = archived.value;
   let shown: { id: number }[] = [];
   let sel = 0;
   let seq = 0;
@@ -148,7 +148,6 @@ export function userSearch(a: OdooAdapter, archived: { value: boolean; set(v: bo
     else if (e.key === 'Enter') { const hit = shown[sel]; if (hit) onPick(hit.id); }
     else if (e.key === 'Escape') { e.stopPropagation(); r.list.hidden = true; } // not the panel's Esc (leave full screen)
   });
-  r.archived.addEventListener('change', () => { archived.set(r.archived.checked); void search(); });
   return r.root;
 }
 

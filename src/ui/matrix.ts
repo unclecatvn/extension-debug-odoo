@@ -92,11 +92,12 @@ export function matrix(first: string, heads: readonly string[], sections: readon
  * filter bar, Apps' search bar), else at the top (panel.css: --mx-sticky-top; --mx-head-h for the section titles sticking
  * under them). Measured once the table is laid out, again whenever that bar changes height (it wraps). */
 function stickHead(table: HTMLTableElement) {
-  let bar: HTMLElement | null | undefined;
+  let bar: HTMLElement | null = null;
   const ro = new ResizeObserver(() => {
     if (!table.isConnected) return;
-    if (bar === undefined && (bar = stickyAbove(table))) ro.observe(bar);
-    const top = bar ? bar.offsetHeight + (parseFloat(getComputedStyle(bar).top) || 0) : 0;
+    if (!bar && (bar = stickyAbove(table))) ro.observe(bar); // looked for again until found: it may turn sticky after the table
+    // its real height (not offsetHeight, rounded), 1px under it: no sliver of the rows between the two at any zoom
+    const top = bar ? Math.max(0, bar.getBoundingClientRect().height + (parseFloat(getComputedStyle(bar).top) || 0) - 1) : 0;
     table.style.setProperty('--mx-sticky-top', `${top}px`);
     table.style.setProperty('--mx-head-h', `${table.tHead?.offsetHeight ?? 0}px`);
   });
