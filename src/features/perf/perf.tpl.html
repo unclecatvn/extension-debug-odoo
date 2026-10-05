@@ -1,0 +1,98 @@
+<!-- features/perf/perf.*.ts: the Perf tab (styles: ui/panel.css, "Perf tab").
+     The recorder (on / off, what it collects, until when the database allows it), the call handed by the RPC tab, the
+     profiled requests and the one opened beside them, cleaning up. data-ref: filled by the code, text only. -->
+
+<template data-tpl="recorder">
+  <div class="card perf-recorder" data-ref="root">
+    <div class="row" data-ref="line"><span data-ref="pill"></span><span class="grow" data-ref="since"></span><span data-ref="actions"></span></div>
+    <div class="row perf-collectors" data-ref="collectors"></div>
+    <div class="muted perf-note" data-ref="note"></div>
+    <ol class="perf-steps" data-ref="steps" hidden>
+      <li data-i18n="text">Start profiling (Odoo's built-in profiler, administrators only).</li>
+      <li data-i18n="text">Do the slow action on the Odoo page: open the record, save, confirm…</li>
+      <li data-i18n="text">Come back and refresh: the requests show slowest first; click one to see why it is slow.</li>
+    </ol>
+    <div data-ref="out"></div>
+  </div>
+</template>
+
+<!-- The requests, and the one opened beside them (wide panel) or under its row. -->
+<template data-tpl="perf-md">
+  <div class="groups-md" data-ref="root"><div class="groups-list" data-ref="list"></div><aside class="groups-pane" data-ref="pane"></aside></div>
+</template>
+<template data-tpl="select">
+  <select class="perf-select" data-ref="select"></select>
+</template>
+<template data-tpl="option">
+  <option data-ref="option"></option>
+</template>
+
+<!-- A request opened: its name, when, its tools; its totals. -->
+<template data-tpl="req-head">
+  <div class="group-head" data-ref="box">
+    <h3 class="row" data-ref="name"></h3>
+    <div class="muted" data-ref="meta"></div>
+    <div class="row" data-ref="actions"></div>
+    <div class="row perf-totals" data-ref="totals"></div>
+  </div>
+</template>
+<template data-tpl="total">
+  <span class="perf-total" data-ref="box"><b data-ref="value"></b><span class="muted" data-ref="label"></span></span>
+</template>
+<template data-tpl="fold">
+  <details class="fold"><summary><span data-ref="title"></span><span class="muted" data-ref="count"></span></summary><div class="fold-body" data-ref="body"></div></details>
+</template>
+<!-- What to look at first in the request (perf.logic.ts → diagnose): its title, the advice; then where its time goes. -->
+<template data-tpl="diag">
+  <div class="perf-diag" data-ref="box"><strong data-ref="title"></strong><div class="row" data-ref="advice"></div></div>
+</template>
+<template data-tpl="split">
+  <div class="row perf-time" data-ref="row">
+    <span class="perf-key sql" data-ref="sql"></span>
+    <span class="perf-split grow" role="img" data-ref="bar"><i class="sql" data-ref="sqlBar"></i><i class="py" data-ref="pyBar"></i></span>
+    <span class="perf-key py" data-ref="py"></span>
+  </div>
+</template>
+<!-- What a query does, in words: "Reads res_partner" (its table as code). -->
+<template data-tpl="says">
+  <span class="perf-says" data-ref="box"><span data-ref="before"></span><code data-ref="table"></code><span data-ref="after"></span></span>
+</template>
+<!-- A line of the source, as the profiler recorded it. -->
+<template data-tpl="code-line">
+  <pre class="perf-code" data-ref="pre"></pre>
+</template>
+<!-- A function of the modules opened: its line of code, the module functions that called it. -->
+<template data-tpl="hot-detail">
+  <div class="perf-query" data-ref="box"><div class="row perf-calls" data-ref="calls"></div></div>
+</template>
+
+<!-- A query opened: as run (with its values), then its stack, the app frame first. -->
+<template data-tpl="query">
+  <div class="perf-query" data-ref="box"><pre class="code-plain mono" data-ref="sql"></pre><pre class="code-plain mono muted" data-ref="stack"></pre></div>
+</template>
+
+<!-- Small pieces. -->
+<template data-tpl="toolbar">
+  <div class="toolbar" data-ref="bar"></div>
+</template>
+<template data-tpl="box">
+  <div data-ref="box"></div>
+</template>
+<template data-tpl="row">
+  <div class="row" data-ref="row"></div>
+</template>
+<template data-tpl="button">
+  <button type="button" class="btn" data-ref="button"></button>
+</template>
+<template data-tpl="chip">
+  <button type="button" class="chip" data-ref="button"></button>
+</template>
+<template data-tpl="text">
+  <span data-ref="text"></span>
+</template>
+<template data-tpl="link">
+  <a class="btn" target="_blank" rel="noreferrer" data-ref="link"></a>
+</template>
+<template data-tpl="sub-title">
+  <h4 class="story-title" data-ref="title"></h4>
+</template>

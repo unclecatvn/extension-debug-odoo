@@ -1,0 +1,124 @@
+<!-- features/code/code.*.ts: the Code tab, an ORM console (styles: ui/panel.css, "Code tab").
+     The bar (how it runs: language, mode · what to do: snippets, guide, run), who it runs as and on what, the editor,
+     the guide, the result.
+     data-ref: filled by the code, text only. -->
+
+<template data-tpl="console">
+  <div class="card console-card">
+    <div class="card-body">
+      <div class="console" data-ref="root">
+        <div class="row console-bar" data-ref="bar"><div class="row console-acts" data-ref="acts"></div></div>
+        <div class="row console-screen muted" data-ref="screen"></div>
+        <div data-ref="editor"></div>
+        <div class="code-help" data-ref="guide" hidden></div>
+        <div class="output" data-ref="output"></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!-- The editor: a transparent textarea over a <pre> painting the same text in colours, line numbers beside it. -->
+<template data-tpl="editor">
+  <div class="editor" data-ref="root">
+    <div class="editor-body" data-ref="body">
+      <pre class="hl" aria-hidden="true" data-ref="paint"></pre>
+      <textarea class="code" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" writingsuggestions="false" data-ref="ta"></textarea>
+    </div>
+  </div>
+</template>
+<template data-tpl="hl-line">
+  <div data-ref="line"></div>
+</template>
+<template data-tpl="tok">
+  <span data-ref="tok"></span>
+</template>
+<template data-tpl="suggest">
+  <ul class="suggest" role="listbox" aria-label="Suggestions" data-i18n="aria-label" data-ref="box" hidden></ul>
+</template>
+<template data-tpl="suggest-item">
+  <li role="option" data-ref="item"><span class="name" data-ref="name"></span><span class="muted" data-ref="detail"></span></li>
+</template>
+
+<!-- Snippets: the built-in ones, the ones saved for this Odoo. -->
+<template data-tpl="snippets">
+  <div class="snippets" data-ref="root"><div class="snippets-list" data-ref="list"></div></div>
+</template>
+<template data-tpl="snippet">
+  <div class="row snippet" data-ref="row"><button type="button" class="snippet-name" data-ref="pick"></button><span class="muted grow" data-ref="desc"></span></div>
+</template>
+
+<!-- The guide. -->
+<template data-tpl="help-title">
+  <div class="help-title" data-ref="title"></div>
+</template>
+<template data-tpl="help-list">
+  <ul class="help-list" data-ref="list"></ul>
+</template>
+<template data-tpl="help-item">
+  <li data-ref="item"><code data-ref="name"></code>: <span data-ref="desc"></span></li>
+</template>
+<template data-tpl="example">
+  <div class="example" data-ref="root"><pre data-ref="code"></pre></div>
+</template>
+
+<!-- The result: its head, prints, the value, the calls. -->
+<template data-tpl="result-head">
+  <div class="row result-head" data-ref="head"></div>
+</template>
+<template data-tpl="prints">
+  <div class="prints" data-ref="box"></div>
+</template>
+<template data-tpl="print-line">
+  <div class="print-line" data-ref="line"></div>
+</template>
+<template data-tpl="value-box">
+  <div class="value-box" data-ref="box"><div class="row value-head" data-ref="head"></div><div data-ref="body"></div></div>
+</template>
+<!-- A table of rows: typed cells (numbers right aligned, booleans, many2one links, dates in the user's time zone). -->
+<template data-tpl="table">
+  <div class="table-wrap"><table class="result-table" data-ref="table"><thead><tr data-ref="head"></tr></thead><tbody data-ref="body"></tbody></table></div>
+</template>
+<template data-tpl="th">
+  <th data-ref="cell"><span data-ref="name"></span><span class="muted col-type" data-ref="type"></span></th>
+</template>
+<template data-tpl="tr">
+  <tr data-ref="row"></tr>
+</template>
+<template data-tpl="td">
+  <td data-ref="cell"></td>
+</template>
+<template data-tpl="big">
+  <div class="big-value" data-ref="box"><span data-ref="value"></span><span class="muted" data-ref="kind"></span></div>
+</template>
+<template data-tpl="facts">
+  <dl class="facts value-facts" data-ref="list"></dl>
+</template>
+<template data-tpl="fact">
+  <div class="fact"><dt data-ref="label"></dt><dd data-ref="value"></dd></div>
+</template>
+<template data-tpl="text-block">
+  <pre class="value-text" data-ref="text"></pre>
+</template>
+
+<!-- Small pieces. -->
+<template data-tpl="box">
+  <div data-ref="box"></div>
+</template>
+<template data-tpl="row">
+  <div class="row" data-ref="row"></div>
+</template>
+<template data-tpl="button">
+  <button type="button" class="btn" data-ref="button"></button>
+</template>
+<template data-tpl="chip">
+  <button type="button" class="chip" data-ref="button"></button>
+</template>
+<template data-tpl="text">
+  <span data-ref="text"></span>
+</template>
+<template data-tpl="link">
+  <a class="rec-link" target="_blank" rel="noreferrer" data-ref="link"></a>
+</template>
+<template data-tpl="check">
+  <label class="check" data-ref="label"><input type="checkbox" data-ref="box"> <span data-ref="text"></span></label>
+</template>

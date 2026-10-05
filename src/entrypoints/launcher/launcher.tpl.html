@@ -1,0 +1,29 @@
+<!-- entrypoints/launcher/index.ts: what Odoo Debug adds to the Odoo page, inside a closed shadow root (styles: launcher.css).
+     English only, no data-i18n: the page is not in the panel's language. -->
+
+<!-- The button, and the frame the panel opens in (empty until the first click). The grips resize the frame from its
+     free edges, the ones away from the button (launcher.css places them from the frame's data-side / data-anchor).
+     data-title-detached: the button's title while the panel is in its own window. -->
+<template data-tpl="launcher">
+  <div class="launcher">
+    <button type="button" data-ref="button" title="Odoo Debug · ⌥/Alt + click a field (or a change in the chatter): copy its name"
+      data-title-detached="Odoo Debug · in its own window: click to bring it to the front" aria-label="Odoo Debug" aria-expanded="false">
+      <img data-ref="icon" alt="">
+    </button>
+    <div class="frame" data-ref="frame" hidden>
+      <div class="grip" data-grip="x" data-ref="gripX" title="Drag to resize" aria-hidden="true"></div>
+      <div class="grip" data-grip="y" data-ref="gripY" title="Drag to resize" aria-hidden="true"></div>
+      <div class="grip" data-grip="xy" data-ref="gripXY" title="Drag to resize · double-click: default size" aria-hidden="true"></div>
+    </div>
+  </div>
+</template>
+
+<!-- The panel (entrypoints/panel), created on the first open. -->
+<template data-tpl="panel-frame">
+  <iframe data-ref="iframe" title="Odoo Debug" allow="clipboard-write"></iframe>
+</template>
+
+<!-- ✓ / ✗ field name, next to the pointer after ⌥/Alt + click. -->
+<template data-tpl="toast">
+  <div class="toast" data-ref="text"></div>
+</template>

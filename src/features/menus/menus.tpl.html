@@ -1,0 +1,14 @@
+<!-- features/menus/menus.tab.ts: the Menus tab (styles: ui/panel.css). data-ref: filled by the code, text only. -->
+
+<!-- The list of technical screens, then where an error opening one shows. -->
+<template data-tpl="menus">
+  <div data-ref="root"><ul class="list menus" data-ref="list"></ul><div class="pad" data-ref="error" hidden></div></div>
+</template>
+
+<!-- One screen: its label, its model (click: copy), ↗ in a new tab; its action's xmlid below. -->
+<template data-tpl="menu">
+  <li tabindex="0" data-ref="item">
+    <div class="row" data-ref="line"><span data-ref="label"></span><span class="muted" data-ref="model"></span><span class="grow"></span></div>
+    <div class="meta mono" data-ref="meta"></div>
+  </li>
+</template>

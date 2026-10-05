@@ -1,0 +1,139 @@
+<!-- features/apps/apps.*.ts: the Apps tab (styles: ui/panel.css, "Apps tab").
+     Two views: the modules (Odoo's search bar, the list, the module opened beside it) · the operations waiting.
+     data-ref: filled by the code, text only. -->
+
+<!-- A view: the view switch, then its content. -->
+<template data-tpl="view">
+  <div class="subview" data-ref="view"><div class="row subview-head" data-ref="head"></div><div class="subview-body" data-ref="body"></div></div>
+</template>
+
+<!-- Odoo's search bar: the filters as facets inside it, the input, the count, ▾ opening the filters and categories. -->
+<template data-tpl="searchbar">
+  <div class="searchbar" data-ref="root">
+    <span class="facets" data-ref="facets"></span>
+    <input type="text" data-ref="input" placeholder="Search, or type names then Enter: sale; stock" aria-label="Search modules" data-i18n="placeholder,aria-label" spellcheck="false" autocomplete="off">
+    <span class="muted count-note" data-ref="count"></span>
+    <button type="button" class="search-toggle" data-ref="toggle" title="Filters" aria-label="Filters" aria-expanded="false" data-i18n="title,aria-label">▾</button>
+    <div class="search-panel" data-ref="panel" hidden></div>
+  </div>
+</template>
+<template data-tpl="search-col">
+  <div class="search-col" data-ref="col"><div class="search-head" data-ref="head"></div></div>
+</template>
+<template data-tpl="search-item">
+  <button type="button" class="search-item" data-ref="item"></button>
+</template>
+<template data-tpl="search-sep">
+  <hr data-ref="sep">
+</template>
+<template data-tpl="facet">
+  <span class="facet" data-ref="facet"><span data-ref="label"></span><button type="button" class="facet-x" data-ref="x" title="Remove" aria-label="Remove" data-i18n="title,aria-label">×</button></span>
+</template>
+
+<!-- The modules picked for an action, and the actions. -->
+<template data-tpl="pickbar">
+  <div class="pickbar" data-ref="bar">
+    <div class="row chips" data-ref="chips"></div>
+    <div class="row" data-ref="actions"></div>
+    <ul class="steps" data-ref="log"></ul>
+  </div>
+</template>
+<template data-tpl="picked">
+  <span class="facet" data-ref="chip"><span data-ref="label"></span><button type="button" class="facet-x" data-ref="x" title="Remove" aria-label="Remove" data-i18n="title,aria-label">×</button></span>
+</template>
+<template data-tpl="steps">
+  <ul class="steps" data-ref="log"></ul>
+</template>
+<template data-tpl="step">
+  <li class="row" data-ref="item"><span class="grow" data-ref="text"></span><span class="muted" data-ref="outcome" data-i18n="text">Running…</span></li>
+</template>
+<template data-tpl="pick">
+  <input type="checkbox" class="pick-box" data-ref="box">
+</template>
+
+<!-- Operations waiting: a line above the list, leading to the Pending view. -->
+<template data-tpl="warn">
+  <div class="trybar warn" data-ref="bar"><span class="grow" data-ref="text"></span></div>
+</template>
+
+<!-- The modules and the module opened beside them (wide panel) or under its row. -->
+<template data-tpl="apps-md">
+  <div class="groups-md" data-ref="root"><div class="groups-list" data-ref="list"></div><aside class="groups-pane" data-ref="pane"></aside></div>
+</template>
+<!-- A module opened: icon, title, technical name and labels, summary, versions, what to do. -->
+<template data-tpl="module-head">
+  <div class="group-head module-head" data-ref="box">
+    <div class="row module-title"><img class="module-icon" alt="" data-ref="icon"><h3 data-ref="name"></h3></div>
+    <div class="row" data-ref="meta"></div>
+    <div class="muted" data-ref="summary"></div>
+    <div class="group-status" data-ref="status"></div>
+    <div class="row" data-ref="actions"></div>
+  </div>
+</template>
+<!-- A part of the module opened, folding by its title. -->
+<template data-tpl="fold">
+  <details class="fold"><summary><span data-ref="title"></span><span class="muted" data-ref="count"></span></summary><div class="fold-body" data-ref="body"></div></details>
+</template>
+<!-- The module's description as Odoo renders it: sandboxed (no allow-scripts: nothing runs; same origin: its height is read), its own styles, links open in a new tab. -->
+<template data-tpl="description">
+  <iframe class="module-desc" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" referrerpolicy="no-referrer" title="Module description" data-i18n="title" data-ref="frame"></iframe>
+</template>
+
+<!-- The dependency diagram (apps.graph.ts): its tools, the drawing (scrolls, zooms), what the module clicked is.
+     SVG pieces are cloned from a wrapper (a template's root must be an HTML element) and moved into the drawing. -->
+<template data-tpl="graph">
+  <div class="dep-graph" data-ref="root">
+    <div class="row graph-bar" data-ref="bar"></div>
+    <div class="graph-scroll" data-ref="scroll">
+      <svg class="graph-svg" data-ref="svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dependency diagram" data-i18n="aria-label">
+        <defs><marker id="dep-arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="g-arrow" d="M0,0 L8,4 L0,8 z"></path></marker></defs>
+        <g data-ref="edges"></g><g data-ref="nodes"></g>
+      </svg>
+    </div>
+    <div class="row graph-info" data-ref="info"></div>
+  </div>
+</template>
+<template data-tpl="g-node">
+  <div><svg><g class="g-node" tabindex="0" data-ref="node"><rect rx="6" data-ref="box"></rect><text dy="0.35em" data-ref="label"></text></g></svg></div>
+</template>
+<template data-tpl="g-edge">
+  <div><svg><path class="g-edge" marker-end="url(#dep-arrow)" data-ref="edge"></path></svg></div>
+</template>
+<template data-tpl="check">
+  <label class="check" data-ref="label"><input type="checkbox" data-ref="box"> <span data-ref="text"></span></label>
+</template>
+
+<!-- Small pieces. -->
+<template data-tpl="toolbar">
+  <div class="toolbar" data-ref="bar"></div>
+</template>
+<template data-tpl="box">
+  <div data-ref="box"></div>
+</template>
+<template data-tpl="row">
+  <div class="row" data-ref="row"></div>
+</template>
+<template data-tpl="line">
+  <div class="row" data-ref="line"></div>
+</template>
+<template data-tpl="button">
+  <button type="button" class="btn" data-ref="button"></button>
+</template>
+<template data-tpl="chip">
+  <button type="button" class="chip" data-ref="button"></button>
+</template>
+<template data-tpl="sub-title">
+  <h4 class="story-title" data-ref="title"></h4>
+</template>
+<template data-tpl="text">
+  <span data-ref="text"></span>
+</template>
+<template data-tpl="link">
+  <a target="_blank" rel="noreferrer" data-ref="link"></a>
+</template>
+<template data-tpl="plain-list">
+  <ul class="plain" data-ref="list"></ul>
+</template>
+<template data-tpl="plain-item">
+  <li data-ref="item"></li>
+</template>

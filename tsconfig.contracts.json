@@ -1,0 +1,13 @@
+{
+  // contracts: what every context shares (JSON, messages). Pure: no DOM, no chrome.*.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "types": [],
+    "declarationDir": ".tsbuild/contracts",
+    "tsBuildInfoFile": ".tsbuild/contracts.tsbuildinfo"
+  },
+  "include": ["src/contracts"],
+  "exclude": [],
+  "references": []
+}

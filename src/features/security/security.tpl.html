@@ -1,0 +1,135 @@
+<!-- features/security/security.*.ts: the Security tab (styles: ui/panel.css, "Security tab").
+     A bar (the user, their companies, the user compared, the groups being tried), then five views as tables:
+     record · by model · this model · groups · system. data-ref: filled by the code, text only. -->
+
+<!-- The bar: one labelled line per setting. -->
+<template data-tpl="bar">
+  <div class="sec-bar card" data-ref="bar"><dl class="facts" data-ref="facts"></dl></div>
+</template>
+<template data-tpl="facts">
+  <dl class="facts" data-ref="list"></dl>
+</template>
+<template data-tpl="fact">
+  <div class="fact"><dt data-ref="label"></dt><dd class="row" data-ref="value"></dd></div>
+</template>
+
+<!-- A user searched on the server (name or login), archived ones too when the bar's box is ticked. -->
+<template data-tpl="user-search">
+  <span class="row user-pick" data-ref="root">
+    <span class="user-search" data-ref="search">
+      <input type="search" data-ref="input" spellcheck="false" autocomplete="off">
+      <ul class="suggest" role="listbox" data-ref="list" hidden></ul>
+    </span>
+  </span>
+</template>
+<!-- Under the searches of the bar: archived users too, in both. -->
+<template data-tpl="archived">
+  <label class="check archived-box" data-ref="label"><input type="checkbox" data-ref="box"> <span data-i18n="text">Archived too</span></label>
+</template>
+<template data-tpl="suggest-item">
+  <li role="option" data-ref="item"><span class="name" data-ref="name"></span><span class="muted" data-ref="meta"></span></li>
+</template>
+<template data-tpl="who">
+  <span class="row who" data-ref="root"><span data-ref="name"></span><span class="muted" data-ref="meta"></span></span>
+</template>
+<template data-tpl="trybar">
+  <div class="trybar" data-ref="bar">
+    <span class="grow" data-ref="text"></span>
+    <button type="button" class="chip" data-ref="apply" data-i18n="text">Apply</button>
+    <button type="button" class="chip" data-ref="discard" data-i18n="text">Discard</button>
+  </div>
+</template>
+<template data-tpl="applied">
+  <div class="trybar applied" data-ref="bar"><span class="grow" data-ref="text"></span><button type="button" class="chip" data-ref="close">×</button></div>
+</template>
+
+<!-- A view: its heading line (what it is about, its tools), then its tables. -->
+<template data-tpl="view">
+  <div class="subview" data-ref="view"><div class="row subview-head" data-ref="head"></div><div class="subview-body" data-ref="body"></div></div>
+</template>
+
+<template data-tpl="mark">
+  <span class="mark" data-ref="mark"></span>
+</template>
+
+<!-- The record view: what is checked, an error to paste. -->
+<template data-tpl="subject">
+  <div class="subject" data-ref="box"><div class="row" data-ref="line"></div><div class="meta" data-ref="meta"></div></div>
+</template>
+<template data-tpl="paste">
+  <details class="paste">
+    <summary data-i18n="text">Diagnose an access error message</summary>
+    <div class="composer">
+      <textarea rows="5" data-ref="text" spellcheck="false" placeholder="Paste the message of the error dialog (debug mode adds the records and the rules)" aria-label="Access error message" data-i18n="placeholder,aria-label"></textarea>
+      <div class="row mt"><button type="button" class="btn" data-ref="go" data-i18n="text">Diagnose</button><span class="error" data-ref="error"></span></div>
+    </div>
+  </details>
+</template>
+<!-- A rule opened: its domain as written, as evaluated for the user, why it couldn't be checked. -->
+<template data-tpl="rule-detail">
+  <div class="rule-detail" data-ref="box">
+    <div class="kv-line"><span class="muted" data-i18n="text">As written</span><span data-ref="domain"></span></div>
+    <div class="kv-line" data-ref="evRow"><span class="muted" data-i18n="text">For the user</span><span data-ref="evaluated"></span></div>
+    <div class="error" data-ref="note"></div>
+  </div>
+</template>
+
+<!-- Lists and boxes. -->
+<template data-tpl="plain-list">
+  <ul class="plain" data-ref="list"></ul>
+</template>
+<template data-tpl="plain-item">
+  <li data-ref="item"></li>
+</template>
+<template data-tpl="toolbar">
+  <div class="toolbar" data-ref="bar"></div>
+</template>
+<template data-tpl="count">
+  <span class="muted" data-ref="text"></span>
+</template>
+<template data-tpl="box">
+  <div data-ref="box"></div>
+</template>
+<template data-tpl="button">
+  <button type="button" class="btn" data-ref="button"></button>
+</template>
+<template data-tpl="chip">
+  <button type="button" class="chip" data-ref="button"></button>
+</template>
+<template data-tpl="sub-title">
+  <h4 class="story-title" data-ref="title"></h4>
+</template>
+
+<!-- Findings: one per line, by level. -->
+<template data-tpl="findings">
+  <ul class="findings" data-ref="list"></ul>
+</template>
+<template data-tpl="finding">
+  <li data-ref="item"><span data-ref="pill"></span><span data-ref="text"></span></li>
+</template>
+<template data-tpl="okline">
+  <div class="okline" data-i18n="text">✓ No issue found.</div>
+</template>
+
+<!-- Groups view: the list of groups, and beside it (wide panel) the group opened. -->
+<template data-tpl="groups-md">
+  <div class="groups-md" data-ref="root"><div class="groups-list" data-ref="list"></div><aside class="groups-pane" data-ref="pane"></aside></div>
+</template>
+<!-- A group opened: its name, xmlid and application, its description, where each user stands, what to do. -->
+<template data-tpl="group-head">
+  <div class="group-head" data-ref="box">
+    <h3 data-ref="name"></h3>
+    <div class="row" data-ref="meta"></div>
+    <div class="muted" data-ref="comment"></div>
+    <div class="group-status" data-ref="status"></div>
+    <div class="row" data-ref="actions"></div>
+  </div>
+</template>
+<!-- A part of the group opened, folding by its title. -->
+<template data-tpl="fold">
+  <details class="fold"><summary><span data-ref="title"></span><span class="muted" data-ref="count"></span></summary><div class="fold-body" data-ref="body"></div></details>
+</template>
+<template data-tpl="status-line">
+  <div class="row" data-ref="line"></div>
+</template>
+

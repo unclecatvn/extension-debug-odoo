@@ -1,14 +1,16 @@
 name: Release
-# Bump "version" in extension/manifest.json (+ a CHANGELOG.md section) and push to main: CI runs, then tag v<version> + GitHub release (zip + notes).
-# Pushes that keep the same version only run CI.
-# A new version also goes to the Chrome Web Store (uploaded, submitted for review: it goes live once Google approves it),
-# with the repository secrets CWS_CLIENT_ID, CWS_CLIENT_SECRET, CWS_REFRESH_TOKEN (an OAuth client allowed to use the
-# Chrome Web Store API, see README › Releasing); without them that step is skipped.
-# Run by hand (Actions › Release › Run workflow), it sends the manifest's version to the Chrome Web Store again, released
-# or not: e.g. once the store's listing or privacy practices are fixed after a refused submission.
+# Bump "version" in static/manifest.json (+ a CHANGELOG.md section) and push to main or ts: CI runs, then the extension
+# is built, zipped (dist/ as it is: what Load unpacked takes) and released as v<version> with that section as notes.
+# From ts the release is a pre-release (main is not the TypeScript version yet). Pushes that keep the same version only
+# run CI.
+# A new version released from main also goes to the Chrome Web Store (uploaded, submitted for review: it goes live once
+# Google approves it), with the repository secrets CWS_CLIENT_ID, CWS_CLIENT_SECRET, CWS_REFRESH_TOKEN (an OAuth client
+# allowed to use the Chrome Web Store API); without them that step is skipped. Pre-releases from ts never go there.
+# Run by hand on main (Actions › Release › Run workflow), it sends the manifest's version to the Chrome Web Store again,
+# released or not: e.g. once the store's listing or privacy practices are fixed after a refused submission.
 on:
   push:
-    branches: [main]
+    branches: [main, ts]
   workflow_dispatch:
 
 jobs:
@@ -23,30 +25,37 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # full history + tags for the changelog
+          fetch-depth: 0 # full history + tags for the notes
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
       - name: Tag + release if the manifest version is new
         id: release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VER=v$(jq -r .version extension/manifest.json)
-          ZIP=odoo-debug-$VER.zip
+          VER=v$(jq -r .version static/manifest.json)
+          ZIP="odoo-debug-$VER.zip"
           if git rev-parse -q --verify "refs/tags/$VER" >/dev/null; then
             echo "$VER already released"
             [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] || exit 0
             gh release download "$VER" --pattern "$ZIP" # by hand: the store gets the released zip again
             echo "zip=$ZIP" >> "$GITHUB_OUTPUT"; exit 0
           fi
+          npm ci
+          npm run build
+          (cd dist && zip -r "../$ZIP" . -x "*.DS_Store")
           PREV=$(git describe --tags --abbrev=0 2>/dev/null || true)
           # notes = this version's section of CHANGELOG.md, else the commit subjects since the previous tag
           awk -v v="[${VER#v}]" '/^## \[/ { p = index($0, v) > 0; next } p' CHANGELOG.md > notes.md 2>/dev/null || true
           [ -s notes.md ] || { echo "## Changes${PREV:+ since $PREV}"; git log --no-merges --pretty='- %s (%h)' ${PREV:+$PREV..}HEAD; } > notes.md
-          (cd extension && zip -r "../$ZIP" . -x "*.DS_Store" "icons/icon.svg" "icons/make-icons.sh")
-          gh release create "$VER" "$ZIP" --target "$GITHUB_SHA" --title "$VER" --notes-file notes.md
+          PRE=$([ "$GITHUB_REF_NAME" = main ] || echo --prerelease)
+          gh release create "$VER" "$ZIP" --target "$GITHUB_SHA" --title "$VER" --notes-file notes.md $PRE
           echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
 
       - name: Chrome Web Store — upload the version, submit it for review
-        if: steps.release.outputs.zip
+        if: steps.release.outputs.zip && github.ref_name == 'main'
         env:
           ZIP: ${{ steps.release.outputs.zip }}
           ITEM: mfmamdbagelffoedimmjpolhalmngcjk
@@ -55,7 +64,7 @@ jobs:
           CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
         run: |
           if [ -z "$CWS_CLIENT_ID" ] || [ -z "$CWS_CLIENT_SECRET" ] || [ -z "$CWS_REFRESH_TOKEN" ]; then
-            echo "::notice::Chrome Web Store secrets not set: $ZIP not uploaded (upload it by hand, or see README › Releasing)"; exit 0
+            echo "::notice::Chrome Web Store secrets not set: $ZIP not uploaded (upload it by hand)"; exit 0
           fi
           TOKEN=$(curl -fsS https://oauth2.googleapis.com/token -d grant_type=refresh_token -d client_id="$CWS_CLIENT_ID" \
             -d client_secret="$CWS_CLIENT_SECRET" -d refresh_token="$CWS_REFRESH_TOKEN" | jq -r .access_token)

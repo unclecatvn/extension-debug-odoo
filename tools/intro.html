@@ -1,8 +1,13 @@
 <!doctype html>
-<!-- The intro film's editing room, rendered frame by frame by tools/intro.mjs (render): the take it recorded (real
-     frames of the extension in use, /take/frames/*.jpg, and its log /take/take.json) cut into an opening montage of its
-     best moments, a title, then played in a browser window on a dark stage with a camera following the action and
-     captions. Every frame is a pure function of t: window.renderAt(t). window.MUSIC: the cues the score follows. -->
+<!-- The intro film's editing room, rendered frame by frame by tools/intro.mjs (render). 120 BPM (tools/score.mjs):
+       0.5 s   four questions the panel answers, one every two beats, word by word, each with its tab's icon
+       4.5 s   a montage: the take's best moments, one close-up a beat, a flash on each cut
+       6.5 s   the build: light rays closing in on a glow, the rest goes dark
+       8.0 s   the drop: a flash, a shockwave, the logo and the name landing, the tagline, the nine tabs
+      10.5 s   the window flies in; then the take (real frames of the extension in use, /take/frames/*.jpg and its log
+               /take/take.json) in a browser window on a dark stage, a camera following the action, captions
+      the end  the window recedes behind the closing title.
+     Every frame is a pure function of t: window.renderAt(t). window.MUSIC: the cues the score follows. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -13,47 +18,86 @@
   .layer { position: absolute; inset: 0; }
   #stage { perspective: 2200px; perspective-origin: 50% 40%; }
   .glow { position: absolute; width: 1500px; height: 1100px; border-radius: 50%; filter: blur(90px); }
+  #grid { opacity: 0; background-image: linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
+    background-size: 80px 80px; mask-image: radial-gradient(900px 600px at 50% 50%, #000, transparent 75%); }
+
+  /* the questions: a tab's icon and name, then the question, word by word, its key word lit */
+  .q { position: absolute; left: 0; right: 0; top: 400px; text-align: center; opacity: 0; }
+  .q .tag { display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px 8px 14px; border-radius: 999px; background: rgba(180, 124, 208, .14);
+    box-shadow: 0 0 0 1px rgba(201, 154, 224, .35); font-size: 20px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #e3b8f0; }
+  .q .tag i, .chips i { width: 26px; height: 26px; background: currentColor; mask: var(--icon) center / contain no-repeat; }
+  .q h2 { margin: 30px 0 0; font-size: 96px; font-weight: 750; letter-spacing: -.045em; line-height: 1.05; }
+  .q h2 span { display: inline-block; margin: 0 .12em; }
+  .q h2 span.key { background: linear-gradient(90deg, #f0c8ff, #b47cd0 55%, #7f6bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
   /* the browser window, the take inside it */
-  #win { position: absolute; left: 160px; top: 22px; width: 1600px; height: 1036px; border-radius: 18px; overflow: hidden; background: #0d0d10;
+  #win { position: absolute; left: 272px; top: 18px; width: 1376px; height: 896px; border-radius: 18px; overflow: hidden; background: #0d0d10;
     transform-origin: 50% 60%; box-shadow: 0 0 0 1px rgba(255, 255, 255, .13), 0 40px 120px rgba(0, 0, 0, .7), 0 0 160px rgba(160, 110, 200, .12); }
   #bar { position: absolute; left: 0; right: 0; top: 0; height: 36px; display: flex; align-items: center; gap: 8px; padding: 0 16px;
     background: linear-gradient(#232327, #1b1b1e); border-bottom: 1px solid rgba(0, 0, 0, .6); }
   #bar i { width: 12px; height: 12px; border-radius: 50%; }
   #bar span { position: absolute; left: 50%; transform: translateX(-50%); padding: 3px 60px; border-radius: 7px; background: rgba(255, 255, 255, .06);
     font: 500 13px -apple-system, system-ui; color: #9a9aa0; }
-  #view { position: absolute; left: 0; top: 36px; width: 1600px; height: 1000px; overflow: hidden; background: #fff; }
+  #view { position: absolute; left: 0; top: 36px; width: 1376px; height: 860px; overflow: hidden; background: #fff; }
   #view img { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; transform-origin: 0 0; }
   #sheen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
     background: linear-gradient(105deg, transparent 0%, transparent 40%, rgba(255, 255, 255, .22) 50%, transparent 60%, transparent 100%); background-size: 300% 100%; }
 
-  /* lower-third captions, on glass: one element each, so one fades out fully before the next comes in */
-  .cap { position: absolute; left: 210px; bottom: 70px; max-width: 900px; padding: 20px 30px 22px; border-radius: 22px; opacity: 0;
-    background: rgba(16, 16, 20, .74); backdrop-filter: blur(24px) saturate(1.5); -webkit-backdrop-filter: blur(24px) saturate(1.5);
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 20px 60px rgba(0, 0, 0, .45); }
-  .cap b { display: block; font-size: 17px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #c99ae0; }
-  .cap p { margin: 6px 0 0; font-size: 36px; font-weight: 650; letter-spacing: -.025em; line-height: 1.15; }
+  /* captions in their own strip under the window: never over what it shows; one element each, so one fades out fully
+     before the next comes in */
+  .cap { position: absolute; left: 160px; right: 160px; top: 930px; text-align: center; opacity: 0; }
+  .cap b { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #c99ae0; }
+  .cap b i { width: 19px; height: 19px; background: currentColor; mask: var(--icon) center / contain no-repeat; }
+  .cap p { margin: 8px auto 0; max-width: 1500px; text-wrap: balance; font-size: 31px; font-weight: 650; letter-spacing: -.02em; line-height: 1.18; }
 
-  /* the opening montage: close-ups of the take's best moments, floating in depth */
+  /* the answer on screen: a glowing outline following the camera, its label above it */
+  .spot { position: absolute; border-radius: 12px; opacity: 0; pointer-events: none;
+    box-shadow: 0 0 0 3px #b47cd0, 0 0 0 9999px rgba(10, 8, 16, .28), 0 0 40px 6px rgba(180, 124, 208, .65); }
+  .spot b { position: absolute; left: -3px; bottom: calc(100% + 10px); white-space: nowrap; padding: 7px 14px; border-radius: 10px;
+    background: linear-gradient(90deg, #8f5bb0, #6f55d8); color: #fff; font-size: 20px; font-weight: 650; letter-spacing: -.01em;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+  .spot.below b { bottom: auto; top: calc(100% + 10px); }
+  /* a note beside the window: what was copied, as a terminal */
+  .note { position: absolute; left: 120px; top: 170px; width: 700px; border-radius: 16px; overflow: hidden; opacity: 0;
+    background: #0f0f14; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14), 0 30px 90px rgba(0, 0, 0, .6), 0 0 120px rgba(160, 110, 200, .25); }
+  .note b { display: block; padding: 12px 18px; font-size: 16px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #c99ae0;
+    background: rgba(255, 255, 255, .05); border-bottom: 1px solid rgba(255, 255, 255, .08); }
+  .note pre { margin: 0; padding: 16px 18px 20px; font: 500 17px/1.5 ui-monospace, 'SF Mono', Menlo, monospace; color: #d8f5d0; white-space: pre-wrap; word-break: break-all; }
+
+  /* the montage: close-ups of the take's best moments */
   #montage { perspective: 1800px; }
   .shot { position: absolute; overflow: hidden; border-radius: 18px; opacity: 0; background: #fff;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, .16), 0 50px 140px rgba(0, 0, 0, .85), 0 0 140px rgba(180, 124, 208, .25); }
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .16), 0 50px 140px rgba(0, 0, 0, .85), 0 0 160px rgba(180, 124, 208, .3); }
   .shot img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
-  .shot b { position: absolute; left: 22px; bottom: 18px; padding: 6px 12px; border-radius: 8px; background: rgba(16, 16, 20, .8);
+  .shot b { position: absolute; left: 22px; bottom: 18px; padding: 6px 12px; border-radius: 8px; background: rgba(16, 16, 20, .82);
     font-size: 15px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #e3b8f0; }
-  #flash { pointer-events: none; background: radial-gradient(900px 500px at 50% 50%, rgba(220, 180, 255, .55), transparent 70%); opacity: 0; }
+  #flash { pointer-events: none; background: radial-gradient(1100px 650px at 50% 50%, rgba(235, 205, 255, .75), transparent 70%); opacity: 0; }
 
-  /* the title, letter by letter, a light sweeping across it */
+  /* the build and the drop: rays closing in, a core of light, a shockwave */
+  #rays { opacity: 0; }
+  #rays i { position: absolute; left: 960px; top: 540px; width: 1400px; height: 3px; margin-top: -1.5px; transform-origin: 0 50%;
+    background: linear-gradient(90deg, rgba(240, 210, 255, .95), rgba(180, 124, 208, .4) 30%, transparent 70%); }
+  #core { position: absolute; left: 960px; top: 540px; width: 600px; height: 600px; margin: -300px 0 0 -300px; border-radius: 50%; opacity: 0;
+    background: radial-gradient(closest-side, rgba(255, 245, 255, .95), rgba(200, 140, 240, .5) 35%, transparent 70%); }
+  #wave { position: absolute; left: 960px; top: 480px; width: 400px; height: 400px; margin: -200px 0 0 -200px; border-radius: 50%; opacity: 0;
+    border: 6px solid rgba(225, 185, 250, .9); box-shadow: 0 0 60px rgba(200, 140, 240, .8), inset 0 0 40px rgba(200, 140, 240, .5); }
+
+  /* the title: the logo, the name letter by letter, a light sweeping across it, the tagline, the tabs */
   .title { position: absolute; left: 0; right: 0; text-align: center; }
   .title h1 { margin: 0; font-size: 150px; font-weight: 750; letter-spacing: -.055em; line-height: 1; white-space: nowrap; }
   .title h1 span { display: inline-block; }
-  .title h1 img { width: 118px; height: 118px; vertical-align: -14px; margin-right: 26px; }
+  .title h1 img { display: inline-block; width: 124px; height: 124px; vertical-align: -16px; margin-right: 30px; }
   #open h1.sweep { position: absolute; left: 0; right: 0; top: 0; color: transparent;
     background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, .95) 50%, transparent 65%); background-size: 260% 100%;
     -webkit-background-clip: text; background-clip: text; }
-  .title p { margin: 26px 0 0; font-size: 40px; font-weight: 550; letter-spacing: -.02em; color: #a1a1a6; }
-  .title p span { background: linear-gradient(90deg, #e3b8f0, #b47cd0 55%, #8f6bd8); -webkit-background-clip: text; color: transparent; }
-  .title small { display: block; margin-top: 26px; font: 500 24px ui-monospace, 'SF Mono', Menlo, monospace; color: #6e6e73; }
+  #open h1.sweep img { visibility: hidden; }
+  .title p { margin: 26px 0 0; font-size: 42px; font-weight: 550; letter-spacing: -.02em; color: #a1a1a6; }
+  .title p span { background: linear-gradient(90deg, #f0c8ff, #b47cd0 55%, #7f6bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .chips { display: flex; justify-content: center; gap: 14px; margin-top: 40px; }
+  .chips span { display: inline-flex; align-items: center; gap: 9px; padding: 9px 16px 9px 12px; border-radius: 12px; font-size: 21px; font-weight: 600;
+    background: rgba(255, 255, 255, .06); box-shadow: 0 0 0 1px rgba(255, 255, 255, .12); color: #d6d6db; }
+  .chips i { width: 22px; height: 22px; color: #c99ae0; }
+  .title small { display: block; margin-top: 30px; font: 500 24px ui-monospace, 'SF Mono', Menlo, monospace; color: #7e7e85; }
   #end h1 { font-size: 132px; }
   #fade { background: #000; pointer-events: none; }
 </style>
@@ -62,17 +106,24 @@
 <div id="stage" class="layer">
   <div class="glow" id="g1" style="background: radial-gradient(closest-side, rgba(150, 90, 200, .55), transparent)"></div>
   <div class="glow" id="g2" style="background: radial-gradient(closest-side, rgba(60, 90, 200, .35), transparent)"></div>
+  <div id="grid" class="layer"></div>
+  <div id="questions" class="layer"></div>
   <div id="montage" class="layer"></div>
+  <div id="rays" class="layer"></div>
+  <div id="core"></div>
+  <div id="wave"></div>
   <div id="flash" class="layer"></div>
   <div id="win">
-    <div id="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>localhost:8069/odoo/sales</span></div>
-    <div id="view"><img id="a" alt=""><img id="b" alt=""><div id="sheen"></div></div>
+    <div id="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>localhost/odoo/sales</span></div>
+    <div id="view"><img id="a" alt=""><img id="b" alt=""><div id="spots"></div><div id="sheen"></div></div>
   </div>
+  <div id="notes"></div>
   <div id="caps"></div>
-  <div class="title" id="open" style="top: 380px"><div style="position: relative"><h1 class="letters"></h1><h1 class="sweep">Odoo Debug</h1></div>
-    <p>See <span>why</span> Odoo does what it does.</p></div>
-  <div class="title" id="end" style="top: 330px"><h1><img src="/extension/icons/icon.svg" alt="">Odoo Debug</h1>
-    <p>A debug panel, <span>right on the Odoo page.</span></p><small>Free to use · Odoo 18 and 19 · unclecatvn.github.io/extension-debug-odoo</small></div>
+  <div class="title" id="open" style="top: 330px"><div style="position: relative"><h1 class="letters"><img src="/assets/icons/icon.svg" alt=""></h1><h1 class="sweep"><img src="/assets/icons/icon.svg" alt="">Odoo Debug</h1></div>
+    <p>See <span>why</span> Odoo does what it does.</p><div class="chips" id="open-chips"></div></div>
+  <div class="title" id="end" style="top: 290px"><h1><img src="/assets/icons/icon.svg" alt="">Odoo Debug</h1>
+    <p>A debug panel, <span>right on the Odoo page.</span></p><div class="chips" id="end-chips"></div>
+    <small>Free · Odoo 18, 19 and 20 · on the Chrome Web Store</small></div>
 </div>
 <div id="fade" class="layer"></div>
 
@@ -80,21 +131,31 @@
 const take = await (await fetch('/take/take.json')).json();
 const [VW, VH] = take.viewport; // the page, in px; the frames are 2×
 const $ = (s) => document.querySelector(s);
+const el = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, k) => a + (b - a) * k;
 const smooth = (a, b, t) => { const k = clamp((t - a) / (b - a)); return k * k * (3 - 2 * k); };
 const ease = (k) => (k < .5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2);
 const out = (k) => 1 - (1 - clamp(k)) ** 3;
+const back = (k) => { k = clamp(k); const c = 1.9; return 1 + (c + 1) * (k - 1) ** 3 + c * (k - 1) ** 2; }; // overshoots, settles
 
-// ---------- the opening's beat: the montage cuts on it, the title lands on its 5th; the score follows ----------
-const BEAT = .75;
-const MONTAGE = [1, 2, 3, 4].map((k) => k * BEAT); // 0.75 … 3.0: one close-up per beat
-const IMPACT = 5 * BEAT; // 3.75: the title
-const WIN_IN = 6.1; // the window flies in
-const OPEN = 8.2; // the take starts playing
+// the tabs' icons, as the panel draws them (src/ui/panel.css: masks)
+const css = await (await fetch('/src/ui/panel.css')).text();
+const ICON = Object.fromEntries([...css.matchAll(/\[data-tab=(\w+)\] \{ --icon: (url\("data:image\/svg\+xml,[^"]+"\))/g)].map((m) => [m[1], m[2]]));
+const icon = (tab) => { const i = el('i'); i.style.setProperty('--icon', ICON[tab] ?? 'none'); return i; };
+const TABS = [['record', 'Record'], ['view', 'View'], ['rpc', 'RPC'], ['security', 'Security'], ['translations', 'i18n'], ['apps', 'Apps'], ['menus', 'Menus'], ['perf', 'Perf'], ['code', 'Code']];
+
+// ---------- the opening's beat (120 BPM): every cue on it; the score follows ----------
+const BEAT = .5;
+const QUESTIONS = [1, 3, 5, 7].map((k) => k * BEAT); // 0.5 … 3.5: one every two beats
+const MONTAGE = [9, 10, 11, 12].map((k) => k * BEAT); // 4.5 … 6.0: one close-up a beat
+const RISER = [13 * BEAT, 15.5 * BEAT]; // 6.5 … 7.75, then a beat's half of silence
+const IMPACT = 16 * BEAT; // 8.0: the drop
+const WIN_IN = 21 * BEAT; // 10.5: the window flies in
+const OPEN = 25 * BEAT; // 12.5: the take starts playing
 
 // ---------- the edit: the take without its cuts, its long typing sped up; between the opening and an ending ----------
-const END = 5.2;
+const END = 5.5;
 const S0 = take.start + .9, S1 = take.end; // source times kept
 const marks = [S0, S1, ...take.cuts.flat(), ...take.fast.flatMap(([a, b]) => [a, b])].filter((x) => x >= S0 && x <= S1).sort((a, b) => a - b);
 const pieces = []; // { s0, s1, rate, o0 }: source span s0..s1 plays at `rate` from output time o0
@@ -106,7 +167,8 @@ for (let i = 0; i < marks.length - 1; i++) {
   pieces.push({ s0, s1, rate, o0: o });
   o += (s1 - s0) / rate;
 }
-const BODY_END = o;
+// the take ends on a bar line of the score (its groove started on IMPACT), so the closing chord lands on a downbeat
+const BODY_END = IMPACT + Math.ceil((o - IMPACT) / (4 * BEAT)) * 4 * BEAT;
 const DURATION = BODY_END + END;
 const toSrc = (T) => {
   const p = pieces.findLast((q) => q.o0 <= T) ?? pieces[0];
@@ -114,12 +176,12 @@ const toSrc = (T) => {
 };
 const toOut = (s) => { // a source time to the film's; inside a cut: where the film goes on
   for (const p of pieces) if (s <= p.s1) return p.o0 + Math.max(0, s - p.s0) / p.rate;
-  return BODY_END;
+  return o;
 };
 const cutsOut = pieces.slice(1).filter((p, i) => p.s0 - pieces[i].s1 > .05).map((p) => p.o0); // jump cuts: a dissolve
 
 // ---------- the camera: keyframes of the take, eased moves in (centre, log zoom) ----------
-const view = { w: 1600, h: 1000 }, base = view.w / VW; // page px → view px at zoom 1
+const view = { w: 1376, h: 860 }, base = view.w / VW; // page px → view px at zoom 1
 const shot = (r) => {
   if (!r) return { cx: VW / 2, cy: VH / 2, z: 1 };
   const z = clamp(Math.min(VW / r.w, VH / r.h) * .96, 1, 2.05);
@@ -157,84 +219,167 @@ function rise(n, t, t0, t1 = Infinity, d = 24, blurOn = n) {
   blurOn.style.filter = `blur(${(1 - a) * 12 + b * 6}px)`;
 }
 
+// ---------- the questions ----------
+const QS = [
+  ['view', 'View', ['Why', 'is', 'this', 'field', '*read-only?']],
+  ['security', 'Security', ['Who', 'can', 'see', 'this', '*record?']],
+  ['rpc', 'RPC', ['What', 'did', 'that', '*call', 'send?']],
+  ['perf', 'Perf', ['Why', 'is', 'this', 'screen', '*slow?']],
+].map(([tab, name, words], k) => {
+  const n = el('div', 'q');
+  const tag = el('div', 'tag');
+  tag.append(icon(tab), name);
+  const h = el('h2');
+  const spans = words.map((w) => el('span', w.startsWith('*') ? 'key' : '', w.replace('*', '')));
+  h.append(...spans);
+  n.append(tag, el('br'), h);
+  $('#questions').append(n);
+  return { n, tag, spans, t: QUESTIONS[k] };
+});
+
 // ---------- captions: each from its time until shortly before the next one ----------
+const CAP_TAB = { 'Record': 'record', '⌥ + click': 'record', 'View': 'view', 'i18n': 'translations', 'RPC': 'rpc', 'Code': 'code', 'Security': 'security', 'Apps': 'apps', 'Perf': 'perf', 'Menus': 'menus', 'Yours': 'apps' };
 const caps = take.captions.filter((c) => c.title !== 'Odoo Debug').map((c) => ({ ...c, o: toOut(c.t) }));
 caps.forEach((c, i) => {
-  c.until = (caps[i + 1]?.o ?? BODY_END) - .55; // gone (0.45 s fade) before the next one starts
-  c.n = Object.assign(document.createElement('div'), { className: 'cap' });
-  c.n.innerHTML = '<div><b></b><p></p></div>';
-  c.n.querySelector('b').textContent = c.title;
-  c.n.querySelector('p').textContent = c.text;
+  c.until = (caps[i + 1]?.o ?? o) - .55; // gone (0.45 s fade) before the next one starts
+  c.n = el('div', 'cap');
+  const inner = el('div'), b = el('b');
+  b.append(icon(CAP_TAB[c.title] ?? 'record'), c.title);
+  inner.append(b, el('p', '', c.text));
+  c.n.append(inner);
   $('#caps').append(c.n);
 });
 
-// ---------- the montage: the highlights, cropped close ----------
-const LABELS = ['RPC', 'Code', 'Security', 'Perf'];
-const order = [0, 2, 3, 1]; // RPC, Security, Perf, Code
-const shots = order.map((i, k) => {
-  const h = take.highlights[i];
+// ---------- the answers on screen: outlines with a label, the camera's; notes beside the window ----------
+const spots = (take.spots ?? []).map((sp) => {
+  const n = el('div', 'spot');
+  n.append(el('b', '', sp.label));
+  $('#spots').append(n);
+  return { ...sp, o: toOut(sp.t), n };
+});
+const notes = (take.notes ?? []).map((nt) => {
+  const n = el('div', 'note');
+  n.append(el('b', '', nt.title), el('pre', '', nt.text));
+  $('#notes').append(n);
+  return { ...nt, o: toOut(nt.t), n };
+});
+
+// ---------- the montage: the highlights, cropped close, in the order of the questions ----------
+const LABELS = ['View', 'Security', 'RPC', 'Perf'];
+const shots = LABELS.map((label, k) => {
+  const h = take.highlights.find((x) => x.label === label) ?? take.highlights[k];
   const fit = Math.min(1250 / h.r.w, 680 / h.r.h); // page px → shot px
   const w = h.r.w * fit, ht = h.r.h * fit;
-  const n = Object.assign(document.createElement('div'), { className: 'shot' });
+  const n = el('div', 'shot');
   Object.assign(n.style, { left: `${(1920 - w) / 2}px`, top: `${(1080 - ht) / 2 - 20}px`, width: `${w}px`, height: `${ht}px` });
-  const img = document.createElement('img');
+  const img = el('img');
   Object.assign(img.style, { width: `${VW * fit}px`, height: `${VH * fit}px`, transform: `translate(${-h.r.x * fit}px, ${-h.r.y * fit}px)` });
   img.src = `/take/frames/${idx(h.t)}`;
-  const label = document.createElement('b');
-  label.textContent = LABELS[i];
-  n.append(img, label);
+  n.append(img, el('b', '', label));
   $('#montage').append(n);
   return { n, side: k % 2 ? 1 : -1 };
 });
 
-// ---------- the title, a span per letter ----------
-const letters = [...'Odoo Debug'].map((ch) => Object.assign(document.createElement('span'), { textContent: ch === ' ' ? '\u00a0' : ch }));
+// ---------- the rays of the build ----------
+const RAYS = Array.from({ length: 18 }, (_, k) => { const r = el('i'); $('#rays').append(r); return { r, a: k * 20 + (k % 3) * 4 }; });
+
+// ---------- the title, a span per letter; the tabs ----------
+const letters = [...'Odoo Debug'].map((ch) => el('span', '', ch === ' ' ? ' ' : ch));
 $('#open h1.letters').append(...letters);
+const chipsOf = (box) => TABS.map(([tab, name]) => { const c = el('span'); c.append(icon(tab), name); box.append(c); return c; });
+const openChips = chipsOf($('#open-chips')), endChips = chipsOf($('#end-chips'));
+const logo = $('#open h1.letters img');
 
 window.renderAt = async (T) => {
-  // the stage breathes: two glows drifting; brighter on the title's landing
-  const land = smooth(IMPACT - .05, IMPACT + .1, T) * (1 - smooth(IMPACT + .1, IMPACT + 1.6, T));
-  $('#g1').style.transform = `translate(${-200 + 160 * Math.sin(T * .17)}px, ${-260 + 90 * Math.cos(T * .13)}px) scale(${1 + .25 * land})`;
+  // the stage breathes: two glows drifting; brighter on the drop; the grid pulses on the beat until the title
+  const land = smooth(IMPACT - .05, IMPACT + .08, T) * (1 - smooth(IMPACT + .1, IMPACT + 1.8, T));
+  const pulse = T < IMPACT ? Math.exp(-((T % BEAT) / .12)) : 0;
+  $('#g1').style.transform = `translate(${-200 + 160 * Math.sin(T * .17)}px, ${-260 + 90 * Math.cos(T * .13)}px) scale(${1 + .3 * land + .05 * pulse})`;
   $('#g2').style.transform = `translate(${760 + 140 * Math.cos(T * .15)}px, ${200 + 110 * Math.sin(T * .19)}px)`;
-  $('#g1').style.opacity = $('#g2').style.opacity = smooth(0, 1.2, T);
+  $('#g1').style.opacity = $('#g2').style.opacity = smooth(0, 1, T) * (1 - .6 * smooth(RISER[0], RISER[1], T) * (1 - smooth(IMPACT, IMPACT + .3, T)));
+  $('#grid').style.opacity = smooth(0, .5, T) * (1 - smooth(RISER[0], RISER[0] + .4, T)) * (.55 + .45 * pulse);
 
-  // montage: each close-up comes forward out of a blur on its beat, drifts, leaves into a blur
+  // the questions: the tag first, the words one after the other; up and away two beats later
+  for (const q of QS) {
+    const u = T - q.t, live = u > -.1 && u < 2 * BEAT + .2;
+    if (!live) { q.n.style.opacity = 0; continue; }
+    const gone = smooth(2 * BEAT - .28, 2 * BEAT - .02, u);
+    q.n.style.opacity = 1 - gone;
+    q.n.style.transform = `translateY(${-gone * 60}px) scale(${1 + gone * .06})`;
+    q.n.style.filter = `blur(${gone * 14}px)`;
+    const ta = out(u / .3);
+    q.tag.style.opacity = ta;
+    q.tag.style.transform = `translateY(${(1 - ta) * 16}px)`;
+    q.spans.forEach((s, i) => {
+      const a = out((u - .06 - i * .055) / .32);
+      s.style.opacity = a;
+      s.style.transform = `translateY(${(1 - a) * 46}px) rotateX(${(1 - a) * 50}deg)`;
+      s.style.filter = `blur(${(1 - a) * 10}px)`;
+      if (s.className === 'key') s.style.backgroundPosition = `${lerp(100, 0, clamp((u - .3) / .6))}% 0`;
+    });
+  }
+
+  // montage: each close-up punches in on its beat (a flash), drifts, and is cut by the next
+  let flash = 0;
   shots.forEach(({ n, side }, k) => {
-    const u = T - MONTAGE[k], on = u > -.2 && u < BEAT + .15;
+    const u = T - MONTAGE[k], on = u > -.05 && u < BEAT + .05;
     if (!on) { n.style.opacity = 0; return; }
-    const a = out(u / .32), b = smooth(BEAT - .14, BEAT + .1, u), p = clamp(u / BEAT);
+    const a = out(u / .14), p = clamp(u / BEAT), b = k === shots.length - 1 ? smooth(BEAT - .12, BEAT + .05, u) : 0;
     n.style.opacity = a * (1 - b);
-    n.style.transform = `translateZ(${lerp(-320, 0, a) + p * 60 + b * 140}px) rotateY(${side * lerp(12, 5, ease(p))}deg) rotateX(${lerp(7, 3, p)}deg)`;
-    n.style.filter = `blur(${(1 - a) * 14 + b * 12}px)`;
+    n.style.transform = `scale(${lerp(1.18, 1, out(u / .22)) + p * .04}) rotateY(${side * lerp(8, 3, ease(p))}deg) rotateX(${lerp(5, 2, p)}deg)`;
+    n.style.filter = `blur(${(1 - a) * 10 + b * 10}px) brightness(${1 + .5 * Math.exp(-u / .08)})`;
+    flash = Math.max(flash, .55 * Math.exp(-Math.max(0, u) / .09));
   });
-  $('#flash').style.opacity = land * .9;
 
-  // title: letters land on the impact, tracking in; a light sweeps across; then it lifts away as the window comes
-  const tIn = IMPACT - .25;
+  // the build: the rays turn and close in on a growing core; the drop: a flash, a shockwave, the rays thrown out
+  const build = smooth(RISER[0], RISER[1] + .2, T), after = T - IMPACT;
+  $('#rays').style.opacity = after < 0 ? build * .9 : .9 * Math.exp(-after / .35);
+  RAYS.forEach(({ r, a }, k) => {
+    const len = after < 0 ? lerp(1.15, .12, ease(build)) : lerp(.12, 1.6, out(after / .5));
+    const ang = a + (after < 0 ? 40 * build * build : 40 + after * 30);
+    r.style.transform = `rotate(${ang}deg) translateX(${after < 0 ? lerp(520, 30, ease(build)) : 30 + after * 900}px) scaleX(${len})`;
+    r.style.opacity = .5 + .5 * Math.sin(k * 1.7 + T * 9);
+  });
+  const core = after < 0 ? build : Math.exp(-after / .25);
+  $('#core').style.opacity = core * (after < 0 ? .85 : 1);
+  $('#core').style.transform = `scale(${after < 0 ? lerp(.15, .7, build) + .05 * Math.sin(T * 40) * build : lerp(.7, 2.4, out(after / .4))})`;
+  const w = clamp(after / .9);
+  $('#wave').style.opacity = after < 0 ? 0 : (1 - w) * .95;
+  $('#wave').style.transform = `scale(${lerp(.2, 5.5, out(w))})`;
+  $('#wave').style.borderWidth = `${lerp(10, 1, w)}px`;
+  $('#flash').style.opacity = Math.max(flash, land * .95);
+
+  // the title: the logo pops, the letters land and track in, a light sweeps across; the tagline, the tabs one by one;
+  // then it lifts away as the window comes
+  const lg = back((T - IMPACT + .02) / .5);
+  logo.style.opacity = clamp((T - IMPACT + .05) / .1);
+  logo.style.transform = `scale(${T < IMPACT - .05 ? 0 : lerp(.2, 1, lg)}) rotate(${(1 - clamp(lg)) * -25}deg)`;
   letters.forEach((l, i) => {
-    const a = out((T - tIn - i * .035) / .55);
+    const a = out((T - IMPACT - .08 - i * .03) / .45);
     l.style.opacity = a;
-    l.style.transform = `translateY(${(1 - a) * 40}px) scale(${lerp(1.25, 1, a)})`;
+    l.style.transform = `translateY(${(1 - a) * 46}px) scale(${lerp(1.3, 1, a)})`;
     l.style.filter = `blur(${(1 - a) * 16}px)`;
   });
-  $('#open h1.letters').style.letterSpacing = `${lerp(.2, -.055, out((T - tIn) / 1.6))}em`;
+  $('#open h1.letters').style.letterSpacing = `${lerp(.18, -.055, out((T - IMPACT) / 1.4))}em`;
   const sw = $('#open h1.sweep');
   sw.style.letterSpacing = $('#open h1.letters').style.letterSpacing;
-  sw.style.backgroundPosition = `${lerp(130, -30, clamp((T - IMPACT - .2) / 1.1))}% 0`;
-  sw.style.opacity = T > IMPACT && T < IMPACT + 1.4 ? 1 : 0;
-  rise($('#open p'), T, IMPACT + .7, Infinity, 22);
+  sw.style.backgroundPosition = `${lerp(130, -30, clamp((T - IMPACT - .35) / 1.0))}% 0`;
+  sw.style.opacity = T > IMPACT + .3 && T < IMPACT + 1.5 ? 1 : 0;
+  rise($('#open p'), T, IMPACT + .6, Infinity, 22);
+  openChips.forEach((c, i) => rise(c, T, IMPACT + 1.0 + i * .06, Infinity, 18));
   const lift = smooth(WIN_IN - .3, WIN_IN + .7, T);
-  $('#open').style.opacity = 1 - lift;
+  $('#open').style.opacity = T < IMPACT - .05 ? 0 : 1 - lift;
   $('#open').style.transform = `translateY(${-lift * 140}px) scale(${1 - lift * .1})`;
   $('#open').style.filter = `blur(${lift * 10}px)`;
-  [...$('#end').children].forEach((n, i) => rise(n, T, BODY_END + .8 + i * .4, Infinity, 30));
+  [...$('#end').children].forEach((n, i) => { if (n.id !== 'end-chips') rise(n, T, BODY_END + .5 + i * .35, Infinity, 30); });
+  endChips.forEach((c, i) => rise(c, T, BODY_END + 1.4 + i * .05, Infinity, 16));
 
   // the window: rises tilted, settles; recedes, darker, behind the closing title
   const inK = out((T - WIN_IN) / 2.1), endK = ease(clamp((T - BODY_END) / 1.8));
   const win = $('#win');
-  win.style.opacity = smooth(WIN_IN - .05, WIN_IN + .7, T) * (1 - .78 * endK);
+  win.style.opacity = smooth(WIN_IN - .05, WIN_IN + .7, T) * (1 - .8 * endK);
   win.style.transform = `translateY(${(1 - inK) * 420 - endK * 60}px) rotateX(${(1 - inK) * 32 + endK * 16}deg) scale(${lerp(.78, 1, inK) * lerp(1, .74, endK)})`;
-  win.style.filter = `blur(${endK * 6}px) brightness(${1 - .55 * endK})`;
+  win.style.filter = `blur(${endK * 7}px) brightness(${1 - .6 * endK})`;
 
   // the take at this instant (the window is hidden before it flies in), a dissolve over a jump cut
   if (T > WIN_IN - .1) {
@@ -247,6 +392,24 @@ window.renderAt = async (T) => {
     const c = camera(T), z = base * c.z;
     const tx = view.w / 2 - c.cx * z, ty = view.h / 2 - c.cy * z;
     for (const img of [$('#a'), $('#b')]) img.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
+    // the spots, where the camera shows them: in, held, out; the label below when there is no room above
+    for (const sp of spots) {
+      const u = T - sp.o, live = u > -.05 && u < sp.dur + .4;
+      if (!live) { sp.n.style.opacity = 0; continue; }
+      const a = out(u / .35), b = smooth(sp.dur, sp.dur + .35, u);
+      const x = tx + sp.r.x * z, y = ty + sp.r.y * z, w = sp.r.w * z, h = sp.r.h * z;
+      Object.assign(sp.n.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
+      sp.n.classList.toggle('below', y < 70);
+      sp.n.style.opacity = a * (1 - b);
+      sp.n.style.transform = `scale(${lerp(1.06, 1, a)})`;
+    }
+  }
+  for (const nt of notes) {
+    const u = T - nt.o, live = u > -.05 && u < nt.dur + .5;
+    if (!live) { nt.n.style.opacity = 0; continue; }
+    const a = out(u / .45), b = smooth(nt.dur, nt.dur + .4, u);
+    nt.n.style.opacity = a * (1 - b);
+    nt.n.style.transform = `translateX(${(1 - a) * 60 + b * 30}px)`;
   }
 
   // a soft light across the glass when a new part starts
@@ -265,8 +428,9 @@ window.renderAt = async (T) => {
 };
 window.DURATION = DURATION;
 window.CAPS = caps.map((c) => [c.title, +c.o.toFixed(2)]);
-window.POSTER_AT = take.posterAt ? toOut(take.posterAt) + 1.2 : DURATION / 2; // the RPC sent again, its answer in
-window.MUSIC = { duration: DURATION, beat: BEAT, montage: MONTAGE, impact: IMPACT, main: OPEN, captions: caps.map((c) => c.o), end: BODY_END };
+window.SPOTS = spots.map((sp) => [sp.label, +sp.o.toFixed(2)]).concat(notes.map((nt) => [nt.title, +nt.o.toFixed(2)]));
+window.POSTER_AT = IMPACT + 1.9; // the title, the tagline and the tabs in
+window.MUSIC = { duration: DURATION, beat: BEAT, questions: QUESTIONS, montage: MONTAGE, riser: RISER, impact: IMPACT, main: OPEN, captions: caps.map((c) => c.o), end: BODY_END };
 await Promise.all([...document.images].map((i) => i.decode().catch(() => {})));
 await show($('#a'), take.frames[0].f);
 await document.fonts.ready;

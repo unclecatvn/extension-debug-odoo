@@ -1,11 +1,12 @@
 // npm run intro: the intro film, in two steps (or one of them: node tools/intro.mjs record | render).
-//   record  plays a real session with the extension on the Odoo of tools/screenshots.mjs (Sales + CRM demo data): the
-//           panel opened, fields filtered, an RPC edited and sent again, code typed and run, a user's access explained,
-//           a request profiled. Every frame Chrome paints is kept (2880×1800), with a log: where the camera looks,
-//           the captions, the waits to cut.
-//   render  edits that take in tools/intro.html (the window on a dark stage, a camera following the action, captions)
-//           frame by frame, scores it (tools/score.mjs, on its cues), then ffmpeg encodes website/intro.mp4 (1080p60),
-//           its poster website/intro-poster.jpg and store/odoo-debug-intro.mp4 (1440p60 master, not committed).
+//   record  plays a real session with the built extension (dist/: npm run build) on the Odoo of tools/compose.yml
+//           (Sales + CRM demo data): the panel opened, fields filtered, an RPC edited and sent again in its detail,
+//           code typed and run, a user's access explained, a request profiled and diagnosed, a technical screen opened.
+//           Every frame Chrome paints is kept (2880×1800), with a log: where the camera looks, the captions, the waits to cut.
+//   render  edits that take in tools/intro.html (the questions, a montage, the title, then the window on a dark stage
+//           with a camera following the action and captions) frame by frame, scores it (tools/score.mjs, on its cues),
+//           then ffmpeg encodes website/intro.mp4 (1080p60), its poster website/intro-poster.jpg and
+//           store/odoo-debug-intro.mp4 (1440p60 master, not committed).
 //   node tools/intro.mjs render --stills 4,12.5   only those instants, as PNGs next to the take (to check an edit)
 import { spawn, execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
@@ -14,9 +15,9 @@ import { writeFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { tmpdir } from 'node:os';
 import puppeteer from 'puppeteer';
-import { ODOO, EXT, rpc, openForm } from '../e2e/odoo.mjs';
+import { ODOO, EXT, rpc, openForm, isPanel, settingsOf } from './odoo.mjs';
 import { score } from './score.mjs';
-import { sqlSummary, diagnose } from '../extension/src/features/perf/logic.js';
+import { sqlSummary, parseSql, diagnose } from '../src/features/perf/perf.logic.ts';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const TAKE = join(tmpdir(), 'odoo-debug-take'); // frames/NNNNN.jpg + take.json
@@ -34,16 +35,16 @@ async function record() {
   const VW = 1440, VH = 900;
   const browser = await puppeteer.launch({ enableExtensions: [EXT], pipe: true, defaultViewport: { width: VW, height: VH, deviceScaleFactor: 2 } });
   const page = await browser.newPage();
-  page.on('dialog', (d) => d.accept()); // Perf: "Enable profiling?"
-  const worker = await (await browser.waitForTarget((t) => t.type() === 'service_worker' && t.url().startsWith('chrome-extension://'))).worker();
-  const settings = (s) => worker.evaluate((s) => chrome.storage.local.set(s), s);
+  page.on('dialog', (d) => d.accept());
+  await browser.defaultBrowserContext().overridePermissions(ODOO, ['clipboard-read', 'clipboard-write', 'clipboard-sanitized-write']);
+  const settings = await settingsOf(browser);
   await settings({ lang: 'en', theme: 'light' });
 
   await openForm(browser, page, 'action-base.action_res_users/2');
-  const [, soId] = await rpc(page, '/web/dataset/call_kw', { model: 'ir.model.data', method: 'check_object_reference', args: ['sale', 'sale_order_16'], kwargs: {} });
+  const [, soId] = await rpc(page, '/web/dataset/call_kw', { model: 'ir.model.data', method: 'check_object_reference', args: ['sale', 'sale_order_7'], kwargs: {} });
   await page.goto(`${ODOO}/odoo/action-sale.action_orders/${soId}`);
   await page.waitForSelector('.o_form_view');
-  await page.evaluate(() => { sessionStorage.clear(); localStorage.removeItem('odoo-debug-pos'); });
+  await page.evaluate(() => { sessionStorage.clear(); for (const k of Object.keys(localStorage)) if (k.startsWith('odoo-debug')) localStorage.removeItem(k); });
 
   // ---------- the pointer: a cursor drawn in the page, gliding along a curve; the real mouse follows it. In every
   // document the page loads, where the last one left it (sessionStorage). ----------
@@ -87,12 +88,16 @@ async function record() {
   await sleep(2000); // the chatter, the avatars
 
   // ---------- the director's log ----------
-  const log = { viewport: [VW, VH], cams: [], captions: [], cuts: [], fast: [], highlights: [] };
+  const log = { viewport: [VW, VH], cams: [], captions: [], cuts: [], fast: [], highlights: [], spots: [], notes: [] };
   /** The camera frames `r` ({ x, y, w, h } in page px; null: the whole page) from now on. */
   const cam = (r) => log.cams.push({ t: now(), r });
   const caption = (title, text) => log.captions.push({ t: now(), title, text });
   /** A moment worth a close-up in the opening montage: `r` (page px) a little later, once it has settled. */
-  const highlight = (r, settle = .7) => log.highlights.push({ t: now() + settle, r });
+  const highlight = (r, label, settle = .7) => log.highlights.push({ t: now() + settle, r, label });
+  /** The answer on screen: a glowing outline around `r` (page px) with `label`, for `dur` s. */
+  const spot = (r, label, dur = 2.8) => log.spots.push({ t: now() + .15, r, label, dur });
+  /** A card beside the window: `title` and some lines of text (what was copied…), for `dur` s. */
+  const note = (title, text, dur = 3.2) => log.notes.push({ t: now(), title, text, dur });
   /** Waits for `p`; a long wait is cut from the film. */
   async function wait(p) {
     const a = now();
@@ -115,6 +120,25 @@ async function record() {
     const f = await (await panel.frameElement()).boundingBox();
     return { x: f.x + r.x, y: f.y + r.y, w: r.w, h: r.h };
   };
+  /** The box (page px) of the row holding `text` in `scope` (the deepest element with it, then its tr / li). `center`:
+   * scrolled to the middle (the first of a part); else into sight only when it is not, so a box measured before stays
+   * right. `last`: the last one found. */
+  const boxOfText = async (scope, text, last = false, center = false) => {
+    const r = await panel.evaluate((scope, text, last, center) => {
+      const has = (n) => (n.textContent || '').toLowerCase().includes(text.toLowerCase());
+      const deepest = [...document.querySelectorAll(`${scope} *`)].filter((n) => has(n) && ![...n.children].some(has));
+      const n = (last ? deepest.at(-1) : deepest[0]);
+      if (!n) return null;
+      const row = n.closest('tr, li') || n;
+      row.scrollIntoView({ block: center ? 'center' : 'nearest' });
+      const b = row.getBoundingClientRect();
+      return { x: b.x, y: b.y, w: b.width, h: b.height };
+    }, scope, text, last, center);
+    if (!r) throw new Error(`text not found: ${scope} ${text}`);
+    const f = await (await panel.frameElement()).boundingBox();
+    return { x: f.x + r.x, y: f.y + r.y, w: r.w, h: r.h };
+  };
+  const pad = (b, p = 6) => ({ x: b.x - p, y: b.y - p, w: b.w + 2 * p, h: b.h + 2 * p });
   const panelBox = async () => { const f = await (await panel.frameElement()).boundingBox(); return { x: f.x, y: f.y, w: f.width, h: f.height }; };
   async function glide(x, y, ms = 650) {
     await page.evaluate((x, y, ms) => filmGlide(x, y, ms), x, y, ms);
@@ -156,26 +180,32 @@ async function record() {
   // 1. the button opens the panel, beside the page
   caption('Odoo Debug', 'A debug panel, right on the Odoo page.');
   await click(VW - 36, VH - 28, { ms: 1100, after: 0 });
-  panel = await page.waitForFrame((f) => f.url().endsWith('/src/panel/panel.html'), { timeout: 15_000 });
+  panel = await page.waitForFrame(isPanel, { timeout: 15_000 });
   await wait(panel.waitForFunction(() => document.querySelector('#status')?.textContent.includes('sale.order'), { timeout: 15_000 }));
   await sleep(300);
   const pb = await panelBox();
+  const onPanel = () => cam({ x: pb.x - 20, y: pb.y, w: pb.w + 40, h: pb.h });
   cam({ x: pb.x - 380, y: pb.y - 40, w: pb.w + 420, h: pb.h + 60 });
   await sleep(900);
 
-  // 2. Record: every field, filtered, one opened
-  caption('Record', 'Every field of the record: its type, its module, its value.');
-  await clickIn('#record details.card summary', 'Fields');
-  await wait(panel.waitForSelector('#record .card-body input[type=search]', { timeout: 15_000 }));
-  cam({ ...pb, x: pb.x - 20, w: pb.w + 40 });
-  await clickIn('#record .card-body input[type=search]');
-  await type('amount', 110);
+  // 2. Record: a field, what it is and what recomputes it
+  caption('Record', 'Every field of the record: its type, its value, where it is defined, what recomputes it.');
+  await clickIn('#record details.card[data-key=fields] summary');
+  await wait(panel.waitForSelector('#record details.card[data-key=fields] input[type=search]', { timeout: 15_000 }));
+  onPanel();
+  await clickIn('#record details.card[data-key=fields] input[type=search]');
+  await type('amount_total', 90);
+  await sleep(600);
+  await panel.$$eval('#record .list > li:not([hidden])', (lis) => lis.find((li) => li.querySelector('.name')?.textContent === 'amount_total')?.classList.add('film-pick'));
+  await clickIn('#record .list > li.film-pick .pill', null, { fx: .5 });
   await sleep(700);
-  await clickIn('#record .list > li:not([hidden]) .name', 'amount_total', { fx: .3 });
-  await sleep(1600);
+  const field = await boxOf('#record .list > li.film-pick');
+  cam({ x: field.x - 30, y: field.y - 160, w: field.w + 60, h: Math.max(field.h + 260, 420) });
+  spot(pad(field), 'stored · computed from the order lines · module sale');
+  await sleep(3200);
 
   // 3. on the page: ⌥ + click a field copies its technical name
-  caption('⌥ + click', 'Any field of the page: its technical name, copied.');
+  caption('⌥ + click', 'Any field on the page, or a change in the chatter: its technical name, copied.');
   const customer = await page.$eval('.o_field_widget[name=partner_id]', (n) => { const b = n.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height }; });
   cam({ x: customer.x - 160, y: customer.y - 110, w: 720, h: 380 });
   await glide(customer.x + 60, customer.y + customer.h / 2, 1000);
@@ -183,20 +213,47 @@ async function record() {
   await page.keyboard.down('Alt');
   await click(customer.x + 60, customer.y + customer.h / 2, { ms: 120, after: 0 });
   await page.keyboard.up('Alt');
-  await sleep(1500);
-
-  // 4. View: the inheritance of this form
-  cam({ x: pb.x - 20, y: pb.y, w: pb.w + 40, h: pb.h });
-  caption('View', 'Which module changed the form, and the arch they build.');
-  await clickIn('.tabs [data-tab="view"]', null, { ms: 900 });
-  await wait(panel.waitForSelector('#view details.card', { timeout: 15_000 }));
-  const inherited = await panel.$eval('#view details.card[data-key=inherited]', (c) => c.open);
-  if (!inherited) await clickIn('#view details.card[data-key=inherited] summary');
-  await wait(panel.waitForFunction(() => document.querySelector('#view details.card[data-key=inherited] .card-body .list'), { timeout: 15_000 }));
   await sleep(1800);
 
-  // 5. RPC: the calls live, one edited and sent again, copied as cURL
-  caption('RPC', 'Every call, live: edit it right there, send it again, copy it as cURL.');
+  // 4. View: why the customer is read-only, and which view says so
+  caption('View', 'Why is this field read-only? The condition, its value right now, and the view that set it.');
+  onPanel();
+  await clickIn('.tabs [data-tab="view"]', null, { ms: 900 });
+  await wait(panel.waitForSelector('#view details.card[data-key=field]', { timeout: 15_000 }));
+  if (!await panel.$eval('#view details.card[data-key=field]', (c) => c.open)) await clickIn('#view details.card[data-key=field] summary');
+  await clickIn('#view details.card[data-key=field] button', '⌖ Pick on Page', { after: 400 });
+  await click(customer.x + 40, customer.y + customer.h / 2, { ms: 1000, after: 0 }); // the field picked on the page
+  await wait(panel.waitForFunction(() => /state in \['cancel', 'sale'\]/.test(document.querySelector('#view details.card[data-key=field]')?.textContent || ''), { timeout: 15_000 }));
+  await sleep(300);
+  const ro = await boxOfText('#view details.card[data-key=field]', "state in ['cancel', 'sale']", false, true);
+  cam({ x: ro.x - 40, y: ro.y - 200, w: ro.w + 80, h: 460 });
+  spot(pad(ro), 'read-only: state is "sale"');
+  highlight(pad({ x: ro.x, y: ro.y - 120, w: ro.w, h: 330 }, 0), 'View');
+  await sleep(3000);
+  const story = await boxOfText('#view details.card[data-key=field]', 'view_order_form', false, true);
+  cam({ x: story.x - 40, y: story.y - 140, w: story.w + 80, h: 460 });
+  spot(pad(story), 'set by sale · view_order_form');
+  await sleep(2600);
+
+  // 5. Translations: where a text of the page comes from, and where to change it
+  caption('i18n', 'Where does a text come from? Pick it on the page: its source, and where to change it.');
+  onPanel();
+  await clickIn('.tabs [data-tab="translations"]', null, { ms: 900 });
+  await wait(panel.waitForSelector('#translations .subview-body', { timeout: 15_000 }));
+  await clickIn('#translations button', '⌖ Pick on Page', { after: 400 });
+  const orderDate = await page.$$eval('.o_form_view label', (ls) => { const l = ls.find((x) => x.textContent.trim().startsWith('Order Date')); const b = l.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height }; });
+  await click(orderDate.x + 30, orderDate.y + orderDate.h / 2, { ms: 1000, after: 0 });
+  await wait(panel.waitForFunction(() => /date_order/.test(document.querySelector('#translations .subview-body')?.textContent || ''), { timeout: 15_000 }));
+  await sleep(300);
+  await clickIn('#full', null, { ms: 800, after: 700 }); // the answer wide, full screen
+  const found = await boxOf('#translations .subview-body table.matrix');
+  cam({ x: found.x - 30, y: found.y - 140, w: found.w + 60, h: Math.max(found.h + 240, 460) });
+  spot(pad(found), 'the field label of sale.order.date_order, and the view: where to change each');
+  await sleep(3400);
+  await clickIn('#full', null, { ms: 800, after: 600 }); // back beside the page
+
+  // 6. RPC: the calls live; one opened is its request, edited and sent again right there, copied as cURL
+  caption('RPC', 'Every call, live. Edit it and send it again, right there, or copy it as cURL for the external API.');
   await clickIn('.tabs [data-tab="rpc"]');
   cam(null);
   // back to the list, then the order again: their calls show up in the log as they happen
@@ -208,128 +265,191 @@ async function record() {
   await click(...at(await boxOnPage('.o_breadcrumb .breadcrumb-item a, .o_breadcrumb a', 'Sales Orders')), { ms: 1000, after: 0 });
   await wait(page.waitForSelector('.o_list_view .o_data_row', { timeout: 15_000 }));
   await sleep(900);
-  await click(...at(await boxOnPage('.o_data_row .o_data_cell[name=name]', 'S00016'), .3), { ms: 900, after: 0 });
+  await click(...at(await boxOnPage('.o_data_row .o_data_cell[name=name]', 'S00007'), .3), { ms: 900, after: 0 });
   await wait(page.waitForSelector('.o_form_view', { timeout: 15_000 }));
-  cam({ x: pb.x - 20, y: pb.y, w: pb.w + 40, h: pb.h });
+  onPanel();
   await sleep(1300);
   await clickIn('#rpc .list > li[data-q="sale.order web_read"] .name');
   await sleep(500);
-  await wait(panel.waitForSelector('#rpc .detail .composer textarea'));
-  // the body, editable right away: `specification` cut down to four fields, typed where it starts
-  await panel.$eval('#rpc .detail .composer textarea', (t) => {
+  await wait(panel.waitForSelector('#rpc .detail form.composer textarea'));
+  // the body, editable right away: `specification` cut down to three fields, typed where it starts
+  await panel.$eval('#rpc .detail form.composer textarea', (t) => {
     const body = JSON.parse(t.value);
     delete body.params.kwargs.specification;
     t.value = JSON.stringify(body, null, 2).replace('"kwargs": {', '"kwargs": {\n      "specification": ');
     t.rows = 9;
     t.scrollTop = Math.max(0, t.value.slice(0, t.value.indexOf('"specification"')).split('\n').length * 16 - 60);
   });
-  const ta = await boxOf('#rpc .detail .composer textarea');
+  const ta = await boxOf('#rpc .detail form.composer textarea');
   cam({ x: ta.x - 20, y: ta.y - 70, w: ta.w + 40, h: ta.h + 330 });
   await click(...at(ta, .6, .55), { ms: 700, after: 150 });
-  await panel.$eval('#rpc .detail .composer textarea', (t) => { const at = t.value.indexOf('"specification": ') + 17; t.setSelectionRange(at, at); });
+  await panel.$eval('#rpc .detail form.composer textarea', (t) => { const at = t.value.indexOf('"specification": ') + 17; t.setSelectionRange(at, at); });
   await type('{"name": {}, "state": {}, "amount_total": {}},', 45);
   await sleep(300);
-  await clickIn('#rpc .detail .composer button[type=submit]');
-  await wait(panel.waitForFunction(() => document.querySelector('#rpc .detail .composer .answer')?.textContent.includes('HTTP'), { timeout: 15_000 })); // the recorded answer, replaced
+  await clickIn('#rpc .detail form.composer button[type=submit]');
+  await wait(panel.waitForFunction(() => document.querySelector('#rpc .detail form.composer .answer')?.textContent.includes('HTTP'), { timeout: 15_000 })); // the recorded answer, replaced
   log.posterAt = now();
-  highlight(await boxOf('#rpc .detail .composer'));
-  await sleep(1200);
-  await clickIn('#rpc .detail .composer .btn', 'Copy as cURL', { after: 1100 });
+  const answer = await boxOf('#rpc .detail form.composer .answer');
+  spot(pad({ ...answer, h: Math.min(answer.h, 220) }), 'sent again: only the three fields asked');
+  highlight(await boxOf('#rpc .detail form.composer'), 'RPC');
+  await sleep(2600);
+  await page.evaluate(() => navigator.clipboard.writeText('')).catch(() => {});
+  await clickIn('#rpc .detail form.composer .btn', 'Copy as cURL', { after: 600 });
+  const curl = await page.evaluate(() => navigator.clipboard.readText()).catch(() => '');
+  if (curl) note('Copied as cURL', curl.split('\n').slice(0, 9).join('\n'));
+  await sleep(3000);
 
-  // 6. Code: the ORM typed and run as the logged-in user
-  cam({ x: pb.x - 20, y: pb.y, w: pb.w + 40, h: pb.h });
-  caption('Code', 'The ORM in JavaScript, run as the logged-in user.');
+  // 7. Code: a change tried for real, then rolled back (Python, dry run)
+  caption('Code', 'Try a change for real, then roll it back: a Python dry run shows what it would do.');
+  onPanel();
   await clickIn('.tabs [data-tab="code"]', null, { ms: 900 });
   await wait(panel.waitForSelector('#code textarea.code', { timeout: 15_000 }));
+  await clickIn('#code .seg button', 'Python', { after: 300 });
+  await clickIn('#code .seg button', 'Dry run', { after: 300 });
   await clickIn('#code textarea.code', null, { after: 200 });
-  const code = "const orders = await env['sale.order'].search([['state', '=', 'sale']], { limit: 5 });\nreturn orders.read(['name', 'partner_id', 'amount_total']);";
+  const code = "record.order_line.write({'discount': 10})\nreturn record.read(['amount_untaxed', 'amount_total'])";
   await panel.$eval('#code textarea.code', (t) => { t.value = ''; t.dispatchEvent(new Event('input')); });
-  await type(code, 38);
+  await type(code, 40);
   await panel.$eval('#code .suggest', (s) => { s.hidden = true; }).catch(() => {});
   if (await panel.$eval('#code textarea.code', (t) => t.value) !== code) { // smart typing differed: the intended text
     await panel.$eval('#code textarea.code', (t, v) => { t.value = v; t.dispatchEvent(new Event('input')); }, code);
   }
-  await clickIn('#code .console .btn');
-  await wait(panel.waitForFunction(() => document.querySelector('#code .output table'), { timeout: 15_000 })
+  await clickIn('#code .console-acts .btn.primary');
+  await wait(panel.waitForFunction(() => document.querySelector('#code .output table'), { timeout: 20_000 })
     .catch(async (e) => { throw new Error(`${e.message}: ${await panel.$eval('#code', (c) => c.querySelector('.output')?.textContent + ' | ' + c.querySelector('textarea.code').value)}`); }));
+  await sleep(300);
   const out = await boxOf('#code .output');
   cam({ x: out.x - 20, y: out.y - 220, w: out.w + 40, h: out.h + 260 });
-  highlight({ x: out.x - 6, y: out.y - 6, w: out.w + 12, h: Math.min(out.h + 12, 330) });
-  await sleep(2200);
+  spot(pad({ ...out, h: Math.min(out.h, 260) }), 'total 1,706.00 → 1,535.40, then rolled back');
+  highlight({ x: out.x - 6, y: out.y - 6, w: out.w + 12, h: Math.min(out.h + 12, 330) }, 'Code');
+  await sleep(3600);
 
-  // 7. Security, full screen: why another user can or can't
-  caption('Security', 'Why a user can, or can\'t. Rule by rule.');
+  // 8. Security, full screen: why Marc can't open this order, and the group that would let him
+  caption('Security', 'Why can\'t Marc open this order? The rule that refuses, and the group that would let him.');
   await clickIn('#full', null, { ms: 900, after: 600 });
   cam(null);
   await clickIn('.tabs [data-tab="security"]', null, { ms: 900 });
   await wait(panel.waitForSelector('#security .user-search input', { timeout: 15_000 }));
-  await panel.$$eval('#security details.card', (cs) => cs.forEach((c) => { c.open = ['why', 'groups'].includes(c.dataset.key); }));
   const search = await boxOf('#security .user-search input');
-  cam({ x: search.x - 40, y: search.y - 60, w: 1000, h: 560 });
+  const bar = await boxOf('#security .sec-bar');
+  cam({ x: bar.x - 30, y: bar.y - 40, w: bar.w + 60, h: bar.h + 240 }); // the whole bar: whose rights, and the search
   await click(...at(search, .2), { after: 200 });
   await type('marc', 120);
-  await sleep(500);
+  await wait(panel.waitForSelector('#security .user-search .suggest:not([hidden]) li', { timeout: 15_000 }));
+  await sleep(400);
   await page.keyboard.press('Enter');
-  await wait(panel.waitForFunction(() => /Marc/.test(document.querySelector('#security .user-line')?.textContent || ''), { timeout: 15_000 }));
-  await wait(panel.waitForFunction(() => document.querySelector('#security details.card[data-key=why] .card-body')?.childElementCount
-    && !document.querySelector('#security details.card[data-key=why] .card-body > .loading'), { timeout: 20_000 }));
-  // their groups, as a tree: the given ones, what each implies
-  const groups = await wait(panel.waitForFunction(() => document.querySelector('#security details.card[data-key=groups] .card-body')?.childElementCount
-    && !document.querySelector('#security details.card[data-key=groups] .card-body > .loading'), { timeout: 20_000 }).then(() => boxOf('#security details.card[data-key=groups]')));
-  cam({ x: groups.x - 30, y: groups.y - 30, w: Math.min(groups.w + 60, 1000), h: Math.min(groups.h + 60, 560) });
-  await sleep(1900);
-  const why = await boxOf('#security details.card[data-key=why]');
-  cam({ x: why.x - 30, y: why.y - 30, w: Math.min(why.w + 60, 1100), h: Math.min(why.h + 60, 560) });
-  highlight({ x: why.x, y: why.y, w: Math.min(why.w, 1000), h: Math.min(why.h, 420) }, 1.2);
+  await wait(panel.waitForFunction(() => /Marc/.test(document.querySelector('#security .sec-bar .who')?.textContent || ''), { timeout: 15_000 }));
+  await wait(panel.waitForFunction(() => /Personal Orders/.test(document.querySelector('#security .subview table.matrix')?.textContent || ''), { timeout: 20_000 }));
+  await sleep(500);
+  const rule = await boxOfText('#security .subview table.matrix', 'Personal Orders', false, true);
+  const result = await boxOfText('#security .subview table.matrix', 'Result', true);
+  cam({ x: rule.x - 30, y: rule.y - 200, w: rule.w + 60, h: result.y + result.h - rule.y + 320 });
+  spot(pad(rule, 4), 'Personal Orders: only his own orders');
+  await sleep(2400);
+  spot(pad(result, 4), 'refused: read, write, create, delete');
+  highlight(pad({ x: rule.x, y: rule.y - 40, w: rule.w, h: result.y + result.h - rule.y + 60 }, 0), 'Security');
+  await sleep(2400);
+  await panel.$$eval('#security .subview-body table.matrix', (ts) => ts.at(-1).classList.add('film-allow')); // "To allow it"
+  const allow = await boxOfText('#security table.film-allow', 'Sales / User: All Documents', false, true);
+  cam({ x: allow.x - 30, y: allow.y - 160, w: allow.w + 60, h: 420 });
+  spot(pad(allow, 4), 'the group that would allow it');
+  await sleep(2400);
+  await clickIn('#security .subview-body button', 'Try', { ms: 800, after: 0 });
+  await wait(panel.waitForSelector('#security .trybar', { timeout: 15_000 }));
+  await sleep(800);
+  const tried = await boxOf('#security .trybar');
+  cam({ x: tried.x - 30, y: tried.y - 120, w: tried.w + 60, h: 360 });
+  spot(pad(tried, 4), 'tried, nothing written: Apply or Discard');
   await sleep(2600);
+  const now2 = await boxOfText('#security .subview table.matrix', 'Result', true, true);
+  cam({ x: now2.x - 30, y: now2.y - 260, w: now2.w + 60, h: 460 });
+  spot(pad(now2, 4), 'with it: allowed');
+  await sleep(2400);
+  await clickIn('#security .trybar button', 'Discard', { after: 400 });
 
-  // 8. Perf: a request profiled, its repeated queries
-  caption('Perf', 'A diagnosis for every request: N+1, slow SQL or Python, and where.');
+  // 9. Apps: what installing a module brings, as Odoo computes it, before the click
+  caption('Apps', 'What does installing a module bring? Odoo\'s own answer, before you click Install.');
+  cam(null);
+  await clickIn('.tabs [data-tab="apps"]', null, { ms: 900 });
+  await wait(panel.waitForSelector('#apps .searchbar input', { timeout: 15_000 }));
+  await sleep(800);
+  for (const x of await panel.$$('#apps .searchbar .facet-x')) await x.evaluate((b) => b.click()); // every module, not only the installed ones
+  await clickIn('#apps .searchbar input', null, { after: 200 });
+  await type('website_sale;', 90);
+  await sleep(700);
+  await panel.$$eval('#apps table.matrix tr[data-id]', (rs) => rs.find((r) => !r.hidden && /^website_sale ·/.test(r.querySelector('.mx-label')?.innerText.split('\n').at(-1) || ''))?.classList.add('film-pick'));
+  await clickIn('#apps table.matrix tr.film-pick .mx-label', null, { ms: 900, after: 0 });
+  await wait(panel.waitForFunction(() => /website_sale/.test(document.querySelector('#apps .groups-pane')?.textContent || ''), { timeout: 15_000 }));
+  await panel.$$eval('#apps .groups-pane details.fold', (ds) => ds.forEach((d) => { // the description folded, the dependencies open
+    const open = /^Depends/.test(d.querySelector('summary').textContent.trim());
+    if (d.open !== open) { d.open = open; d.dispatchEvent(new Event('toggle')); }
+  }));
+  await wait(panel.waitForFunction(() => /also installs/i.test(document.querySelector('#apps .groups-pane')?.textContent || ''), { timeout: 20_000 }));
+  await sleep(500);
+  const brings = await boxOfText('#apps .groups-pane', 'also installs', false, true);
+  const pane = await boxOf('#apps .groups-pane');
+  cam({ x: pane.x - 30, y: brings.y - 220, w: pane.w + 60, h: 560 });
+  spot(pad({ x: pane.x + 12, y: brings.y - 6, w: pane.w - 24, h: 150 }, 0), 'installing it also installs these, and auto-installs those');
+  highlight({ x: pane.x, y: brings.y - 200, w: pane.w, h: 420 }, 'Apps');
+  await sleep(3600);
+  await panel.$$eval('#apps .groups-pane details.fold', (ds) => { const d = ds.find((x) => /^Dependency diagram/.test(x.querySelector('summary').textContent.trim())); if (d) { d.open = true; d.dispatchEvent(new Event('toggle')); } });
+  await wait(panel.waitForSelector('#apps .groups-pane .dep-graph svg .g-node', { timeout: 20_000 }));
+  await sleep(400);
+  const graph = await boxOf('#apps .groups-pane .dep-graph');
+  cam({ x: graph.x - 30, y: graph.y - 40, w: graph.w + 60, h: Math.min(graph.h + 80, 620) });
+  await sleep(3000);
+
+  // 10. Perf: a request profiled, what to look at first, and where the time goes
+  caption('Perf', 'Why is it slow? An N+1 and the line of code running it, and where the time goes.');
   cam(null);
   await clickIn('.tabs [data-tab="perf"]', null, { ms: 900 });
-  await wait(panel.waitForSelector('#perf .card .btn', { timeout: 15_000 }));
+  await wait(panel.waitForSelector('#perf .perf-recorder .btn', { timeout: 15_000 }));
   // a cold start, as after a deployment: writing a system parameter clears Odoo's caches, so the profiled reload below
-  // shows the queries a warm server would skip (the repeated ones the diagnosis calls N+1). Before profiling starts: out
-  // of the list. The demo database only.
+  // shows the queries a warm server would skip (the repeated ones the diagnosis calls N+1). The demo database only.
   await rpc(page, '/web/dataset/call_kw/ir.config_parameter/set_param', { model: 'ir.config_parameter', method: 'set_param', args: ['odoo_debug.film', String(Date.now())], kwargs: {} });
-  await clickIn('#perf .card .btn', null, { after: 200 }); // Start profiling (the dialog is accepted)
-  await wait(panel.waitForFunction(() => document.querySelector('#perf .pill.ok'), { timeout: 15_000 }));
+  await clickIn('#perf .perf-recorder .btn', 'Start Profiling', { after: 600 });
+  if (await panel.$$eval('#perf .perf-recorder .chip', (cs) => cs.some((c) => c.textContent === '5 minutes'))) { // not allowed yet: for 5 minutes
+    await clickIn('#perf .perf-recorder .chip', '5 minutes', { after: 300 });
+  }
+  await wait(panel.waitForFunction(() => /RECORDING/.test(document.querySelector('#perf .perf-recorder')?.textContent || ''), { timeout: 15_000 }));
   // the page reloads (cut from the film): its requests are profiled; the panel comes back, full screen, on this tab
   await wait((async () => {
     await page.reload();
     await page.waitForSelector('.o_form_view');
-    panel = await page.waitForFrame((f) => f.url().endsWith('/src/panel/panel.html'), { timeout: 15_000 });
-    await panel.waitForSelector('#perf .card .btn', { timeout: 15_000 });
+    panel = await page.waitForFrame(isPanel, { timeout: 15_000 });
+    await panel.waitForSelector('#perf .perf-recorder', { timeout: 15_000 });
     await sleep(1500); // the chatter's requests
   })());
-  await clickIn('#refresh', null, { after: 0 });
-  // the request worth showing: the one the panel will diagnose as an N+1 (its most repeated query), else the slowest.
-  // Read here with the panel's own logic; through /ir.profile/ in the route, so the panel leaves this read out of its list.
-  await wait(panel.waitForFunction(() => document.querySelectorAll('#perf .list > li').length > 3, { timeout: 20_000 }));
-  const ids = await panel.$$eval('#perf .list > li', (lis) => lis.map((li) => +li.title.match(/^#(\d+)/)?.[1]).filter(Boolean));
+  await clickIn('#perf .toolbar .chip', '⟳', { after: 0 });
+  await wait(panel.waitForFunction(() => document.querySelectorAll('#perf table.matrix tr[data-id]').length > 3, { timeout: 20_000 }));
+  // the request worth showing: the one the panel diagnoses as an N+1 (its most repeated query), else the slowest. Read
+  // here with the panel's own logic; through /ir.profile/ in the route, so the panel leaves this read out of its list.
+  const ids = await panel.$$eval('#perf table.matrix tr[data-id]', (rs) => rs.map((r) => +r.dataset.id));
   const profiles = await rpc(page, '/web/dataset/call_kw/ir.profile/read', { model: 'ir.profile', method: 'read', args: [ids, ['duration', 'sql']], kwargs: {} });
   const rated = profiles.map((p) => {
-    const sum = sqlSummary(JSON.parse(p.sql || '[]'));
-    return { id: p.id, kind: diagnose(p.duration, sum), n: sum.dups[0]?.count || 0, duration: p.duration };
+    const sum = sqlSummary(parseSql(p.sql));
+    return { id: p.id, kind: diagnose(p.duration, sum), n: sum.repeated[0]?.count || 0, duration: p.duration };
   });
   const best = rated.filter((r) => r.kind === 'n1').sort((a, b) => b.n - a.n)[0] || rated.sort((a, b) => b.duration - a.duration)[0];
   console.log('perf pick:', JSON.stringify(best));
-  await panel.$$eval('#perf .list > li', (lis, id) => lis.find((li) => li.title.startsWith(`#${id} `) || li.title === `#${id}`)?.classList.add('film-pick'), best.id);
-  const r1 = await boxOf('#perf .list > li.film-pick .name');
+  const r1 = await boxOf(`#perf table.matrix tr[data-id="${best.id}"] .mx-label`);
   cam({ x: r1.x - 40, y: r1.y - 120, w: 1300, h: 720 });
   await click(...at(r1, .3), { ms: 900, after: 0 });
-  await wait(panel.waitForSelector('#perf .pane .perf-detail', { timeout: 15_000 }));
-  const pane = await boxOf('#perf .pane');
-  cam({ x: pane.x - 30, y: pane.y - 20, w: Math.min(pane.w + 60, 1000), h: 600 }); // the diagnosis, the SQL / Python split
-  await sleep(2200);
-  if (await panel.$('#perf .pane .perf-detail .seg button')) { // the repeated queries: the N+1, in words
-    await clickIn('#perf .pane .perf-detail .seg button', 'Repeated Queries', { ms: 800 });
-  }
-  highlight({ x: pane.x, y: pane.y, w: Math.min(pane.w, 900), h: 520 }, 1);
-  await sleep(2600);
+  await wait(panel.waitForSelector('#perf .groups-pane .perf-diag', { timeout: 15_000 }));
+  await sleep(400);
+  const diag = await boxOf('#perf .groups-pane .perf-diag');
+  cam({ x: diag.x - 30, y: diag.y - 200, w: diag.w + 60, h: 520 });
+  spot(pad(diag, 4), best.kind === 'n1' ? `one query run ${best.n}×: the line that loops` : 'what to look at first');
+  highlight({ x: diag.x - 10, y: diag.y - 160, w: diag.w + 20, h: 420 }, 'Perf');
+  await sleep(3400);
+  const byCode = await boxOfText('#perf .groups-pane', 'By code: where the time goes', false, true);
+  const hot = await boxOf('#perf .groups-pane details.fold[open] table.matrix');
+  cam({ x: hot.x - 30, y: byCode.y - 40, w: hot.w + 60, h: Math.min(hot.y + hot.h - byCode.y + 80, 560) });
+  spot(pad({ ...hot, h: Math.min(hot.h, 200) }, 4), 'the time, function by function of the modules');
+  await sleep(3200);
 
-  // 9. Menus: the technical screens, one click away; the page opens the one picked
-  caption('Menus', 'The technical screens, one click away: models, views, rules, crons…');
+  // 11. Menus: the technical screens, one click away; the page opens the one picked
+  caption('Menus', 'Models, views, record rules, crons… the technical screens, one click away.');
   cam(null);
   await clickIn('.tabs [data-tab="menus"]', null, { ms: 900 });
   await wait(panel.waitForSelector('#menus .list.menus li', { timeout: 15_000 }));
@@ -341,7 +461,7 @@ async function record() {
   cam(null);
   await sleep(2200);
 
-  // 10. themes, then the whole page
+  // 12. themes, then the whole page
   caption('Yours', 'Odoo\'s light or dark, or an editor theme. English or Tiếng Việt.');
   cam(null);
   await glide(VW * .6, VH * .55, 900);
@@ -380,6 +500,7 @@ async function render() {
   const only = process.argv.includes('--stills') ? process.argv[process.argv.indexOf('--stills') + 1].split(',').map(Number) : null;
   if (only) {
     console.log(`duration ${duration.toFixed(2)} s, poster at ${posterAt.toFixed(2)} s, captions ${JSON.stringify(await page.evaluate(() => window.CAPS))}`);
+    console.log(`spots ${JSON.stringify(await page.evaluate(() => window.SPOTS))}`);
     for (const t of only) {
       await page.evaluate((t) => window.renderAt(t), t);
       await writeFile(join(TAKE, `still-${t}.png`), await page.screenshot());

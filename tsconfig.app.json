@@ -1,0 +1,13 @@
+{
+  // app: the extension pages (panel with its tabs, popup) and what they use. DOM and every chrome.* API.
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "types": ["chrome"],
+    "declarationDir": ".tsbuild/app",
+    "tsBuildInfoFile": ".tsbuild/app.tsbuildinfo"
+  },
+  "include": ["src/entrypoints/panel", "src/entrypoints/popup", "src/features", "src/ui", "src/odoo", "src/extension", "src/i18n", "src/types/assets.d.ts"],
+  "exclude": ["src/**/*.injected.ts", "src/ui/template.ts"],
+  "references": [{ "path": "./tsconfig.contracts.json" }, { "path": "./tsconfig.dom.json" }, { "path": "./tsconfig.page.json" }]
+}

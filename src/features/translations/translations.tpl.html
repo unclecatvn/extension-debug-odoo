@@ -1,0 +1,88 @@
+<!-- features/translations/translations.*.ts: the Translations tab (styles: ui/panel.css, "Translations tab").
+     Five views as tables: find a text's source · this record · this view · modules (.po) · languages.
+     data-ref: filled by the code, text only. -->
+
+<!-- A view: the view switch, then its content. -->
+<template data-tpl="view">
+  <div class="subview" data-ref="view"><div class="row subview-head" data-ref="head"></div><div class="subview-body" data-ref="body"></div></div>
+</template>
+
+<!-- ① A text to find: typed, or clicked on the page. -->
+<template data-tpl="find-bar">
+  <form class="row find-bar" data-ref="form">
+    <input type="search" data-ref="input" placeholder="A text shown on the page, e.g. Confirm Order" aria-label="A text shown on the page, e.g. Confirm Order" data-i18n="placeholder,aria-label" spellcheck="false">
+    <button type="submit" class="btn" data-ref="go" data-i18n="text">Find</button>
+    <button type="button" class="chip" data-ref="pick" title="Click a text on the Odoo page (Esc to cancel)" data-i18n="text,title">⌖ Pick on Page</button>
+  </form>
+</template>
+
+<!-- ② ③ A row opened: one input per language, then Save. -->
+<template data-tpl="editor">
+  <form class="editor-form" data-ref="form">
+    <div class="editor-source" data-ref="source"></div>
+    <div class="editor-fields" data-ref="fields"></div>
+    <div class="row"><button type="submit" class="btn" data-ref="save" data-i18n="text">Save Translations</button><span class="error" data-ref="error"></span></div>
+  </form>
+</template>
+<template data-tpl="editor-field">
+  <label class="editor-field"><span class="mono" data-ref="lang"></span><textarea rows="1" data-ref="input" spellcheck="false"></textarea></label>
+</template>
+
+<!-- ④ The modules chosen (search the installed ones, click to add), the languages, the actions. -->
+<template data-tpl="module-picker">
+  <div class="mod-chooser" data-ref="root">
+    <div class="row">
+      <span class="user-search grow"><input type="search" data-ref="input" placeholder="Add a module: name or title…" aria-label="Add a module: name or title…" data-i18n="placeholder,aria-label" spellcheck="false" autocomplete="off"><ul class="suggest" role="listbox" data-ref="list" hidden></ul></span>
+    </div>
+    <div class="row chips" data-ref="chips"></div>
+  </div>
+</template>
+<template data-tpl="suggest-item">
+  <li role="option" data-ref="item"><span class="name" data-ref="name"></span><span class="muted" data-ref="meta"></span></li>
+</template>
+<template data-tpl="import-form">
+  <form class="import-form" data-ref="form">
+    <div class="row">
+      <input type="file" accept=".po,.pot" data-ref="file" aria-label=".po file" data-i18n="aria-label">
+      <select data-ref="lang" aria-label="Language of the file" data-i18n="aria-label"></select>
+      <label class="check"><input type="checkbox" data-ref="overwrite"> <span data-i18n="text">Replace the existing translations</span></label>
+      <button type="submit" class="btn" data-ref="go" data-i18n="text">Import</button>
+    </div>
+    <div data-ref="out"></div>
+  </form>
+</template>
+<template data-tpl="option">
+  <option data-ref="option"></option>
+</template>
+
+<!-- Small pieces. -->
+<template data-tpl="toolbar">
+  <div class="toolbar" data-ref="bar"></div>
+</template>
+<template data-tpl="count">
+  <span class="muted" data-ref="text"></span>
+</template>
+<template data-tpl="box">
+  <div data-ref="box"></div>
+</template>
+<template data-tpl="row">
+  <div class="row" data-ref="row"></div>
+</template>
+<template data-tpl="button">
+  <button type="button" class="btn" data-ref="button"></button>
+</template>
+<template data-tpl="chip">
+  <button type="button" class="chip" data-ref="button"></button>
+</template>
+<template data-tpl="sub-title">
+  <h4 class="story-title" data-ref="title"></h4>
+</template>
+<template data-tpl="text">
+  <span data-ref="text"></span>
+</template>
+<template data-tpl="plain-list">
+  <ul class="plain" data-ref="list"></ul>
+</template>
+<template data-tpl="plain-item">
+  <li data-ref="item"></li>
+</template>

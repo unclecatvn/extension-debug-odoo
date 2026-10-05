@@ -1,0 +1,190 @@
+<!-- ui/components.ts: the panel's small components (styles: panel.css). data-ref: the elements the code fills, with text only.
+     data-i18n: translated on first use (npm run i18n extracts it). -->
+
+<!-- A short label: a type, a state, a count. Kind (ok, err, med, info, accent…) added by the code. -->
+<template data-tpl="pill">
+  <span class="pill" data-ref="pill"></span>
+</template>
+
+<!-- Nothing to show, and why. -->
+<template data-tpl="empty">
+  <div class="empty" data-ref="text"></div>
+</template>
+
+<!-- JSON or raw text, as it is. -->
+<template data-tpl="pre">
+  <pre data-ref="text"></pre>
+</template>
+
+<!-- A collapsible section, closed until its summary is clicked. -->
+<template data-tpl="details">
+  <details data-ref="details"><summary data-ref="summary"></summary></details>
+</template>
+
+<!-- An error: its message, and the server traceback when there is one (removed otherwise). -->
+<template data-tpl="error">
+  <div class="error">
+    <span data-ref="message"></span>
+    <details data-ref="trace"><summary data-i18n="text">Traceback</summary><pre data-ref="traceback"></pre></details>
+  </div>
+</template>
+
+<!-- Key / value list; one kv-row per entry. -->
+<template data-tpl="kv">
+  <dl class="kv" data-ref="list"></dl>
+</template>
+<template data-tpl="kv-row">
+  <div class="kv-row"><dt data-ref="key"></dt><dd data-ref="value"></dd></div>
+</template>
+
+<!-- A field name, model, xmlid…: clicking copies it (✓ for a second). Extra classes added by the code. -->
+<template data-tpl="copy">
+  <button type="button" class="copy" data-ref="button" title="Click to copy" data-i18n="title"></button>
+</template>
+
+<!-- Waiting for an answer. -->
+<template data-tpl="loading">
+  <div class="loading" data-i18n="text">Loading…</div>
+</template>
+
+<!-- Column names of a .list, shown only when the list is laid out as a table (wide panel, see panel.css). -->
+<template data-tpl="list-head">
+  <div class="list-head" aria-hidden="true"><span data-ref="main"></span><span data-ref="desc"></span></div>
+</template>
+
+<!-- What an expandable row shows when opened (lists.ts → expandable), built the first time. -->
+<template data-tpl="row-detail">
+  <div class="detail" data-ref="detail"></div>
+</template>
+
+<!-- A list of expandable rows with a pane beside it (lists.ts → masterDetail): the list goes first. -->
+<template data-tpl="master-detail">
+  <div class="master-detail" data-ref="wrap"><aside class="pane" data-ref="pane"></aside></div>
+</template>
+
+<!-- A tab's collapsible card (cards.ts → block): closed until its title is clicked, its body built on first opening. -->
+<template data-tpl="block">
+  <details class="card" data-ref="card"><summary><span class="part-no" data-ref="no" hidden></span><h3 data-ref="title"></h3></summary><div class="card-body" data-ref="body"></div></details>
+</template>
+
+<!-- A tab's only card (cards.ts → card): no title, its body built right away. -->
+<template data-tpl="card">
+  <div class="card"><div class="card-body" data-ref="body"></div></div>
+</template>
+
+<!-- Search box of a filtered list (cards.ts → filterBox); placeholder set by the code. -->
+<template data-tpl="filter">
+  <input type="search" data-ref="input">
+</template>
+
+<!-- Opens /odoo/<path> of the inspected Odoo in a new tab (components.ts → odooLink). -->
+<template data-tpl="odoo-link">
+  <a class="btn" target="_blank" rel="noopener" data-ref="link">↗</a>
+</template>
+
+<!-- A block of code to read (code.ts → xmlCode): one code-line per line, its number then its tokens. -->
+<template data-tpl="code">
+  <div class="code" data-ref="code" tabindex="0"></div>
+</template>
+<template data-tpl="code-line">
+  <div class="code-line" data-ref="line"><span class="ln" data-ref="n"></span><span class="src" data-ref="src"></span></div>
+</template>
+<!-- A tag quoted in a line of text (code.ts → xmlInline). -->
+<template data-tpl="code-inline">
+  <code class="code-inline" data-ref="code"></code>
+</template>
+<!-- One coloured token (tok-* classes: panel.css, they follow the theme). -->
+<template data-tpl="tok">
+  <span data-ref="tok"></span>
+</template>
+
+<!-- A JSON value to read (json-view.ts): a tree whose arrays and objects fold, coloured like code (tok-* classes). -->
+<template data-tpl="json">
+  <div class="json" data-ref="json"></div>
+</template>
+<!-- An array or object: its key, its bracket, its size; folded, "…]"; open, its entries then its closing bracket. -->
+<template data-tpl="json-branch">
+  <details class="json-branch" data-ref="branch">
+    <summary><span data-ref="key"></span><span class="tok-punct" data-ref="open"></span><span class="json-count" data-ref="count"></span><span class="json-preview json-folded" data-ref="preview"></span><span class="tok-punct json-folded" data-ref="folded"></span></summary>
+    <div class="json-children" data-ref="children"></div>
+    <div class="json-close"><span class="tok-punct" data-ref="close"></span></div>
+  </details>
+</template>
+<!-- A scalar (or an empty array / object), with its key. -->
+<template data-tpl="json-leaf">
+  <div class="json-leaf" data-ref="leaf"></div>
+</template>
+<!-- After the first entries of a long array: show the next ones. -->
+<template data-tpl="json-more">
+  <button type="button" class="chip json-more" data-ref="button"></button>
+</template>
+
+<!-- A part of a tab told as a story (parts.ts → part), folded by its title: number, title, a one-line summary, its tools (segmented control,
+     search), which work folded too and don't fold it. -->
+<template data-tpl="part">
+  <details class="card part" data-ref="part">
+    <summary class="part-head">
+      <span class="part-no" data-ref="no"></span>
+      <h3 data-ref="title"></h3>
+      <span class="muted part-sub" data-ref="sub"></span>
+      <span class="spacer"></span>
+      <span class="part-tools" data-ref="tools"></span>
+    </summary>
+    <div class="card-body" data-ref="body"></div>
+  </details>
+</template>
+
+<!-- Segmented control (parts.ts → segmented): one button per option. -->
+<template data-tpl="seg">
+  <div class="seg" role="radiogroup" data-ref="seg"></div>
+</template>
+<template data-tpl="seg-option">
+  <button type="button" role="radio" aria-checked="false" data-ref="button"></button>
+</template>
+
+<!-- Why something is missing (rights), or a hint (parts.ts → note). -->
+<template data-tpl="note">
+  <div class="note" data-ref="text"></div>
+</template>
+
+<!-- A Python expression to read (domain-view.ts → pyCode): coloured tokens, lines kept. -->
+<template data-tpl="code-plain">
+  <pre class="code-plain" data-ref="code"></pre>
+</template>
+<!-- An evaluated domain as a tree (domain-view.ts → domainView): all of / any of / not, then its terms; a term: field,
+     operator, value. -->
+<template data-tpl="dom-group">
+  <div class="dom-group" data-ref="group"><span class="dom-op" data-ref="op"></span><div class="dom-children" data-ref="children"></div></div>
+</template>
+<template data-tpl="dom-leaf">
+  <div class="dom-leaf" data-ref="leaf"><code data-ref="code"></code></div>
+</template>
+
+<!-- The panel's tooltip (tooltip.ts): one, shown at once over an element with data-tip. -->
+<template data-tpl="tooltip">
+  <div class="tooltip" role="tooltip" data-ref="tip" hidden></div>
+</template>
+
+<!-- A table (matrix.ts): a first column naming the row, then one column per operation (or per user). Sections group
+     rows under a title; a row opens its detail below it. -->
+<template data-tpl="matrix">
+  <table class="matrix"><thead><tr data-ref="head"><th data-ref="first"></th></tr></thead></table>
+</template>
+<template data-tpl="mx-th">
+  <th class="c" data-ref="cell"></th>
+</template>
+<template data-tpl="mx-section">
+  <tbody data-ref="body"><tr class="mx-section" data-ref="row"><th data-ref="title"><span data-ref="text"></span><span class="mx-note" data-ref="note"></span></th></tr></tbody>
+</template>
+<template data-tpl="mx-row">
+  <tr data-ref="row"><td class="mx-label" data-ref="label"><div class="row" data-ref="main"></div><div class="meta" data-ref="sub"></div></td></tr>
+</template>
+<template data-tpl="mx-cell">
+  <td class="c" data-ref="cell"></td>
+</template>
+<template data-tpl="mx-detail">
+  <tr class="mx-detail" data-ref="row"><td data-ref="cell"></td></tr>
+</template>
+<template data-tpl="sym">
+  <span class="sym" data-ref="sym"></span>
+</template>

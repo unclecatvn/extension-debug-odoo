@@ -1,0 +1,20 @@
+{
+  // Options every context shares. Each tsconfig.<context>.json adds what that context may use (lib / types) and the
+  // projects it imports from (references). tsc never emits JavaScript (esbuild does, scripts/build.ts): the declarations
+  // that project references need go to .tsbuild/, never shipped. Erasable syntax only: Node runs tests and scripts as is.
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "composite": true,
+    "emitDeclarationOnly": true
+  }
+}

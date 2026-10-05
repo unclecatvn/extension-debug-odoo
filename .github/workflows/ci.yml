@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches-ignore: [main] # main runs CI through release.yml
+    branches-ignore: [main, ts] # main and ts run CI through release.yml
   pull_request:
   workflow_call:
 
@@ -13,11 +13,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Syntax
-        run: find extension/src tools -name '*.js' -o -name '*.mjs' | xargs -n1 node --check
-      - name: Manifest
-        run: node -e "JSON.parse(require('fs').readFileSync('extension/manifest.json'))"
-      - name: Tests
+          cache: npm
+      - run: npm ci
+      - name: Type check (TypeScript 7, one project per execution context)
+        run: npm run typecheck
+      - name: "Type check with TypeScript 5.9 too (what editors run: VS Code bundles TS 5)"
+        run: rm -rf .tsbuild && npx --yes -p typescript@5.9 tsc -b && rm -rf .tsbuild
+      - name: Unit tests
         run: npm test
+      - name: Build
+        run: npm run build
+      - name: Page functions are self-contained
+        run: npm run check:page
+      - name: No markup in .ts files
+        run: npm run check:markup
+      - name: Imports follow the dependency direction
+        run: npm run check:imports
       - name: i18n up to date
-        run: npm run i18n && git diff --exit-code extension/i18n/
+        run: npm run i18n && git diff --exit-code static/i18n/

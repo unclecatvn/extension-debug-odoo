@@ -133,25 +133,37 @@
   @media (max-width: 900px) { .strip { grid-template-columns: 1fr 1fr; } .strip > div:nth-child(3) { border-left: 0; } .strip > div:nth-child(n+3) { border-top: 1px solid var(--line); } }
   @media (max-width: 560px) { .strip { grid-template-columns: 1fr; } .strip > div { border-left: 0; border-top: 1px solid var(--line); padding: 24px 16px; } .strip > div:first-child { border-top: 0; } }
 
-  /* Features: tab list on the left (active one expands), screenshot on the right */
-  .feat { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 56px; align-items: center; margin-top: 48px; }
-  .feat-list { display: flex; flex-direction: column; border-left: 1px solid var(--line); }
-  .item { position: relative; padding: 16px 0 16px 24px; }
-  .item::before { content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 2px; background: transparent; transition: background .2s; }
-  .item:has([aria-selected="true"])::before { background: linear-gradient(var(--brand), var(--accent)); }
-  .item button { display: block; width: 100%; padding: 0; border: 0; background: none; text-align: left; color: inherit; font: inherit; cursor: pointer; }
-  .item .t { display: block; font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin-bottom: 4px; }
-  .item .h { display: block; font-size: 19px; font-weight: 600; letter-spacing: -.02em; color: var(--muted); transition: color .15s; }
-  .item button:hover .h, .item [aria-selected="true"] .h { color: var(--text); }
-  .item [aria-selected="true"] .t { color: var(--brand); }
-  .item .panel { display: none; }
-  .item [aria-selected="true"] + .panel { display: block; }
-  .panel ul { list-style: none; padding: 0; margin: 12px 0 0; }
-  .panel li { position: relative; padding: 5px 0 5px 20px; color: var(--muted); font-size: 15px; }
-  .panel li::before { content: ""; position: absolute; left: 2px; top: 14px; width: 6px; height: 6px; border-radius: 2px; background: var(--brand); }
-  .feat-shots { position: sticky; top: 96px; }
-  .feat-shots .window[hidden] { display: none; }
-  @media (max-width: 900px) { .feat { grid-template-columns: 1fr; gap: 32px; } .feat-shots { position: static; } }
+  /* Features: a bento of the nine tabs, each the question it answers and a close-up of the answer (click: the whole screen) */
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px;
+    grid-template-areas: "perf perf sec" "view rpc sec" "apps apps menus" "record code menus" "i18n i18n i18n"; }
+  .tile { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden;
+    transition: border-color .2s, transform .2s, box-shadow .2s; }
+  .tile:hover { border-color: var(--hover-line); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .tile-text { padding: 22px 24px 16px; }
+  .tile-tab { display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
+  .tile-tab i { width: 16px; height: 16px; background: currentColor; mask: var(--icon) center / contain no-repeat; -webkit-mask: var(--icon) center / contain no-repeat; }
+  .tile h3 { margin: 10px 0 6px; font-size: 21px; font-weight: 600; letter-spacing: -.02em; line-height: 1.25; text-wrap: balance; }
+  .tile p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; text-wrap: pretty; }
+  .tile-shot { position: relative; flex: 1; display: block; min-height: 200px; margin: 0 16px 16px; padding: 0; border: 1px solid var(--line); border-radius: 12px;
+    overflow: hidden; background: #fff; cursor: zoom-in; }
+  .tile-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left top; transition: transform .4s; }
+  .tile:hover .tile-shot img { transform: scale(1.02); }
+  .tile-shot::after { content: ""; position: absolute; inset: auto 0 0; height: 48px; background: linear-gradient(transparent, rgba(255, 255, 255, .95)); pointer-events: none; }
+  .tile-shot:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  [style*="grid-area: i18n"] .tile-shot { min-height: 130px; }
+  :is([style*="grid-area: sec"], [style*="grid-area: menus"], [style*="grid-area: apps"], [style*="grid-area: perf"]) .tile-shot img { object-fit: contain; object-position: left top; } /* whole, never enlarged */
+  [style*="grid-area: i18n"] .tile-shot img { object-fit: contain; object-position: left top; }
+  .ic-record { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/><path d='M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8M10 9H8'/></svg>"); }
+  .ic-view { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='18' height='18' x='3' y='3' rx='2'/><path d='M3 9h18M9 21V9'/></svg>"); }
+  .ic-rpc { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4'/></svg>"); }
+  .ic-security { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/></svg>"); }
+  .ic-translations { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m5 8 6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6'/></svg>"); }
+  .ic-apps { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='7' height='7' x='3' y='3' rx='1'/><rect width='7' height='7' x='14' y='3' rx='1'/><rect width='7' height='7' x='14' y='14' rx='1'/><rect width='7' height='7' x='3' y='14' rx='1'/></svg>"); }
+  .ic-menus { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12h16M4 6h16M4 18h16'/></svg>"); }
+  .ic-perf { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>"); }
+  .ic-code { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m4 17 6-6-6-6M12 19h8'/></svg>"); }
+  @media (max-width: 900px) { .tiles { grid-template-columns: 1fr 1fr; grid-template-areas: "perf perf" "view rpc" "sec menus" "apps apps" "record code" "i18n i18n"; } }
+  @media (max-width: 600px) { .tiles { grid-template-columns: 1fr; grid-template-areas: "record" "view" "rpc" "sec" "i18n" "apps" "menus" "perf" "code"; } .tile-shot { min-height: 240px; } }
   /* Install */
   .steps { display: grid; grid-template-columns: repeat(4, 1fr); margin: 40px 0 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
   .steps li { padding: 24px; border-left: 1px solid var(--line); background: var(--surface); font-size: 15px; color: var(--muted); }
@@ -257,14 +269,14 @@
     <div class="meta"><span>Chrome · Edge · Brave</span><span data-l="en">no backend</span><span data-l="vi">không backend</span><span data-l="en">no analytics</span><span data-l="vi">không analytics</span></div>
     <div class="window">
       <div class="bar"><i></i><i></i><i></i><span>odoo debug · intro</span></div>
-      <video src="intro.mp4" poster="intro-poster.jpg" width="1920" height="1080" autoplay muted loop playsinline controls preload="auto" aria-label="89-second film: the extension used on a real Odoo, the panel opened beside a sales order, fields filtered, an RPC call edited and sent again, ORM code typed and run, a user's access explained, a request's N+1 queries."></video>
+      <video src="intro.mp4" poster="intro-poster.jpg" width="1920" height="1080" autoplay muted loop playsinline controls preload="auto" aria-label="150-second film: four questions the panel answers, then the extension used on a real Odoo, each feature with what it tells: a field and what recomputes it; why a field is read-only and which view set it; where a text comes from; an RPC call edited, sent again and copied as cURL; a change tried in a Python dry run and rolled back; why a user can't open an order, the rule refusing and a group tried; what installing a module brings; a request diagnosed as an N+1 and where its time goes; a technical screen opened from the Menus tab; the themes."></video>
     </div>
   </div>
 
   <div class="strip">
     <div><b data-l="en">Right on the page</b><b data-l="vi">Ngay trên trang</b><span data-l="en">A draggable button on every Odoo page. No DevTools, no window switching.</span><span data-l="vi">Nút kéo thả trên mọi trang Odoo. Không cần DevTools, không chuyển cửa sổ.</span></div>
     <div><b data-l="en">Isolated</b><b data-l="vi">Cô lập</b><span data-l="en">Shadow DOM + iframe: Odoo's CSS and the panel's never mix.</span><span data-l="vi">Shadow DOM + iframe: CSS của Odoo và của bảng không bao giờ lẫn nhau.</span></div>
-    <div><b data-l="en">One build, every version</b><b data-l="vi">Một bản cho mọi phiên bản</b><span data-l="en">Differences are detected at runtime, never by version numbers.</span><span data-l="vi">Khác biệt được phát hiện lúc chạy, không so số phiên bản.</span></div>
+    <div><b data-l="en">Odoo 18, 19 and 20</b><b data-l="vi">Odoo 18, 19 và 20</b><span data-l="en">One adapter per version, checked against your database on every page.</span><span data-l="vi">Mỗi phiên bản một adapter, đối chiếu với database của bạn trên từng trang.</span></div>
     <div><b data-l="en">Private</b><b data-l="vi">Riêng tư</b><span data-l="en">Talks only to your Odoo server, with your session.</span><span data-l="vi">Chỉ nói chuyện với server Odoo của bạn, bằng phiên của bạn.</span></div>
   </div>
 
@@ -272,46 +284,63 @@
     <span class="label" data-l="en">Features</span><span class="label" data-l="vi">Tính năng</span>
     <h2 data-l="en">Developer mode shows what.<br>Odoo Debug shows why.</h2>
     <h2 data-l="vi">Developer mode cho thấy cái gì.<br>Odoo Debug cho thấy vì sao.</h2>
-    <p class="sub" data-l="en">Seven tabs for what you usually dig out of the source code, the database or the server log.</p>
-    <p class="sub" data-l="vi">Bảy tab cho những thứ bạn thường phải lục trong source code, database hay log server.</p>
-    <div class="feat">
-      <div class="feat-list" role="tablist" aria-orientation="vertical">
-        <div class="item">
-          <button role="tab" id="t-record" aria-selected="true" aria-controls="w-record"><span class="t">Record</span><span class="h" data-l="en">Every field, fully explained</span><span class="h" data-l="vi">Mọi field, giải thích đầy đủ</span></button>
-          <div class="panel"><ul data-l="en"><li>xmlids, <code>noupdate</code>, who created and last updated the record</li><li>Type, value, module and storage of every field</li><li>Compute / related source, <code>groups=</code></li><li>Which fields each one triggers a recompute of</li></ul><ul data-l="vi"><li>xmlid, <code>noupdate</code>, ai tạo và ai sửa record lần cuối</li><li>Kiểu, giá trị, module, cách lưu của mọi field</li><li>Nguồn compute / related, <code>groups=</code></li><li>Field nào kích hoạt tính lại những field nào</li></ul></div>
-        </div>
-        <div class="item">
-          <button role="tab" id="t-view" aria-selected="false" aria-controls="w-view"><span class="t">View</span><span class="h" data-l="en">Who changed this form?</span><span class="h" data-l="vi">Ai đã sửa form này?</span></button>
-          <div class="panel"><ul data-l="en"><li>Inheritance tree: primary + extensions, priority, source file</li><li>Combined arch, as the webclient receives it</li><li>Action details</li><li><code>invisible</code> / <code>readonly</code> / <code>required</code> evaluated like the webclient</li></ul><ul data-l="vi"><li>Cây kế thừa: primary + extension, priority, file nguồn</li><li>Arch đã gộp, đúng như webclient nhận được</li><li>Thông tin action</li><li><code>invisible</code> / <code>readonly</code> / <code>required</code> tính đúng như webclient</li></ul></div>
-        </div>
-        <div class="item">
-          <button role="tab" id="t-rpc" aria-selected="false" aria-controls="w-rpc"><span class="t">RPC</span><span class="h" data-l="en">Every call, edited and resent</span><span class="h" data-l="vi">Mọi lời gọi, sửa và gửi lại</span></button>
-          <div class="panel"><ul data-l="en"><li>Live log of JSON-RPC and JSON-2 calls with timing</li><li>Errors with the full Python traceback</li><li>“Why was it blocked?” jumps to Security for <code>AccessError</code>s</li><li>Edit &amp; Resend any call, or a New Request; Copy as cURL</li></ul><ul data-l="vi"><li>Nhật ký trực tiếp JSON-RPC và JSON-2 kèm thời gian</li><li>Lỗi kèm đầy đủ traceback Python</li><li>“Vì sao bị chặn?” nhảy sang Security khi gặp <code>AccessError</code></li><li>Sửa &amp; Gửi lại mọi lời gọi, hoặc Request mới; Sao chép dạng cURL</li></ul></div>
-        </div>
-        <div class="item">
-          <button role="tab" id="t-code" aria-selected="false" aria-controls="w-code"><span class="t">Code</span><span class="h" data-l="en">The ORM, as the logged-in user</span><span class="h" data-l="vi">ORM, dưới quyền user đang đăng nhập</span></button>
-          <div class="panel"><ul data-l="en"><li>JavaScript with an ORM-like <code>env</code>: <code>search</code>, <code>read</code>, <code>mapped</code>, any public method</li><li>Fields read like in Python: <code>rec.partner_id.name</code></li><li>Suggestions while typing: models of the installed modules, their fields, recordset methods</li><li>Runs with the page's session: that user's ACLs, record rules and companies apply</li><li>Read-only by default; results as a table, with every call made</li></ul><ul data-l="vi"><li>JavaScript với <code>env</code> kiểu ORM: <code>search</code>, <code>read</code>, <code>mapped</code>, mọi method public</li><li>Đọc field như Python: <code>rec.partner_id.name</code></li><li>Gợi ý khi gõ: model của các module đang cài, field, method của recordset</li><li>Chạy bằng phiên của trang: áp ACL, record rule và công ty của user đó</li><li>Mặc định chỉ đọc; kết quả dạng bảng, kèm mọi lời gọi</li></ul></div>
-        </div>
-        <div class="item">
-          <div class="panel"><ul data-l="en"><li>db, version, <code>web.base.url</code>, <code>test_mode</code></li><li>Effective rights, ACLs, record rules, groups</li><li>System parameters, secrets masked</li></ul><ul data-l="vi"><li>db, version, <code>web.base.url</code>, <code>test_mode</code></li><li>Quyền thực tế, ACL, record rule, nhóm</li><li>Tham số hệ thống, giá trị bí mật được che</li></ul></div>
-        </div>
-        <div class="item">
-          <button role="tab" id="t-security" aria-selected="false" aria-controls="w-security"><span class="t">Security</span><span class="h" data-l="en">Why is this user blocked?</span><span class="h" data-l="vi">Vì sao user này bị chặn?</span></button>
-          <div class="panel"><ul data-l="en"><li>Simulate another user's rights without logging in as them</li><li>Rule by rule: which one allows, which one blocks</li><li>User risk audit, fields hidden by <code>groups=</code></li><li>Instance checks: HTTPS, cookie flags, security headers, database manager</li></ul><ul data-l="vi"><li>Giả lập quyền của user khác mà không cần đăng nhập bằng user đó</li><li>Từng rule một: rule nào cho phép, rule nào chặn</li><li>Đánh giá rủi ro user, field bị ẩn bởi <code>groups=</code></li><li>Kiểm tra instance: HTTPS, cờ cookie, security header, database manager</li></ul></div>
-        </div>
-        <div class="item">
-          <button role="tab" id="t-perf" aria-selected="false" aria-controls="w-perf"><span class="t">Perf</span><span class="h" data-l="en">Find the N+1 before your users do</span><span class="h" data-l="vi">Bắt N+1 trước khi người dùng than chậm</span></button>
-          <div class="panel"><ul data-l="en"><li>Odoo's built-in server profiler, one click to start / stop</li><li>SQL count and duration of every request</li><li>Repeated queries (N+1 suspects) and the slowest ones, with caller</li><li>Speedscope flame graph</li></ul><ul data-l="vi"><li>Profiler có sẵn của Odoo, một click để bật / tắt</li><li>Số câu SQL và thời gian của từng request</li><li>Câu lặp lại (nghi N+1) và câu chậm nhất, kèm nơi gọi</li><li>Flame graph speedscope</li></ul></div>
-        </div>
-      </div>
-      <div class="feat-shots">
-        <div class="window" id="w-record" role="tabpanel" aria-labelledby="t-record"><div class="bar"><i></i><i></i><i></i><span>Record</span></div><img src="screenshots/full-record.png" width="2880" height="1800" loading="lazy" alt="Record tab"></div>
-        <div class="window" id="w-view" role="tabpanel" aria-labelledby="t-view" hidden><div class="bar"><i></i><i></i><i></i><span>View</span></div><img src="screenshots/side-view.png" width="2880" height="1800" loading="lazy" alt="View tab"></div>
-        <div class="window" id="w-rpc" role="tabpanel" aria-labelledby="t-rpc" hidden><div class="bar"><i></i><i></i><i></i><span>RPC</span></div><img src="screenshots/side-rpc.png" width="2880" height="1800" loading="lazy" alt="RPC tab"></div>
-        <div class="window" id="w-code" role="tabpanel" aria-labelledby="t-code" hidden><div class="bar"><i></i><i></i><i></i><span>Code</span></div><img src="screenshots/side-code.png" width="2880" height="1800" loading="lazy" alt="Code tab"></div>
-        <div class="window" id="w-security" role="tabpanel" aria-labelledby="t-security" hidden><div class="bar"><i></i><i></i><i></i><span>Security</span></div><img src="screenshots/full-security.png" width="2880" height="1800" loading="lazy" alt="Security tab"></div>
-        <div class="window" id="w-perf" role="tabpanel" aria-labelledby="t-perf" hidden><div class="bar"><i></i><i></i><i></i><span>Perf</span></div><img src="screenshots/full-perf.png" width="2880" height="1800" loading="lazy" alt="Perf tab"></div>
-      </div>
+    <p class="sub" data-l="en">Nine tabs, each answering a question you would otherwise dig out of the source code, the database or the server log. Click a picture for the whole screen.</p>
+    <p class="sub" data-l="vi">Chín tab, mỗi tab trả lời một câu hỏi bạn thường phải lục trong source code, database hay log server. Bấm vào ảnh để xem cả màn hình.</p>
+    <div class="tiles">
+      <article class="tile" style="grid-area: record">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-record"></i>Record</span>
+          <h3 data-l="en">What is this field?</h3><h3 data-l="vi">Field này là gì?</h3>
+          <p data-l="en">Its type, value and module, and what recomputes it.</p><p data-l="vi">Kiểu, giá trị, module, và field nào khiến nó tính lại.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/full-record.png" data-title="Record" aria-label="Record: full screenshot"><img src="screenshots/card-record.png" loading="lazy" alt="Record tab: Its type, value and module, and what recomputes it."></button>
+      </article>
+      <article class="tile" style="grid-area: view">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-view"></i>View</span>
+          <h3 data-l="en">Why is this field read-only?</h3><h3 data-l="vi">Vì sao field này chỉ đọc?</h3>
+          <p data-l="en">The condition, its value right now, and the view that set it.</p><p data-l="vi">Điều kiện, giá trị lúc này, và view nào đặt ra.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/side-view.png" data-title="View" aria-label="View: full screenshot"><img src="screenshots/card-view.png" loading="lazy" alt="View tab: The condition, its value right now, and the view that set it."></button>
+      </article>
+      <article class="tile" style="grid-area: rpc">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-rpc"></i>RPC</span>
+          <h3 data-l="en">What did that call send?</h3><h3 data-l="vi">Lời gọi đó gửi gì?</h3>
+          <p data-l="en">Edit it and send it again right there, or copy it as cURL.</p><p data-l="vi">Sửa và gửi lại ngay tại chỗ, hoặc copy thành cURL.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/side-rpc.png" data-title="RPC" aria-label="RPC: full screenshot"><img src="screenshots/card-rpc.png" loading="lazy" alt="RPC tab: Edit it and send it again right there, or copy it as cURL."></button>
+      </article>
+      <article class="tile" style="grid-area: sec">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-security"></i>Security</span>
+          <h3 data-l="en">Why can't Marc open this order?</h3><h3 data-l="vi">Vì sao Marc không mở được đơn này?</h3>
+          <p data-l="en">The rule that refuses, and the group that would let him, tried before it is granted.</p><p data-l="vi">Rule nào chặn, nhóm nào sẽ cho phép, thử trước khi cấp thật.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/full-security.png" data-title="Security" aria-label="Security: full screenshot"><img src="screenshots/card-security.png" loading="lazy" alt="Security tab: The rule that refuses, and the group that would let him, tried before it is granted."></button>
+      </article>
+      <article class="tile" style="grid-area: i18n">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-translations"></i>i18n</span>
+          <h3 data-l="en">Where does this text come from?</h3><h3 data-l="vi">Chữ này lấy từ đâu?</h3>
+          <p data-l="en">Pick it on the page: its source, and where to change it.</p><p data-l="vi">Chọn nó trên trang: nguồn gốc, và chỗ để sửa.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/full-i18n.png" data-title="i18n" aria-label="i18n: full screenshot"><img src="screenshots/card-i18n.png" loading="lazy" alt="i18n tab: Pick it on the page: its source, and where to change it."></button>
+      </article>
+      <article class="tile" style="grid-area: apps">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-apps"></i>Apps</span>
+          <h3 data-l="en">What will this install bring?</h3><h3 data-l="vi">Cài cái này sẽ kéo theo gì?</h3>
+          <p data-l="en">Every module it installs and auto-installs, as Odoo computes it.</p><p data-l="vi">Mọi module sẽ được cài và tự cài, tính đúng như Odoo.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/full-apps.png" data-title="Apps" aria-label="Apps: full screenshot"><img src="screenshots/card-apps.png" loading="lazy" alt="Apps tab: Every module it installs and auto-installs, as Odoo computes it."></button>
+      </article>
+      <article class="tile" style="grid-area: menus">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-menus"></i>Menus</span>
+          <h3 data-l="en">Where is that technical screen?</h3><h3 data-l="vi">Màn hình kỹ thuật kia ở đâu?</h3>
+          <p data-l="en">Models, views, rules, crons… one click, no debug mode.</p><p data-l="vi">Models, views, rules, crons… một cú bấm, không cần debug mode.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/side-menus.png" data-title="Menus" aria-label="Menus: full screenshot"><img src="screenshots/card-menus.png" loading="lazy" alt="Menus tab: Models, views, rules, crons… one click, no debug mode."></button>
+      </article>
+      <article class="tile" style="grid-area: perf">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-perf"></i>Perf</span>
+          <h3 data-l="en">Why is this screen slow?</h3><h3 data-l="vi">Vì sao màn hình chậm?</h3>
+          <p data-l="en">An N+1 and the line running it, and where the time goes.</p><p data-l="vi">N+1 và dòng code gây ra, thời gian đi đâu.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/full-perf.png" data-title="Perf" aria-label="Perf: full screenshot"><img src="screenshots/card-perf.png" loading="lazy" alt="Perf tab: An N+1 and the line running it, and where the time goes."></button>
+      </article>
+      <article class="tile" style="grid-area: code">
+        <div class="tile-text"><span class="tile-tab"><i class="ic-code"></i>Code</span>
+          <h3 data-l="en">What would this change do?</h3><h3 data-l="vi">Đổi thế này thì ra sao?</h3>
+          <p data-l="en">Run it in a Python dry run: see the result, nothing is saved.</p><p data-l="vi">Chạy thử bằng Python dry run: thấy kết quả, không lưu gì.</p></div>
+        <button type="button" class="tile-shot" data-full="screenshots/side-code.png" data-title="Code" aria-label="Code: full screenshot"><img src="screenshots/card-code.png" loading="lazy" alt="Code tab: Run it in a Python dry run: see the result, nothing is saved."></button>
+      </article>
     </div>
   </section>
 
@@ -319,12 +348,13 @@
     <span class="label" data-l="en">Install</span><span class="label" data-l="vi">Cài đặt</span>
     <h2 data-l="en">Up and running in a minute</h2>
     <h2 data-l="vi">Chạy được sau một phút</h2>
-    <p class="sub" data-l="en">From the Chrome Web Store, in Chrome, Edge, Brave or any Chromium browser. It updates itself.</p>
-    <p class="sub" data-l="vi">Từ Chrome Web Store, trên Chrome, Edge, Brave hoặc trình duyệt nhân Chromium bất kỳ. Tự cập nhật.</p>
+    <p class="sub" data-l="en">From the Chrome Web Store, in Chrome, Edge, Brave or any Chromium browser. It updates itself. A version not on the store yet: its zip from the <a href="https://github.com/unclecatvn/extension-debug-odoo/releases">Releases</a>, loaded unpacked.</p>
+    <p class="sub" data-l="vi">Từ Chrome Web Store, trên Chrome, Edge, Brave hoặc trình duyệt nhân Chromium bất kỳ. Tự cập nhật. Bản chưa lên store: tải zip ở trang <a href="https://github.com/unclecatvn/extension-debug-odoo/releases">Releases</a> rồi nạp dạng giải nén.</p>
     <ol class="steps">
       <li><span class="n">01</span><span data-l="en">Open <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Odoo Debug on the Chrome Web Store</a>.</span><span data-l="vi">Mở <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Odoo Debug trên Chrome Web Store</a>.</span></li>
       <li><span class="n">02</span><span data-l="en">Click <b>Add to Chrome</b> (Edge: allow extensions from other stores first).</span><span data-l="vi">Bấm <b>Thêm vào Chrome</b> (Edge: cho phép extension từ store khác trước).</span></li>
-      <li><span class="n">03</span><span data-l="en">Open any Odoo page and click the round button.</span><span data-l="vi">Mở một trang Odoo bất kỳ và bấm vào nút tròn.</span></li>
+      <li><span class="n">03</span><span data-l="en">Open a page of an Odoo 18, 19 or 20 database, logged in, and click the round button at the bottom right, or press <b>Alt+Shift+O</b>.</span><span data-l="vi">Mở một trang của database Odoo 18, 19 hoặc 20 (đã đăng nhập), bấm nút tròn ở góc dưới bên phải, hoặc nhấn <b>Alt+Shift+O</b>.</span></li>
+      <li><span class="n">04</span><span data-l="en">The toolbar icon: Odoo's debug mode (Off / Debug / Assets), the panel in its own window, language and theme. <b>Alt+Shift+D</b> turns debug mode on or off.</span><span data-l="vi">Icon trên thanh công cụ: chế độ debug của Odoo (Off / Debug / Assets), panel trong cửa sổ riêng, ngôn ngữ và giao diện. <b>Alt+Shift+D</b> bật / tắt debug mode.</span></li>
     </ol>
   </section>
 
@@ -336,17 +366,17 @@
       <div class="card">
         <h3 data-l="en">Private by design</h3><h3 data-l="vi">Riêng tư từ thiết kế</h3>
         <ul class="check" data-l="en">
-          <li>Talks only to the Odoo server of the tab you are on, with your own session</li>
-          <li>No backend, no analytics, no tracking</li>
-          <li>The session cookie value is never read, only its flags</li>
-          <li>Odoo data only reaches the page through <code>textContent</code></li>
+          <li>Talks only to the Odoo server of the tab you are on, with your own session: no backend, no analytics, no tracking</li>
+          <li>Active on Odoo pages only: elsewhere nothing shows and the toolbar icon is greyed out</li>
+          <li>The session cookie's value is never read, only its flags</li>
+          <li>Odoo data reaches the panel as text only; a module's description shows in a sandboxed frame where nothing runs</li>
           <li>Source available: read every line on GitHub</li>
         </ul>
         <ul class="check" data-l="vi">
-          <li>Chỉ nói chuyện với server Odoo của tab đang mở, bằng chính phiên của bạn</li>
-          <li>Không backend, không analytics, không theo dõi</li>
+          <li>Chỉ nói chuyện với server Odoo của tab đang mở, bằng chính phiên của bạn: không backend, không analytics, không theo dõi</li>
+          <li>Chỉ hoạt động trên trang Odoo: ở trang khác không hiện gì và icon trên thanh công cụ bị làm mờ</li>
           <li>Không bao giờ đọc giá trị cookie phiên, chỉ đọc các cờ của nó</li>
-          <li>Dữ liệu Odoo chỉ vào trang qua <code>textContent</code></li>
+          <li>Dữ liệu Odoo chỉ vào panel dưới dạng chữ; mô tả của module hiện trong một khung sandbox, không chạy được gì</li>
           <li>Mã nguồn công khai: đọc từng dòng trên GitHub</li>
         </ul>
       </div>
@@ -357,7 +387,36 @@
           <dt>manifest</dt><dd>V3</dd>
           <dt>languages</dt><dd>English, Tiếng Việt</dd>
           <dt>themes</dt><dd><span data-l="en">System, light, dark, and 9 editor themes (Dracula, Monokai, Nord…)</span><span data-l="vi">Theo hệ thống, sáng, tối, và 9 theme kiểu editor (Dracula, Monokai, Nord…)</span></dd>
-          <dt>build</dt><dd><span data-l="en">None: plain JavaScript</span><span data-l="vi">Không cần: JavaScript thuần</span></dd>
+          <dt>odoo</dt><dd>18.0, 19.0, 20.0</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3 data-l="en">It writes only when you ask</h3><h3 data-l="vi">Chỉ ghi khi bạn yêu cầu</h3>
+        <ul class="check" data-l="en">
+          <li>Every tab reads; nothing is written behind your back</li>
+          <li>Code: read-only by default; a dry run lists the writes (JavaScript) or rolls them back for real (Python); writes in its writes mode only</li>
+          <li>Security: groups tried are simulated, written only on Apply</li>
+          <li>On your click, as your user: Apps operations, translations edited, Perf's profiles (Odoo deletes them after 30 days)</li>
+          <li>Python runs as a temporary server action, deleted after the run</li>
+        </ul>
+        <ul class="check" data-l="vi">
+          <li>Mọi tab chỉ đọc; không có gì được ghi sau lưng bạn</li>
+          <li>Code: mặc định chỉ đọc; chạy thử thì liệt kê các lệnh ghi (JavaScript) hoặc rollback thật (Python); chỉ ghi ở chế độ ghi</li>
+          <li>Security: nhóm đang thử chỉ được giả lập, chỉ ghi khi bấm Apply</li>
+          <li>Theo cú bấm của bạn, dưới quyền của bạn: thao tác trong Apps, sửa bản dịch, profile của Perf (Odoo tự xoá sau 30 ngày)</li>
+          <li>Python chạy dưới dạng một server action tạm, xoá ngay sau khi chạy</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-l="en">Permissions, and what for</h3><h3 data-l="vi">Các quyền, và để làm gì</h3>
+        <dl>
+          <dt>all sites</dt><dd><span data-l="en">Odoo runs on any domain; the panel turns on where the page is Odoo</span><span data-l="vi">Odoo chạy trên mọi domain; panel chỉ bật ở trang là Odoo</span></dd>
+          <dt>scripting</dt><dd><span data-l="en">Read the webclient's state: record, view, action</span><span data-l="vi">Đọc trạng thái webclient: record, view, action</span></dd>
+          <dt>cookies</dt><dd><span data-l="en">The session cookie's flags, never its value</span><span data-l="vi">Các cờ của cookie phiên, không bao giờ đọc giá trị</span></dd>
+          <dt>storage</dt><dd><span data-l="en">Settings, snippets, forms</span><span data-l="vi">Cài đặt, snippet, biểu mẫu</span></dd>
+          <dt>clipboard</dt><dd><span data-l="en">Copy names, values, cURL</span><span data-l="vi">Copy tên, giá trị, cURL</span></dd>
+          <dt>downloads</dt><dd><span data-l="en">Exported <code>.pot</code> / <code>.po</code></span><span data-l="vi"><code>.pot</code> / <code>.po</code> đã xuất</span></dd>
+          <dt>toolbar</dt><dd><span data-l="en">The icon lit on Odoo pages only (declarativeContent)</span><span data-l="vi">Icon chỉ sáng trên trang Odoo (declarativeContent)</span></dd>
         </dl>
       </div>
     </div>
@@ -447,6 +506,16 @@
     document.getElementById('zoom-toggle').textContent = full ? '−' : '+';
     if (full) zoom.scrollTo(fx * zimg.offsetWidth - zoom.clientWidth / 2, fy * zimg.offsetHeight - zoom.clientHeight / 2 + 56);
   };
+  const openZoom = (src, alt, title) => {
+    zimg.src = src;
+    zimg.alt = alt;
+    document.getElementById('zoom-title').textContent = title;
+    zoom.classList.remove('full');
+    document.getElementById('zoom-toggle').textContent = '+';
+    zoom.showModal();
+    zoom.scrollTo(0, 0);
+  };
+  document.querySelectorAll('.tile-shot').forEach((b) => { b.onclick = () => openZoom(b.dataset.full, b.querySelector('img').alt, b.dataset.title); });
   document.querySelectorAll('.window').forEach((w) => {
     const img = w.querySelector('img');
     if (!img) return; // the hero's video
@@ -466,12 +535,6 @@
   document.getElementById('zoom-close').onclick = () => zoom.close();
   zoom.onclick = (e) => { if (e.target === zoom || e.target.classList.contains('stage')) zoom.close(); };
 
-  // Feature tabs
-  const tabs = [...document.querySelectorAll('[role=tab]')];
-  tabs.forEach((t) => t.onclick = () => tabs.forEach((o) => {
-    o.setAttribute('aria-selected', o === t);
-    document.getElementById(o.getAttribute('aria-controls')).hidden = o !== t;
-  }));
 </script>
 </body>
 </html>

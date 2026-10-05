@@ -1,0 +1,30 @@
+# The Odoo the intro film (tools/intro.mjs) and the screenshots (tools/screenshots.mjs) are made on: Sales and CRM with
+# their demo data (sale.sale_order_16…), database "e2e", login admin / admin. A throwaway: down -v afterwards.
+#   docker compose -f tools/compose.yml up -d --wait
+#   ODOO_VERSION=19 ODOO_PORT=8070 docker compose -f tools/compose.yml up -d --wait   (another version, another port)
+services:
+  db:
+    image: postgres:16
+    environment: # on the compose network only: no password
+      POSTGRES_USER: odoo
+      POSTGRES_DB: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: pg_isready -U odoo
+      interval: 2s
+      retries: 30
+  odoo:
+    image: odoo:${ODOO_VERSION:-18}
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      HOST: db
+      USER: odoo
+    command: -d e2e -i sale_management,crm --db-filter=^e2e$$
+    ports:
+      - ${ODOO_PORT:-8069}:8069
+    healthcheck:
+      test: curl -fs http://localhost:8069/web/login >/dev/null
+      interval: 5s
+      retries: 120

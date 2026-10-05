@@ -1,0 +1,117 @@
+<!-- features/view/view.*.ts: the View tab, a story in five parts (styles: ui/panel.css).
+     ① overview → ② how the view is built → ③ one field → ④ action & context → ⑤ arch.
+     data-ref: filled by the code, text only. -->
+
+<!-- ① a fact of the overview: what, then its value. -->
+<template data-tpl="facts">
+  <dl class="facts" data-ref="list"></dl>
+</template>
+<template data-tpl="fact">
+  <div class="fact"><dt data-ref="label"></dt><dd data-ref="value"></dd></div>
+</template>
+
+<!-- ② a view of the composition: module, name, marks on the first line; what it does on the second; file below. -->
+<template data-tpl="view-row">
+  <li data-ref="row">
+    <div class="row" data-ref="head"><span class="muted branch" data-ref="branch">└</span></div>
+    <div class="row muted view-does" data-ref="does"></div>
+    <div class="meta" data-ref="meta"></div>
+  </li>
+</template>
+
+<!-- ② what a view does: one spec per item (line, position, target, then what it brings or sets). -->
+<template data-tpl="spec">
+  <li>
+    <div class="row"><button type="button" class="ms line-link" data-ref="line" title="Show this line in the own arch" data-i18n="title"></button><span data-ref="position"></span><span class="grow" data-ref="target"></span></div>
+    <div class="spec-adds" data-ref="adds"></div>
+  </li>
+</template>
+
+<!-- An element restricted to groups: line, the tag, its groups by name. -->
+<template data-tpl="restricted">
+  <li><div class="row"><button type="button" class="ms line-link" data-ref="line" title="Show this line in the own arch" data-i18n="title"></button><span class="grow" data-ref="text"></span></div><div class="row" data-ref="groups"></div></li>
+</template>
+
+<!-- A list inside a detail. -->
+<template data-tpl="sub-list">
+  <ul class="list" data-ref="list"></ul>
+</template>
+
+<!-- Copies a view's own arch. -->
+<template data-tpl="copy-arch">
+  <button type="button" class="chip" data-ref="button" data-i18n="text">Copy</button>
+</template>
+
+<!-- ③ the field to inspect: typed (suggestions: the fields of the view) or picked on the page. -->
+<template data-tpl="field-tools">
+  <span class="row field-tools">
+    <input type="search" list="view-fields" data-ref="input" placeholder="Field to inspect, e.g. partner_id" aria-label="Field to inspect, e.g. partner_id" data-i18n="placeholder,aria-label" spellcheck="false">
+    <datalist id="view-fields" data-ref="options"></datalist>
+    <button type="button" class="chip" data-ref="pick" title="Click a field on the Odoo page (Esc to cancel)" data-i18n="text,title">⌖ Pick on Page</button>
+  </span>
+</template>
+<template data-tpl="field-option">
+  <option data-ref="option"></option>
+</template>
+
+<!-- ③ the inspected field: who it is, how it is now, its story through the views, its groups. -->
+<template data-tpl="inspection">
+  <div class="inspection">
+    <div class="row field-id" data-ref="id"></div>
+    <h4 class="story-title" data-ref="nowTitle" data-i18n="text">Now</h4>
+    <div data-ref="now"></div>
+    <h4 class="story-title" data-i18n="text">Its story through the views</h4>
+    <ol class="story" data-ref="story"></ol>
+    <h4 class="story-title" data-ref="groupsTitle" data-i18n="text">Groups</h4>
+    <div data-ref="groups"></div>
+  </div>
+</template>
+
+<!-- ③ "Now": a modifier, its expression, its value with the values it read. -->
+<template data-tpl="modifier">
+  <div class="row modifier"><span data-ref="name"></span><span data-ref="value"></span><span class="grow" data-ref="expr"></span></div>
+</template>
+
+<!-- ③ a view in the field's story: number, module, name; then its steps. -->
+<template data-tpl="story-view">
+  <li class="story-view">
+    <div class="row"><span class="story-no" data-ref="no"></span><span class="row grow" data-ref="who"></span></div>
+    <ul class="story-steps" data-ref="steps"></ul>
+  </li>
+</template>
+<template data-tpl="story-step">
+  <li class="row"><button type="button" class="ms line-link" data-ref="line" title="Show this line in the own arch" data-i18n="title"></button><span class="grow" data-ref="text"></span></li>
+</template>
+
+<!-- ③ below the inspection: the fields of the view, to pick one. -->
+<template data-tpl="field-list-head">
+  <div class="toolbar" data-ref="bar">
+    <span class="row chips" data-ref="chips">
+      <button type="button" class="chip" aria-pressed="false" data-filter="hidden" data-i18n="text">Hidden</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="notShown" data-i18n="text">Not shown</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="readonly" data-i18n="text">Read-only</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="required" data-i18n="text">Required</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="error" data-i18n="text">Expression error</button>
+    </span>
+    <span class="muted" data-ref="count"></span>
+  </div>
+</template>
+<template data-tpl="field-row">
+  <li data-ref="row"><div class="row" data-ref="line"></div><div class="meta mono" data-ref="meta"></div></li>
+</template>
+<template data-tpl="field-label">
+  <span class="grow muted" data-ref="label"></span>
+</template>
+
+<!-- A place a part fills later (its inspection, its list). -->
+<template data-tpl="slot">
+  <div data-ref="slot"></div>
+</template>
+<template data-tpl="padded-slot">
+  <div class="padded" data-ref="slot"></div>
+</template>
+
+<!-- A list of rows. -->
+<template data-tpl="list">
+  <ul class="list" data-ref="list"></ul>
+</template>

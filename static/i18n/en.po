@@ -1,0 +1,4345 @@
+# Odoo Debug — English
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Debug\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/entrypoints/panel/index.html:14
+msgid "Connecting…"
+msgstr "Connecting…"
+
+#: src/entrypoints/panel/index.html:17
+#: src/entrypoints/panel/index.html:17
+msgid "Reload Data"
+msgstr "Reload Data"
+
+#: src/entrypoints/panel/index.html:21
+msgid "Open in Its Own Window (for a second screen)"
+msgstr "Open in Its Own Window (for a second screen)"
+
+#: src/entrypoints/panel/index.html:21
+msgid "Open in Its Own Window"
+msgstr "Open in Its Own Window"
+
+#: src/entrypoints/panel/index.html:22
+#: src/entrypoints/panel/index.html:22
+msgid "Back into the Odoo Page"
+msgstr "Back into the Odoo Page"
+
+#: src/entrypoints/panel/index.html:23
+msgid "Full Screen (Esc to exit)"
+msgstr "Full Screen (Esc to exit)"
+
+#: src/entrypoints/panel/index.html:23
+msgid "Full Screen"
+msgstr "Full Screen"
+
+#: src/entrypoints/panel/index.html:24
+msgid "Minimize (the Odoo Debug button reopens it)"
+msgstr "Minimize (the Odoo Debug button reopens it)"
+
+#: src/entrypoints/panel/index.html:24
+msgid "Minimize"
+msgstr "Minimize"
+
+#: src/entrypoints/panel/index.html:28
+#: src/features/security/security.tab.ts:61
+#: src/features/translations/translations.find.ts:69
+#: src/features/view/view.overview.ts:64
+msgid "Record"
+msgstr "Record"
+
+#: src/entrypoints/panel/index.html:29
+#: src/features/translations/translations.find.ts:70
+#: src/features/view/view.overview.ts:34
+#: src/features/view/view.overview.ts:37
+msgid "View"
+msgstr "View"
+
+#: src/entrypoints/panel/index.html:30
+msgid "RPC"
+msgstr "RPC"
+
+#: src/entrypoints/panel/index.html:31
+msgid "Security"
+msgstr "Security"
+
+#: src/entrypoints/panel/index.html:32
+msgid "Translations"
+msgstr "Translations"
+
+#: src/entrypoints/panel/index.html:33
+#: src/features/apps/apps.ui.ts:101
+msgid "Apps"
+msgstr "Apps"
+
+#: src/entrypoints/panel/index.html:34
+#: src/features/apps/apps.module.ts:45
+#: src/features/menus/menus.logic.ts:13
+msgid "Menus"
+msgstr "Menus"
+
+#: src/entrypoints/panel/index.html:35
+msgid "Perf"
+msgstr "Perf"
+
+#: src/entrypoints/panel/index.html:36
+#: src/features/code/code.tab.ts:50
+#: src/features/translations/translations.find.ts:59
+msgid "Code"
+msgstr "Code"
+
+#: src/entrypoints/panel/index.ts:49
+#: src/entrypoints/panel/index.ts:50
+msgid "Cannot read this tab: %s"
+msgstr "Cannot read this tab: %s"
+
+#: src/entrypoints/panel/index.ts:49
+msgid "The current tab is not an Odoo page."
+msgstr "The current tab is not an Odoo page."
+
+#: src/entrypoints/panel/index.ts:52
+msgid "Not available on Odoo %s: %s"
+msgstr "Not available on Odoo %s: %s"
+
+#: src/entrypoints/panel/index.ts:99
+msgid "Odoo %s is not tested: the panel uses its Odoo %s support, some cards may fail."
+msgstr "Odoo %s is not tested: the panel uses its Odoo %s support, some cards may fail."
+
+#: src/entrypoints/panel/index.ts:100
+msgid "Odoo %s is older than every supported version: some cards may fail."
+msgstr "Odoo %s is older than every supported version: some cards may fail."
+
+#: src/entrypoints/panel/index.ts:101
+msgid "This database lacks fields the panel expects for Odoo %s: %s"
+msgstr "This database lacks fields the panel expects for Odoo %s: %s"
+
+#: src/entrypoints/panel/index.ts:106
+msgid "Odoo %s, supported"
+msgstr "Odoo %s, supported"
+
+#: src/entrypoints/panel/panel.tpl.html:5
+msgid "Not an Odoo page"
+msgstr "Not an Odoo page"
+
+#: src/entrypoints/popup/index.html:17
+#: src/features/security/security.record.ts:48
+msgid "This page"
+msgstr "This page"
+
+#: src/entrypoints/popup/index.html:19
+msgid "Open the Panel in Its Own Window"
+msgstr "Open the Panel in Its Own Window"
+
+#: src/entrypoints/popup/index.html:20
+#: src/entrypoints/popup/index.html:21
+msgid "Debug Mode"
+msgstr "Debug Mode"
+
+#: src/entrypoints/popup/index.html:22
+msgid "Keep it on for this Odoo"
+msgstr "Keep it on for this Odoo"
+
+#: src/entrypoints/popup/index.html:25
+#: src/features/translations/translations.langs.ts:55
+msgid "Language"
+msgstr "Language"
+
+#: src/entrypoints/popup/index.html:29
+#: src/entrypoints/popup/index.html:30
+msgid "Theme"
+msgstr "Theme"
+
+#: src/entrypoints/popup/index.html:33
+msgid "Shortcuts"
+msgstr "Shortcuts"
+
+#: src/entrypoints/popup/index.html:34
+#: src/features/perf/perf.request.ts:227
+#: src/features/security/security.groups.ts:263
+msgid "Change"
+msgstr "Change"
+
+#: src/entrypoints/popup/index.html:36
+msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
+msgstr "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
+
+#: src/entrypoints/popup/index.ts:15
+#: src/features/security/security.tab.ts:65
+msgid "System"
+msgstr "System"
+
+#: src/entrypoints/popup/index.ts:15
+msgid "Light"
+msgstr "Light"
+
+#: src/entrypoints/popup/index.ts:15
+msgid "Dark"
+msgstr "Dark"
+
+#: src/entrypoints/popup/index.ts:51
+msgid "panel"
+msgstr "panel"
+
+#: src/entrypoints/popup/index.ts:51
+msgid "window"
+msgstr "window"
+
+#: src/entrypoints/popup/index.ts:51
+msgid "debug"
+msgstr "debug"
+
+#: src/entrypoints/popup/index.ts:77
+msgid "Host"
+msgstr "Host"
+
+#: src/entrypoints/popup/index.ts:78
+msgid "Odoo version"
+msgstr "Odoo version"
+
+#: src/entrypoints/popup/index.ts:78
+msgid "Database"
+msgstr "Database"
+
+#: src/entrypoints/popup/index.ts:109
+msgid "Turn Debug Off"
+msgstr "Turn Debug Off"
+
+#: src/extension/run-in-tab.ts:16
+msgid "No tab is open."
+msgstr "No tab is open."
+
+#: src/features/apps/apps.graph.ts:30
+msgid "The module opened"
+msgstr "The module opened"
+
+#: src/features/apps/apps.graph.ts:30
+#: src/features/apps/apps.ui.ts:100
+#: src/features/apps/apps.ui.ts:154
+msgid "Installed"
+msgstr "Installed"
+
+#: src/features/apps/apps.graph.ts:30
+msgid "Installed with it, as a dependency"
+msgstr "Installed with it, as a dependency"
+
+#: src/features/apps/apps.graph.ts:31
+msgid "Auto-installed with it"
+msgstr "Auto-installed with it"
+
+#: src/features/apps/apps.graph.ts:31
+#: src/features/apps/apps.module.ts:230
+msgid "Not on this server"
+msgstr "Not on this server"
+
+#: src/features/apps/apps.graph.ts:31
+#: src/features/apps/apps.ui.ts:154
+msgid "Not installed"
+msgstr "Not installed"
+
+#: src/features/apps/apps.graph.ts:38
+#: src/features/apps/apps.module.ts:127
+msgid "auto-installed: %s all installed or being installed"
+msgstr "auto-installed: %s all installed or being installed"
+
+#: src/features/apps/apps.graph.ts:39
+#: src/features/apps/apps.module.ts:127
+msgid "a dependency of %s"
+msgstr "a dependency of %s"
+
+#: src/features/apps/apps.graph.ts:40
+msgid "Needs"
+msgstr "Needs"
+
+#: src/features/apps/apps.graph.ts:40
+msgid "Install brings"
+msgstr "Install brings"
+
+#: src/features/apps/apps.graph.ts:40
+#: src/features/apps/apps.module.ts:146
+msgid "Used by"
+msgstr "Used by"
+
+#: src/features/apps/apps.graph.ts:52
+msgid "Hide the hubs (base, web, mail…)"
+msgstr "Hide the hubs (base, web, mail…)"
+
+#: src/features/apps/apps.graph.ts:56
+msgid "Installed only"
+msgstr "Installed only"
+
+#: src/features/apps/apps.graph.ts:59
+msgid "1 level"
+msgstr "1 level"
+
+#: src/features/apps/apps.graph.ts:59
+msgid "2 levels"
+msgstr "2 levels"
+
+#: src/features/apps/apps.graph.ts:59
+#: src/features/perf/perf.tab.ts:224
+msgid "All"
+msgstr "All"
+
+#: src/features/apps/apps.graph.ts:72
+msgid "Over the whole tab (Esc to come back)"
+msgstr "Over the whole tab (Esc to come back)"
+
+#: src/features/apps/apps.graph.ts:75
+msgid "Zoom out (Ctrl + wheel)"
+msgstr "Zoom out (Ctrl + wheel)"
+
+#: src/features/apps/apps.graph.ts:75
+msgid "Zoom in (Ctrl + wheel)"
+msgstr "Zoom in (Ctrl + wheel)"
+
+#: src/features/apps/apps.graph.ts:76
+msgid "Fit"
+msgstr "Fit"
+
+#: src/features/apps/apps.graph.ts:76
+msgid "The whole diagram in the width"
+msgstr "The whole diagram in the width"
+
+#: src/features/apps/apps.graph.ts:125
+#: src/features/apps/apps.module.ts:146
+#: src/features/apps/apps.modules.ts:136
+msgid "%s modules"
+msgstr "%s modules"
+
+#: src/features/apps/apps.graph.ts:154
+msgid "Open"
+msgstr "Open"
+
+#: src/features/apps/apps.graph.ts:154
+msgid "Open this module"
+msgstr "Open this module"
+
+#: src/features/apps/apps.graph.ts:156
+msgid "Arrows point to what a module depends on. Click a module for the chain to %s; double-click to open it."
+msgstr "Arrows point to what a module depends on. Click a module for the chain to %s; double-click to open it."
+
+#: src/features/apps/apps.graph.ts:158
+msgid "Hidden hubs: %s"
+msgstr "Hidden hubs: %s"
+
+#: src/features/apps/apps.graph.ts:159
+msgid "… and %s more not drawn"
+msgstr "… and %s more not drawn"
+
+#: src/features/apps/apps.module.ts:44
+#: src/features/apps/apps.module.ts:166
+#: src/features/menus/menus.logic.ts:8
+msgid "Models"
+msgstr "Models"
+
+#: src/features/apps/apps.module.ts:44
+#: src/features/menus/menus.logic.ts:9
+#: src/features/record/record.tab.ts:30
+#: src/features/view/view.overview.ts:73
+msgid "Fields"
+msgstr "Fields"
+
+#: src/features/apps/apps.module.ts:44
+msgid "Selection values"
+msgstr "Selection values"
+
+#: src/features/apps/apps.module.ts:45
+#: src/features/menus/menus.logic.ts:12
+msgid "Views"
+msgstr "Views"
+
+#: src/features/apps/apps.module.ts:45
+msgid "Window actions"
+msgstr "Window actions"
+
+#: src/features/apps/apps.module.ts:46
+msgid "Server actions"
+msgstr "Server actions"
+
+#: src/features/apps/apps.module.ts:46
+#: src/features/menus/menus.logic.ts:18
+msgid "Reports"
+msgstr "Reports"
+
+#: src/features/apps/apps.module.ts:46
+msgid "Client actions"
+msgstr "Client actions"
+
+#: src/features/apps/apps.module.ts:47
+msgid "URL actions"
+msgstr "URL actions"
+
+#: src/features/apps/apps.module.ts:47
+msgid "Scheduled actions"
+msgstr "Scheduled actions"
+
+#: src/features/apps/apps.module.ts:47
+#: src/features/security/security.tab.ts:64
+#: src/features/view/view.tpl.html:65
+msgid "Groups"
+msgstr "Groups"
+
+#: src/features/apps/apps.module.ts:48
+msgid "Accesses"
+msgstr "Accesses"
+
+#: src/features/apps/apps.module.ts:48
+#: src/features/security/security.groups.ts:123
+#: src/features/security/security.model.ts:29
+#: src/features/security/security.record.ts:85
+msgid "Access rights (ACL)"
+msgstr "Access rights (ACL)"
+
+#: src/features/apps/apps.module.ts:48
+#: src/features/security/security.groups.ts:134
+#: src/features/security/security.model.ts:40
+msgid "Record rules"
+msgstr "Record rules"
+
+#: src/features/apps/apps.module.ts:48
+msgid "Constraints"
+msgstr "Constraints"
+
+#: src/features/apps/apps.module.ts:49
+msgid "Many2many tables"
+msgstr "Many2many tables"
+
+#: src/features/apps/apps.module.ts:49
+msgid "Categories"
+msgstr "Categories"
+
+#: src/features/apps/apps.module.ts:49
+msgid "Assets"
+msgstr "Assets"
+
+#: src/features/apps/apps.module.ts:66
+msgid "App"
+msgstr "App"
+
+#: src/features/apps/apps.module.ts:67
+msgid "auto-install"
+msgstr "auto-install"
+
+#: src/features/apps/apps.module.ts:67
+msgid "Installed by itself once every module it depends on is"
+msgstr "Installed by itself once every module it depends on is"
+
+#: src/features/apps/apps.module.ts:68
+msgid "Enterprise"
+msgstr "Enterprise"
+
+#: src/features/apps/apps.module.ts:77
+msgid "Installed: %s"
+msgstr "Installed: %s"
+
+#: src/features/apps/apps.module.ts:77
+msgid "ir.module.module.latest_version: the version in the database, written by the last install or upgrade"
+msgstr "ir.module.module.latest_version: the version in the database, written by the last install or upgrade"
+
+#: src/features/apps/apps.module.ts:79
+msgid "On disk: %s"
+msgstr "On disk: %s"
+
+#: src/features/apps/apps.module.ts:79
+msgid "installed_version: the version in the manifest on the server's addons path"
+msgstr "installed_version: the version in the manifest on the server's addons path"
+
+#: src/features/apps/apps.module.ts:80
+msgid "upgrade needed"
+msgstr "upgrade needed"
+
+#: src/features/apps/apps.module.ts:80
+msgid "older on disk"
+msgstr "older on disk"
+
+#: src/features/apps/apps.module.ts:81
+msgid "The code on disk is newer than the database: Upgrade applies it."
+msgstr "The code on disk is newer than the database: Upgrade applies it."
+
+#: src/features/apps/apps.module.ts:82
+msgid "The code on disk is older than the database: another branch, or a version bumped back?"
+msgstr "The code on disk is older than the database: another branch, or a version bumped back?"
+
+#: src/features/apps/apps.module.ts:85
+msgid "missing"
+msgstr "missing"
+
+#: src/features/apps/apps.module.ts:85
+msgid "Depends on modules this server doesn't have: %s"
+msgstr "Depends on modules this server doesn't have: %s"
+
+#: src/features/apps/apps.module.ts:95
+#: src/features/apps/apps.module.ts:97
+msgid "Picked ✓"
+msgstr "Picked ✓"
+
+#: src/features/apps/apps.module.ts:95
+#: src/features/apps/apps.module.ts:97
+msgid "Pick"
+msgstr "Pick"
+
+#: src/features/apps/apps.module.ts:98
+msgid "Add to / remove from the modules picked for an action"
+msgstr "Add to / remove from the modules picked for an action"
+
+#: src/features/apps/apps.module.ts:101
+msgid "Install"
+msgstr "Install"
+
+#: src/features/apps/apps.module.ts:101
+msgid "Update Apps List, then install it with its dependencies"
+msgstr "Update Apps List, then install it with its dependencies"
+
+#: src/features/apps/apps.module.ts:102
+#: src/features/apps/apps.modules.ts:126
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: src/features/apps/apps.module.ts:102
+msgid "Upgrade it now (and the modules depending on it)"
+msgstr "Upgrade it now (and the modules depending on it)"
+
+#: src/features/apps/apps.module.ts:103
+msgid "Uninstall…"
+msgstr "Uninstall…"
+
+#: src/features/apps/apps.module.ts:103
+msgid "What it would remove, then confirm"
+msgstr "What it would remove, then confirm"
+
+#: src/features/apps/apps.module.ts:105
+msgid "Form ↗"
+msgstr "Form ↗"
+
+#: src/features/apps/apps.module.ts:111
+msgid "Description"
+msgstr "Description"
+
+#: src/features/apps/apps.module.ts:114
+msgid "From static/description/index.html"
+msgstr "From static/description/index.html"
+
+#: src/features/apps/apps.module.ts:114
+msgid "From the manifest's description (RST) or the README"
+msgstr "From the manifest's description (RST) or the README"
+
+#: src/features/apps/apps.module.ts:115
+msgid "Open the page ↗"
+msgstr "Open the page ↗"
+
+#: src/features/apps/apps.module.ts:116
+msgid "No description."
+msgstr "No description."
+
+#: src/features/apps/apps.module.ts:120
+msgid "Manifest"
+msgstr "Manifest"
+
+#: src/features/apps/apps.module.ts:123
+#: src/features/apps/apps.module.ts:252
+msgid "Depends"
+msgstr "Depends"
+
+#: src/features/apps/apps.module.ts:123
+msgid "%s declared"
+msgstr "%s declared"
+
+#: src/features/apps/apps.module.ts:129
+msgid "Declared in its manifest"
+msgstr "Declared in its manifest"
+
+#: src/features/apps/apps.module.ts:129
+msgid "Nothing: it depends on no module."
+msgstr "Nothing: it depends on no module."
+
+#: src/features/apps/apps.module.ts:130
+msgid "Needs in all (%s)"
+msgstr "Needs in all (%s)"
+
+#: src/features/apps/apps.module.ts:130
+#: src/features/apps/apps.module.ts:135
+msgid "Nothing."
+msgstr "Nothing."
+
+#: src/features/apps/apps.module.ts:132
+msgid "Installing it also installs (%s)"
+msgstr "Installing it also installs (%s)"
+
+#: src/features/apps/apps.module.ts:133
+msgid "Nothing: every dependency is installed."
+msgstr "Nothing: every dependency is installed."
+
+#: src/features/apps/apps.module.ts:134
+msgid "And auto-installs (%s)"
+msgstr "And auto-installs (%s)"
+
+#: src/features/apps/apps.module.ts:136
+msgid "Odoo will refuse it: %s"
+msgstr "Odoo will refuse it: %s"
+
+#: src/features/apps/apps.module.ts:136
+msgid "%s depends on %s, not on this server"
+msgstr "%s depends on %s, not on this server"
+
+#: src/features/apps/apps.module.ts:137
+msgid "Not installable, the install will fail: %s"
+msgstr "Not installable, the install will fail: %s"
+
+#: src/features/apps/apps.module.ts:138
+msgid "As Odoo's button_install computes it: the dependencies not installed, then every auto_install module whose triggers are all installed or being installed (and, for a localization, a company in its countries)."
+msgstr "As Odoo's button_install computes it: the dependencies not installed, then every auto_install module whose triggers are all installed or being installed (and, for a localization, a company in its countries)."
+
+#: src/features/apps/apps.module.ts:142
+#: src/features/apps/apps.tpl.html:88
+msgid "Dependency diagram"
+msgstr "Dependency diagram"
+
+#: src/features/apps/apps.module.ts:146
+msgid "%s installed depend on it"
+msgstr "%s installed depend on it"
+
+#: src/features/apps/apps.module.ts:147
+msgid "Declaring it in their depends (%s)"
+msgstr "Declaring it in their depends (%s)"
+
+#: src/features/apps/apps.module.ts:147
+msgid "No module depends on it."
+msgstr "No module depends on it."
+
+#: src/features/apps/apps.module.ts:148
+msgid "Uninstalling it also removes (%s)"
+msgstr "Uninstalling it also removes (%s)"
+
+#: src/features/apps/apps.module.ts:148
+#: src/features/apps/apps.module.ts:208
+msgid "No other module."
+msgstr "No other module."
+
+#: src/features/apps/apps.module.ts:151
+msgid "Data (xmlids)"
+msgstr "Data (xmlids)"
+
+#: src/features/apps/apps.module.ts:153
+msgid "No xmlid: the module brings no data."
+msgstr "No xmlid: the module brings no data."
+
+#: src/features/apps/apps.module.ts:153
+msgid "Not installed: its data is known once it is."
+msgstr "Not installed: its data is known once it is."
+
+#: src/features/apps/apps.module.ts:159
+msgid "noupdate: an upgrade doesn't overwrite them"
+msgstr "noupdate: an upgrade doesn't overwrite them"
+
+#: src/features/apps/apps.module.ts:163
+msgid "%s xmlids. Click a kind for its records."
+msgstr "%s xmlids. Click a kind for its records."
+
+#: src/features/apps/apps.module.ts:163
+msgid "Kind"
+msgstr "Kind"
+
+#: src/features/apps/apps.module.ts:163
+msgid "Records"
+msgstr "Records"
+
+#: src/features/apps/apps.module.ts:168
+msgid "It creates or extends no model."
+msgstr "It creates or extends no model."
+
+#: src/features/apps/apps.module.ts:168
+msgid "Not installed: its models are known once it is."
+msgstr "Not installed: its models are known once it is."
+
+#: src/features/apps/apps.module.ts:176
+msgid "Installed modules defining or extending it: %s"
+msgstr "Installed modules defining or extending it: %s"
+
+#: src/features/apps/apps.module.ts:178
+msgid "%s · created by %s"
+msgstr "%s · created by %s"
+
+#: src/features/apps/apps.module.ts:178
+msgid "%s · also in %s"
+msgstr "%s · also in %s"
+
+#: src/features/apps/apps.module.ts:180
+#: src/features/security/security.groups.ts:130
+#: src/features/security/security.models.ts:81
+msgid "Model"
+msgstr "Model"
+
+#: src/features/apps/apps.module.ts:180
+#: src/features/apps/apps.tab.ts:41
+#: src/features/translations/translations.modules.ts:66
+msgid "Modules"
+msgstr "Modules"
+
+#: src/features/apps/apps.module.ts:181
+msgid "Creates (%s)"
+msgstr "Creates (%s)"
+
+#: src/features/apps/apps.module.ts:182
+msgid "Extends (%s)"
+msgstr "Extends (%s)"
+
+#: src/features/apps/apps.module.ts:190
+msgid "Uninstall"
+msgstr "Uninstall"
+
+#: src/features/apps/apps.module.ts:195
+msgid "Uninstall %s…"
+msgstr "Uninstall %s…"
+
+#: src/features/apps/apps.module.ts:196
+msgid "Uninstall %s?"
+msgstr "Uninstall %s?"
+
+#: src/features/apps/apps.module.ts:197
+msgid "Removed with it: %s"
+msgstr "Removed with it: %s"
+
+#: src/features/apps/apps.module.ts:197
+msgid "No other module is removed."
+msgstr "No other module is removed."
+
+#: src/features/apps/apps.module.ts:198
+msgid "Models whose data is deleted for good: %s"
+msgstr "Models whose data is deleted for good: %s"
+
+#: src/features/apps/apps.module.ts:198
+msgid "This cannot be undone."
+msgstr "This cannot be undone."
+
+#: src/features/apps/apps.module.ts:200
+msgid "Type %s to uninstall it."
+msgstr "Type %s to uninstall it."
+
+#: src/features/apps/apps.module.ts:202
+msgid "Not the module's name: nothing was uninstalled."
+msgstr "Not the module's name: nothing was uninstalled."
+
+#: src/features/apps/apps.module.ts:204
+msgid "Asks to confirm, then to type its name"
+msgstr "Asks to confirm, then to type its name"
+
+#: src/features/apps/apps.module.ts:207
+msgid "What Odoo's uninstall wizard computes: every module depending on it goes too, and the models only these modules define lose their table and data."
+msgstr "What Odoo's uninstall wizard computes: every module depending on it goes too, and the models only these modules define lose their table and data."
+
+#: src/features/apps/apps.module.ts:208
+msgid "Modules removed with it (%s)"
+msgstr "Modules removed with it (%s)"
+
+#: src/features/apps/apps.module.ts:209
+msgid "Models whose data is deleted (%s)"
+msgstr "Models whose data is deleted (%s)"
+
+#: src/features/apps/apps.module.ts:210
+msgid "None: no model loses its data."
+msgstr "None: no model loses its data."
+
+#: src/features/apps/apps.module.ts:219
+msgid "Not installable: its manifest says installable: False, or it is not on this server's addons path any more."
+msgstr "Not installable: its manifest says installable: False, or it is not on this server's addons path any more."
+
+#: src/features/apps/apps.module.ts:220
+msgid "%s: waiting for Odoo's next module operation (see Pending)."
+msgstr "%s: waiting for Odoo's next module operation (see Pending)."
+
+#: src/features/apps/apps.module.ts:237
+msgid "● installed · ○ not installed · ✗ not on this server. Click a module to open it."
+msgstr "● installed · ○ not installed · ✗ not on this server. Click a module to open it."
+
+#: src/features/apps/apps.module.ts:241
+msgid "Technical name"
+msgstr "Technical name"
+
+#: src/features/apps/apps.module.ts:242
+msgid "Title (name)"
+msgstr "Title (name)"
+
+#: src/features/apps/apps.module.ts:243
+msgid "Version on disk"
+msgstr "Version on disk"
+
+#: src/features/apps/apps.module.ts:244
+msgid "Version installed"
+msgstr "Version installed"
+
+#: src/features/apps/apps.module.ts:245
+msgid "Summary"
+msgstr "Summary"
+
+#: src/features/apps/apps.module.ts:246
+msgid "Author"
+msgstr "Author"
+
+#: src/features/apps/apps.module.ts:247
+msgid "Maintainer"
+msgstr "Maintainer"
+
+#: src/features/apps/apps.module.ts:248
+msgid "Contributors"
+msgstr "Contributors"
+
+#: src/features/apps/apps.module.ts:249
+msgid "Website"
+msgstr "Website"
+
+#: src/features/apps/apps.module.ts:250
+msgid "License"
+msgstr "License"
+
+#: src/features/apps/apps.module.ts:251
+#: src/features/apps/apps.ui.ts:130
+#: src/features/apps/apps.ui.ts:132
+msgid "Category"
+msgstr "Category"
+
+#: src/features/apps/apps.module.ts:253
+msgid "Application"
+msgstr "Application"
+
+#: src/features/apps/apps.module.ts:253
+#: src/features/apps/apps.module.ts:254
+#: src/features/apps/apps.module.ts:255
+#: src/features/view/view.field.ts:133
+msgid "yes"
+msgstr "yes"
+
+#: src/features/apps/apps.module.ts:253
+#: src/features/apps/apps.module.ts:254
+#: src/features/apps/apps.module.ts:255
+#: src/features/view/view.field.ts:133
+msgid "no"
+msgstr "no"
+
+#: src/features/apps/apps.module.ts:254
+msgid "Auto-install"
+msgstr "Auto-install"
+
+#: src/features/apps/apps.module.ts:255
+msgid "Demo data loaded"
+msgstr "Demo data loaded"
+
+#: src/features/apps/apps.module.ts:275
+#: src/features/code/code.result.ts:160
+#: src/features/security/security.groups.ts:151
+#: src/features/security/security.record.ts:174
+#: src/features/translations/translations.modules.ts:139
+msgid "… and %s more"
+msgstr "… and %s more"
+
+#: src/features/apps/apps.modules.ts:36
+msgid "Choose a module: its description, dependencies and data show here."
+msgstr "Choose a module: its description, dependencies and data show here."
+
+#: src/features/apps/apps.modules.ts:49
+msgid "Pick %s"
+msgstr "Pick %s"
+
+#: src/features/apps/apps.modules.ts:63
+#: src/features/apps/apps.pending.ts:46
+#: src/features/translations/translations.modules.ts:123
+msgid "Module"
+msgstr "Module"
+
+#: src/features/apps/apps.modules.ts:63
+msgid "State"
+msgstr "State"
+
+#: src/features/apps/apps.modules.ts:63
+msgid "Version"
+msgstr "Version"
+
+#: src/features/apps/apps.modules.ts:74
+msgid "%s/%s modules"
+msgstr "%s/%s modules"
+
+#: src/features/apps/apps.modules.ts:118
+msgid "Pick at least one module."
+msgstr "Pick at least one module."
+
+#: src/features/apps/apps.modules.ts:125
+#: src/features/translations/translations.langs.ts:52
+msgid "Activate"
+msgstr "Activate"
+
+#: src/features/apps/apps.modules.ts:125
+msgid "Update Apps List, then install every module picked (with its dependencies)"
+msgstr "Update Apps List, then install every module picked (with its dependencies)"
+
+#: src/features/apps/apps.modules.ts:126
+msgid "Upgrade every module picked (they must be installed)"
+msgstr "Upgrade every module picked (they must be installed)"
+
+#: src/features/apps/apps.modules.ts:127
+msgid "Open Forms ↗"
+msgstr "Open Forms ↗"
+
+#: src/features/apps/apps.modules.ts:127
+msgid "Open the form of every module picked in a new tab"
+msgstr "Open the form of every module picked in a new tab"
+
+#: src/features/apps/apps.modules.ts:129
+#: src/features/rpc/rpc.tpl.html:8
+msgid "Clear"
+msgstr "Clear"
+
+#: src/features/apps/apps.modules.ts:129
+msgid "Unpick every module"
+msgstr "Unpick every module"
+
+#: src/features/apps/apps.modules.ts:136
+msgid "+ This screen: %s"
+msgstr "+ This screen: %s"
+
+#: src/features/apps/apps.modules.ts:139
+msgid "Pick the modules not by Odoo S.A. defining or extending %s: %s (all of them: %s)"
+msgstr "Pick the modules not by Odoo S.A. defining or extending %s: %s (all of them: %s)"
+
+#: src/features/apps/apps.modules.ts:142
+msgid "+ Upgrade needed (%s)"
+msgstr "+ Upgrade needed (%s)"
+
+#: src/features/apps/apps.modules.ts:145
+msgid "Pick the installed modules whose manifest on disk is newer than the database: %s"
+msgstr "Pick the installed modules whose manifest on disk is newer than the database: %s"
+
+#: src/features/apps/apps.modules.ts:148
+msgid "Picked:"
+msgstr "Picked:"
+
+#: src/features/apps/apps.modules.ts:148
+msgid "Tick modules, or type names then Enter, to act on them."
+msgstr "Tick modules, or type names then Enter, to act on them."
+
+#: src/features/apps/apps.modules.ts:152
+msgid "Not in the list yet: Activate runs Update Apps List first"
+msgstr "Not in the list yet: Activate runs Update Apps List first"
+
+#: src/features/apps/apps.modules.ts:175
+msgid "On disk: %s, newer than the database: Upgrade applies it"
+msgstr "On disk: %s, newer than the database: Upgrade applies it"
+
+#: src/features/apps/apps.modules.ts:176
+msgid "On disk: %s, older than the database"
+msgstr "On disk: %s, older than the database"
+
+#: src/features/apps/apps.modules.ts:181
+msgid "%s modules wait for an operation (%s): Odoo runs them at its next one."
+msgstr "%s modules wait for an operation (%s): Odoo runs them at its next one."
+
+#: src/features/apps/apps.modules.ts:182
+msgid "Pending →"
+msgstr "Pending →"
+
+#: src/features/apps/apps.ops.ts:24
+msgid "Modules are waiting for an operation: %s. Odoo refuses another one until they are applied or cancelled (Pending)."
+msgstr "Modules are waiting for an operation: %s. Odoo refuses another one until they are applied or cancelled (Pending)."
+
+#: src/features/apps/apps.ops.ts:25
+msgid "Modules are waiting for an operation: %s. Odoo %s would run them along with this one: apply or cancel them first (Pending)."
+msgstr "Modules are waiting for an operation: %s. Odoo %s would run them along with this one: apply or cancel them first (Pending)."
+
+#: src/features/apps/apps.ops.ts:44
+#: src/features/apps/apps.pending.ts:32
+msgid "Reloading the Odoo page…"
+msgstr "Reloading the Odoo page…"
+
+#: src/features/apps/apps.ops.ts:52
+msgid "Update Apps List"
+msgstr "Update Apps List"
+
+#: src/features/apps/apps.ops.ts:54
+msgid "%s updated · %s added"
+msgstr "%s updated · %s added"
+
+#: src/features/apps/apps.ops.ts:56
+msgid "Not found, even after Update Apps List: %s"
+msgstr "Not found, even after Update Apps List: %s"
+
+#: src/features/apps/apps.ops.ts:57
+msgid "Not installable: %s"
+msgstr "Not installable: %s"
+
+#: src/features/apps/apps.ops.ts:58
+msgid "Waiting to be uninstalled: %s"
+msgstr "Waiting to be uninstalled: %s"
+
+#: src/features/apps/apps.ops.ts:59
+msgid "Already installed: %s"
+msgstr "Already installed: %s"
+
+#: src/features/apps/apps.ops.ts:64
+msgid "With its dependencies: %s"
+msgstr "With its dependencies: %s"
+
+#: src/features/apps/apps.ops.ts:65
+msgid "And auto-installed with them: %s"
+msgstr "And auto-installed with them: %s"
+
+#: src/features/apps/apps.ops.ts:66
+msgid "Install %s"
+msgstr "Install %s"
+
+#: src/features/apps/apps.ops.ts:76
+msgid "Not found: %s"
+msgstr "Not found: %s"
+
+#: src/features/apps/apps.ops.ts:77
+msgid "Not installed (use Activate): %s"
+msgstr "Not installed (use Activate): %s"
+
+#: src/features/apps/apps.ops.ts:78
+msgid "Upgrade %s"
+msgstr "Upgrade %s"
+
+#: src/features/apps/apps.ops.ts:87
+msgid "Uninstall %s"
+msgstr "Uninstall %s"
+
+#: src/features/apps/apps.ops.ts:98
+msgid "Opened %s tab(s): %s"
+msgstr "Opened %s tab(s): %s"
+
+#: src/features/apps/apps.ops.ts:100
+msgid "Not found: %s (Activate runs Update Apps List first)"
+msgstr "Not found: %s (Activate runs Update Apps List first)"
+
+#: src/features/apps/apps.pending.ts:19
+msgid "Odoo refuses to install, upgrade or uninstall anything while modules wait (\"Odoo is currently processing another module operation\")."
+msgstr "Odoo refuses to install, upgrade or uninstall anything while modules wait (\"Odoo is currently processing another module operation\")."
+
+#: src/features/apps/apps.pending.ts:20
+msgid "Odoo %s runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here."
+msgstr "Odoo %s runs the waiting modules along with the next install, upgrade or uninstall: an install could also uninstall a module waiting here."
+
+#: src/features/apps/apps.pending.ts:21
+msgid "No module is waiting for an operation."
+msgstr "No module is waiting for an operation."
+
+#: src/features/apps/apps.pending.ts:26
+msgid "Apply Now"
+msgstr "Apply Now"
+
+#: src/features/apps/apps.pending.ts:27
+msgid "Run every waiting operation now?\n\n%s"
+msgstr "Run every waiting operation now?\n\n%s"
+
+#: src/features/apps/apps.pending.ts:29
+msgid "Apply Scheduled Upgrades"
+msgstr "Apply Scheduled Upgrades"
+
+#: src/features/apps/apps.pending.ts:35
+msgid "Odoo's Apply Scheduled Upgrades: installs, upgrades and uninstalls them"
+msgstr "Odoo's Apply Scheduled Upgrades: installs, upgrades and uninstalls them"
+
+#: src/features/apps/apps.pending.ts:36
+msgid "Cancel All"
+msgstr "Cancel All"
+
+#: src/features/apps/apps.pending.ts:37
+msgid "Cancel every waiting operation? The modules go back to installed / not installed."
+msgstr "Cancel every waiting operation? The modules go back to installed / not installed."
+
+#: src/features/apps/apps.pending.ts:39
+msgid "Cancel the waiting operations"
+msgstr "Cancel the waiting operations"
+
+#: src/features/apps/apps.pending.ts:44
+msgid "Back to installed (to upgrade, to remove) or not installed (to install): nothing runs"
+msgstr "Back to installed (to upgrade, to remove) or not installed (to install): nothing runs"
+
+#: src/features/apps/apps.pending.ts:46
+msgid "Waiting for"
+msgstr "Waiting for"
+
+#: src/features/apps/apps.tab.ts:30
+msgid "The Apps tab needs Settings rights (base.group_system), as Odoo's Apps menu."
+msgstr "The Apps tab needs Settings rights (base.group_system), as Odoo's Apps menu."
+
+#: src/features/apps/apps.tab.ts:41
+msgid "Pending (%s)"
+msgstr "Pending (%s)"
+
+#: src/features/apps/apps.tab.ts:41
+msgid "Pending"
+msgstr "Pending"
+
+#: src/features/apps/apps.tpl.html:14
+msgid "Search, or type names then Enter: sale; stock"
+msgstr "Search, or type names then Enter: sale; stock"
+
+#: src/features/apps/apps.tpl.html:14
+msgid "Search modules"
+msgstr "Search modules"
+
+#: src/features/apps/apps.tpl.html:16
+#: src/features/apps/apps.tpl.html:16
+#: src/features/apps/apps.ui.ts:136
+msgid "Filters"
+msgstr "Filters"
+
+#: src/features/apps/apps.tpl.html:30
+#: src/features/apps/apps.tpl.html:30
+#: src/features/apps/apps.tpl.html:42
+#: src/features/apps/apps.tpl.html:42
+#: src/features/translations/translations.modules.ts:74
+msgid "Remove"
+msgstr "Remove"
+
+#: src/features/apps/apps.tpl.html:48
+msgid "Running…"
+msgstr "Running…"
+
+#: src/features/apps/apps.tpl.html:79
+msgid "Module description"
+msgstr "Module description"
+
+#: src/features/apps/apps.ui.ts:83
+#: src/features/code/code.result.ts:234
+#: src/features/code/code.result.ts:272
+#: src/features/rpc/rpc.tab.ts:98
+#: src/features/rpc/rpc.tab.ts:128
+#: src/features/rpc/rpc.tab.ts:186
+msgid "error"
+msgstr "error"
+
+#: src/features/apps/apps.ui.ts:100
+msgid "Not Installed"
+msgstr "Not Installed"
+
+#: src/features/apps/apps.ui.ts:101
+msgid "Extra"
+msgstr "Extra"
+
+#: src/features/apps/apps.ui.ts:129
+msgid " or "
+msgstr " or "
+
+#: src/features/apps/apps.ui.ts:132
+msgid "All Categories"
+msgstr "All Categories"
+
+#: src/features/apps/apps.ui.ts:154
+msgid "Not installable"
+msgstr "Not installable"
+
+#: src/features/apps/apps.ui.ts:155
+msgid "To upgrade"
+msgstr "To upgrade"
+
+#: src/features/apps/apps.ui.ts:155
+msgid "To uninstall"
+msgstr "To uninstall"
+
+#: src/features/apps/apps.ui.ts:155
+msgid "To install"
+msgstr "To install"
+
+#: src/features/code/code.data.ts:26
+#: src/features/code/code.data.ts:76
+#: src/features/menus/menus.tab.ts:42
+#: src/features/perf/perf.data.ts:94
+#: src/features/rpc/rpc.tab.ts:183
+#: src/odoo/rpc.ts:30
+msgid "No response — is this an Odoo page?"
+msgstr "No response — is this an Odoo page?"
+
+#: src/features/code/code.data.ts:40
+msgid "Unknown model: %s"
+msgstr "Unknown model: %s"
+
+#: src/features/code/code.data.ts:61
+msgid "The server action returned nothing: is this Odoo running it as code?"
+msgstr "The server action returned nothing: is this Odoo running it as code?"
+
+#: src/features/code/code.injected.ts:65
+msgid "%s writes: blocked in read-only mode (choose \"Dry run\" or \"Allow writes\")"
+msgstr "%s writes: blocked in read-only mode (choose \"Dry run\" or \"Allow writes\")"
+
+#: src/features/code/code.injected.ts:87
+msgid "Stopped after %s calls"
+msgstr "Stopped after %s calls"
+
+#: src/features/code/code.injected.ts:132
+msgid "%s has no field %s"
+msgstr "%s has no field %s"
+
+#: src/features/code/code.injected.ts:165
+#: src/features/code/code.injected.ts:170
+#: src/features/code/code.injected.ts:189
+#: src/features/code/code.injected.ts:225
+#: src/features/code/code.injected.ts:300
+msgid "%s.%s is not relational"
+msgstr "%s.%s is not relational"
+
+#: src/features/code/code.injected.ts:167
+#: src/features/code/code.injected.ts:263
+msgid "Expected singleton: %s"
+msgstr "Expected singleton: %s"
+
+#: src/features/code/code.injected.ts:211
+msgid "%s is read from the server: await it before using its value"
+msgstr "%s is read from the server: await it before using its value"
+
+#: src/features/code/code.injected.ts:471
+msgid "No view to refresh on this page"
+msgstr "No view to refresh on this page"
+
+#: src/features/code/code.result.ts:41
+msgid "true"
+msgstr "true"
+
+#: src/features/code/code.result.ts:41
+msgid "false"
+msgstr "false"
+
+#: src/features/code/code.result.ts:48
+#: src/features/code/code.result.ts:80
+#: src/features/code/code.result.ts:157
+msgid "%s records"
+msgstr "%s records"
+
+#: src/features/code/code.result.ts:62
+msgid "binary · %s"
+msgstr "binary · %s"
+
+#: src/features/code/code.result.ts:78
+msgid "Not created: a dry run answers create() with an id no record has"
+msgstr "Not created: a dry run answers create() with an id no record has"
+
+#: src/features/code/code.result.ts:138
+msgid "Download CSV"
+msgstr "Download CSV"
+
+#: src/features/code/code.result.ts:139
+#: src/features/view/view.tpl.html:42
+msgid "Copy"
+msgstr "Copy"
+
+#: src/features/code/code.result.ts:139
+msgid "Copy CSV"
+msgstr "Copy CSV"
+
+#: src/features/code/code.result.ts:139
+msgid "Copy Markdown"
+msgstr "Copy Markdown"
+
+#: src/features/code/code.result.ts:140
+msgid "Copy JSON"
+msgstr "Copy JSON"
+
+#: src/features/code/code.result.ts:157
+msgid "recordset"
+msgstr "recordset"
+
+#: src/features/code/code.result.ts:164
+msgid "rows of %s"
+msgstr "rows of %s"
+
+#: src/features/code/code.result.ts:164
+msgid "table"
+msgstr "table"
+
+#: src/features/code/code.result.ts:164
+msgid "%s rows (first %s shown)"
+msgstr "%s rows (first %s shown)"
+
+#: src/features/code/code.result.ts:164
+msgid "%s rows"
+msgstr "%s rows"
+
+#: src/features/code/code.result.ts:171
+msgid "list"
+msgstr "list"
+
+#: src/features/code/code.result.ts:171
+#: src/ui/json-view.ts:57
+msgid "%s items"
+msgstr "%s items"
+
+#: src/features/code/code.result.ts:180
+msgid "dict"
+msgstr "dict"
+
+#: src/features/code/code.result.ts:180
+#: src/ui/json-view.ts:57
+msgid "%s keys"
+msgstr "%s keys"
+
+#: src/features/code/code.result.ts:191
+msgid "%s bytes"
+msgstr "%s bytes"
+
+#: src/features/code/code.result.ts:195
+msgid "JSON"
+msgstr "JSON"
+
+#: src/features/code/code.result.ts:205
+msgid "nothing"
+msgstr "nothing"
+
+#: src/features/code/code.result.ts:212
+msgid "text · %s characters"
+msgstr "text · %s characters"
+
+#: src/features/code/code.result.ts:234
+msgid "ok"
+msgstr "ok"
+
+#: src/features/code/code.result.ts:235
+#: src/features/view/view.overview.ts:64
+msgid "read-only"
+msgstr "read-only"
+
+#: src/features/code/code.result.ts:235
+msgid "dry run"
+msgstr "dry run"
+
+#: src/features/code/code.result.ts:235
+msgid "writes committed"
+msgstr "writes committed"
+
+#: src/features/code/code.result.ts:236
+#: src/features/code/code.result.ts:272
+msgid "%s ms"
+msgstr "%s ms"
+
+#: src/features/code/code.result.ts:237
+msgid "%s calls"
+msgstr "%s calls"
+
+#: src/features/code/code.result.ts:238
+msgid "%s writes not sent"
+msgstr "%s writes not sent"
+
+#: src/features/code/code.result.ts:239
+msgid "%s write calls"
+msgstr "%s write calls"
+
+#: src/features/code/code.result.ts:240
+msgid "page refreshed"
+msgstr "page refreshed"
+
+#: src/features/code/code.result.ts:240
+msgid "page not refreshed"
+msgstr "page not refreshed"
+
+#: src/features/code/code.result.ts:244
+msgid "Dry run: the code ran for real, then everything it changed was rolled back."
+msgstr "Dry run: the code ran for real, then everything it changed was rolled back."
+
+#: src/features/code/code.result.ts:245
+msgid "Dry run: the writing calls below were listed, not sent; reads after them show the values before."
+msgstr "Dry run: the writing calls below were listed, not sent; reads after them show the values before."
+
+#: src/features/code/code.result.ts:254
+msgid "No return value: end with return … to see one."
+msgstr "No return value: end with return … to see one."
+
+#: src/features/code/code.result.ts:263
+msgid "Line %s"
+msgstr "Line %s"
+
+#: src/features/code/code.result.ts:263
+msgid "Go to Line"
+msgstr "Go to Line"
+
+#: src/features/code/code.result.ts:264
+msgid "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
+msgstr "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
+
+#: src/features/code/code.result.ts:265
+msgid "Nothing was saved: the error rolled back everything the code had changed."
+msgstr "Nothing was saved: the error rolled back everything the code had changed."
+
+#: src/features/code/code.result.ts:271
+msgid "not sent"
+msgstr "not sent"
+
+#: src/features/code/code.result.ts:271
+msgid "write"
+msgstr "write"
+
+#: src/features/code/code.result.ts:275
+msgid "Calls (%s)"
+msgstr "Calls (%s)"
+
+#: src/features/code/code.snippets.ts:10
+#: src/features/code/code.snippets.ts:26
+msgid "This record"
+msgstr "This record"
+
+#: src/features/code/code.snippets.ts:10
+#: src/features/code/code.snippets.ts:26
+msgid "every field of the record opened"
+msgstr "every field of the record opened"
+
+#: src/features/code/code.snippets.ts:11
+#: src/features/code/code.snippets.ts:27
+msgid "Selected records"
+msgstr "Selected records"
+
+#: src/features/code/code.snippets.ts:11
+#: src/features/code/code.snippets.ts:27
+msgid "the records ticked in the list, else the one opened"
+msgstr "the records ticked in the list, else the one opened"
+
+#: src/features/code/code.snippets.ts:12
+#: src/features/code/code.snippets.ts:28
+msgid "Count by a field"
+msgstr "Count by a field"
+
+#: src/features/code/code.snippets.ts:12
+#: src/features/code/code.snippets.ts:28
+msgid "how many records of the screen's model per value (change state)"
+msgstr "how many records of the screen's model per value (change state)"
+
+#: src/features/code/code.snippets.ts:17
+#: src/features/code/code.snippets.ts:31
+msgid "Empty field"
+msgstr "Empty field"
+
+#: src/features/code/code.snippets.ts:17
+#: src/features/code/code.snippets.ts:31
+msgid "records missing a value"
+msgstr "records missing a value"
+
+#: src/features/code/code.snippets.ts:18
+#: src/features/code/code.snippets.ts:32
+msgid "My access to this record"
+msgstr "My access to this record"
+
+#: src/features/code/code.snippets.ts:18
+#: src/features/code/code.snippets.ts:32
+msgid "what the server answers for each operation"
+msgstr "what the server answers for each operation"
+
+#: src/features/code/code.snippets.ts:22
+#: src/features/code/code.snippets.ts:37
+msgid "Record of an xmlid"
+msgstr "Record of an xmlid"
+
+#: src/features/code/code.snippets.ts:23
+#: src/features/code/code.snippets.ts:38
+msgid "Change a field (dry run first)"
+msgstr "Change a field (dry run first)"
+
+#: src/features/code/code.snippets.ts:23
+msgid "rec.field = value writes it, like in Python"
+msgstr "rec.field = value writes it, like in Python"
+
+#: src/features/code/code.snippets.ts:38
+msgid "a dry run rolls it back: see what it would do"
+msgstr "a dry run rolls it back: see what it would do"
+
+#: src/features/code/code.snippets.ts:41
+msgid "Time a piece of code"
+msgstr "Time a piece of code"
+
+#: src/features/code/code.snippets.ts:41
+msgid "how long a call takes on the server"
+msgstr "how long a call takes on the server"
+
+#: src/features/code/code.snippets.ts:69
+msgid "Delete the snippet \"%s\"?"
+msgstr "Delete the snippet \"%s\"?"
+
+#: src/features/code/code.snippets.ts:69
+msgid "Delete this snippet"
+msgstr "Delete this snippet"
+
+#: src/features/code/code.snippets.ts:73
+msgid "+ Save the code as a snippet…"
+msgstr "+ Save the code as a snippet…"
+
+#: src/features/code/code.snippets.ts:84
+msgid "Available variables:"
+msgstr "Available variables:"
+
+#: src/features/code/code.snippets.ts:85
+msgid "environment of the logged-in user, with their access rights and record rules; env['res.partner'] is an empty recordset"
+msgstr "environment of the logged-in user, with their access rights and record rules; env['res.partner'] is an empty recordset"
+
+#: src/features/code/code.snippets.ts:86
+msgid "the record opened, the records selected (else the one opened), the screen's model: as in a server action"
+msgstr "the record opened, the records selected (else the one opened), the screen's model: as in a server action"
+
+#: src/features/code/code.snippets.ts:87
+msgid "current user, current company, active companies"
+msgstr "current user, current company, active companies"
+
+#: src/features/code/code.snippets.ts:88
+msgid "record of an external id, if you can read it"
+msgstr "record of an external id, if you can read it"
+
+#: src/features/code/code.snippets.ts:89
+#: src/features/code/code.snippets.ts:104
+msgid "shows values above the result"
+msgstr "shows values above the result"
+
+#: src/features/code/code.snippets.ts:90
+msgid "x2many commands: Command.create(vals), link(id), set(ids)…"
+msgstr "x2many commands: Command.create(vals), link(id), set(ids)…"
+
+#: src/features/code/code.snippets.ts:92
+msgid "Recordsets:"
+msgstr "Recordsets:"
+
+#: src/features/code/code.snippets.ts:93
+msgid "read from the server"
+msgstr "read from the server"
+
+#: src/features/code/code.snippets.ts:94
+msgid "work like in Python"
+msgstr "work like in Python"
+
+#: src/features/code/code.snippets.ts:95
+msgid "field value of a single record, as in Python; await it inside an expression"
+msgstr "field value of a single record, as in Python; await it inside an expression"
+
+#: src/features/code/code.snippets.ts:96
+msgid "writes the field, like in Python"
+msgstr "writes the field, like in Python"
+
+#: src/features/code/code.snippets.ts:97
+msgid "write: refused in read-only, listed but not sent in a dry run"
+msgstr "write: refused in read-only, listed but not sent in a dry run"
+
+#: src/features/code/code.snippets.ts:101
+msgid "Available variables (a server action's):"
+msgstr "Available variables (a server action's):"
+
+#: src/features/code/code.snippets.ts:102
+msgid "environment of the logged-in user (their rights; sudo() is yours to call)"
+msgstr "environment of the logged-in user (their rights; sudo() is yours to call)"
+
+#: src/features/code/code.snippets.ts:103
+msgid "the record opened, the records selected (else the one opened), the screen's model"
+msgstr "the record opened, the records selected (else the one opened), the screen's model"
+
+#: src/features/code/code.snippets.ts:105
+msgid "the value shown, as what it is"
+msgstr "the value shown, as what it is"
+
+#: src/features/code/code.snippets.ts:106
+msgid "what a server action has"
+msgstr "what a server action has"
+
+#: src/features/code/code.snippets.ts:108
+msgid "Runs:"
+msgstr "Runs:"
+
+#: src/features/code/code.snippets.ts:109
+#: src/features/code/code.tab.ts:29
+#: src/features/code/code.tab.ts:30
+msgid "Dry run"
+msgstr "Dry run"
+
+#: src/features/code/code.snippets.ts:109
+msgid "the code runs for real, then everything is rolled back: try a write, see what it does"
+msgstr "the code runs for real, then everything is rolled back: try a write, see what it does"
+
+#: src/features/code/code.snippets.ts:110
+#: src/features/code/code.tab.ts:30
+msgid "Commit"
+msgstr "Commit"
+
+#: src/features/code/code.snippets.ts:110
+msgid "saved at once; an error rolls back everything the code changed"
+msgstr "saved at once; an error rolls back everything the code changed"
+
+#: src/features/code/code.snippets.ts:111
+msgid "Odoo's sandbox: no import, no dunder (__x__) names; Settings rights needed"
+msgstr "Odoo's sandbox: no import, no dunder (__x__) names; Settings rights needed"
+
+#: src/features/code/code.snippets.ts:131
+msgid "Suggestions: env[' (models), '… (fields), . (methods and fields); ↑ ↓ Enter / Tab, Esc, Ctrl+Space. ⌘/Ctrl+Enter runs."
+msgstr "Suggestions: env[' (models), '… (fields), . (methods and fields); ↑ ↓ Enter / Tab, Esc, Ctrl+Space. ⌘/Ctrl+Enter runs."
+
+#: src/features/code/code.tab.ts:25
+msgid "// JavaScript with env, record, records, model, print, Command. ⌘/Ctrl+Enter runs it."
+msgstr "// JavaScript with env, record, records, model, print, Command. ⌘/Ctrl+Enter runs it."
+
+#: src/features/code/code.tab.ts:26
+msgid "# Python with env, record, records, model, print, Command; return a value. ⌘/Ctrl+Enter runs it."
+msgstr "# Python with env, record, records, model, print, Command; return a value. ⌘/Ctrl+Enter runs it."
+
+#: src/features/code/code.tab.ts:29
+#: src/features/view/view.tpl.html:92
+msgid "Read-only"
+msgstr "Read-only"
+
+#: src/features/code/code.tab.ts:29
+msgid "Allow writes"
+msgstr "Allow writes"
+
+#: src/features/code/code.tab.ts:56
+msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
+msgstr "Runs as %s (uid %s): their access rights, record rules and companies apply."
+
+#: src/features/code/code.tab.ts:58
+msgid "Runs on:"
+msgstr "Runs on:"
+
+#: src/features/code/code.tab.ts:59
+msgid "no model on this screen: record, records and model are empty"
+msgstr "no model on this screen: record, records and model are empty"
+
+#: src/features/code/code.tab.ts:62
+msgid "record #%s"
+msgstr "record #%s"
+
+#: src/features/code/code.tab.ts:62
+msgid "no record opened"
+msgstr "no record opened"
+
+#: src/features/code/code.tab.ts:63
+msgid "%s selected"
+msgstr "%s selected"
+
+#: src/features/code/code.tab.ts:65
+msgid "Read the selection again"
+msgstr "Read the selection again"
+
+#: src/features/code/code.tab.ts:73
+msgid "Run"
+msgstr "Run"
+
+#: src/features/code/code.tab.ts:73
+msgid "Run (⌘/Ctrl+Enter)"
+msgstr "Run (⌘/Ctrl+Enter)"
+
+#: src/features/code/code.tab.ts:75
+msgid "Auto Refresh"
+msgstr "Auto Refresh"
+
+#: src/features/code/code.tab.ts:75
+msgid "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
+msgstr "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
+
+#: src/features/code/code.tab.ts:100
+msgid "Snippets"
+msgstr "Snippets"
+
+#: src/features/code/code.tab.ts:100
+msgid "Ready-made snippets, and the ones you saved for this Odoo"
+msgstr "Ready-made snippets, and the ones you saved for this Odoo"
+
+#: src/features/code/code.tab.ts:101
+msgid "Guide: available variables, recordset API, examples"
+msgstr "Guide: available variables, recordset API, examples"
+
+#: src/features/code/code.tab.ts:119
+msgid "Name of the snippet:"
+msgstr "Name of the snippet:"
+
+#: src/features/code/code.tab.ts:155
+msgid "Python runs as a server action: it needs Settings rights (base.group_system)."
+msgstr "Python runs as a server action: it needs Settings rights (base.group_system)."
+
+#: src/features/code/code.tpl.html:36
+msgid "Suggestions"
+msgstr "Suggestions"
+
+#: src/features/menus/menus.logic.ts:10
+msgid "Record Rules"
+msgstr "Record Rules"
+
+#: src/features/menus/menus.logic.ts:11
+msgid "Access Rights"
+msgstr "Access Rights"
+
+#: src/features/menus/menus.logic.ts:14
+msgid "Model Data"
+msgstr "Model Data"
+
+#: src/features/menus/menus.logic.ts:15
+msgid "Crons"
+msgstr "Crons"
+
+#: src/features/menus/menus.logic.ts:16
+msgid "Actions Window"
+msgstr "Actions Window"
+
+#: src/features/menus/menus.logic.ts:17
+msgid "Actions Server"
+msgstr "Actions Server"
+
+#: src/features/menus/menus.logic.ts:19
+msgid "Parameters"
+msgstr "Parameters"
+
+#: src/features/menus/menus.logic.ts:20
+msgid "Sequences"
+msgstr "Sequences"
+
+#: src/features/menus/menus.logic.ts:21
+msgid "Mail Templates"
+msgstr "Mail Templates"
+
+#: src/features/menus/menus.tab.ts:24
+msgid "Needs Access Rights (base.group_erp_manager)."
+msgstr "Needs Access Rights (base.group_erp_manager)."
+
+#: src/features/menus/menus.tab.ts:51
+msgid "Menu · model"
+msgstr "Menu · model"
+
+#: src/features/menus/menus.tab.ts:51
+#: src/features/translations/translations.find.ts:67
+#: src/features/view/view.overview.ts:58
+#: src/features/view/view.overview.ts:59
+msgid "Action"
+msgstr "Action"
+
+#: src/features/perf/perf.data.ts:16
+msgid "Profiling is not allowed on this database: allow it first."
+msgstr "Profiling is not allowed on this database: allow it first."
+
+#: src/features/perf/perf.data.ts:44
+msgid "Cannot call /web/set_profiling"
+msgstr "Cannot call /web/set_profiling"
+
+#: src/features/perf/perf.request.ts:52
+msgid "Flame Graph ↗"
+msgstr "Flame Graph ↗"
+
+#: src/features/perf/perf.request.ts:53
+msgid "Odoo 18 shows it only while profiling is allowed on the database"
+msgstr "Odoo 18 shows it only while profiling is allowed on the database"
+
+#: src/features/perf/perf.request.ts:53
+msgid "Odoo's speedscope view of this request"
+msgstr "Odoo's speedscope view of this request"
+
+#: src/features/perf/perf.request.ts:55
+msgid "Baseline ✓"
+msgstr "Baseline ✓"
+
+#: src/features/perf/perf.request.ts:55
+msgid "Set as Baseline"
+msgstr "Set as Baseline"
+
+#: src/features/perf/perf.request.ts:56
+msgid "Stop comparing with this request"
+msgstr "Stop comparing with this request"
+
+#: src/features/perf/perf.request.ts:56
+msgid "Compare the other requests with this one (before a fix)"
+msgstr "Compare the other requests with this one (before a fix)"
+
+#: src/features/perf/perf.request.ts:58
+msgid "Side by Side ↗"
+msgstr "Side by Side ↗"
+
+#: src/features/perf/perf.request.ts:58
+msgid "Both flame graphs in speedscope"
+msgstr "Both flame graphs in speedscope"
+
+#: src/features/perf/perf.request.ts:60
+msgid "Delete"
+msgstr "Delete"
+
+#: src/features/perf/perf.request.ts:61
+msgid "Delete this profile (#%s)?"
+msgstr "Delete this profile (#%s)?"
+
+#: src/features/perf/perf.request.ts:63
+msgid "Delete this ir.profile record"
+msgstr "Delete this ir.profile record"
+
+#: src/features/perf/perf.request.ts:67
+msgid "queries"
+msgstr "queries"
+
+#: src/features/perf/perf.request.ts:67
+msgid "SQL queries of the request"
+msgstr "SQL queries of the request"
+
+#: src/features/perf/perf.request.ts:68
+msgid "in SQL"
+msgstr "in SQL"
+
+#: src/features/perf/perf.request.ts:68
+msgid "Time spent in the database"
+msgstr "Time spent in the database"
+
+#: src/features/perf/perf.request.ts:69
+msgid "total"
+msgstr "total"
+
+#: src/features/perf/perf.request.ts:69
+msgid "Real time of the request on the server"
+msgstr "Real time of the request on the server"
+
+#: src/features/perf/perf.request.ts:70
+msgid "Python"
+msgstr "Python"
+
+#: src/features/perf/perf.request.ts:70
+msgid "The rest: Python, waiting, and the profiler itself"
+msgstr "The rest: Python, waiting, and the profiler itself"
+
+#: src/features/perf/perf.request.ts:71
+msgid "CPU time of the server process (Odoo 19)"
+msgstr "CPU time of the server process (Odoo 19)"
+
+#: src/features/perf/perf.request.ts:75
+msgid "By code: where the time goes"
+msgstr "By code: where the time goes"
+
+#: src/features/perf/perf.request.ts:76
+msgid "No SQL recorded for this request (the SQL collector was off?)."
+msgstr "No SQL recorded for this request (the SQL collector was off?)."
+
+#: src/features/perf/perf.request.ts:78
+msgid "Lines of code sending queries"
+msgstr "Lines of code sending queries"
+
+#: src/features/perf/perf.request.ts:79
+msgid "Repeated queries: N+1 suspects"
+msgstr "Repeated queries: N+1 suspects"
+
+#: src/features/perf/perf.request.ts:80
+#: src/features/perf/perf.request.ts:86
+#: src/features/perf/perf.request.ts:202
+msgid "Statement"
+msgstr "Statement"
+
+#: src/features/perf/perf.request.ts:80
+#: src/features/perf/perf.request.ts:202
+msgid "Runs"
+msgstr "Runs"
+
+#: src/features/perf/perf.request.ts:80
+#: src/features/perf/perf.request.ts:86
+#: src/features/perf/perf.request.ts:172
+#: src/features/perf/perf.request.ts:195
+#: src/features/perf/perf.tab.ts:117
+msgid "Time"
+msgstr "Time"
+
+#: src/features/perf/perf.request.ts:81
+msgid "Odoo itself"
+msgstr "Odoo itself"
+
+#: src/features/perf/perf.request.ts:83
+msgid "The same SQL sent several times. If a count follows the number of records shown (10 records → 10×), it is an N+1: the code reads records one by one where one query could read them all."
+msgstr "The same SQL sent several times. If a count follows the number of records shown (10 records → 10×), it is an N+1: the code reads records one by one where one query could read them all."
+
+#: src/features/perf/perf.request.ts:84
+msgid "✓ No statement runs twice."
+msgstr "✓ No statement runs twice."
+
+#: src/features/perf/perf.request.ts:86
+msgid "Slowest queries"
+msgstr "Slowest queries"
+
+#: src/features/perf/perf.request.ts:89
+msgid "✓ No slow query (the slowest took %s): the database is not the problem here."
+msgstr "✓ No slow query (the slowest took %s): the database is not the problem here."
+
+#: src/features/perf/perf.request.ts:90
+msgid "The slowest took %s. Check the columns it filters or joins on have an index, and that it does not read more rows than needed."
+msgstr "The slowest took %s. Check the columns it filters or joins on have an index, and that it does not read more rows than needed."
+
+#: src/features/perf/perf.request.ts:116
+msgid "Reads %s"
+msgstr "Reads %s"
+
+#: src/features/perf/perf.request.ts:116
+msgid "Creates in %s"
+msgstr "Creates in %s"
+
+#: src/features/perf/perf.request.ts:116
+msgid "Updates %s"
+msgstr "Updates %s"
+
+#: src/features/perf/perf.request.ts:116
+msgid "Deletes from %s"
+msgstr "Deletes from %s"
+
+#: src/features/perf/perf.request.ts:120
+msgid "Runs a SQL query"
+msgstr "Runs a SQL query"
+
+#: src/features/perf/perf.request.ts:135
+msgid "N+1: one query runs %s× in this request"
+msgstr "N+1: one query runs %s× in this request"
+
+#: src/features/perf/perf.request.ts:136
+msgid "%s runs it once per record: read them all at once instead (a recordset, mapped(), read_group…)."
+msgstr "%s runs it once per record: read them all at once instead (a recordset, mapped(), read_group…)."
+
+#: src/features/perf/perf.request.ts:137
+msgid "Most of the time is in the database (%s of %s)"
+msgstr "Most of the time is in the database (%s of %s)"
+
+#: src/features/perf/perf.request.ts:138
+msgid "See the slowest queries below: a missing index, a large join, a search on a non-stored field…"
+msgstr "See the slowest queries below: a missing index, a large join, a search on a non-stored field…"
+
+#: src/features/perf/perf.request.ts:139
+msgid "Most of the time is in Python (≈ %s of %s)"
+msgstr "Most of the time is in Python (≈ %s of %s)"
+
+#: src/features/perf/perf.request.ts:140
+msgid "The SQL is not the problem: see which code takes the time below, or every function in the Flame Graph."
+msgstr "The SQL is not the problem: see which code takes the time below, or every function in the Flame Graph."
+
+#: src/features/perf/perf.request.ts:141
+msgid "✓ Fast request (%s)"
+msgstr "✓ Fast request (%s)"
+
+#: src/features/perf/perf.request.ts:141
+msgid "Nothing to optimise here."
+msgstr "Nothing to optimise here."
+
+#: src/features/perf/perf.request.ts:155
+msgid "SQL %s"
+msgstr "SQL %s"
+
+#: src/features/perf/perf.request.ts:156
+msgid "Python ≈ %s"
+msgstr "Python ≈ %s"
+
+#: src/features/perf/perf.request.ts:159
+msgid "SQL %s, Python ≈ %s"
+msgstr "SQL %s, Python ≈ %s"
+
+#: src/features/perf/perf.request.ts:168
+msgid "The functions of the modules (outside the ORM and the server) the time went to, SQL they ran included. Sampled every 10 ms or so: approximate."
+msgstr "The functions of the modules (outside the ORM and the server) the time went to, SQL they ran included. Sampled every 10 ms or so: approximate."
+
+#: src/features/perf/perf.request.ts:169
+msgid "No time in the modules' code: the server itself (routing, ORM) took it."
+msgstr "No time in the modules' code: the server itself (routing, ORM) took it."
+
+#: src/features/perf/perf.request.ts:170
+msgid "No Python samples: this request was recorded without them (Collect: Python stacks)."
+msgstr "No Python samples: this request was recorded without them (Collect: Python stacks)."
+
+#: src/features/perf/perf.request.ts:172
+msgid "Function"
+msgstr "Function"
+
+#: src/features/perf/perf.request.ts:174
+msgid "≈ %s in Python, %s in %s SQL queries"
+msgstr "≈ %s in Python, %s in %s SQL queries"
+
+#: src/features/perf/perf.request.ts:174
+msgid "≈ %s in Python, no SQL"
+msgstr "≈ %s in Python, no SQL"
+
+#: src/features/perf/perf.request.ts:187
+msgid "Called by"
+msgstr "Called by"
+
+#: src/features/perf/perf.request.ts:195
+msgid "Line of code"
+msgstr "Line of code"
+
+#: src/features/perf/perf.request.ts:195
+#: src/features/perf/perf.request.ts:228
+msgid "Queries"
+msgstr "Queries"
+
+#: src/features/perf/perf.request.ts:195
+msgid "Statements"
+msgstr "Statements"
+
+#: src/features/perf/perf.request.ts:196
+msgid "Odoo itself (no addon line in the stack)"
+msgstr "Odoo itself (no addon line in the stack)"
+
+#: src/features/perf/perf.request.ts:207
+msgid "The line of an addon under the ORM that caused the queries. Many queries from one line, one statement repeated: a loop reading record by record (N+1)."
+msgstr "The line of an addon under the ORM that caused the queries. Many queries from one line, one statement repeated: a loop reading record by record (N+1)."
+
+#: src/features/perf/perf.request.ts:214
+msgid "The baseline was deleted."
+msgstr "The baseline was deleted."
+
+#: src/features/perf/perf.request.ts:221
+msgid "✓ Gone: %s"
+msgstr "✓ Gone: %s"
+
+#: src/features/perf/perf.request.ts:222
+msgid "✗ New: %s"
+msgstr "✗ New: %s"
+
+#: src/features/perf/perf.request.ts:223
+msgid "%s× → %s×: %s"
+msgstr "%s× → %s×: %s"
+
+#: src/features/perf/perf.request.ts:224
+msgid "Against the baseline #%s"
+msgstr "Against the baseline #%s"
+
+#: src/features/perf/perf.request.ts:227
+msgid "Baseline"
+msgstr "Baseline"
+
+#: src/features/perf/perf.request.ts:227
+msgid "This one"
+msgstr "This one"
+
+#: src/features/perf/perf.request.ts:228
+msgid "Total"
+msgstr "Total"
+
+#: src/features/perf/perf.request.ts:228
+msgid "In SQL"
+msgstr "In SQL"
+
+#: src/features/perf/perf.request.ts:230
+msgid "Repeated statements: the same as the baseline."
+msgstr "Repeated statements: the same as the baseline."
+
+#: src/features/perf/perf.tab.ts:49
+msgid "The Perf tab needs Settings rights (base.group_system): the profiles are ir.profile records."
+msgstr "The Perf tab needs Settings rights (base.group_system): the profiles are ir.profile records."
+
+#: src/features/perf/perf.tab.ts:75
+#: src/features/perf/perf.tab.ts:224
+msgid "Every session"
+msgstr "Every session"
+
+#: src/features/perf/perf.tab.ts:86
+msgid "Profile session"
+msgstr "Profile session"
+
+#: src/features/perf/perf.tab.ts:87
+msgid "Filter requests…"
+msgstr "Filter requests…"
+
+#: src/features/perf/perf.tab.ts:88
+msgid "Read the profiles again"
+msgstr "Read the profiles again"
+
+#: src/features/perf/perf.tab.ts:90
+msgid "Static Files (%s)"
+msgstr "Static Files (%s)"
+
+#: src/features/perf/perf.tab.ts:90
+msgid "Scripts, images, manifest…: nothing to optimise in a module"
+msgstr "Scripts, images, manifest…: nothing to optimise in a module"
+
+#: src/features/perf/perf.tab.ts:97
+msgid "Recording: do the slow action on the Odoo page, then ⟳. Every request of this session writes a profile."
+msgstr "Recording: do the slow action on the Odoo page, then ⟳. Every request of this session writes a profile."
+
+#: src/features/perf/perf.tab.ts:98
+msgid "No request in this session."
+msgstr "No request in this session."
+
+#: src/features/perf/perf.tab.ts:98
+msgid "No profile yet: Start, use the Odoo page, then come back here."
+msgstr "No profile yet: Start, use the Odoo page, then come back here."
+
+#: src/features/perf/perf.tab.ts:104
+msgid "Click a request to see where its time goes."
+msgstr "Click a request to see where its time goes."
+
+#: src/features/perf/perf.tab.ts:108
+msgid "baseline"
+msgstr "baseline"
+
+#: src/features/perf/perf.tab.ts:117
+msgid "Request"
+msgstr "Request"
+
+#: src/features/perf/perf.tab.ts:117
+msgid "At"
+msgstr "At"
+
+#: src/features/perf/perf.tab.ts:119
+msgid "%s requests"
+msgstr "%s requests"
+
+#: src/features/perf/perf.tab.ts:130
+msgid "RECORDING"
+msgstr "RECORDING"
+
+#: src/features/perf/perf.tab.ts:130
+msgid "off"
+msgstr "off"
+
+#: src/features/perf/perf.tab.ts:131
+msgid "since %s"
+msgstr "since %s"
+
+#: src/features/perf/perf.tab.ts:138
+msgid "Stop Profiling"
+msgstr "Stop Profiling"
+
+#: src/features/perf/perf.tab.ts:138
+msgid "Start Profiling"
+msgstr "Start Profiling"
+
+#: src/features/perf/perf.tab.ts:158
+msgid "Collect:"
+msgstr "Collect:"
+
+#: src/features/perf/perf.tab.ts:159
+msgid "Every query, its time and stack: always"
+msgstr "Every query, its time and stack: always"
+
+#: src/features/perf/perf.tab.ts:160
+msgid "Python stacks"
+msgstr "Python stacks"
+
+#: src/features/perf/perf.tab.ts:160
+msgid "The Python stack sampled every few ms: the flame graph"
+msgstr "The Python stack sampled every few ms: the flame graph"
+
+#: src/features/perf/perf.tab.ts:161
+msgid "The QWeb directives rendered and their time (reports, website pages)"
+msgstr "The QWeb directives rendered and their time (reports, website pages)"
+
+#: src/features/perf/perf.tab.ts:163
+msgid "Every request of this session writes one profile (ir.profile); the panel's own are left out of the list."
+msgstr "Every request of this session writes one profile (ir.profile); the panel's own are left out of the list."
+
+#: src/features/perf/perf.tab.ts:164
+msgid "Odoo's own profiler: SQL and Python of every request of this session, read back here (Settings rights)."
+msgstr "Odoo's own profiler: SQL and Python of every request of this session, read back here (Settings rights)."
+
+#: src/features/perf/perf.tab.ts:165
+msgid "Allowed on this database until %s."
+msgstr "Allowed on this database until %s."
+
+#: src/features/perf/perf.tab.ts:165
+msgid "Not allowed on this database yet: Start asks for how long."
+msgstr "Not allowed on this database yet: Start asks for how long."
+
+#: src/features/perf/perf.tab.ts:173
+msgid "Cannot change what the profiler collects."
+msgstr "Cannot change what the profiler collects."
+
+#: src/features/perf/perf.tab.ts:179
+msgid "Profiling is not allowed on this database. Allow it for:"
+msgstr "Profiling is not allowed on this database. Allow it for:"
+
+#: src/features/perf/perf.tab.ts:180
+msgid "5 minutes"
+msgstr "5 minutes"
+
+#: src/features/perf/perf.tab.ts:180
+msgid "1 hour"
+msgstr "1 hour"
+
+#: src/features/perf/perf.tab.ts:180
+msgid "1 day"
+msgstr "1 day"
+
+#: src/features/perf/perf.tab.ts:181
+msgid "(writes base.profiling_enabled_until)"
+msgstr "(writes base.profiling_enabled_until)"
+
+#: src/features/perf/perf.tab.ts:186
+msgid "Profiling"
+msgstr "Profiling"
+
+#: src/features/perf/perf.tab.ts:191
+msgid "Sent (HTTP %s), but no profile of it was found."
+msgstr "Sent (HTTP %s), but no profile of it was found."
+
+#: src/features/perf/perf.tab.ts:194
+msgid "HTTP %s · %s · %s queries · opened below"
+msgstr "HTTP %s · %s · %s queries · opened below"
+
+#: src/features/perf/perf.tab.ts:206
+msgid "Profiled"
+msgstr "Profiled"
+
+#: src/features/perf/perf.tab.ts:213
+msgid "Nothing to delete."
+msgstr "Nothing to delete."
+
+#: src/features/perf/perf.tab.ts:214
+msgid "%s: delete %s profiles (ir.profile)? The panel's own reads, not listed, are among them."
+msgstr "%s: delete %s profiles (ir.profile)? The panel's own reads, not listed, are among them."
+
+#: src/features/perf/perf.tab.ts:221
+msgid "Clean up:"
+msgstr "Clean up:"
+
+#: src/features/perf/perf.tab.ts:222
+msgid "This session (%s)"
+msgstr "This session (%s)"
+
+#: src/features/perf/perf.tab.ts:222
+msgid "This session"
+msgstr "This session"
+
+#: src/features/perf/perf.tab.ts:223
+msgid "Mine"
+msgstr "Mine"
+
+#: src/features/perf/perf.tab.ts:223
+msgid "Your sessions"
+msgstr "Your sessions"
+
+#: src/features/perf/perf.tab.ts:223
+msgid "Every session of %s"
+msgstr "Every session of %s"
+
+#: src/features/perf/perf.tab.ts:224
+msgid "Every profile of the database (Odoo deletes them after 30 days anyway)"
+msgstr "Every profile of the database (Odoo deletes them after 30 days anyway)"
+
+#: src/features/perf/perf.tpl.html:11
+msgid "Start profiling (Odoo's built-in profiler, administrators only)."
+msgstr "Start profiling (Odoo's built-in profiler, administrators only)."
+
+#: src/features/perf/perf.tpl.html:12
+msgid "Do the slow action on the Odoo page: open the record, save, confirm…"
+msgstr "Do the slow action on the Odoo page: open the record, save, confirm…"
+
+#: src/features/perf/perf.tpl.html:13
+msgid "Come back and refresh: the requests show slowest first; click one to see why it is slow."
+msgstr "Come back and refresh: the requests show slowest first; click one to see why it is slow."
+
+#: src/features/record/record.logic.ts:62
+msgid "change → recomputes %s"
+msgstr "change → recomputes %s"
+
+#: src/features/record/record.tab.ts:28
+#: src/features/view/view.tab.ts:33
+msgid "This screen is not bound to a model."
+msgstr "This screen is not bound to a model."
+
+#: src/features/record/record.tab.ts:29
+msgid "Identity & metadata"
+msgstr "Identity & metadata"
+
+#: src/features/record/record.tab.ts:47
+msgid "(none / several records)"
+msgstr "(none / several records)"
+
+#: src/features/record/record.tab.ts:49
+msgid "created by"
+msgstr "created by"
+
+#: src/features/record/record.tab.ts:49
+msgid "last updated by"
+msgstr "last updated by"
+
+#: src/features/record/record.tab.ts:108
+msgid "Click to copy the value"
+msgstr "Click to copy the value"
+
+#: src/features/record/record.tab.ts:123
+#: src/features/view/view.field.ts:202
+msgid "%s fields"
+msgstr "%s fields"
+
+#: src/features/record/record.tab.ts:123
+#: src/features/view/view.field.ts:202
+msgid "%s/%s fields"
+msgstr "%s/%s fields"
+
+#: src/features/record/record.tab.ts:124
+msgid "Filter name / label / value / type / module"
+msgstr "Filter name / label / value / type / module"
+
+#: src/features/record/record.tab.ts:135
+msgid "Field · type · value"
+msgstr "Field · type · value"
+
+#: src/features/record/record.tab.ts:135
+msgid "Label · storage · compute · module"
+msgstr "Label · storage · compute · module"
+
+#: src/features/record/record.tab.ts:147
+msgid "A computed field failed: values of the stored fields only."
+msgstr "A computed field failed: values of the stored fields only."
+
+#: src/features/record/record.tab.ts:152
+msgid "Modules and indexes need Access Rights (base.group_erp_manager)."
+msgstr "Modules and indexes need Access Rights (base.group_erp_manager)."
+
+#: src/features/record/record.tab.ts:153
+msgid "Modules and indexes unavailable: %s"
+msgstr "Modules and indexes unavailable: %s"
+
+#: src/features/record/record.tpl.html:7
+msgid "Stored"
+msgstr "Stored"
+
+#: src/features/record/record.tpl.html:8
+msgid "Computed"
+msgstr "Computed"
+
+#: src/features/record/record.tpl.html:9
+msgid "Relational"
+msgstr "Relational"
+
+#: src/features/record/record.tpl.html:10
+#: src/features/view/view.tpl.html:93
+msgid "Required"
+msgstr "Required"
+
+#: src/features/record/record.tpl.html:13
+msgid "Copy as JSON"
+msgstr "Copy as JSON"
+
+#: src/features/record/record.tpl.html:13
+msgid "Copy the values of the record as JSON"
+msgstr "Copy the values of the record as JSON"
+
+#: src/features/rpc/rpc.logic.ts:162
+msgid "Signature of %s.%s unknown: ids and argument names are guessed."
+msgstr "Signature of %s.%s unknown: ids and argument names are guessed."
+
+#: src/features/rpc/rpc.logic.ts:163
+msgid "JSON-2 takes named arguments only: rename %s."
+msgstr "JSON-2 takes named arguments only: rename %s."
+
+#: src/features/rpc/rpc.tab.ts:46
+msgid "Method · model · duration"
+msgstr "Method · model · duration"
+
+#: src/features/rpc/rpc.tab.ts:46
+msgid "Time · route"
+msgstr "Time · route"
+
+#: src/features/rpc/rpc.tab.ts:50
+msgid "Select a call to edit its parameters, send it again and see its result."
+msgstr "Select a call to edit its parameters, send it again and see its result."
+
+#: src/features/rpc/rpc.tab.ts:115
+msgid "Cut at 200 KB by the recorder: its body is not whole, it cannot be profiled."
+msgstr "Cut at 200 KB by the recorder: its body is not whole, it cannot be profiled."
+
+#: src/features/rpc/rpc.tab.ts:129
+msgid "Recorded at %s · %s ms"
+msgstr "Recorded at %s · %s ms"
+
+#: src/features/rpc/rpc.tab.ts:140
+msgid "Cut at 200 KB by the recorder: only its start is kept."
+msgstr "Cut at 200 KB by the recorder: only its start is kept."
+
+#: src/features/rpc/rpc.tab.ts:178
+msgid "Invalid JSON: %s"
+msgstr "Invalid JSON: %s"
+
+#: src/features/rpc/rpc.tab.ts:202
+msgid "call_kw: the JSON-2 API (/json/2, named arguments), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
+msgstr "call_kw: the JSON-2 API (/json/2, named arguments), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
+
+#: src/features/rpc/rpc.tab.ts:203
+msgid "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
+msgstr "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
+
+#: src/features/rpc/rpc.tpl.html:6
+msgid "Filter model / method"
+msgstr "Filter model / method"
+
+#: src/features/rpc/rpc.tpl.html:7
+msgid "Errors Only"
+msgstr "Errors Only"
+
+#: src/features/rpc/rpc.tpl.html:9
+#: src/features/rpc/rpc.tpl.html:35
+msgid "New Request"
+msgstr "New Request"
+
+#: src/features/rpc/rpc.tpl.html:26
+msgid "No RPC yet. Use the Odoo page to record some."
+msgstr "No RPC yet. Use the Odoo page to record some."
+
+#: src/features/rpc/rpc.tpl.html:27
+msgid "Calls Odoo answers from its own cache (views, actions…) never reach the network: they are not logged."
+msgstr "Calls Odoo answers from its own cache (views, actions…) never reach the network: they are not logged."
+
+#: src/features/rpc/rpc.tpl.html:36
+#: src/features/rpc/rpc.tpl.html:36
+msgid "Close"
+msgstr "Close"
+
+#: src/features/rpc/rpc.tpl.html:57
+msgid "Why was it blocked? → Security"
+msgstr "Why was it blocked? → Security"
+
+#: src/features/rpc/rpc.tpl.html:60
+msgid "⏱ Profile → Perf"
+msgstr "⏱ Profile → Perf"
+
+#: src/features/rpc/rpc.tpl.html:60
+msgid "Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)"
+msgstr "Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)"
+
+#: src/features/rpc/rpc.tpl.html:67
+msgid "Route"
+msgstr "Route"
+
+#: src/features/rpc/rpc.tpl.html:68
+msgid "Body (JSON)"
+msgstr "Body (JSON)"
+
+#: src/features/rpc/rpc.tpl.html:70
+msgid "Send"
+msgstr "Send"
+
+#: src/features/rpc/rpc.tpl.html:71
+msgid "Ctrl/⌘ + Enter"
+msgstr "Ctrl/⌘ + Enter"
+
+#: src/features/rpc/rpc.tpl.html:89
+msgid "Copy as cURL"
+msgstr "Copy as cURL"
+
+#: src/features/security/security.bar.ts:25
+#: src/features/security/security.system.ts:44
+msgid "User"
+msgstr "User"
+
+#: src/features/security/security.bar.ts:32
+msgid "Search a user by name or login…"
+msgstr "Search a user by name or login…"
+
+#: src/features/security/security.bar.ts:33
+#: src/features/security/security.system.ts:60
+#: src/features/security/security.system.ts:71
+msgid "Companies"
+msgstr "Companies"
+
+#: src/features/security/security.bar.ts:36
+msgid "My User"
+msgstr "My User"
+
+#: src/features/security/security.bar.ts:43
+msgid "Compare with"
+msgstr "Compare with"
+
+#: src/features/security/security.bar.ts:47
+msgid "Stop comparing"
+msgstr "Stop comparing"
+
+#: src/features/security/security.bar.ts:51
+msgid "Another user, to compare…"
+msgstr "Another user, to compare…"
+
+#: src/features/security/security.bar.ts:59
+msgid "Archived users too, in both searches"
+msgstr "Archived users too, in both searches"
+
+#: src/features/security/security.bar.ts:77
+msgid "%s · #%s · %s groups"
+msgstr "%s · #%s · %s groups"
+
+#: src/features/security/security.bar.ts:80
+msgid "me"
+msgstr "me"
+
+#: src/features/security/security.bar.ts:81
+msgid "superuser"
+msgstr "superuser"
+
+#: src/features/security/security.bar.ts:82
+#: src/features/security/security.ui.ts:135
+msgid "public"
+msgstr "public"
+
+#: src/features/security/security.bar.ts:82
+#: src/features/security/security.ui.ts:135
+msgid "portal"
+msgstr "portal"
+
+#: src/features/security/security.bar.ts:83
+#: src/features/security/security.ui.ts:135
+msgid "archived"
+msgstr "archived"
+
+#: src/features/security/security.bar.ts:97
+msgid "The current company (the first one on)"
+msgstr "The current company (the first one on)"
+
+#: src/features/security/security.bar.ts:101
+msgid "as in the page's switcher"
+msgstr "as in the page's switcher"
+
+#: src/features/security/security.bar.ts:101
+msgid "their default company: their switcher can't be seen from here"
+msgstr "their default company: their switcher can't be seen from here"
+
+#: src/features/security/security.bar.ts:109
+msgid "Trying %s: every view is simulated with it, nothing is written."
+msgstr "Trying %s: every view is simulated with it, nothing is written."
+
+#: src/features/security/security.bar.ts:111
+#: src/features/security/security.groups.ts:229
+msgid "Add %s to %s?"
+msgstr "Add %s to %s?"
+
+#: src/features/security/security.bar.ts:125
+msgid "Applied…"
+msgstr "Applied…"
+
+#: src/features/security/security.bar.ts:130
+msgid "Applied on %s: %s"
+msgstr "Applied on %s: %s"
+
+#: src/features/security/security.bar.ts:131
+msgid "Applied: no operation changed on this record."
+msgstr "Applied: no operation changed on this record."
+
+#: src/features/security/security.data.ts:246
+msgid "You cannot read this record yourself, so its rules cannot be checked."
+msgstr "You cannot read this record yourself, so its rules cannot be checked."
+
+#: src/features/security/security.data.ts:250
+msgid "Its 'access' condition is checked with your own rights, not the simulated user's: it cannot be told."
+msgstr "Its 'access' condition is checked with your own rights, not the simulated user's: it cannot be told."
+
+#: src/features/security/security.data.ts:275
+#: src/features/security/security.data.ts:275
+msgid "no result"
+msgstr "no result"
+
+#: src/features/security/security.groups.ts:41
+msgid "Choose a group: its rights, rules and users show here."
+msgstr "Choose a group: its rights, rules and users show here."
+
+#: src/features/security/security.groups.ts:44
+#: src/features/security/security.model.ts:30
+msgid "Group"
+msgstr "Group"
+
+#: src/features/security/security.groups.ts:44
+#: src/features/security/security.models.ts:81
+msgid "Rules"
+msgstr "Rules"
+
+#: src/features/security/security.groups.ts:44
+#: src/features/security/security.groups.ts:148
+#: src/features/translations/translations.langs.ts:55
+msgid "Users"
+msgstr "Users"
+
+#: src/features/security/security.groups.ts:45
+msgid "Other"
+msgstr "Other"
+
+#: src/features/security/security.groups.ts:46
+#: src/features/security/security.groups.ts:71
+msgid "%s groups"
+msgstr "%s groups"
+
+#: src/features/security/security.groups.ts:48
+msgid "%s has %s"
+msgstr "%s has %s"
+
+#: src/features/security/security.groups.ts:67
+msgid "Filter groups…"
+msgstr "Filter groups…"
+
+#: src/features/security/security.groups.ts:74
+msgid "Their groups"
+msgstr "Their groups"
+
+#: src/features/security/security.groups.ts:74
+msgid "Groups of %s"
+msgstr "Groups of %s"
+
+#: src/features/security/security.groups.ts:74
+msgid "All groups"
+msgstr "All groups"
+
+#: src/features/security/security.groups.ts:117
+msgid "Open this group"
+msgstr "Open this group"
+
+#: src/features/security/security.groups.ts:117
+msgid "none"
+msgstr "none"
+
+#: src/features/security/security.groups.ts:118
+msgid "Inheritance"
+msgstr "Inheritance"
+
+#: src/features/security/security.groups.ts:118
+msgid "brings %s · brought by %s"
+msgstr "brings %s · brought by %s"
+
+#: src/features/security/security.groups.ts:119
+msgid "Brings (implied groups)"
+msgstr "Brings (implied groups)"
+
+#: src/features/security/security.groups.ts:120
+msgid "Brought by (groups implying it)"
+msgstr "Brought by (groups implying it)"
+
+#: src/features/security/security.groups.ts:123
+#: src/features/security/security.models.ts:115
+msgid "%s models"
+msgstr "%s models"
+
+#: src/features/security/security.groups.ts:124
+msgid "Reading the ACLs needs Access Rights (base.group_erp_manager)."
+msgstr "Reading the ACLs needs Access Rights (base.group_erp_manager)."
+
+#: src/features/security/security.groups.ts:125
+msgid "This group grants no ACL of its own."
+msgstr "This group grants no ACL of its own."
+
+#: src/features/security/security.groups.ts:129
+msgid "This group may %s"
+msgstr "This group may %s"
+
+#: src/features/security/security.groups.ts:129
+msgid "Not granted by this group"
+msgstr "Not granted by this group"
+
+#: src/features/security/security.groups.ts:134
+msgid "%s rules"
+msgstr "%s rules"
+
+#: src/features/security/security.groups.ts:135
+msgid "Reading the rules needs Access Rights (base.group_erp_manager)."
+msgstr "Reading the rules needs Access Rights (base.group_erp_manager)."
+
+#: src/features/security/security.groups.ts:136
+msgid "This group carries no record rule."
+msgstr "This group carries no record rule."
+
+#: src/features/security/security.groups.ts:140
+#: src/features/security/security.model.ts:44
+msgid "The rule covers this operation"
+msgstr "The rule covers this operation"
+
+#: src/features/security/security.groups.ts:140
+#: src/features/security/security.model.ts:44
+#: src/features/security/security.record.ts:100
+msgid "The rule doesn't cover this operation"
+msgstr "The rule doesn't cover this operation"
+
+#: src/features/security/security.groups.ts:143
+#: src/features/security/security.model.ts:49
+#: src/features/security/security.models.ts:157
+msgid "Rule"
+msgstr "Rule"
+
+#: src/features/security/security.groups.ts:144
+msgid "A group's rules: the user sees a record if any of their group rules matches (and every global rule). Click a rule for its domain, evaluated for %s."
+msgstr "A group's rules: the user sees a record if any of their group rules matches (and every global rule). Click a rule for its domain, evaluated for %s."
+
+#: src/features/security/security.groups.ts:148
+msgid "%s users"
+msgstr "%s users"
+
+#: src/features/security/security.groups.ts:150
+msgid "%s · look at this user"
+msgstr "%s · look at this user"
+
+#: src/features/security/security.groups.ts:151
+msgid "No user."
+msgstr "No user."
+
+#: src/features/security/security.groups.ts:155
+msgid "If added to %s"
+msgstr "If added to %s"
+
+#: src/features/security/security.groups.ts:158
+msgid "No new right on any model."
+msgstr "No new right on any model."
+
+#: src/features/security/security.groups.ts:166
+msgid "● set on the user · ◐ implied by another group · + being tried · ○ not. ACL: models its ACLs open · Rules: rules it carries · Users: users in it. Click a group for the details."
+msgstr "● set on the user · ◐ implied by another group · + being tried · ○ not. ACL: models its ACLs open · Rules: rules it carries · Users: users in it. Click a group for the details."
+
+#: src/features/security/security.groups.ts:167
+msgid "Risks of %s"
+msgstr "Risks of %s"
+
+#: src/features/security/security.groups.ts:197
+msgid "Being tried"
+msgstr "Being tried"
+
+#: src/features/security/security.groups.ts:198
+msgid "Set on %s"
+msgstr "Set on %s"
+
+#: src/features/security/security.groups.ts:199
+msgid "Implied by %s"
+msgstr "Implied by %s"
+
+#: src/features/security/security.groups.ts:200
+#: src/features/security/security.model.ts:24
+#: src/features/security/security.record.ts:75
+#: src/features/security/security.record.ts:76
+msgid "%s doesn't have this group"
+msgstr "%s doesn't have this group"
+
+#: src/features/security/security.groups.ts:206
+msgid "being tried (simulated, nothing written)"
+msgstr "being tried (simulated, nothing written)"
+
+#: src/features/security/security.groups.ts:208
+msgid "set on them"
+msgstr "set on them"
+
+#: src/features/security/security.groups.ts:209
+msgid "has it through %s"
+msgstr "has it through %s"
+
+#: src/features/security/security.groups.ts:210
+msgid "doesn't have it"
+msgstr "doesn't have it"
+
+#: src/features/security/security.groups.ts:220
+msgid "Stop trying it"
+msgstr "Stop trying it"
+
+#: src/features/security/security.groups.ts:223
+msgid "To take it away, remove the group bringing it."
+msgstr "To take it away, remove the group bringing it."
+
+#: src/features/security/security.groups.ts:224
+msgid "Remove from %s"
+msgstr "Remove from %s"
+
+#: src/features/security/security.groups.ts:224
+msgid "Remove %s from %s?"
+msgstr "Remove %s from %s?"
+
+#: src/features/security/security.groups.ts:228
+msgid "Try on %s"
+msgstr "Try on %s"
+
+#: src/features/security/security.groups.ts:228
+#: src/features/security/security.record.ts:166
+msgid "Simulate this group in every view, nothing is written"
+msgstr "Simulate this group in every view, nothing is written"
+
+#: src/features/security/security.groups.ts:229
+msgid "Add to %s"
+msgstr "Add to %s"
+
+#: src/features/security/security.groups.ts:247
+msgid "Copy the groups of %s"
+msgstr "Copy the groups of %s"
+
+#: src/features/security/security.groups.ts:247
+msgid "Same groups set on both."
+msgstr "Same groups set on both."
+
+#: src/features/security/security.groups.ts:249
+msgid "Added"
+msgstr "Added"
+
+#: src/features/security/security.groups.ts:250
+msgid "Removed by \"the same\"; kept by \"add only\""
+msgstr "Removed by \"the same\"; kept by \"add only\""
+
+#: src/features/security/security.groups.ts:253
+msgid "Change the groups of %s?"
+msgstr "Change the groups of %s?"
+
+#: src/features/security/security.groups.ts:254
+msgid "Add: %s"
+msgstr "Add: %s"
+
+#: src/features/security/security.groups.ts:255
+msgid "Remove: %s"
+msgstr "Remove: %s"
+
+#: src/features/security/security.groups.ts:256
+msgid "Warning: one is a portal user, the other is not: the user type changes."
+msgstr "Warning: one is a portal user, the other is not: the user type changes."
+
+#: src/features/security/security.groups.ts:259
+msgid "Add only the missing ones (%s)"
+msgstr "Add only the missing ones (%s)"
+
+#: src/features/security/security.groups.ts:260
+msgid "Make them the same (+%s, −%s)"
+msgstr "Make them the same (+%s, −%s)"
+
+#: src/features/security/security.groups.ts:263
+msgid "Copy the groups of %s onto %s"
+msgstr "Copy the groups of %s onto %s"
+
+#: src/features/security/security.groups.ts:263
+msgid "Group set on the user"
+msgstr "Group set on the user"
+
+#: src/features/security/security.injected.ts:14
+msgid "py_js is not loaded"
+msgstr "py_js is not loaded"
+
+#: src/features/security/security.logic.ts:338
+#: src/features/security/security.model.ts:38
+msgid "No ACL: only the superuser can access this model."
+msgstr "No ACL: only the superuser can access this model."
+
+#: src/features/security/security.logic.ts:341
+msgid "ACL \"%s\" has no group → applies to EVERY user, portal/public included (%s)."
+msgstr "ACL \"%s\" has no group → applies to EVERY user, portal/public included (%s)."
+
+#: src/features/security/security.logic.ts:343
+msgid "ACL \"%s\" grants %s to %s."
+msgstr "ACL \"%s\" grants %s to %s."
+
+#: src/features/security/security.logic.ts:347
+msgid "Has company_id but no global multi-company rule → records may leak across companies."
+msgstr "Has company_id but no global multi-company rule → records may leak across companies."
+
+#: src/features/security/security.logic.ts:349
+msgid "Field \"%s\" looks sensitive but has no groups=."
+msgstr "Field \"%s\" looks sensitive but has no groups=."
+
+#: src/features/security/security.logic.ts:382
+msgid "Not served over HTTPS."
+msgstr "Not served over HTTPS."
+
+#: src/features/security/security.logic.ts:383
+msgid "Cannot read the session_id cookie."
+msgstr "Cannot read the session_id cookie."
+
+#: src/features/security/security.logic.ts:385
+msgid "session_id cookie is not HttpOnly → readable by JS/XSS."
+msgstr "session_id cookie is not HttpOnly → readable by JS/XSS."
+
+#: src/features/security/security.logic.ts:386
+msgid "session_id cookie lacks the Secure flag."
+msgstr "session_id cookie lacks the Secure flag."
+
+#: src/features/security/security.logic.ts:387
+msgid "session_id cookie is SameSite=None → larger CSRF surface."
+msgstr "session_id cookie is SameSite=None → larger CSRF surface."
+
+#: src/features/security/security.logic.ts:390
+msgid "Missing Strict-Transport-Security (HSTS) header."
+msgstr "Missing Strict-Transport-Security (HSTS) header."
+
+#: src/features/security/security.logic.ts:391
+msgid "Missing X-Frame-Options / CSP frame-ancestors → clickjacking."
+msgstr "Missing X-Frame-Options / CSP frame-ancestors → clickjacking."
+
+#: src/features/security/security.logic.ts:392
+msgid "Missing X-Content-Type-Options: nosniff."
+msgstr "Missing X-Content-Type-Options: nosniff."
+
+#: src/features/security/security.logic.ts:393
+msgid "Missing Content-Security-Policy."
+msgstr "Missing Content-Security-Policy."
+
+#: src/features/security/security.logic.ts:394
+msgid "Header %s discloses a version: %s"
+msgstr "Header %s discloses a version: %s"
+
+#: src/features/security/security.logic.ts:396
+msgid "Database manager has NO master password (default \"admin\")!"
+msgstr "Database manager has NO master password (default \"admin\")!"
+
+#: src/features/security/security.logic.ts:397
+msgid "/web/database/manager is reachable → block /web/database/* at the proxy or set list_db = False."
+msgstr "/web/database/manager is reachable → block /web/database/* at the proxy or set list_db = False."
+
+#: src/features/security/security.logic.ts:398
+msgid "list_db is on: database names are exposed (%s)."
+msgstr "list_db is on: database names are exposed (%s)."
+
+#: src/features/security/security.logic.ts:399
+msgid "Server version is public via /web/webclient/version_info: %s"
+msgstr "Server version is public via /web/webclient/version_info: %s"
+
+#: src/features/security/security.logic.ts:409
+msgid "__system__ (superuser): bypasses every ACL and record rule."
+msgstr "__system__ (superuser): bypasses every ACL and record rule."
+
+#: src/features/security/security.logic.ts:410
+msgid "Settings administrator (base.group_system)."
+msgstr "Settings administrator (base.group_system)."
+
+#: src/features/security/security.logic.ts:411
+msgid "Access Rights manager (base.group_erp_manager): can grant itself any group."
+msgstr "Access Rights manager (base.group_erp_manager): can grant itself any group."
+
+#: src/features/security/security.logic.ts:412
+msgid "Has Technical Features (base.group_no_one)."
+msgstr "Has Technical Features (base.group_no_one)."
+
+#: src/features/security/security.logic.ts:413
+msgid "Public user."
+msgstr "Public user."
+
+#: src/features/security/security.logic.ts:413
+msgid "Portal user (share)."
+msgstr "Portal user (share)."
+
+#: src/features/security/security.logic.ts:414
+msgid "Login \"admin\" is the default, easy to guess."
+msgstr "Login \"admin\" is the default, easy to guess."
+
+#: src/features/security/security.logic.ts:415
+msgid "auth_totp is not installed → no 2FA."
+msgstr "auth_totp is not installed → no 2FA."
+
+#: src/features/security/security.logic.ts:416
+msgid "2FA (TOTP) is not enabled."
+msgstr "2FA (TOTP) is not enabled."
+
+#: src/features/security/security.logic.ts:417
+msgid "%s API key(s): direct RPC calls with this user's rights."
+msgstr "%s API key(s): direct RPC calls with this user's rights."
+
+#: src/features/security/security.logic.ts:418
+msgid "User is archived."
+msgstr "User is archived."
+
+#: src/features/security/security.model.ts:24
+#: src/features/security/security.record.ts:75
+#: src/features/security/security.record.ts:76
+msgid "%s has this group"
+msgstr "%s has this group"
+
+#: src/features/security/security.model.ts:27
+msgid "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager)."
+msgstr "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager)."
+
+#: src/features/security/security.model.ts:32
+#: src/features/security/security.record.ts:87
+#: src/features/security/security.record.ts:106
+msgid "every user"
+msgstr "every user"
+
+#: src/features/security/security.model.ts:34
+#: src/features/security/security.record.ts:89
+msgid "This ACL grants it"
+msgstr "This ACL grants it"
+
+#: src/features/security/security.model.ts:34
+#: src/features/security/security.record.ts:89
+msgid "This ACL doesn't grant it"
+msgstr "This ACL doesn't grant it"
+
+#: src/features/security/security.model.ts:43
+msgid "of %s, through %s"
+msgstr "of %s, through %s"
+
+#: src/features/security/security.model.ts:43
+msgid "global: every user"
+msgstr "global: every user"
+
+#: src/features/security/security.model.ts:49
+msgid "This model has no record rule."
+msgstr "This model has no record rule."
+
+#: src/features/security/security.model.ts:50
+msgid "Rules of %s (through %s) count as one more global rule."
+msgstr "Rules of %s (through %s) count as one more global rule."
+
+#: src/features/security/security.model.ts:51
+msgid "Rules of %s are not counted: %s is not stored (Odoo %s)."
+msgstr "Rules of %s are not counted: %s is not stored (Odoo %s)."
+
+#: src/features/security/security.model.ts:52
+msgid "✓ the rule applies to this operation · ● the user has one of its groups · ○ not · — every user. Click a rule for its domain."
+msgstr "✓ the rule applies to this operation · ● the user has one of its groups · ○ not · — every user. Click a rule for its domain."
+
+#: src/features/security/security.model.ts:57
+msgid "Fields restricted to groups"
+msgstr "Fields restricted to groups"
+
+#: src/features/security/security.model.ts:60
+msgid "Configuration check"
+msgstr "Configuration check"
+
+#: src/features/security/security.model.ts:70
+msgid "No field is restricted to groups."
+msgstr "No field is restricted to groups."
+
+#: src/features/security/security.model.ts:75
+msgid "Field"
+msgstr "Field"
+
+#: src/features/security/security.model.ts:79
+msgid "%s sees this field"
+msgstr "%s sees this field"
+
+#: src/features/security/security.model.ts:79
+msgid "Hidden from %s"
+msgstr "Hidden from %s"
+
+#: src/features/security/security.models.ts:24
+msgid "The rights across models need Access Rights (base.group_erp_manager)."
+msgstr "The rights across models need Access Rights (base.group_erp_manager)."
+
+#: src/features/security/security.models.ts:55
+msgid "%s may %s: an ACL grants it"
+msgstr "%s may %s: an ACL grants it"
+
+#: src/features/security/security.models.ts:55
+msgid "%s may not %s: no ACL grants it"
+msgstr "%s may not %s: no ACL grants it"
+
+#: src/features/security/security.models.ts:63
+msgid "1 record rule decides which records %s sees"
+msgstr "1 record rule decides which records %s sees"
+
+#: src/features/security/security.models.ts:64
+msgid "%s record rules decide which records %s sees"
+msgstr "%s record rules decide which records %s sees"
+
+#: src/features/security/security.models.ts:74
+msgid "Custom models (no module)"
+msgstr "Custom models (no module)"
+
+#: src/features/security/security.models.ts:90
+msgid "%s of %s models"
+msgstr "%s of %s models"
+
+#: src/features/security/security.models.ts:93
+msgid "Filter models or modules…"
+msgstr "Filter models or modules…"
+
+#: src/features/security/security.models.ts:102
+msgid "Expand All"
+msgstr "Expand All"
+
+#: src/features/security/security.models.ts:102
+msgid "Show the models of every module"
+msgstr "Show the models of every module"
+
+#: src/features/security/security.models.ts:103
+msgid "Collapse All"
+msgstr "Collapse All"
+
+#: src/features/security/security.models.ts:103
+msgid "Fold every module back to its line"
+msgstr "Fold every module back to its line"
+
+#: src/features/security/security.models.ts:104
+msgid "Only what the tried groups add"
+msgstr "Only what the tried groups add"
+
+#: src/features/security/security.models.ts:104
+msgid "Only differences"
+msgstr "Only differences"
+
+#: src/features/security/security.models.ts:106
+msgid "Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
+msgstr "Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
+
+#: src/features/security/security.models.ts:107
+msgid "✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
+msgstr "✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
+
+#: src/features/security/security.models.ts:115
+msgid "1 model"
+msgstr "1 model"
+
+#: src/features/security/security.models.ts:115
+msgid "%s every operation"
+msgstr "%s every operation"
+
+#: src/features/security/security.models.ts:115
+msgid "%s read only"
+msgstr "%s read only"
+
+#: src/features/security/security.models.ts:116
+msgid "%s some operations"
+msgstr "%s some operations"
+
+#: src/features/security/security.models.ts:116
+msgid "%s limited by rules"
+msgstr "%s limited by rules"
+
+#: src/features/security/security.models.ts:127
+msgid "%s can %s %s."
+msgstr "%s can %s %s."
+
+#: src/features/security/security.models.ts:127
+msgid "%s has no access to %s."
+msgstr "%s has no access to %s."
+
+#: src/features/security/security.models.ts:128
+msgid "Not %s."
+msgstr "Not %s."
+
+#: src/features/security/security.models.ts:129
+msgid "1 record rule decides which records: only the ones it allows."
+msgstr "1 record rule decides which records: only the ones it allows."
+
+#: src/features/security/security.models.ts:130
+msgid "%s record rules decide which records: only the ones they allow."
+msgstr "%s record rules decide which records: only the ones they allow."
+
+#: src/features/security/security.models.ts:130
+msgid "No record rule: every record."
+msgstr "No record rule: every record."
+
+#: src/features/security/security.models.ts:131
+msgid "%s: %s."
+msgstr "%s: %s."
+
+#: src/features/security/security.models.ts:131
+msgid "no access"
+msgstr "no access"
+
+#: src/features/security/security.models.ts:137
+msgid "Every user (an ACL without a group)"
+msgstr "Every user (an ACL without a group)"
+
+#: src/features/security/security.models.ts:138
+msgid "being tried"
+msgstr "being tried"
+
+#: src/features/security/security.models.ts:139
+msgid "This ACL grants %s"
+msgstr "This ACL grants %s"
+
+#: src/features/security/security.models.ts:139
+msgid "Not granted by this ACL"
+msgstr "Not granted by this ACL"
+
+#: src/features/security/security.models.ts:146
+msgid "global: applies to every user"
+msgstr "global: applies to every user"
+
+#: src/features/security/security.models.ts:146
+msgid "for the group %s"
+msgstr "for the group %s"
+
+#: src/features/security/security.models.ts:147
+msgid "Limits the records for %s"
+msgstr "Limits the records for %s"
+
+#: src/features/security/security.models.ts:147
+msgid "Doesn't apply to %s"
+msgstr "Doesn't apply to %s"
+
+#: src/features/security/security.models.ts:154
+msgid "Access rights (ACL): who grants what"
+msgstr "Access rights (ACL): who grants what"
+
+#: src/features/security/security.models.ts:155
+msgid "Granted by"
+msgstr "Granted by"
+
+#: src/features/security/security.models.ts:155
+msgid "No ACL of this user's groups grants anything on this model."
+msgstr "No ACL of this user's groups grants anything on this model."
+
+#: src/features/security/security.models.ts:156
+msgid "An operation is allowed when at least one of these ACLs grants it."
+msgstr "An operation is allowed when at least one of these ACLs grants it."
+
+#: src/features/security/security.models.ts:157
+msgid "Record rules: which records"
+msgstr "Record rules: which records"
+
+#: src/features/security/security.models.ts:158
+msgid "For an operation, a record must match every global rule and at least one of the group rules. Click a rule for its domain; the Record view evaluates them on a record."
+msgstr "For an operation, a record must match every global rule and at least one of the group rules. Click a rule for its domain; the Record view evaluates them on a record."
+
+#: src/features/security/security.record.ts:34
+#: src/features/security/security.record.ts:146
+msgid "Server (has_access)"
+msgstr "Server (has_access)"
+
+#: src/features/security/security.record.ts:34
+#: src/features/security/security.record.ts:147
+msgid "Odoo says: allowed"
+msgstr "Odoo says: allowed"
+
+#: src/features/security/security.record.ts:34
+#: src/features/security/security.record.ts:147
+msgid "Odoo says: refused"
+msgstr "Odoo says: refused"
+
+#: src/features/security/security.record.ts:36
+msgid "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): this is the server's answer for you, without the why."
+msgstr "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): this is the server's answer for you, without the why."
+
+#: src/features/security/security.record.ts:37
+msgid "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): nothing can be said for another user."
+msgstr "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): nothing can be said for another user."
+
+#: src/features/security/security.record.ts:48
+msgid "From an error"
+msgstr "From an error"
+
+#: src/features/security/security.record.ts:52
+msgid "Back to this page"
+msgstr "Back to this page"
+
+#: src/features/security/security.record.ts:56
+msgid "the first record is checked"
+msgstr "the first record is checked"
+
+#: src/features/security/security.record.ts:57
+msgid "rules blamed: %s"
+msgstr "rules blamed: %s"
+
+#: src/features/security/security.record.ts:58
+msgid "groups allowed: %s"
+msgstr "groups allowed: %s"
+
+#: src/features/security/security.record.ts:59
+msgid "operation not named in the message"
+msgstr "operation not named in the message"
+
+#: src/features/security/security.record.ts:60
+msgid "no record in the message: debug mode adds them"
+msgstr "no record in the message: debug mode adds them"
+
+#: src/features/security/security.record.ts:61
+msgid "No record open: the ACLs only, the rules are checked on a record."
+msgstr "No record open: the ACLs only, the rules are checked on a record."
+
+#: src/features/security/security.record.ts:83
+msgid "An ACL of the user's groups grants it"
+msgstr "An ACL of the user's groups grants it"
+
+#: src/features/security/security.record.ts:83
+msgid "No ACL of the user's groups grants it: refused"
+msgstr "No ACL of the user's groups grants it: refused"
+
+#: src/features/security/security.record.ts:85
+msgid "one is enough"
+msgstr "one is enough"
+
+#: src/features/security/security.record.ts:92
+msgid "No ACL: only the superuser"
+msgstr "No ACL: only the superuser"
+
+#: src/features/security/security.record.ts:93
+#: src/features/security/security.record.ts:119
+#: src/features/security/security.record.ts:135
+msgid "→ for the user"
+msgstr "→ for the user"
+
+#: src/features/security/security.record.ts:102
+msgid "The record matches this rule"
+msgstr "The record matches this rule"
+
+#: src/features/security/security.record.ts:102
+msgid "The record doesn't match this rule"
+msgstr "The record doesn't match this rule"
+
+#: src/features/security/security.record.ts:102
+msgid "Could not be checked: open the rule"
+msgstr "Could not be checked: open the rule"
+
+#: src/features/security/security.record.ts:113
+msgid "Global rules"
+msgstr "Global rules"
+
+#: src/features/security/security.record.ts:113
+msgid "the record must match every one"
+msgstr "the record must match every one"
+
+#: src/features/security/security.record.ts:117
+msgid "Group rules"
+msgstr "Group rules"
+
+#: src/features/security/security.record.ts:117
+msgid "the record must match one of the user's"
+msgstr "the record must match one of the user's"
+
+#: src/features/security/security.record.ts:122
+msgid "No group rule of the user for this operation: no restriction from them"
+msgstr "No group rule of the user for this operation: no restriction from them"
+
+#: src/features/security/security.record.ts:123
+msgid "One of the user's group rules matches: enough"
+msgstr "One of the user's group rules matches: enough"
+
+#: src/features/security/security.record.ts:123
+msgid "None of the user's group rules matches: refused"
+msgstr "None of the user's group rules matches: refused"
+
+#: src/features/security/security.record.ts:123
+#: src/features/security/security.record.ts:136
+msgid "Could not be checked"
+msgstr "Could not be checked"
+
+#: src/features/security/security.record.ts:133
+msgid "Rules of %s, through %s"
+msgstr "Rules of %s, through %s"
+
+#: src/features/security/security.record.ts:133
+msgid "counted as one global rule"
+msgstr "counted as one global rule"
+
+#: src/features/security/security.record.ts:136
+msgid "The parent record passes its rules"
+msgstr "The parent record passes its rules"
+
+#: src/features/security/security.record.ts:136
+msgid "The parent record doesn't pass its rules: refused"
+msgstr "The parent record doesn't pass its rules: refused"
+
+#: src/features/security/security.record.ts:143
+msgid "%s can do it"
+msgstr "%s can do it"
+
+#: src/features/security/security.record.ts:143
+msgid "%s is refused"
+msgstr "%s is refused"
+
+#: src/features/security/security.record.ts:143
+msgid "Not certain: a rule could not be checked"
+msgstr "Not certain: a rule could not be checked"
+
+#: src/features/security/security.record.ts:144
+#: src/features/security/security.record.ts:145
+#: src/features/security/security.record.ts:148
+msgid "Result"
+msgstr "Result"
+
+#: src/features/security/security.record.ts:146
+msgid "Odoo's own answer for you, same companies"
+msgstr "Odoo's own answer for you, same companies"
+
+#: src/features/security/security.record.ts:147
+msgid "The server disagrees with the simulation"
+msgstr "The server disagrees with the simulation"
+
+#: src/features/security/security.record.ts:152
+msgid "✓ allowed / matches · ✗ refused / no match · · does not apply · ? unknown · ● the user has the group · ○ not. Click a rule for its domain."
+msgstr "✓ allowed / matches · ✗ refused / no match · · does not apply · ? unknown · ● the user has the group · ○ not. Click a rule for its domain."
+
+#: src/features/security/security.record.ts:153
+msgid "Marks: %s, then %s."
+msgstr "Marks: %s, then %s."
+
+#: src/features/security/security.record.ts:162
+#: src/features/security/security.record.ts:179
+msgid "To allow it"
+msgstr "To allow it"
+
+#: src/features/security/security.record.ts:162
+msgid "No single group allows it."
+msgstr "No single group allows it."
+
+#: src/features/security/security.record.ts:166
+msgid "Try"
+msgstr "Try"
+
+#: src/features/security/security.record.ts:167
+msgid "also adds: %s"
+msgstr "also adds: %s"
+
+#: src/features/security/security.record.ts:168
+msgid "Adding this group allows it"
+msgstr "Adding this group allows it"
+
+#: src/features/security/security.record.ts:169
+msgid "Already allowed"
+msgstr "Already allowed"
+
+#: src/features/security/security.record.ts:169
+msgid "Still refused with this group"
+msgstr "Still refused with this group"
+
+#: src/features/security/security.record.ts:172
+msgid "No new right on other models."
+msgstr "No new right on other models."
+
+#: src/features/security/security.record.ts:175
+msgid "Also opens, on %s other models:"
+msgstr "Also opens, on %s other models:"
+
+#: src/features/security/security.record.ts:179
+msgid "Group to add"
+msgstr "Group to add"
+
+#: src/features/security/security.record.ts:180
+msgid "Fewest new groups first; %s more not shown. Click a group for what else it opens."
+msgstr "Fewest new groups first; %s more not shown. Click a group for what else it opens."
+
+#: src/features/security/security.record.ts:181
+msgid "Fewest new groups first. Click a group for what else it opens."
+msgstr "Fewest new groups first. Click a group for what else it opens."
+
+#: src/features/security/security.record.ts:189
+msgid "No model found in this message: is it an access error?"
+msgstr "No model found in this message: is it an access error?"
+
+#: src/features/security/security.system.ts:26
+msgid "Session"
+msgstr "Session"
+
+#: src/features/security/security.system.ts:27
+msgid "System parameters (ir.config_parameter)"
+msgstr "System parameters (ir.config_parameter)"
+
+#: src/features/security/security.system.ts:28
+msgid "Instance check"
+msgstr "Instance check"
+
+#: src/features/security/security.system.ts:50
+msgid "Become Superuser"
+msgstr "Become Superuser"
+
+#: src/features/security/security.system.ts:51
+msgid "Switch the current session to superuser (bypasses every rule)?"
+msgstr "Switch the current session to superuser (bypasses every rule)?"
+
+#: src/features/security/security.system.ts:52
+msgid "Odoo's built-in /web/become route, base.group_system only"
+msgstr "Odoo's built-in /web/become route, base.group_system only"
+
+#: src/features/security/security.system.ts:60
+msgid "Not in the session info."
+msgstr "Not in the session info."
+
+#: src/features/security/security.system.ts:64
+msgid "parent only: the user is not in it"
+msgstr "parent only: the user is not in it"
+
+#: src/features/security/security.system.ts:66
+msgid "The user's default company"
+msgstr "The user's default company"
+
+#: src/features/security/security.system.ts:66
+msgid "Not the default company"
+msgstr "Not the default company"
+
+#: src/features/security/security.system.ts:67
+msgid "On in the page's company switcher"
+msgstr "On in the page's company switcher"
+
+#: src/features/security/security.system.ts:67
+msgid "Off in the page's company switcher"
+msgstr "Off in the page's company switcher"
+
+#: src/features/security/security.system.ts:67
+msgid "The user is not in this company"
+msgstr "The user is not in this company"
+
+#: src/features/security/security.system.ts:69
+msgid "Default: the company the user starts in. On: enabled in the page's company switcher (record rules read these)."
+msgstr "Default: the company the user starts in. On: enabled in the page's company switcher (record rules read these)."
+
+#: src/features/security/security.system.ts:71
+msgid "Company"
+msgstr "Company"
+
+#: src/features/security/security.system.ts:71
+msgid "Default"
+msgstr "Default"
+
+#: src/features/security/security.system.ts:71
+msgid "On"
+msgstr "On"
+
+#: src/features/security/security.system.ts:76
+msgid "Needs Settings rights (base.group_system)."
+msgstr "Needs Settings rights (base.group_system)."
+
+#: src/features/security/security.system.ts:78
+msgid "No parameter."
+msgstr "No parameter."
+
+#: src/features/security/security.system.ts:79
+msgid "Key"
+msgstr "Key"
+
+#: src/features/security/security.system.ts:87
+msgid "Copy the value"
+msgstr "Copy the value"
+
+#: src/features/security/security.system.ts:93
+msgid "Filter key / value"
+msgstr "Filter key / value"
+
+#: src/features/security/security.system.ts:94
+msgid "%s of %s parameters"
+msgstr "%s of %s parameters"
+
+#: src/features/security/security.system.ts:105
+msgid "Raw data"
+msgstr "Raw data"
+
+#: src/features/security/security.system.ts:106
+msgid "Check Again"
+msgstr "Check Again"
+
+#: src/features/security/security.tab.ts:61
+#: src/features/translations/translations.tab.ts:36
+msgid "Record #%s"
+msgstr "Record #%s"
+
+#: src/features/security/security.tab.ts:62
+msgid "By model"
+msgstr "By model"
+
+#: src/features/security/security.tpl.html:27
+msgid "Archived too"
+msgstr "Archived too"
+
+#: src/features/security/security.tpl.html:38
+msgid "Apply"
+msgstr "Apply"
+
+#: src/features/security/security.tpl.html:39
+msgid "Discard"
+msgstr "Discard"
+
+#: src/features/security/security.tpl.html:61
+msgid "Diagnose an access error message"
+msgstr "Diagnose an access error message"
+
+#: src/features/security/security.tpl.html:63
+msgid "Paste the message of the error dialog (debug mode adds the records and the rules)"
+msgstr "Paste the message of the error dialog (debug mode adds the records and the rules)"
+
+#: src/features/security/security.tpl.html:63
+msgid "Access error message"
+msgstr "Access error message"
+
+#: src/features/security/security.tpl.html:64
+msgid "Diagnose"
+msgstr "Diagnose"
+
+#: src/features/security/security.tpl.html:71
+msgid "As written"
+msgstr "As written"
+
+#: src/features/security/security.tpl.html:72
+msgid "For the user"
+msgstr "For the user"
+
+#: src/features/security/security.tpl.html:111
+msgid "✓ No issue found."
+msgstr "✓ No issue found."
+
+#: src/features/security/security.ui.ts:62
+msgid "Has this group: set on the user"
+msgstr "Has this group: set on the user"
+
+#: src/features/security/security.ui.ts:63
+msgid "Has this group through another one (implied)"
+msgstr "Has this group through another one (implied)"
+
+#: src/features/security/security.ui.ts:64
+msgid "Doesn't have this group"
+msgstr "Doesn't have this group"
+
+#: src/features/security/security.ui.ts:65
+msgid "Being tried: simulated, nothing written"
+msgstr "Being tried: simulated, nothing written"
+
+#: src/features/security/security.ui.ts:83
+msgid "cannot evaluate: %s"
+msgstr "cannot evaluate: %s"
+
+#: src/features/security/security.ui.ts:163
+msgid "Log in as %s in an incognito window"
+msgstr "Log in as %s in an incognito window"
+
+#: src/features/translations/translations.find.ts:28
+msgid "Type a text shown on the page, or pick it: its source, its English text and where to change it are listed."
+msgstr "Type a text shown on the page, or pick it: its source, its English text and where to change it are listed."
+
+#: src/features/translations/translations.find.ts:35
+msgid "Click a text on the page… (Esc to cancel)"
+msgstr "Click a text on the page… (Esc to cancel)"
+
+#: src/features/translations/translations.find.ts:38
+#: src/features/translations/translations.tpl.html:15
+#: src/features/view/view.tpl.html:50
+msgid "⌖ Pick on Page"
+msgstr "⌖ Pick on Page"
+
+#: src/features/translations/translations.find.ts:59
+msgid "contains the text"
+msgstr "contains the text"
+
+#: src/features/translations/translations.find.ts:61
+msgid "Selection"
+msgstr "Selection"
+
+#: src/features/translations/translations.find.ts:61
+msgid "Field label"
+msgstr "Field label"
+
+#: src/features/translations/translations.find.ts:62
+msgid "Field %s: its module's .po (model:ir.model.fields…), or Settings › Technical › Fields"
+msgstr "Field %s: its module's .po (model:ir.model.fields…), or Settings › Technical › Fields"
+
+#: src/features/translations/translations.find.ts:63
+#: src/features/view/view.overview.ts:57
+msgid "Menu"
+msgstr "Menu"
+
+#: src/features/translations/translations.find.ts:63
+msgid "The menu's name (translated in Odoo, or the module's .po)"
+msgstr "The menu's name (translated in Odoo, or the module's .po)"
+
+#: src/features/translations/translations.find.ts:67
+msgid "The action's name (translated in Odoo, or the module's .po)"
+msgstr "The action's name (translated in Odoo, or the module's .po)"
+
+#: src/features/translations/translations.find.ts:69
+msgid "Translations › Record: edit it there"
+msgstr "Translations › Record: edit it there"
+
+#: src/features/translations/translations.find.ts:70
+msgid "Translations › View: edit it there"
+msgstr "Translations › View: edit it there"
+
+#: src/features/translations/translations.find.ts:73
+msgid "Source"
+msgstr "Source"
+
+#: src/features/translations/translations.find.ts:73
+msgid "English (source)"
+msgstr "English (source)"
+
+#: src/features/translations/translations.find.ts:73
+msgid "Where to change it"
+msgstr "Where to change it"
+
+#: src/features/translations/translations.find.ts:74
+msgid "Not found in %s. It may be a code text with no translation (it then shows in English), data of a record not on this screen, or a text built from several parts: pick a smaller piece."
+msgstr "Not found in %s. It may be a code text with no translation (it then shows in English), data of a record not on this screen, or a text built from several parts: pick a smaller piece."
+
+#: src/features/translations/translations.find.ts:75
+msgid "The views' terms were not searched: reading views needs Settings rights (base.group_system)."
+msgstr "The views' terms were not searched: reading views needs Settings rights (base.group_system)."
+
+#: src/features/translations/translations.find.ts:76
+msgid "Your language is English: code texts have no translation to find. Switch language in Translations › Languages to look for one."
+msgstr "Your language is English: code texts have no translation to find. Switch language in Translations › Languages to look for one."
+
+#: src/features/translations/translations.langs.ts:30
+msgid "Working… (loading terms can take a minute)"
+msgstr "Working… (loading terms can take a minute)"
+
+#: src/features/translations/translations.langs.ts:34
+msgid "Switch your language to %s? The page reloads."
+msgstr "Switch your language to %s? The page reloads."
+
+#: src/features/translations/translations.langs.ts:45
+#: src/features/translations/translations.langs.ts:55
+msgid "Active"
+msgstr "Active"
+
+#: src/features/translations/translations.langs.ts:45
+msgid "Not active"
+msgstr "Not active"
+
+#: src/features/translations/translations.langs.ts:46
+msgid "Your language"
+msgstr "Your language"
+
+#: src/features/translations/translations.langs.ts:46
+msgid "Not your language"
+msgstr "Not your language"
+
+#: src/features/translations/translations.langs.ts:49
+msgid "Update"
+msgstr "Update"
+
+#: src/features/translations/translations.langs.ts:49
+msgid "Reload the translations of %s from the modules' .po, replacing the ones changed in the database?"
+msgstr "Reload the translations of %s from the modules' .po, replacing the ones changed in the database?"
+
+#: src/features/translations/translations.langs.ts:50
+msgid "Load the modules' translations again, replacing the ones changed in the database"
+msgstr "Load the modules' translations again, replacing the ones changed in the database"
+
+#: src/features/translations/translations.langs.ts:51
+msgid "Use"
+msgstr "Use"
+
+#: src/features/translations/translations.langs.ts:51
+msgid "Make it your language and reload the page"
+msgstr "Make it your language and reload the page"
+
+#: src/features/translations/translations.langs.ts:52
+msgid "Activate %s and load its translations for every installed module?"
+msgstr "Activate %s and load its translations for every installed module?"
+
+#: src/features/translations/translations.langs.ts:55
+msgid "Yours"
+msgstr "Yours"
+
+#: src/features/translations/translations.langs.ts:58
+msgid "Find a language to activate…"
+msgstr "Find a language to activate…"
+
+#: src/features/translations/translations.langs.ts:62
+msgid "%s languages found"
+msgstr "%s languages found"
+
+#: src/features/translations/translations.langs.ts:62
+msgid "%s active languages"
+msgstr "%s active languages"
+
+#: src/features/translations/translations.langs.ts:69
+msgid "You are seeing Odoo in %s."
+msgstr "You are seeing Odoo in %s."
+
+#: src/features/translations/translations.langs.ts:69
+msgid "Back to %s"
+msgstr "Back to %s"
+
+#: src/features/translations/translations.langs.ts:75
+msgid "Users: internal users with this language. Update reloads the terms from the modules (what a module upgrade does)."
+msgstr "Users: internal users with this language. Update reloads the terms from the modules (what a module upgrade does)."
+
+#: src/features/translations/translations.modules.ts:29
+msgid "Exporting translations needs Settings rights (base.group_system)."
+msgstr "Exporting translations needs Settings rights (base.group_system)."
+
+#: src/features/translations/translations.modules.ts:38
+msgid "Template (.pot)"
+msgstr "Template (.pot)"
+
+#: src/features/translations/translations.modules.ts:38
+msgid "Always exported: the empty template, <module>.pot"
+msgstr "Always exported: the empty template, <module>.pot"
+
+#: src/features/translations/translations.modules.ts:49
+msgid "Add at least one module."
+msgstr "Add at least one module."
+
+#: src/features/translations/translations.modules.ts:60
+msgid "%s files saved to Downloads/<module>/i18n/."
+msgstr "%s files saved to Downloads/<module>/i18n/."
+
+#: src/features/translations/translations.modules.ts:64
+msgid "Check Coverage"
+msgstr "Check Coverage"
+
+#: src/features/translations/translations.modules.ts:64
+msgid "Download .pot / .po"
+msgstr "Download .pot / .po"
+
+#: src/features/translations/translations.modules.ts:65
+msgid "Odoo's export wizard: one run per language"
+msgstr "Odoo's export wizard: one run per language"
+
+#: src/features/translations/translations.modules.ts:65
+msgid "base.language.export, tgz"
+msgstr "base.language.export, tgz"
+
+#: src/features/translations/translations.modules.ts:66
+#: src/features/translations/translations.tab.ts:39
+msgid "Languages"
+msgstr "Languages"
+
+#: src/features/translations/translations.modules.ts:67
+msgid "Import a .po into the database"
+msgstr "Import a .po into the database"
+
+#: src/features/translations/translations.modules.ts:75
+msgid "No module yet."
+msgstr "No module yet."
+
+#: src/features/translations/translations.modules.ts:117
+msgid "%s terms"
+msgstr "%s terms"
+
+#: src/features/translations/translations.modules.ts:121
+msgid "Share of the template's terms translated in each language; fuzzy ones count as not translated. Click a module for the missing terms."
+msgstr "Share of the template's terms translated in each language; fuzzy ones count as not translated. Click a module for the missing terms."
+
+#: src/features/translations/translations.modules.ts:123
+msgid "Template"
+msgstr "Template"
+
+#: src/features/translations/translations.modules.ts:128
+msgid "no file"
+msgstr "no file"
+
+#: src/features/translations/translations.modules.ts:131
+msgid "%s translated, %s missing, %s fuzzy, of %s"
+msgstr "%s translated, %s missing, %s fuzzy, of %s"
+
+#: src/features/translations/translations.modules.ts:140
+msgid "Missing in %s (%s)"
+msgstr "Missing in %s (%s)"
+
+#: src/features/translations/translations.modules.ts:142
+msgid "Nothing missing."
+msgstr "Nothing missing."
+
+#: src/features/translations/translations.modules.ts:162
+msgid "Choose a .po file and its language."
+msgstr "Choose a .po file and its language."
+
+#: src/features/translations/translations.modules.ts:163
+msgid "Import %s into %s%s?"
+msgstr "Import %s into %s%s?"
+
+#: src/features/translations/translations.modules.ts:163
+msgid ", replacing the existing translations"
+msgstr ", replacing the existing translations"
+
+#: src/features/translations/translations.modules.ts:168
+msgid "Imported: %s terms in %s. Reload the page to see them."
+msgstr "Imported: %s terms in %s. Reload the page to see them."
+
+#: src/features/translations/translations.record.ts:16
+msgid "Open a record to see its translations."
+msgstr "Open a record to see its translations."
+
+#: src/features/translations/translations.record.ts:19
+msgid "%s has no translated field."
+msgstr "%s has no translated field."
+
+#: src/features/translations/translations.record.ts:29
+msgid "Fields translated whole"
+msgstr "Fields translated whole"
+
+#: src/features/translations/translations.record.ts:34
+msgid "%s · translated term by term (%s terms)"
+msgstr "%s · translated term by term (%s terms)"
+
+#: src/features/translations/translations.record.ts:39
+msgid "✗ not translated: Odoo shows the English value. Click a row to edit its translations."
+msgstr "✗ not translated: Odoo shows the English value. Click a row to edit its translations."
+
+#: src/features/translations/translations.tab.ts:35
+msgid "Find a Text"
+msgstr "Find a Text"
+
+#: src/features/translations/translations.tab.ts:37
+msgid "View (%s)"
+msgstr "View (%s)"
+
+#: src/features/translations/translations.tab.ts:38
+msgid "Modules (.po)"
+msgstr "Modules (.po)"
+
+#: src/features/translations/translations.tpl.html:13
+#: src/features/translations/translations.tpl.html:13
+msgid "A text shown on the page, e.g. Confirm Order"
+msgstr "A text shown on the page, e.g. Confirm Order"
+
+#: src/features/translations/translations.tpl.html:14
+msgid "Find"
+msgstr "Find"
+
+#: src/features/translations/translations.tpl.html:15
+msgid "Click a text on the Odoo page (Esc to cancel)"
+msgstr "Click a text on the Odoo page (Esc to cancel)"
+
+#: src/features/translations/translations.tpl.html:24
+msgid "Save Translations"
+msgstr "Save Translations"
+
+#: src/features/translations/translations.tpl.html:35
+#: src/features/translations/translations.tpl.html:35
+msgid "Add a module: name or title…"
+msgstr "Add a module: name or title…"
+
+#: src/features/translations/translations.tpl.html:46
+msgid ".po file"
+msgstr ".po file"
+
+#: src/features/translations/translations.tpl.html:47
+msgid "Language of the file"
+msgstr "Language of the file"
+
+#: src/features/translations/translations.tpl.html:48
+msgid "Replace the existing translations"
+msgstr "Replace the existing translations"
+
+#: src/features/translations/translations.tpl.html:49
+msgid "Import"
+msgstr "Import"
+
+#: src/features/translations/translations.ui.ts:54
+msgid "Not translated in %s"
+msgstr "Not translated in %s"
+
+#: src/features/translations/translations.ui.ts:77
+msgid "Nothing changed."
+msgstr "Nothing changed."
+
+#: src/features/translations/translations.ui.ts:78
+msgid "Save the translations in %s?"
+msgstr "Save the translations in %s?"
+
+#: src/features/translations/translations.ui.ts:110
+msgid "Filter the texts…"
+msgstr "Filter the texts…"
+
+#: src/features/translations/translations.ui.ts:114
+msgid "Everything is translated."
+msgstr "Everything is translated."
+
+#: src/features/translations/translations.ui.ts:116
+msgid "Only missing translations"
+msgstr "Only missing translations"
+
+#: src/features/translations/translations.view.ts:16
+msgid "This screen has no view."
+msgstr "This screen has no view."
+
+#: src/features/translations/translations.view.ts:20
+msgid "Reading the views needs Settings rights (base.group_system)."
+msgstr "Reading the views needs Settings rights (base.group_system)."
+
+#: src/features/translations/translations.view.ts:24
+msgid "%s · %s terms"
+msgstr "%s · %s terms"
+
+#: src/features/translations/translations.view.ts:24
+msgid "view"
+msgstr "view"
+
+#: src/features/translations/translations.view.ts:24
+msgid "extension"
+msgstr "extension"
+
+#: src/features/translations/translations.view.ts:31
+msgid "The views of this screen have no translatable text."
+msgstr "The views of this screen have no translatable text."
+
+#: src/features/translations/translations.view.ts:33
+msgid "%s views"
+msgstr "%s views"
+
+#: src/features/translations/translations.view.ts:34
+msgid "✗ not translated: the screen shows the English text. Click a row to edit its translations."
+msgstr "✗ not translated: the screen shows the English text. Click a row to edit its translations."
+
+#: src/features/view/view.action.ts:11
+msgid "Action & context"
+msgstr "Action & context"
+
+#: src/features/view/view.action.ts:17
+msgid "Opened without an action: by the URL of a record. The webclient made one up to show it."
+msgstr "Opened without an action: by the URL of a record. The webclient made one up to show it."
+
+#: src/features/view/view.action.ts:21
+msgid "menu"
+msgstr "menu"
+
+#: src/features/view/view.action.ts:23
+msgid "Open Action Record ↗"
+msgstr "Open Action Record ↗"
+
+#: src/features/view/view.action.ts:24
+msgid "Context"
+msgstr "Context"
+
+#: src/features/view/view.action.ts:25
+msgid "Domain"
+msgstr "Domain"
+
+#: src/features/view/view.action.ts:26
+msgid "Full action (JSON)"
+msgstr "Full action (JSON)"
+
+#: src/features/view/view.arch.ts:12
+msgid "Combined arch"
+msgstr "Combined arch"
+
+#: src/features/view/view.arch.ts:16
+#: src/features/view/view.composition.ts:51
+msgid "No %s view."
+msgstr "No %s view."
+
+#: src/features/view/view.arch.ts:18
+msgid "View #%s with every extension applied, as the webclient receives it (elements of groups you are not in are already removed)."
+msgstr "View #%s with every extension applied, as the webclient receives it (elements of groups you are not in are already removed)."
+
+#: src/features/view/view.composition.ts:18
+msgid "How the view is built"
+msgstr "How the view is built"
+
+#: src/features/view/view.composition.ts:52
+msgid "The inheritance tree needs Settings rights (base.group_system)."
+msgstr "The inheritance tree needs Settings rights (base.group_system)."
+
+#: src/features/view/view.composition.ts:55
+msgid "%s views · %s modules"
+msgstr "%s views · %s modules"
+
+#: src/features/view/view.composition.ts:68
+msgid "primary"
+msgstr "primary"
+
+#: src/features/view/view.composition.ts:69
+msgid "%s elements restricted to groups"
+msgstr "%s elements restricted to groups"
+
+#: src/features/view/view.composition.ts:70
+#: src/features/view/view.field.ts:101
+msgid "inactive"
+msgstr "inactive"
+
+#: src/features/view/view.composition.ts:93
+msgid "Select a view to see what it does and its own arch."
+msgstr "Select a view to see what it does and its own arch."
+
+#: src/features/view/view.composition.ts:118
+#: src/features/view/view.field.ts:162
+msgid "removed"
+msgstr "removed"
+
+#: src/features/view/view.composition.ts:123
+msgid "What it does (%s)"
+msgstr "What it does (%s)"
+
+#: src/features/view/view.composition.ts:134
+msgid "Restricted to groups (%s)"
+msgstr "Restricted to groups (%s)"
+
+#: src/features/view/view.composition.ts:142
+msgid "Own arch (view #%s)"
+msgstr "Own arch (view #%s)"
+
+#: src/features/view/view.composition.ts:149
+msgid "base view · %s fields"
+msgstr "base view · %s fields"
+
+#: src/features/view/view.composition.ts:151
+msgid "+%s fields"
+msgstr "+%s fields"
+
+#: src/features/view/view.composition.ts:152
+msgid "%s moved"
+msgstr "%s moved"
+
+#: src/features/view/view.composition.ts:153
+msgid "%s attributes changed"
+msgstr "%s attributes changed"
+
+#: src/features/view/view.composition.ts:154
+msgid "%s removed"
+msgstr "%s removed"
+
+#: src/features/view/view.composition.ts:155
+msgid "+%s elements"
+msgstr "+%s elements"
+
+#: src/features/view/view.composition.ts:157
+msgid "changes nothing visible"
+msgstr "changes nothing visible"
+
+#: src/features/view/view.field.ts:23
+msgid "One field"
+msgstr "One field"
+
+#: src/features/view/view.field.ts:29
+msgid "Picking… (Esc to cancel)"
+msgstr "Picking… (Esc to cancel)"
+
+#: src/features/view/view.field.ts:42
+msgid "Type a field, pick it on the page or in the list below: its story through the views shows here."
+msgstr "Type a field, pick it on the page or in the list below: its story through the views shows here."
+
+#: src/features/view/view.field.ts:75
+msgid "not a field of this model"
+msgstr "not a field of this model"
+
+#: src/features/view/view.field.ts:82
+msgid "The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible."
+msgstr "The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible."
+
+#: src/features/view/view.field.ts:85
+msgid "Not on this form."
+msgstr "Not on this form."
+
+#: src/features/view/view.field.ts:92
+msgid "The story through the views needs Settings rights (base.group_system)."
+msgstr "The story through the views needs Settings rights (base.group_system)."
+
+#: src/features/view/view.field.ts:113
+msgid "No view of this screen places or changes it."
+msgstr "No view of this screen places or changes it."
+
+#: src/features/view/view.field.ts:118
+msgid "on the field"
+msgstr "on the field"
+
+#: src/features/view/view.field.ts:120
+msgid "Groups set by the views: unknown without Settings rights (base.group_system)."
+msgstr "Groups set by the views: unknown without Settings rights (base.group_system)."
+
+#: src/features/view/view.field.ts:121
+msgid "None: every user who sees the view sees it."
+msgstr "None: every user who sees the view sees it."
+
+#: src/features/view/view.field.ts:132
+msgid "never"
+msgstr "never"
+
+#: src/features/view/view.field.ts:133
+msgid "error: %s"
+msgstr "error: %s"
+
+#: src/features/view/view.field.ts:151
+msgid "placed"
+msgstr "placed"
+
+#: src/features/view/view.field.ts:151
+msgid "in"
+msgstr "in"
+
+#: src/features/view/view.field.ts:152
+msgid "added"
+msgstr "added"
+
+#: src/features/view/view.field.ts:153
+msgid "moved"
+msgstr "moved"
+
+#: src/features/view/view.field.ts:154
+msgid "attributes changed:"
+msgstr "attributes changed:"
+
+#: src/features/view/view.field.ts:155
+msgid "restricted to groups"
+msgstr "restricted to groups"
+
+#: src/features/view/view.field.ts:158
+msgid "right after it"
+msgstr "right after it"
+
+#: src/features/view/view.field.ts:158
+msgid "right before it"
+msgstr "right before it"
+
+#: src/features/view/view.field.ts:158
+msgid "inside it"
+msgstr "inside it"
+
+#: src/features/view/view.field.ts:159
+msgid "adds"
+msgstr "adds"
+
+#: src/features/view/view.field.ts:161
+msgid "replaced by"
+msgstr "replaced by"
+
+#: src/features/view/view.field.ts:165
+msgid "used in"
+msgstr "used in"
+
+#: src/features/view/view.field.ts:165
+msgid "of"
+msgstr "of"
+
+#: src/features/view/view.field.ts:181
+msgid "No field in this view."
+msgstr "No field in this view."
+
+#: src/features/view/view.field.ts:190
+msgid "hidden"
+msgstr "hidden"
+
+#: src/features/view/view.field.ts:190
+msgid "not shown"
+msgstr "not shown"
+
+#: src/features/view/view.field.ts:203
+msgid "Filter name / label / widget"
+msgstr "Filter name / label / widget"
+
+#: src/features/view/view.injected.ts:42
+msgid "Webclient internals are not reachable."
+msgstr "Webclient internals are not reachable."
+
+#: src/features/view/view.injected.ts:50
+msgid "No form view is open."
+msgstr "No form view is open."
+
+#: src/features/view/view.overview.ts:18
+msgid "Overview"
+msgstr "Overview"
+
+#: src/features/view/view.overview.ts:36
+msgid "File"
+msgstr "File"
+
+#: src/features/view/view.overview.ts:37
+msgid "none: a client action (%s)"
+msgstr "none: a client action (%s)"
+
+#: src/features/view/view.overview.ts:44
+msgid "(no module)"
+msgstr "(no module)"
+
+#: src/features/view/view.overview.ts:46
+#: src/features/view/view.overview.ts:51
+msgid "Built from"
+msgstr "Built from"
+
+#: src/features/view/view.overview.ts:47
+msgid "%s base + %s extensions · %s modules"
+msgstr "%s base + %s extensions · %s modules"
+
+#: src/features/view/view.overview.ts:48
+msgid "%s inactive"
+msgstr "%s inactive"
+
+#: src/features/view/view.overview.ts:51
+msgid "unknown: the inheritance needs Settings rights (base.group_system)"
+msgstr "unknown: the inheritance needs Settings rights (base.group_system)"
+
+#: src/features/view/view.overview.ts:59
+msgid "none: opened directly by its URL"
+msgstr "none: opened directly by its URL"
+
+#: src/features/view/view.overview.ts:64
+msgid "new"
+msgstr "new"
+
+#: src/features/view/view.overview.ts:64
+msgid "editing"
+msgstr "editing"
+
+#: src/features/view/view.overview.ts:73
+msgid "%s on the form"
+msgstr "%s on the form"
+
+#: src/features/view/view.overview.ts:74
+msgid "%s hidden"
+msgstr "%s hidden"
+
+#: src/features/view/view.overview.ts:74
+msgid "%s not shown"
+msgstr "%s not shown"
+
+#: src/features/view/view.overview.ts:75
+msgid "%s read-only"
+msgstr "%s read-only"
+
+#: src/features/view/view.overview.ts:75
+msgid "%s required"
+msgstr "%s required"
+
+#: src/features/view/view.overview.ts:76
+msgid "%s expression errors"
+msgstr "%s expression errors"
+
+#: src/features/view/view.overview.ts:84
+msgid "Views of the action"
+msgstr "Views of the action"
+
+#: src/features/view/view.overview.ts:85
+msgid "search: %s"
+msgstr "search: %s"
+
+#: src/features/view/view.tpl.html:25
+#: src/features/view/view.tpl.html:32
+#: src/features/view/view.tpl.html:83
+msgid "Show this line in the own arch"
+msgstr "Show this line in the own arch"
+
+#: src/features/view/view.tpl.html:48
+#: src/features/view/view.tpl.html:48
+msgid "Field to inspect, e.g. partner_id"
+msgstr "Field to inspect, e.g. partner_id"
+
+#: src/features/view/view.tpl.html:50
+msgid "Click a field on the Odoo page (Esc to cancel)"
+msgstr "Click a field on the Odoo page (Esc to cancel)"
+
+#: src/features/view/view.tpl.html:61
+msgid "Now"
+msgstr "Now"
+
+#: src/features/view/view.tpl.html:63
+msgid "Its story through the views"
+msgstr "Its story through the views"
+
+#: src/features/view/view.tpl.html:90
+msgid "Hidden"
+msgstr "Hidden"
+
+#: src/features/view/view.tpl.html:91
+msgid "Not shown"
+msgstr "Not shown"
+
+#: src/features/view/view.tpl.html:94
+msgid "Expression error"
+msgstr "Expression error"
+
+#: src/odoo/detect.ts:33
+msgid "Cannot read the Odoo version (%s)."
+msgstr "Cannot read the Odoo version (%s)."
+
+#: src/odoo/groups.ts:17
+msgid "not %s"
+msgstr "not %s"
+
+#: src/ui/components.tpl.html:28
+msgid "Traceback"
+msgstr "Traceback"
+
+#: src/ui/components.tpl.html:42
+msgid "Click to copy"
+msgstr "Click to copy"
+
+#: src/ui/components.tpl.html:47
+msgid "Loading…"
+msgstr "Loading…"
+
+#: src/ui/components.ts:117
+msgid "Open /odoo/%s"
+msgstr "Open /odoo/%s"
+
+#: src/ui/domain-view.ts:36
+msgid "always true"
+msgstr "always true"
+
+#: src/ui/domain-view.ts:36
+msgid "always false"
+msgstr "always false"
+
+#: src/ui/domain-view.ts:41
+msgid "all of"
+msgstr "all of"
+
+#: src/ui/domain-view.ts:41
+msgid "any of"
+msgstr "any of"
+
+#: src/ui/domain-view.ts:41
+msgid "not"
+msgstr "not"
+
+#: src/ui/json-view.ts:36
+msgid "Show %s more characters"
+msgstr "Show %s more characters"
+
+#: src/ui/json-view.ts:71
+msgid "Show %s more (of %s)"
+msgstr "Show %s more (of %s)"
+
+#: src/ui/matrix.ts:37
+msgid "Allowed / matches"
+msgstr "Allowed / matches"
+
+#: src/ui/matrix.ts:37
+msgid "Refused / doesn't match"
+msgstr "Refused / doesn't match"
+
+#: src/ui/matrix.ts:37
+msgid "Does not apply"
+msgstr "Does not apply"
+
+#: src/ui/matrix.ts:37
+msgid "Unknown: could not be checked"
+msgstr "Unknown: could not be checked"
+
+#: src/ui/matrix.ts:44
+msgid "Added by the groups being tried"
+msgstr "Added by the groups being tried"

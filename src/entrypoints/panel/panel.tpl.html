@@ -1,0 +1,21 @@
+<!-- entrypoints/panel/index.ts: the shell's dynamic pieces (the page itself: index.html; styles: ui/panel.css). -->
+
+<!-- Header status, not on an Odoo page. -->
+<template data-tpl="status-not-odoo">
+  <span data-i18n="text">Not an Odoo page</span>
+</template>
+
+<!-- Header status, on a screen bound to no model. -->
+<template data-tpl="status-no-model">
+  <span class="model">—</span>
+</template>
+
+<!-- Header status: the action name. -->
+<template data-tpl="status-text">
+  <span data-ref="text"></span>
+</template>
+
+<!-- A tab whose feature is not ported from the JavaScript extension yet. Not translated: it goes away. -->
+<template data-tpl="not-ported">
+  <div class="empty">Not ported yet.</div>
+</template>

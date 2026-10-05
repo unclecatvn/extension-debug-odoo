@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Odoo Debug</title>
+  <link rel="stylesheet" href="../panel.css">
+</head>
+<body>
+  <!-- data-i18n lists what to translate (text and/or attributes); the English values are the msgids. -->
+  <header class="top">
+    <div class="brand-row">
+      <div class="brand"><img src="../icons/icon-32.png" width="20" height="20" alt=""><strong>Odoo Debug</strong></div>
+      <div id="status" class="context" data-i18n="text">Connecting…</div>
+      <span id="odoo-version"></span>
+      <span class="spacer"></span>
+      <button id="refresh" class="icon-btn" title="Reload Data" aria-label="Reload Data" data-i18n="title,aria-label">⟳</button>
+      <!-- the panel's own place, apart from ⟳: its window, full screen, then − at the end, where a window's close sits.
+           In the page: open in its own window; in its own window: back into the page, alone (index.ts removes the rest). -->
+      <span class="win-btns">
+        <button id="detach" class="icon-btn" title="Open in Its Own Window (for a second screen)" aria-label="Open in Its Own Window" data-i18n="title,aria-label">⧉</button>
+        <button id="attach" class="icon-btn" title="Back into the Odoo Page" aria-label="Back into the Odoo Page" data-i18n="title,aria-label">⧈</button>
+        <button id="full" class="icon-btn" title="Full Screen (Esc to exit)" aria-label="Full Screen" aria-pressed="false" data-i18n="title,aria-label">⤢</button>
+        <button id="minimize" class="icon-btn" title="Minimize (the Odoo Debug button reopens it)" aria-label="Minimize" data-i18n="title,aria-label">−</button>
+      </span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="record" class="active" aria-selected="true"><span data-i18n="text">Record</span></button>
+      <button role="tab" data-tab="view" aria-selected="false"><span data-i18n="text">View</span></button>
+      <button role="tab" data-tab="rpc" aria-selected="false"><span data-i18n="text">RPC</span></button>
+      <button role="tab" data-tab="security" aria-selected="false"><span data-i18n="text">Security</span></button>
+      <button role="tab" data-tab="translations" aria-selected="false"><span data-i18n="text">Translations</span></button>
+      <button role="tab" data-tab="apps" aria-selected="false"><span data-i18n="text">Apps</span></button>
+      <button role="tab" data-tab="menus" aria-selected="false"><span data-i18n="text">Menus</span></button>
+      <button role="tab" data-tab="perf" aria-selected="false"><span data-i18n="text">Perf</span></button>
+      <button role="tab" data-tab="code" aria-selected="false"><span data-i18n="text">Code</span></button>
+    </nav>
+  </header>
+  <main>
+    <section id="record" class="tab active" role="tabpanel"></section>
+    <section id="view" class="tab" role="tabpanel"></section>
+    <section id="rpc" class="tab" role="tabpanel"></section>
+    <section id="security" class="tab" role="tabpanel"></section>
+    <section id="translations" class="tab" role="tabpanel"></section>
+    <section id="apps" class="tab" role="tabpanel"></section>
+    <section id="menus" class="tab" role="tabpanel"></section>
+    <section id="perf" class="tab" role="tabpanel"></section>
+    <section id="code" class="tab" role="tabpanel"></section>
+  </main>
+  <script type="module" src="index.js"></script>
+</body>
+</html>

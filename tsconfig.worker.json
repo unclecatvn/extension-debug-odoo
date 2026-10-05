@@ -1,0 +1,13 @@
+{
+  // worker: the service worker. chrome.*; no DOM (a worker has none).
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["es2023", "webworker"],
+    "types": ["chrome"],
+    "declarationDir": ".tsbuild/worker",
+    "tsBuildInfoFile": ".tsbuild/worker.tsbuildinfo"
+  },
+  "include": ["src/entrypoints/background"],
+  "exclude": [],
+  "references": [{ "path": "./tsconfig.contracts.json" }, { "path": "./tsconfig.page.json" }]
+}

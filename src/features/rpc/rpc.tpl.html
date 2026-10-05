@@ -1,0 +1,90 @@
+<!-- features/rpc/rpc.tab.ts: the RPC tab (styles: ui/panel.css). data-ref: filled by the code, text only. -->
+
+<!-- Top of the tab: filter, Errors Only, Clear, New Request; the column names (list-head) are added by the code. -->
+<template data-tpl="toolbar">
+  <div class="toolbar" data-ref="bar">
+    <input type="search" data-ref="filter" placeholder="Filter model / method" data-i18n="placeholder">
+    <button type="button" class="chip" aria-pressed="false" data-ref="errors" data-i18n="text">Errors Only</button>
+    <button type="button" class="chip" data-ref="clear" data-i18n="text">Clear</button>
+    <button type="button" class="chip" aria-pressed="false" data-ref="compose" data-i18n="text">New Request</button>
+  </div>
+</template>
+
+<!-- Where the New Request card goes, under the toolbar (empty while closed). -->
+<template data-tpl="draft-slot">
+  <div data-ref="slot"></div>
+</template>
+
+<!-- The log: one "call" per recorded request, newest first. -->
+<template data-tpl="rows">
+  <ul class="list" data-ref="list"></ul>
+</template>
+
+<!-- Nothing recorded yet. -->
+<template data-tpl="empty-log">
+  <div class="empty">
+    <span data-i18n="text">No RPC yet. Use the Odoo page to record some.</span>
+    <p class="note" data-i18n="text">Calls Odoo answers from its own cache (views, actions…) never reach the network: they are not logged.</p>
+  </div>
+</template>
+
+<!-- New Request: a card above the log, holding a composer. -->
+<template data-tpl="draft">
+  <div class="rpc-draft">
+    <div class="row">
+      <h3 class="grow" data-i18n="text">New Request</h3>
+      <button type="button" class="icon-btn close" data-ref="close" title="Close" aria-label="Close" data-i18n="title,aria-label"></button>
+    </div>
+    <div data-ref="body"></div>
+  </div>
+</template>
+
+<!-- One recorded call. The error pill is added by the code. -->
+<template data-tpl="call">
+  <li data-ref="row">
+    <div class="row" data-ref="line">
+      <span class="dot"></span>
+      <span class="name" data-ref="method"></span>
+      <span class="grow muted" data-ref="model"></span>
+      <span class="ms" data-ref="ms"></span>
+    </div>
+    <div class="meta" data-ref="meta"></div>
+  </li>
+</template>
+
+<!-- A call opened is its request in the composer, editable right away; these go in its actions. -->
+<template data-tpl="why">
+  <button type="button" class="btn" data-ref="button" data-i18n="text">Why was it blocked? → Security</button>
+</template>
+<template data-tpl="profile">
+  <button type="button" class="btn" data-ref="button" title="Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)" data-i18n="text,title">⏱ Profile → Perf</button>
+</template>
+
+<!-- A request as sent, editable: Send (or Ctrl/⌘ + Enter) posts it with the page's session; the answer shows below, in
+     place of the recorded one. -->
+<template data-tpl="composer">
+  <form class="composer" data-ref="form">
+    <input type="text" spellcheck="false" data-ref="route" aria-label="Route" data-i18n="aria-label">
+    <textarea spellcheck="false" data-ref="text" aria-label="Body (JSON)" data-i18n="aria-label"></textarea>
+    <div class="row actions-bar" data-ref="actions">
+      <button type="submit" class="btn primary" data-ref="send" data-i18n="text">Send</button>
+      <span class="muted" data-ref="hint" data-i18n="text">Ctrl/⌘ + Enter</span>
+    </div>
+    <div class="answer" data-ref="out"></div>
+  </form>
+</template>
+
+<!-- The answer to a sent request: status pill, HTTP status and time. -->
+<template data-tpl="sent-head">
+  <div class="row"><span data-ref="pill"></span><span class="muted" data-ref="info"></span></div>
+</template>
+
+<!-- Above a body / an answer the recorder cut (over 200 KB). -->
+<template data-tpl="cut-note">
+  <div class="note" data-ref="text"></div>
+</template>
+
+<!-- Copy as cURL; its title says which external API the version uses (set by the code). -->
+<template data-tpl="curl">
+  <button type="button" class="btn" data-ref="button" data-i18n="text">Copy as cURL</button>
+</template>

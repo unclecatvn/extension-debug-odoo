@@ -1,0 +1,13 @@
+{
+  // page: runs IN the Odoo page (MAIN world): rpc-recorder and the injected functions. DOM and window.odoo; no chrome.* (it doesn't exist there).
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["es2023", "dom", "dom.iterable"],
+    "types": [],
+    "declarationDir": ".tsbuild/page",
+    "tsBuildInfoFile": ".tsbuild/page.tsbuildinfo"
+  },
+  "include": ["src/injected", "src/**/*.injected.ts", "src/entrypoints/rpc-recorder", "src/types/odoo-page.d.ts", "src/types/page-events.d.ts"],
+  "exclude": [],
+  "references": [{ "path": "./tsconfig.contracts.json" }]
+}

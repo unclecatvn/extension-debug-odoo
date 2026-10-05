@@ -1,15 +1,32 @@
 {
-  "type": "module",
+  "name": "odoo-debug",
   "private": true,
+  "type": "module",
   "license": "SEE LICENSE IN LICENSE",
+  "description": "Odoo Debug, an in-page debug panel for Odoo 18 / 19 (Chrome extension, Manifest V3).",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
-    "test": "node --test \"tests/*.test.mjs\"",
-    "i18n": "node tools/i18n.mjs",
-    "e2e": "node --test \"e2e/*.e2e.mjs\"",
+    "build": "node scripts/build.ts",
+    "watch": "node scripts/build.ts --watch",
+    "typecheck": "tsc -b",
+    "test": "node --test \"tests/unit/**/*.test.ts\"",
+    "check:page": "node scripts/check-page-fns.ts",
+    "i18n": "node scripts/i18n.ts",
+    "check": "npm run typecheck && npm test && npm run build && npm run check:page && npm run check:markup && npm run check:imports",
+    "check:markup": "node scripts/check-markup.ts",
+    "check:imports": "node scripts/check-imports.ts",
     "screenshots": "node tools/screenshots.mjs",
     "intro": "node tools/intro.mjs"
   },
   "devDependencies": {
-    "puppeteer": "^25.12.0"
+    "@types/chrome": "^0.3.4",
+    "@types/node": "^26.6.3",
+    "acorn": "^8.18.0",
+    "esbuild": "^0.28.2",
+    "eslint-scope": "^9.1.2",
+    "puppeteer": "^25.12.0",
+    "typescript": "^7.0.2"
   }
 }

@@ -1,0 +1,47 @@
+/* entrypoints/launcher: the button and the panel frame on the Odoo page (markup: launcher.tpl.html).
+   --size (button) and --gap (to the window edges) are set by index.ts, which places the button with the same values. */
+:host { all: initial; }
+.launcher { display: contents; }
+
+button {
+  position: fixed; z-index: 2147483647; width: var(--size); height: var(--size); padding: 0; border: 0; border-radius: 50%;
+  background: #714b67; box-shadow: 0 2px 8px rgba(0, 0, 0, .35); cursor: grab; touch-action: none; display: grid; place-items: center;
+}
+button:active { cursor: grabbing; }
+button[hidden] { display: none; }
+button:focus-visible { outline: 3px solid #d5a6c8; outline-offset: 2px; }
+img { width: 24px; height: 24px; pointer-events: none; }
+
+.frame {
+  /* --panel-w / --panel-h: the size the user dragged it to (index.ts, saved per Odoo instance) */
+  position: fixed; z-index: 2147483646; width: var(--panel-w, 420px); height: min(var(--panel-h, 720px), calc(100vh - 2 * var(--gap)));
+  max-width: calc(100vw - 2 * var(--gap)); border-radius: 14px; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .08), 0 12px 40px rgba(0, 0, 0, .22);
+}
+.frame[hidden] { display: none; }
+.frame.full { width: calc(100vw - 2 * var(--gap)); height: calc(100vh - 2 * var(--gap)); max-width: none; }
+iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+.toast {
+  position: fixed; z-index: 2147483647; padding: 4px 8px; border-radius: 6px; pointer-events: none;
+  background: #1f1d24; color: #fff; font: 600 12px ui-monospace, Menlo, monospace; box-shadow: 0 2px 8px rgba(0, 0, 0, .35);
+}
+
+/* Resize grips, on the frame's free edges (data-side: the frame's side of the button; data-anchor: its edge aligned on
+   the button). Above the iframe; while dragging, the iframe stops taking the pointer (.resizing). */
+.grip { position: absolute; z-index: 1; }
+.grip:hover, .resizing .grip { background: rgba(113, 75, 103, .18); }
+.grip[data-grip=x] { top: 0; bottom: 0; width: 6px; cursor: ew-resize; }
+.grip[data-grip=y] { left: 0; right: 0; height: 6px; cursor: ns-resize; }
+.grip[data-grip=xy] { width: 16px; height: 16px; }
+.frame[data-side=left] .grip:is([data-grip=x], [data-grip=xy]) { left: 0; }
+.frame[data-side=right] .grip:is([data-grip=x], [data-grip=xy]) { right: 0; }
+.frame[data-anchor=top] .grip:is([data-grip=y], [data-grip=xy]) { bottom: 0; }
+.frame[data-anchor=bottom] .grip:is([data-grip=y], [data-grip=xy]) { top: 0; }
+.frame:is([data-side=left][data-anchor=top], [data-side=right][data-anchor=bottom]) .grip[data-grip=xy] { cursor: nesw-resize; }
+.frame:is([data-side=right][data-anchor=top], [data-side=left][data-anchor=bottom]) .grip[data-grip=xy] { cursor: nwse-resize; }
+.frame.full .grip { display: none; }
+.frame.resizing iframe { pointer-events: none; }
+
+/* The panel is in its own window: the button brings it to the front. */
+button.detached { box-shadow: 0 0 0 3px #d5a6c8, 0 2px 8px rgba(0, 0, 0, .35); }

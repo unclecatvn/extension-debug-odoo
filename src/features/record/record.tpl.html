@@ -1,0 +1,39 @@
+<!-- features/record/record.tab.ts: the Record tab (styles: ui/panel.css). data-ref: filled by the code, text only. -->
+
+<!-- Top of the field list: the search box and the count (added by the code), the quick filters, Copy as JSON. -->
+<template data-tpl="fields-toolbar">
+  <div class="toolbar" data-ref="bar">
+    <span class="row chips" data-ref="chips">
+      <button type="button" class="chip" aria-pressed="false" data-filter="stored" data-i18n="text">Stored</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="computed" data-i18n="text">Computed</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="relational" data-i18n="text">Relational</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="required" data-i18n="text">Required</button>
+      <button type="button" class="chip" aria-pressed="false" data-filter="groups">groups</button>
+    </span>
+    <button type="button" class="chip" data-ref="copyJson" title="Copy the values of the record as JSON" data-i18n="text,title">Copy as JSON</button>
+    <span class="muted" data-ref="count"></span>
+  </div>
+</template>
+
+<!-- Why something is missing from the list (compute failed, no rights on ir.model.fields). -->
+<template data-tpl="note">
+  <div class="note pad-x" data-ref="text"></div>
+</template>
+
+<!-- The field list. -->
+<template data-tpl="fields">
+  <ul class="list" data-ref="list"></ul>
+</template>
+
+<!-- One field: name (click: copy), type, value (click: copy it), ↗ to the record it points to; its description below. -->
+<template data-tpl="field">
+  <li data-ref="row">
+    <div class="row" data-ref="line"></div>
+    <div class="meta" data-ref="meta"></div>
+  </li>
+</template>
+
+<!-- A field with no value read (no record, or not readable). -->
+<template data-tpl="no-value">
+  <span class="grow"></span>
+</template>

@@ -4,13 +4,18 @@
 .vscode/
 *.swp
 
-# Node (dev dependencies only: Puppeteer for e2e/)
 node_modules/
 
-# Build outputs: release zips are made by CI (.github/workflows/release.yml)
+# Build output (npm run build): load it unpacked from chrome://extensions; release zips are made by CI
+dist/
 *.zip
-extension/icons/_tmp.html
+
+# The intro film's 1440p master (npm run intro): uploaded by hand, too big for the repository
+store/
 
 # Local tooling
 .claude/
 *.log
+
+# tsc -b: declarations between projects (tsconfig.*.json), never shipped
+.tsbuild/
