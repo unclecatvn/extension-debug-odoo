@@ -48,10 +48,13 @@ Phiên bản Odoo được nhận diện trên từng trang, và mọi khác bi�
 
 ## Video demo
 
-<!-- Dán video demo vào đây, ví dụ link YouTube: [![Odoo Debug demo](thumbnail.png)](https://www.youtube.com/watch?v=…)
-     hoặc file .mp4 tải lên một issue / release của GitHub: https://github.com/user-attachments/assets/… -->
-> 🎬 Video demo sẽ sớm có. Trong lúc chờ, ảnh chụp từng tab có trên
-> [trang Odoo Debug](https://unclecatvn.github.io/extension-debug-odoo/).
+<!-- website/intro.mp4 (npm run intro), tải lên làm tệp đính kèm của GitHub: GitHub không phát video nằm trong repo.
+     Phim mới: kéo file vào một ô bình luận bất kỳ, thay link user-attachments nhận được vào chỗ này. -->
+https://github.com/user-attachments/assets/d6254395-fac7-4999-ac39-f0c72e547428
+
+Từng tab trả lời một câu hỏi thật trên một đơn bán hàng: vì sao field bị readonly, vì sao user không mở được đơn, cài một
+module sẽ kéo theo những gì, vì sao màn hình chậm… Ảnh chụp từng tab có trên
+[trang Odoo Debug](https://unclecatvn.github.io/extension-debug-odoo/).
 
 ## Hướng dẫn sử dụng
 

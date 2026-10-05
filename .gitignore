@@ -10,6 +10,9 @@ node_modules/
 dist/
 *.zip
 
+# The intro film's 1440p master (npm run intro): uploaded by hand, too big for the repository
+store/
+
 # Local tooling
 .claude/
 *.log

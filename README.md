@@ -49,10 +49,13 @@ one place (`src/odoo/adapters/`).
 
 ## Demo
 
-<!-- Paste the demo video here, e.g. a YouTube link: [![Odoo Debug demo](thumbnail.png)](https://www.youtube.com/watch?v=…)
-     or an .mp4 uploaded to a GitHub issue / release: https://github.com/user-attachments/assets/… -->
-> 🎬 Demo video coming soon. Meanwhile, screenshots of every tab are on the
-> [Odoo Debug page](https://unclecatvn.github.io/extension-debug-odoo/).
+<!-- website/intro.mp4 (npm run intro), uploaded as a GitHub attachment: GitHub plays no video from the repository.
+     A new film: drag it into any comment box, put the user-attachments link it gives in place of this one. -->
+https://github.com/user-attachments/assets/d6254395-fac7-4999-ac39-f0c72e547428
+
+Every tab answering a real question on a sales order: why a field is read-only, why a user can't open the order, what
+installing a module brings, why a screen is slow… Screenshots of every tab are on the
+[Odoo Debug page](https://unclecatvn.github.io/extension-debug-odoo/).
 
 ## User guide
 

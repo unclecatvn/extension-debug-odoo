@@ -16,7 +16,9 @@
     "i18n": "node scripts/i18n.ts",
     "check": "npm run typecheck && npm test && npm run build && npm run check:page && npm run check:markup && npm run check:imports",
     "check:markup": "node scripts/check-markup.ts",
-    "check:imports": "node scripts/check-imports.ts"
+    "check:imports": "node scripts/check-imports.ts",
+    "screenshots": "node tools/screenshots.mjs",
+    "intro": "node tools/intro.mjs"
   },
   "devDependencies": {
     "@types/chrome": "^0.3.4",
@@ -24,6 +26,7 @@
     "acorn": "^8.18.0",
     "esbuild": "^0.28.2",
     "eslint-scope": "^9.1.2",
+    "puppeteer": "^25.12.0",
     "typescript": "^7.0.2"
   }
 }
