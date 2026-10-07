@@ -3,15 +3,26 @@ name: Release
 # is built, zipped (dist/ as it is: what Load unpacked takes) and released as v<version> with that section as notes.
 # From ts the release is a pre-release (main is not the TypeScript version yet). Pushes that keep the same version only
 # run CI.
-# A new version released from main also goes to the Chrome Web Store (uploaded, submitted for review: it goes live once
-# Google approves it), with the repository secrets CWS_CLIENT_ID, CWS_CLIENT_SECRET, CWS_REFRESH_TOKEN (an OAuth client
-# allowed to use the Chrome Web Store API); without them that step is skipped. Pre-releases from ts never go there.
-# Run by hand on main (Actions › Release › Run workflow), it sends the manifest's version to the Chrome Web Store again,
+# A new version released from main then goes to each store in its own job, side by side, with the released zip:
+#   chrome  Chrome Web Store (API v2), secrets CWS_PUBLISHER_ID (Developer Dashboard › Publisher › Settings),
+#           CWS_CLIENT_ID, CWS_CLIENT_SECRET, CWS_REFRESH_TOKEN (an OAuth client allowed to use the Chrome Web Store API)
+#   edge    Edge Add-ons, secrets EDGE_PRODUCT_ID, EDGE_CLIENT_ID, EDGE_API_KEY (Partner Center › Microsoft Edge ›
+#           Publish API; the product itself is created once by hand there, the API only updates it)
+# Each uploads the version and submits it for review (live once the store approves it); without its secrets it is
+# skipped. One store failing leaves the other alone: Re-run failed jobs sends it again to that store only.
+# Pre-releases from ts never go to a store.
+# Run by hand on main (Actions › Release › Run workflow), it sends the manifest's version again to the store chosen,
 # released or not: e.g. once the store's listing or privacy practices are fixed after a refused submission.
 on:
   push:
     branches: [main, ts]
   workflow_dispatch:
+    inputs:
+      store:
+        description: Store to send the manifest's version to
+        type: choice
+        options: [both, chrome, edge]
+        default: both
 
 jobs:
   ci:
@@ -22,11 +33,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      tag: ${{ steps.release.outputs.tag }} # set when the stores get this version
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # full history + tags for the notes
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -40,8 +53,7 @@ jobs:
           if git rev-parse -q --verify "refs/tags/$VER" >/dev/null; then
             echo "$VER already released"
             [ "$GITHUB_EVENT_NAME" = workflow_dispatch ] || exit 0
-            gh release download "$VER" --pattern "$ZIP" # by hand: the store gets the released zip again
-            echo "zip=$ZIP" >> "$GITHUB_OUTPUT"; exit 0
+            echo "tag=$VER" >> "$GITHUB_OUTPUT"; exit 0 # by hand: the stores get the released zip again
           fi
           npm ci
           npm run build
@@ -52,36 +64,95 @@ jobs:
           [ -s notes.md ] || { echo "## Changes${PREV:+ since $PREV}"; git log --no-merges --pretty='- %s (%h)' ${PREV:+$PREV..}HEAD; } > notes.md
           PRE=$([ "$GITHUB_REF_NAME" = main ] || echo --prerelease)
           gh release create "$VER" "$ZIP" --target "$GITHUB_SHA" --title "$VER" --notes-file notes.md $PRE
-          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          echo "tag=$VER" >> "$GITHUB_OUTPUT"
 
+  chrome:
+    needs: release
+    if: needs.release.outputs.tag && github.ref_name == 'main' && inputs.store != 'edge'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ZIP: odoo-debug-${{ needs.release.outputs.tag }}.zip
+    steps:
+      - name: Download the released zip
+        run: gh release download "${{ needs.release.outputs.tag }}" -R "$GITHUB_REPOSITORY" --pattern "$ZIP"
       - name: Chrome Web Store — upload the version, submit it for review
-        if: steps.release.outputs.zip && github.ref_name == 'main'
         env:
-          ZIP: ${{ steps.release.outputs.zip }}
           ITEM: mfmamdbagelffoedimmjpolhalmngcjk
+          CWS_PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
           CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
           CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
           CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
         run: |
-          if [ -z "$CWS_CLIENT_ID" ] || [ -z "$CWS_CLIENT_SECRET" ] || [ -z "$CWS_REFRESH_TOKEN" ]; then
+          if [ -z "$CWS_PUBLISHER_ID" ] || [ -z "$CWS_CLIENT_ID" ] || [ -z "$CWS_CLIENT_SECRET" ] || [ -z "$CWS_REFRESH_TOKEN" ]; then
             echo "::notice::Chrome Web Store secrets not set: $ZIP not uploaded (upload it by hand)"; exit 0
           fi
           TOKEN=$(curl -fsS https://oauth2.googleapis.com/token -d grant_type=refresh_token -d client_id="$CWS_CLIENT_ID" \
             -d client_secret="$CWS_CLIENT_SECRET" -d refresh_token="$CWS_REFRESH_TOKEN" | jq -r .access_token)
           echo "::add-mask::$TOKEN"
-          API=https://www.googleapis.com/chromewebstore/v1.1/items/$ITEM
+          # API v2 (v1.1 is shut down on 15 October 2026)
+          NAME=publishers/$CWS_PUBLISHER_ID/items/$ITEM
           AUTH="Authorization: Bearer $TOKEN"
-          UP=$(curl -sS -X PUT -H "$AUTH" -T "$ZIP" "https://www.googleapis.com/upload/chromewebstore/v1.1/items/$ITEM")
+          UP=$(curl -sS -X POST -H "$AUTH" -T "$ZIP" "https://chromewebstore.googleapis.com/upload/v2/$NAME:upload")
           echo "upload: $UP"
-          STATE=$(jq -r '.uploadState // "FAILURE"' <<< "$UP")
+          STATE=$(jq -r '.uploadState // "FAILED"' <<< "$UP")
           for _ in $(seq 30); do # a big package is processed after the request: wait for it
             [ "$STATE" = IN_PROGRESS ] || break
             sleep 5
-            STATE=$(curl -sS -H "$AUTH" "$API?projection=DRAFT" | jq -r '.uploadState // "FAILURE"')
+            STATE=$(curl -sS -H "$AUTH" "https://chromewebstore.googleapis.com/v2/$NAME:fetchStatus" | jq -r '.lastAsyncUploadState // "FAILED"')
           done
-          [ "$STATE" = SUCCESS ] || { echo "::error::Chrome Web Store upload: $STATE $(jq -c '.itemError // .error // empty' <<< "$UP")"; exit 1; }
-          PUB=$(curl -sS -X POST -H "$AUTH" -H "Content-Length: 0" "$API/publish")
+          [ "$STATE" = SUCCEEDED ] || { echo "::error::Chrome Web Store upload: $STATE $(jq -c '.error // empty' <<< "$UP")"; exit 1; }
+          PUB=$(curl -sS -X POST -H "$AUTH" -H "Content-Length: 0" "https://chromewebstore.googleapis.com/v2/$NAME:publish")
           echo "publish: $PUB"
-          jq -e '.status // [] | any(. == "OK" or . == "ITEM_PENDING_REVIEW")' <<< "$PUB" > /dev/null \
-            || { echo "::error::Chrome Web Store publish: $(jq -c '.statusDetail // .error // .' <<< "$PUB")"; exit 1; }
+          jq -e '.state | IN("PENDING_REVIEW", "STAGED", "PUBLISHED", "PUBLISHED_TO_TESTERS")' <<< "$PUB" > /dev/null \
+            || { echo "::error::Chrome Web Store publish: $(jq -c '.error // .' <<< "$PUB")"; exit 1; }
           echo "::notice::$ZIP uploaded to the Chrome Web Store and submitted for review"
+
+  edge:
+    needs: release
+    if: needs.release.outputs.tag && github.ref_name == 'main' && inputs.store != 'chrome'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ZIP: odoo-debug-${{ needs.release.outputs.tag }}.zip
+    steps:
+      - name: Download the released zip
+        run: gh release download "${{ needs.release.outputs.tag }}" -R "$GITHUB_REPOSITORY" --pattern "$ZIP"
+      - name: Edge Add-ons — upload the version, submit it for review
+        env:
+          EDGE_PRODUCT_ID: ${{ secrets.EDGE_PRODUCT_ID }}
+          EDGE_CLIENT_ID: ${{ secrets.EDGE_CLIENT_ID }}
+          EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
+        run: |
+          if [ -z "$EDGE_PRODUCT_ID" ] || [ -z "$EDGE_CLIENT_ID" ] || [ -z "$EDGE_API_KEY" ]; then
+            echo "::notice::Edge Add-ons secrets not set: $ZIP not uploaded (upload it by hand)"; exit 0
+          fi
+          API=https://api.addons.microsoftedge.microsoft.com/v1/products/$EDGE_PRODUCT_ID/submissions
+          H=(-H "Authorization: ApiKey $EDGE_API_KEY" -H "X-ClientID: $EDGE_CLIENT_ID")
+          # both calls answer 202 with the operation in the Location header; poll it until it is no longer InProgress
+          wait_op() { # $1 = operations URL prefix, $2 = headers file of the 202
+            local op st
+            op=$(basename "$(grep -i '^location:' "$2" | cut -d' ' -f2 | tr -d '\r')")
+            [ -n "$op" ] || { echo "::error::Edge Add-ons: no operation in $(head -1 "$2")"; return 1; }
+            for _ in $(seq 60); do
+              st=$(curl -sS "${H[@]}" "$1/$op")
+              [ "$(jq -r .status <<< "$st")" = InProgress ] || break
+              sleep 5
+            done
+            echo "$st"
+            [ "$(jq -r .status <<< "$st")" = Succeeded ]
+          }
+          CODE=$(curl -sS -o /dev/null -D up.h -w '%{http_code}' "${H[@]}" -H "Content-Type: application/zip" -X POST -T "$ZIP" "$API/draft/package")
+          if [ "$CODE" = 401 ] || [ "$CODE" = 403 ]; then # a key cannot be renewed by API: it expires, a new one is made by hand
+            echo "::error::Edge Add-ons: $CODE, the API key has expired or is wrong. Partner Center › Microsoft Edge › Publish API › Create API credentials, put the new key in the EDGE_API_KEY secret, then Re-run failed jobs"
+            exit 1
+          fi
+          wait_op "$API/draft/package/operations" up.h || { echo "::error::Edge Add-ons upload failed"; exit 1; }
+          NOTES=$(jq -n --arg n "https://github.com/$GITHUB_REPOSITORY/releases/tag/${{ needs.release.outputs.tag }}" '{notes: $n}')
+          curl -sS -o /dev/null -D pub.h "${H[@]}" -H "Content-Type: application/json" -X POST -d "$NOTES" "$API"
+          wait_op "$API/operations" pub.h || { echo "::error::Edge Add-ons publish failed"; exit 1; }
+          echo "::notice::$ZIP uploaded to Edge Add-ons and submitted for review"
