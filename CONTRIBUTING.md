@@ -32,7 +32,7 @@ How the code is organized, the rules it follows and how the Odoo versions are ha
 
 ## Releasing
 
-Bump `version` in `static/manifest.json`, add its section to [CHANGELOG.md](CHANGELOG.md), push. CI checks, builds and publishes `odoo-debug-v<version>.zip` in the Releases; from `main` it is also uploaded to the Chrome Web Store and to Edge Add-ons and submitted for review (repository secrets `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`; `EDGE_PRODUCT_ID`, `EDGE_CLIENT_ID`, `EDGE_API_KEY`; each store is its own job: one whose secrets are missing is skipped, one that failed is sent again with Re-run failed jobs; Actions › Release › Run workflow sends the version again to the store chosen, e.g. after a refused submission).
+Bump `version` in `static/manifest.json`, add its section to [CHANGELOG.md](CHANGELOG.md), push. CI checks, builds and publishes `odoo-debug-v<version>.zip` in the Releases; from `main` it is also uploaded to the Chrome Web Store and to Edge Add-ons and submitted for review (repository secrets `CWS_PUBLISHER_ID`, `CWS_CLIENT_ID`, `CWS_CLIENT_SECRET`, `CWS_REFRESH_TOKEN`; `EDGE_PRODUCT_ID`, `EDGE_CLIENT_ID`, `EDGE_API_KEY`; each store is its own job: one whose secrets are missing is skipped, one that failed is sent again with Re-run failed jobs; Actions › Release › Run workflow sends the version again to the store chosen, e.g. after a refused submission).
 
 ## Contributor License Agreement
 

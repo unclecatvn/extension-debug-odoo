@@ -1,0 +1,7 @@
+# Keeps the actions in .github/workflows/ on their latest major (a runner drops old Node versions: Node 20 in 2026).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
