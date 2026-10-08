@@ -23,8 +23,52 @@ export interface ProfileRow {
 /** "/web/dataset/call_kw/res.users/web_read?" → the method and model, as the RPC tab names them; any other route as
  * it is (its query string kept when it has one). */
 export function requestName(name: string): { method: string; model: string } | { route: string } {
-  const m = /\/web\/dataset\/call_kw\/([^/?]+)\/([^/?]+)/.exec(name);
+  const m = /\/web\/dataset\/call_(?:kw|button)\/([^/?]+)\/([^/?]+)/.exec(name);
   return m ? { method: m[2]!, model: m[1]! } : { route: name.replace(/\?$/, '') };
+}
+
+/** Model/method when the route names them; otherwise the route without its query. Generic call_kw routes don't
+ * reveal their payload in ir.profile, so never guess a model/method for those requests. */
+export function profileGroupKey(name: string): string {
+  const n = requestName(name);
+  return 'method' in n ? `method:${n.model}/${n.method}` : `route:${n.route.split('?')[0]}`;
+}
+
+export interface ProfileGroup {
+  key: string;
+  /** canonical route, displayed by the existing request-name renderer */
+  name: string;
+  count: number;
+  /** Sum of request durations in seconds, NOT elapsed page time (requests may overlap). */
+  duration: number;
+  median: number;
+  sql: number;
+  rows: ProfileRow[];
+}
+
+const measurement = (n: number) => Number.isFinite(n) && n >= 0 ? n : 0;
+
+/** Aggregate exactly the supplied profiles; caller applies session/asset/panel exclusions first. */
+export function groupProfiles(rows: readonly ProfileRow[]): ProfileGroup[] {
+  const groups = new Map<string, ProfileGroup>();
+  for (const r of rows) {
+    const key = profileGroupKey(r.name);
+    const n = requestName(r.name);
+    const name = 'method' in n ? `/web/dataset/call_kw/${n.model}/${n.method}` : n.route.split('?')[0]!;
+    const g = groups.get(key) ?? { key, name, count: 0, duration: 0, median: 0, sql: 0, rows: [] };
+    g.count++;
+    g.duration += measurement(r.duration);
+    g.sql += measurement(r.sql_count);
+    g.rows.push(r);
+    groups.set(key, g);
+  }
+  for (const g of groups.values()) {
+    const times = g.rows.map((r) => measurement(r.duration)).sort((a, b) => a - b);
+    const mid = Math.floor(times.length / 2);
+    g.median = times.length % 2 ? times[mid]! : (times[mid - 1]! + times[mid]!) / 2;
+    g.rows.sort((a, b) => measurement(b.duration) - measurement(a.duration) || a.id - b.id);
+  }
+  return [...groups.values()].sort((a, b) => b.duration - a.duration || b.count - a.count || a.key.localeCompare(b.key));
 }
 
 /** The panel's own requests while profiling (it reads through the page's session, its URL marked: odoo/rpc.ts →

@@ -16,6 +16,9 @@ export interface PerfState {
   samples: Map<number, Promise<Sample[]>>;
   /** static files (scripts, images…) listed too */
   assets: boolean;
+  /** Aggregate the loaded profiles by model/method, with a route fallback. */
+  grouped: boolean;
+  group: string | null;
   /** a call the RPC tab handed, profiled: what came of it, shown once after the tab is drawn again */
   profiled: { label: string; text: string } | null;
 }
@@ -23,7 +26,7 @@ export interface PerfState {
 const states = new Map<string, PerfState>();
 export function stateOf(origin: string): PerfState {
   let s = states.get(origin);
-  if (!s) states.set(origin, s = { session: null, selected: null, baseline: null, sql: new Map(), samples: new Map(), assets: false, profiled: null });
+  if (!s) states.set(origin, s = { session: null, selected: null, baseline: null, sql: new Map(), samples: new Map(), assets: false, grouped: false, group: null, profiled: null });
   return s;
 }
 export const forgetAll = () => states.clear();

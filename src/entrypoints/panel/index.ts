@@ -46,8 +46,8 @@ function renderActive() {
     return;
   }
   s.replaceChildren();
-  if (!state.odoo) return s.append(empty(state.error ? _t('Cannot read this tab: %s', state.error) : _t('The current tab is not an Odoo page.')));
-  if (!ctx) return s.append(empty(_t('Cannot read this tab: %s', (ctxError as Error)?.message ?? ctxError)));
+  if (!state.odoo) return s.append(empty(state.error ? _t('Cannot read this page: %s', state.error) : _t('The current tab is not an Odoo page.')));
+  if (!ctx) return s.append(empty(_t('Cannot read this page: %s', (ctxError as Error)?.message ?? ctxError)));
   const why = tab.supports?.(ctx);
   if (why) return s.append(empty(_t('Not available on Odoo %s: %s', ctx.version.label, why)));
   tab.render(s, state, ctx);
@@ -96,7 +96,7 @@ function showVersion() {
   if (!ctx) return box.replaceChildren();
   const { version, support, adapter, mismatches } = ctx;
   const warnings = [
-    support === 'untested' && _t('Odoo %s is not tested: the panel uses its Odoo %s support, some cards may fail.', version.label, adapter.major),
+    support === 'untested' && _t('Odoo %s is untested: using the Odoo %s support, some cards may fail.', version.label, adapter.major),
     support === 'unsupported' && _t('Odoo %s is older than every supported version: some cards may fail.', version.label),
     mismatches.length && _t('This database lacks fields the panel expects for Odoo %s: %s', adapter.major,
       mismatches.map((m) => `${m.model}.${m.field} (${m.usedBy})`).join(', ')),
@@ -123,12 +123,18 @@ function statusParts(): HTMLElement[] {
 }
 
 let seq = 0; // a slow refresh must not overwrite a newer one (fast navigation, ⟳)
+let observedPage = state; // observations advance before slow Odoo detection commits the rendered state (BFCache too)
 async function refresh() {
   const n = ++seq;
   $('#refresh').classList.add('spin');
   const r = await exec(pageState);
+  if (n !== seq) return;
   const next: PageState = r && !isExecError(r) ? r : { ...state, odoo: false, error: r?.error };
-  if (next.loadedAt !== state.loadedAt) clearCache(); // another page load: cached reads are stale
+  if (next.loadedAt !== observedPage.loadedAt) {
+    clearCache(); // another page load: cached reads are stale
+  }
+  for (const name of TAB_NAMES) TABS[name]?.pageObserved?.(observedPage, next);
+  observedPage = next;
   ctx = null;
   ctxError = null;
   if (next.odoo) await odoo().then((c) => { ctx = c; }, (e: unknown) => { ctxError = e; });
@@ -147,7 +153,26 @@ async function refresh() {
 const panel: PanelContext = { state: () => state, odoo: () => ctx, showTab, rerender: (name) => { rendered.delete(name); showTab(name); } };
 // before mounting: the RPC log reads what the page recorded already
 setTab(ownWindowOf != null ? await chrome.tabs.get(ownWindowOf).catch(() => undefined) : await chrome.tabs.getCurrent());
-for (const name of TAB_NAMES) await TABS[name]?.mount?.(section(name), panel);
+// Mount prologues initialize DOM synchronously. Listen before awaiting the RPC snapshot: a completion arriving
+// between snapshot capture and delivery must update its pending row, not disappear during panel startup.
+const mounting = TAB_NAMES.map((name) => TABS[name]?.mount?.(section(name), panel));
+let mounted = false;
+chrome.runtime.onMessage.addListener((msg: unknown, sender) => {
+  if (sender.tab?.id !== tabId || !isExtMessage(msg)) return;
+  if (!mounted) {
+    if (msg.type === 'odoo-rpc') TABS.rpc?.onMessage?.(msg);
+    return; // other tabs keep their startup behaviour until mounting is finished
+  }
+  for (const name of TAB_NAMES) {
+    const show = TABS[name]?.onMessage?.(msg);
+    if (show) {
+      rendered.delete(show);
+      showTab(show);
+    }
+  }
+});
+await Promise.all(mounting);
+mounted = true;
 let saved: string | null = null;
 try { saved = sessionStorage.getItem(TAB_KEY); } catch { /* storage off */ }
 if (isTabName(saved)) showTab(saved, false);
@@ -167,16 +192,6 @@ const scheduleRefresh = () => { clearTimeout(timer); timer = setTimeout(refresh,
 
 chrome.tabs.onUpdated.addListener((id, change) => {
   if (id === tabId && (change.url || change.status === 'complete')) scheduleRefresh(); // Odoo's pushState navigation
-});
-chrome.runtime.onMessage.addListener((msg: unknown, sender) => {
-  if (sender.tab?.id !== tabId || !isExtMessage(msg)) return;
-  for (const name of TAB_NAMES) {
-    const show = TABS[name]?.onMessage?.(msg);
-    if (show) {
-      rendered.delete(show);
-      showTab(show);
-    }
-  }
 });
 
 // ---------- minimize: back to the Odoo Debug button (the launcher hides the frame; the panel keeps its state) ----------

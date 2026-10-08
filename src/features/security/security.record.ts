@@ -33,8 +33,8 @@ export function recordView(body: HTMLElement, c: SecurityCtx) {
     if (!x.rights || !x.input) {
       const rows: MxRow[] = x.server ? [{ label: [_t('Server (has_access)')], cells: x.server.map((v) => ({ v, title: v ? _t('Odoo says: allowed') : _t('Odoo says: refused') })), kind: 'result' }] : [];
       return frag(rows.length ? matrix('', modeHeads(), [{ rows }], focus) : null,
-        note(x.server ? _t('Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): this is the server\'s answer for you, without the why.')
-          : _t('Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): nothing can be said for another user.')));
+        note(x.server ? _t('Only the server\'s answer for you: the reasons need Access Rights (base.group_erp_manager).')
+          : _t('Simulating another user or tried groups needs Access Rights (base.group_erp_manager).')));
     }
     return frag(matrix(subject.resId ? `${subject.model} #${subject.resId}` : subject.model, modeHeads(), sections(sim, x, graph, other, ox), focus),
       legend(sim, other), fixList(sim, x, graph, c));
@@ -58,7 +58,7 @@ function subjectLine(c: SecurityCtx, subject: Subject) {
     pr.groups.length > 0 && _t('groups allowed: %s', pr.groups.join(', ')),
     !pr.mode && _t('operation not named in the message'),
     !pr.ids.length && pr.kind === 'rule' && _t('no record in the message: debug mode adds them'),
-  ].filter(Boolean).join(' · ') : !subject.resId ? _t('No record open: the ACLs only, the rules are checked on a record.') : '';
+  ].filter(Boolean).join(' · ') : !subject.resId ? _t('No record open: ACLs only (rules need a record).') : '';
   if (!r.meta.textContent) r.meta.remove();
   return r.line.parentElement!;
 }
@@ -119,7 +119,7 @@ function sections(sim: Simulated, x: Assessment, graph: GroupGraph, other: Simul
       { label: [_t('→ for the user')], kind: 'sum', cells: MODES.map((m) => {
         const mine = rulesFor(groupRules, input.groupIds, m);
         const v = mine.length ? groupRulesVerdict(mine, passed) : true;
-        return { v, title: !mine.length ? _t('No group rule of the user for this operation: no restriction from them')
+        return { v, title: !mine.length ? _t('The user has no group rule for this operation: no restriction')
           : v === true ? _t('One of the user\'s group rules matches: enough') : v === false ? _t('None of the user\'s group rules matches: refused') : _t('Could not be checked') };
       }) },
     ] });

@@ -21,7 +21,7 @@ msgstr "Tải lại dữ liệu"
 
 #: src/entrypoints/panel/index.html:21
 msgid "Open in Its Own Window (for a second screen)"
-msgstr "Mở trong cửa sổ riêng (để đưa sang màn hình thứ hai)"
+msgstr "Mở trong cửa sổ riêng (cho màn hình thứ hai)"
 
 #: src/entrypoints/panel/index.html:21
 msgid "Open in Its Own Window"
@@ -90,15 +90,15 @@ msgid "Perf"
 msgstr "Perf"
 
 #: src/entrypoints/panel/index.html:36
-#: src/features/code/code.tab.ts:50
+#: src/features/code/code.tab.ts:64
 #: src/features/translations/translations.find.ts:59
 msgid "Code"
 msgstr "Code"
 
 #: src/entrypoints/panel/index.ts:49
 #: src/entrypoints/panel/index.ts:50
-msgid "Cannot read this tab: %s"
-msgstr "Không đọc được tab này: %s"
+msgid "Cannot read this page: %s"
+msgstr "Không đọc được trang này: %s"
 
 #: src/entrypoints/panel/index.ts:49
 msgid "The current tab is not an Odoo page."
@@ -109,8 +109,8 @@ msgid "Not available on Odoo %s: %s"
 msgstr "Không dùng được trên Odoo %s: %s"
 
 #: src/entrypoints/panel/index.ts:99
-msgid "Odoo %s is not tested: the panel uses its Odoo %s support, some cards may fail."
-msgstr "Odoo %s chưa được kiểm thử: panel dùng phần hỗ trợ Odoo %s, một số card có thể lỗi."
+msgid "Odoo %s is untested: using the Odoo %s support, some cards may fail."
+msgstr "Odoo %s chưa được kiểm thử: dùng phần hỗ trợ Odoo %s, một số card có thể lỗi."
 
 #: src/entrypoints/panel/index.ts:100
 msgid "Odoo %s is older than every supported version: some cards may fail."
@@ -227,7 +227,7 @@ msgstr "Đã cài"
 
 #: src/features/apps/apps.graph.ts:30
 msgid "Installed with it, as a dependency"
-msgstr "Được cài theo, là phụ thuộc"
+msgstr "Được cài theo vì là phụ thuộc"
 
 #: src/features/apps/apps.graph.ts:31
 msgid "Auto-installed with it"
@@ -283,13 +283,14 @@ msgid "2 levels"
 msgstr "2 cấp"
 
 #: src/features/apps/apps.graph.ts:59
-#: src/features/perf/perf.tab.ts:224
+#: src/features/perf/perf.tab.ts:264
+#: src/features/rpc/rpc.tab.ts:44
 msgid "All"
 msgstr "Tất cả"
 
 #: src/features/apps/apps.graph.ts:72
-msgid "Over the whole tab (Esc to come back)"
-msgstr "Phóng to cả tab (Esc để quay lại)"
+msgid "Expand to the whole tab (Esc to exit)"
+msgstr "Phóng to cả tab (Esc để thoát)"
 
 #: src/features/apps/apps.graph.ts:75
 msgid "Zoom out (Ctrl + wheel)"
@@ -304,8 +305,8 @@ msgid "Fit"
 msgstr "Vừa khung"
 
 #: src/features/apps/apps.graph.ts:76
-msgid "The whole diagram in the width"
-msgstr "Cả sơ đồ vừa chiều ngang"
+msgid "Fit the diagram to the width"
+msgstr "Thu sơ đồ vừa chiều ngang"
 
 #: src/features/apps/apps.graph.ts:125
 #: src/features/apps/apps.module.ts:146
@@ -322,8 +323,8 @@ msgid "Open this module"
 msgstr "Mở module này"
 
 #: src/features/apps/apps.graph.ts:156
-msgid "Arrows point to what a module depends on. Click a module for the chain to %s; double-click to open it."
-msgstr "Mũi tên chỉ tới module mà nó phụ thuộc. Bấm một module để xem chuỗi nối tới %s; bấm đúp để mở."
+msgid "Arrows point to dependencies. Click a module for its chain to %s; double-click to open it."
+msgstr "Mũi tên chỉ tới module được phụ thuộc. Bấm một module để xem chuỗi tới %s; bấm đúp để mở."
 
 #: src/features/apps/apps.graph.ts:158
 msgid "Hidden hubs: %s"
@@ -341,10 +342,10 @@ msgstr "Model"
 
 #: src/features/apps/apps.module.ts:44
 #: src/features/menus/menus.logic.ts:9
-#: src/features/record/record.tab.ts:30
+#: src/features/record/record.tab.ts:38
 #: src/features/view/view.overview.ts:73
 msgid "Fields"
-msgstr "Fields"
+msgstr "Field"
 
 #: src/features/apps/apps.module.ts:44
 msgid "Selection values"
@@ -428,8 +429,8 @@ msgid "auto-install"
 msgstr "tự cài"
 
 #: src/features/apps/apps.module.ts:67
-msgid "Installed by itself once every module it depends on is"
-msgstr "Tự được cài khi mọi module nó phụ thuộc đã được cài"
+msgid "Installs itself once all its dependencies are installed"
+msgstr "Tự cài khi mọi phụ thuộc của nó đã được cài"
 
 #: src/features/apps/apps.module.ts:68
 msgid "Enterprise"
@@ -440,8 +441,8 @@ msgid "Installed: %s"
 msgstr "Đã cài: %s"
 
 #: src/features/apps/apps.module.ts:77
-msgid "ir.module.module.latest_version: the version in the database, written by the last install or upgrade"
-msgstr "ir.module.module.latest_version: phiên bản trong database, ghi lúc cài hoặc nâng cấp gần nhất"
+msgid "latest_version: the database's version, from the last install or upgrade"
+msgstr "latest_version: phiên bản trong database, từ lần cài hoặc nâng cấp gần nhất"
 
 #: src/features/apps/apps.module.ts:79
 msgid "On disk: %s"
@@ -486,8 +487,8 @@ msgid "Pick"
 msgstr "Chọn"
 
 #: src/features/apps/apps.module.ts:98
-msgid "Add to / remove from the modules picked for an action"
-msgstr "Thêm vào / bỏ khỏi các module được chọn để thao tác"
+msgid "Add to or remove from the picked modules"
+msgstr "Thêm vào hoặc bỏ khỏi các module đã chọn"
 
 #: src/features/apps/apps.module.ts:101
 msgid "Install"
@@ -511,7 +512,7 @@ msgid "Uninstall…"
 msgstr "Gỡ cài đặt…"
 
 #: src/features/apps/apps.module.ts:103
-msgid "What it would remove, then confirm"
+msgid "See what it would remove, then confirm"
 msgstr "Xem những gì sẽ bị gỡ, rồi xác nhận"
 
 #: src/features/apps/apps.module.ts:105
@@ -556,12 +557,12 @@ msgid "Declared in its manifest"
 msgstr "Khai báo trong manifest"
 
 #: src/features/apps/apps.module.ts:129
-msgid "Nothing: it depends on no module."
-msgstr "Không có: nó không phụ thuộc module nào."
+msgid "It depends on no module."
+msgstr "Không phụ thuộc module nào."
 
 #: src/features/apps/apps.module.ts:130
 msgid "Needs in all (%s)"
-msgstr "Cần tất cả (%s)"
+msgstr "Cần tổng cộng (%s)"
 
 #: src/features/apps/apps.module.ts:130
 #: src/features/apps/apps.module.ts:135
@@ -573,8 +574,8 @@ msgid "Installing it also installs (%s)"
 msgstr "Cài nó sẽ cài thêm (%s)"
 
 #: src/features/apps/apps.module.ts:133
-msgid "Nothing: every dependency is installed."
-msgstr "Không có: mọi phụ thuộc đã được cài."
+msgid "Every dependency is already installed."
+msgstr "Mọi phụ thuộc đã được cài."
 
 #: src/features/apps/apps.module.ts:134
 msgid "And auto-installs (%s)"
@@ -593,8 +594,8 @@ msgid "Not installable, the install will fail: %s"
 msgstr "Không cài được, việc cài sẽ lỗi: %s"
 
 #: src/features/apps/apps.module.ts:138
-msgid "As Odoo's button_install computes it: the dependencies not installed, then every auto_install module whose triggers are all installed or being installed (and, for a localization, a company in its countries)."
-msgstr "Tính như button_install của Odoo: các phụ thuộc chưa cài, rồi mọi module auto_install có các module kích hoạt đều đã cài hoặc đang được cài (với module bản địa hoá: phải có công ty thuộc quốc gia của nó)."
+msgid "Computed like Odoo's button_install: an auto_install module joins once all its triggers are installed; a localization also needs a company in its country."
+msgstr "Tính như button_install của Odoo: module auto_install được cài theo khi mọi module kích hoạt đã cài; module bản địa hoá còn cần công ty thuộc quốc gia đó."
 
 #: src/features/apps/apps.module.ts:142
 #: src/features/apps/apps.tpl.html:88
@@ -631,8 +632,8 @@ msgid "No xmlid: the module brings no data."
 msgstr "Không có xmlid: module không mang theo dữ liệu nào."
 
 #: src/features/apps/apps.module.ts:153
-msgid "Not installed: its data is known once it is."
-msgstr "Chưa cài: dữ liệu của nó chỉ biết được sau khi cài."
+msgid "Not installed: its data shows after install."
+msgstr "Chưa cài: dữ liệu chỉ hiện sau khi cài."
 
 #: src/features/apps/apps.module.ts:159
 msgid "noupdate: an upgrade doesn't overwrite them"
@@ -655,8 +656,8 @@ msgid "It creates or extends no model."
 msgstr "Nó không tạo hay mở rộng model nào."
 
 #: src/features/apps/apps.module.ts:168
-msgid "Not installed: its models are known once it is."
-msgstr "Chưa cài: các model của nó chỉ biết được sau khi cài."
+msgid "Not installed: its models show after install."
+msgstr "Chưa cài: model chỉ hiện sau khi cài."
 
 #: src/features/apps/apps.module.ts:176
 msgid "Installed modules defining or extending it: %s"
@@ -712,7 +713,7 @@ msgstr "Không module nào khác bị gỡ."
 
 #: src/features/apps/apps.module.ts:198
 msgid "Models whose data is deleted for good: %s"
-msgstr "Số model bị xoá vĩnh viễn dữ liệu: %s"
+msgstr "Số model mất vĩnh viễn dữ liệu: %s"
 
 #: src/features/apps/apps.module.ts:198
 msgid "This cannot be undone."
@@ -723,16 +724,16 @@ msgid "Type %s to uninstall it."
 msgstr "Gõ %s để gỡ cài đặt."
 
 #: src/features/apps/apps.module.ts:202
-msgid "Not the module's name: nothing was uninstalled."
-msgstr "Không đúng tên module: không gỡ gì cả."
+msgid "The name doesn't match: nothing was uninstalled."
+msgstr "Tên không khớp: chưa gỡ gì cả."
 
 #: src/features/apps/apps.module.ts:204
 msgid "Asks to confirm, then to type its name"
 msgstr "Hỏi xác nhận, rồi yêu cầu gõ tên module"
 
 #: src/features/apps/apps.module.ts:207
-msgid "What Odoo's uninstall wizard computes: every module depending on it goes too, and the models only these modules define lose their table and data."
-msgstr "Kết quả từ wizard gỡ cài đặt của Odoo: mọi module phụ thuộc vào nó bị gỡ theo, và các model chỉ do những module này định nghĩa sẽ mất bảng cùng dữ liệu."
+msgid "Per Odoo's uninstall wizard: modules depending on it are removed too; models only they define lose their table and data."
+msgstr "Theo wizard gỡ cài đặt của Odoo: các module phụ thuộc vào nó cũng bị gỡ; model chỉ do chúng định nghĩa sẽ mất bảng và dữ liệu."
 
 #: src/features/apps/apps.module.ts:208
 msgid "Modules removed with it (%s)"
@@ -743,12 +744,12 @@ msgid "Models whose data is deleted (%s)"
 msgstr "Model bị xoá dữ liệu (%s)"
 
 #: src/features/apps/apps.module.ts:210
-msgid "None: no model loses its data."
-msgstr "Không có: không model nào mất dữ liệu."
+msgid "No model loses its data."
+msgstr "Không model nào mất dữ liệu."
 
 #: src/features/apps/apps.module.ts:219
-msgid "Not installable: its manifest says installable: False, or it is not on this server's addons path any more."
-msgstr "Không cài được: manifest ghi installable: False, hoặc module không còn trên addons path của server."
+msgid "Not installable: installable: False in its manifest, or no longer in the addons path."
+msgstr "Không cài được: manifest ghi installable: False, hoặc module không còn trong addons path."
 
 #: src/features/apps/apps.module.ts:220
 msgid "%s: waiting for Odoo's next module operation (see Pending)."
@@ -874,23 +875,23 @@ msgid "Activate"
 msgstr "Kích hoạt"
 
 #: src/features/apps/apps.modules.ts:125
-msgid "Update Apps List, then install every module picked (with its dependencies)"
-msgstr "Cập nhật danh sách ứng dụng, rồi cài mọi module đã chọn (cùng các phụ thuộc)"
+msgid "Update Apps List, then install the picked modules with their dependencies"
+msgstr "Cập nhật danh sách ứng dụng, rồi cài các module đã chọn cùng các phụ thuộc"
 
 #: src/features/apps/apps.modules.ts:126
-msgid "Upgrade every module picked (they must be installed)"
-msgstr "Nâng cấp mọi module đã chọn (phải đã cài)"
+msgid "Upgrade the picked modules (must be installed)"
+msgstr "Nâng cấp các module đã chọn (phải được cài sẵn)"
 
 #: src/features/apps/apps.modules.ts:127
 msgid "Open Forms ↗"
 msgstr "Mở form ↗"
 
 #: src/features/apps/apps.modules.ts:127
-msgid "Open the form of every module picked in a new tab"
-msgstr "Mở form của mọi module đã chọn, mỗi module một tab mới"
+msgid "Open each picked module's form in a new tab"
+msgstr "Mở form của từng module đã chọn trong tab mới"
 
 #: src/features/apps/apps.modules.ts:129
-#: src/features/rpc/rpc.tpl.html:8
+#: src/features/rpc/rpc.tpl.html:7
 msgid "Clear"
 msgstr "Xoá"
 
@@ -903,8 +904,8 @@ msgid "+ This screen: %s"
 msgstr "+ Màn hình này: %s"
 
 #: src/features/apps/apps.modules.ts:139
-msgid "Pick the modules not by Odoo S.A. defining or extending %s: %s (all of them: %s)"
-msgstr "Chọn các module không phải của Odoo S.A. định nghĩa hoặc mở rộng %s: %s (tất cả: %s)"
+msgid "Pick the non-Odoo S.A. modules defining or extending %s: %s (all: %s)"
+msgstr "Chọn các module định nghĩa hoặc mở rộng %s, trừ của Odoo S.A.: %s (tất cả: %s)"
 
 #: src/features/apps/apps.modules.ts:142
 msgid "+ Upgrade needed (%s)"
@@ -927,12 +928,12 @@ msgid "Not in the list yet: Activate runs Update Apps List first"
 msgstr "Chưa có trong danh sách: Kích hoạt sẽ chạy Cập nhật danh sách ứng dụng trước"
 
 #: src/features/apps/apps.modules.ts:175
-msgid "On disk: %s, newer than the database: Upgrade applies it"
-msgstr "Trên đĩa: %s, mới hơn database: Nâng cấp để áp dụng"
+msgid "Newer on disk (%s): Upgrade applies it"
+msgstr "Trên đĩa mới hơn (%s): Nâng cấp để áp dụng"
 
 #: src/features/apps/apps.modules.ts:176
-msgid "On disk: %s, older than the database"
-msgstr "Trên đĩa: %s, cũ hơn database"
+msgid "Older on disk (%s)"
+msgstr "Trên đĩa cũ hơn (%s)"
 
 #: src/features/apps/apps.modules.ts:181
 msgid "%s modules wait for an operation (%s): Odoo runs them at its next one."
@@ -943,12 +944,12 @@ msgid "Pending →"
 msgstr "Đang chờ →"
 
 #: src/features/apps/apps.ops.ts:24
-msgid "Modules are waiting for an operation: %s. Odoo refuses another one until they are applied or cancelled (Pending)."
-msgstr "Có module đang chờ thao tác: %s. Odoo từ chối thao tác mới cho tới khi chúng được áp dụng hoặc huỷ (Đang chờ)."
+msgid "Modules are waiting: %s. Odoo refuses a new operation until they are applied or cancelled (Pending)."
+msgstr "Có module đang chờ: %s. Odoo từ chối thao tác mới cho tới khi chúng được áp dụng hoặc huỷ (Đang chờ)."
 
 #: src/features/apps/apps.ops.ts:25
-msgid "Modules are waiting for an operation: %s. Odoo %s would run them along with this one: apply or cancel them first (Pending)."
-msgstr "Có module đang chờ thao tác: %s. Odoo %s sẽ chạy luôn chúng cùng thao tác này: hãy áp dụng hoặc huỷ trước (Đang chờ)."
+msgid "Modules are waiting: %s. Odoo %s would run them with this one: apply or cancel them first (Pending)."
+msgstr "Có module đang chờ: %s. Odoo %s sẽ chạy chúng cùng thao tác này: hãy áp dụng hoặc huỷ trước (Đang chờ)."
 
 #: src/features/apps/apps.ops.ts:44
 #: src/features/apps/apps.pending.ts:32
@@ -1056,8 +1057,8 @@ msgid "Cancel the waiting operations"
 msgstr "Huỷ các thao tác đang chờ"
 
 #: src/features/apps/apps.pending.ts:44
-msgid "Back to installed (to upgrade, to remove) or not installed (to install): nothing runs"
-msgstr "Trở về đã cài (chờ nâng cấp, chờ gỡ) hoặc chưa cài (chờ cài): không chạy gì"
+msgid "Nothing runs: each module goes back to installed or not installed"
+msgstr "Không chạy gì: mỗi module trở về đã cài hoặc chưa cài"
 
 #: src/features/apps/apps.pending.ts:46
 msgid "Waiting for"
@@ -1072,6 +1073,9 @@ msgid "Pending (%s)"
 msgstr "Đang chờ (%s)"
 
 #: src/features/apps/apps.tab.ts:41
+#: src/features/rpc/rpc.tab.ts:44
+#: src/features/rpc/rpc.tab.ts:146
+#: src/features/rpc/rpc.tab.ts:180
 msgid "Pending"
 msgstr "Đang chờ"
 
@@ -1108,9 +1112,9 @@ msgstr "Mô tả module"
 #: src/features/apps/apps.ui.ts:83
 #: src/features/code/code.result.ts:234
 #: src/features/code/code.result.ts:272
-#: src/features/rpc/rpc.tab.ts:98
-#: src/features/rpc/rpc.tab.ts:128
-#: src/features/rpc/rpc.tab.ts:186
+#: src/features/rpc/rpc.tab.ts:147
+#: src/features/rpc/rpc.tab.ts:181
+#: src/features/rpc/rpc.tab.ts:253
 msgid "error"
 msgstr "lỗi"
 
@@ -1146,53 +1150,143 @@ msgstr "Chờ gỡ"
 msgid "To install"
 msgstr "Chờ cài"
 
-#: src/features/code/code.data.ts:26
-#: src/features/code/code.data.ts:76
+#: src/features/code/code.data.ts:24
+#: src/features/code/code.data.ts:35
+#: src/features/code/code.data.ts:89
 #: src/features/menus/menus.tab.ts:42
-#: src/features/perf/perf.data.ts:94
-#: src/features/rpc/rpc.tab.ts:183
+#: src/features/perf/perf.data.ts:95
+#: src/features/rpc/rpc.tab.ts:250
 #: src/odoo/rpc.ts:30
 msgid "No response — is this an Odoo page?"
 msgstr "Không có phản hồi — đây có phải trang Odoo?"
 
-#: src/features/code/code.data.ts:40
+#: src/features/code/code.data.ts:26
+#: src/features/code/code.data.ts:71
+#: src/features/code/code.injected.ts:61
+#: src/features/code/code.tab.ts:207
+msgid "The screen changed before the run. Run again."
+msgstr "Màn hình đã đổi trước khi chạy. Hãy chạy lại."
+
+#: src/features/code/code.data.ts:49
 msgid "Unknown model: %s"
 msgstr "Không có model: %s"
 
-#: src/features/code/code.data.ts:61
-msgid "The server action returned nothing: is this Odoo running it as code?"
-msgstr "Server action không trả về gì: Odoo này có chạy nó dưới dạng code không?"
+#: src/features/code/code.data.ts:74
+msgid "The server action returned nothing: was it run as code?"
+msgstr "Server action không trả về gì: nó có được chạy dưới dạng code không?"
 
-#: src/features/code/code.injected.ts:65
+#: src/features/code/code.history.ts:17
+#: src/features/code/code.tab.ts:32
+#: src/features/view/view.tpl.html:92
+msgid "Read-only"
+msgstr "Chỉ đọc"
+
+#: src/features/code/code.history.ts:17
+#: src/features/code/code.snippets.ts:109
+#: src/features/code/code.tab.ts:32
+#: src/features/code/code.tab.ts:33
+msgid "Dry run"
+msgstr "Chạy thử"
+
+#: src/features/code/code.history.ts:17
+#: src/features/code/code.tab.ts:32
+msgid "Allow writes"
+msgstr "Cho phép ghi"
+
+#: src/features/code/code.history.ts:30
+msgid "Clear run history for this database and user? Saved snippets are kept."
+msgstr "Xoá lịch sử chạy của database và user này? Snippet đã lưu vẫn được giữ."
+
+#: src/features/code/code.history.ts:32
+msgid "No completed runs yet."
+msgstr "Chưa có lần chạy nào hoàn tất."
+
+#: src/features/code/code.history.ts:41
+#: src/features/code/code.history.ts:56
+#: src/features/code/code.result.ts:236
+#: src/features/code/code.result.ts:272
+msgid "%s ms"
+msgstr "%s ms"
+
+#: src/features/code/code.history.ts:49
+msgid "Choose a run to inspect its code and result."
+msgstr "Chọn một lần chạy để xem code và kết quả."
+
+#: src/features/code/code.history.ts:58
+#: src/features/code/code.tab.ts:76
+msgid "record #%s"
+msgstr "bản ghi #%s"
+
+#: src/features/code/code.history.ts:58
+#: src/features/code/code.tab.ts:76
+msgid "no record opened"
+msgstr "chưa mở bản ghi nào"
+
+#: src/features/code/code.history.ts:58
+#: src/features/code/code.tab.ts:77
+msgid "%s selected"
+msgstr "đang chọn %s"
+
+#: src/features/code/code.history.ts:59
+#: src/features/code/code.tab.ts:73
+msgid "no model on this screen"
+msgstr "màn hình này không có model"
+
+#: src/features/code/code.history.ts:61
+msgid "Restore code"
+msgstr "Khôi phục code"
+
+#: src/features/code/code.history.ts:61
+msgid "Save as snippet…"
+msgstr "Lưu thành snippet…"
+
+#: src/features/code/code.history.ts:65
+#: src/features/code/code.history.ts:71
+msgid "This error was cut short to fit in the history."
+msgstr "Lỗi này đã bị cắt bớt để vừa lịch sử."
+
+#: src/features/code/code.history.ts:68
+msgid "Result too large to keep in history; the code and run details are kept."
+msgstr "Kết quả quá lớn nên không được lưu vào lịch sử; code và thông tin lần chạy vẫn còn."
+
+#: src/features/code/code.history.ts:69
+msgid "Result could not be saved in history; the code and run details are kept."
+msgstr "Không lưu được kết quả vào lịch sử; code và thông tin lần chạy vẫn còn."
+
+#: src/features/code/code.injected.ts:81
 msgid "%s writes: blocked in read-only mode (choose \"Dry run\" or \"Allow writes\")"
 msgstr "%s ghi dữ liệu: bị chặn ở chế độ chỉ đọc (chọn \"Chạy thử\" hoặc \"Cho phép ghi\")"
 
-#: src/features/code/code.injected.ts:87
+#: src/features/code/code.injected.ts:103
 msgid "Stopped after %s calls"
 msgstr "Đã dừng sau %s lời gọi"
 
-#: src/features/code/code.injected.ts:132
+#: src/features/code/code.injected.ts:148
 msgid "%s has no field %s"
 msgstr "%s không có field %s"
 
-#: src/features/code/code.injected.ts:165
-#: src/features/code/code.injected.ts:170
-#: src/features/code/code.injected.ts:189
-#: src/features/code/code.injected.ts:225
-#: src/features/code/code.injected.ts:300
+#: src/features/code/code.injected.ts:181
+#: src/features/code/code.injected.ts:186
+#: src/features/code/code.injected.ts:205
+#: src/features/code/code.injected.ts:241
+#: src/features/code/code.injected.ts:316
 msgid "%s.%s is not relational"
 msgstr "%s.%s không phải field quan hệ"
 
-#: src/features/code/code.injected.ts:167
-#: src/features/code/code.injected.ts:263
+#: src/features/code/code.injected.ts:183
+#: src/features/code/code.injected.ts:279
 msgid "Expected singleton: %s"
-msgstr "Cần đúng một record: %s"
+msgstr "Cần đúng một bản ghi: %s"
 
-#: src/features/code/code.injected.ts:211
-msgid "%s is read from the server: await it before using its value"
-msgstr "%s được đọc từ server: hãy await trước khi dùng giá trị"
+#: src/features/code/code.injected.ts:227
+msgid "%s is read from the server: await it first"
+msgstr "%s được đọc từ server: hãy await nó trước"
 
-#: src/features/code/code.injected.ts:471
+#: src/features/code/code.injected.ts:478
+msgid "The screen changed during the run, so it was not refreshed."
+msgstr "Màn hình đã đổi trong lúc chạy nên không được làm mới."
+
+#: src/features/code/code.injected.ts:480
 msgid "No view to refresh on this page"
 msgstr "Trang này không có view nào để làm mới"
 
@@ -1215,8 +1309,8 @@ msgid "binary · %s"
 msgstr "nhị phân · %s"
 
 #: src/features/code/code.result.ts:78
-msgid "Not created: a dry run answers create() with an id no record has"
-msgstr "Chưa tạo: chạy thử trả về cho create() một id không thuộc bản ghi nào"
+msgid "Not created: in a dry run, create() returns a fake id"
+msgstr "Chưa tạo: khi chạy thử, create() trả về một id giả"
 
 #: src/features/code/code.result.ts:138
 msgid "Download CSV"
@@ -1291,7 +1385,7 @@ msgstr "không có gì"
 
 #: src/features/code/code.result.ts:212
 msgid "text · %s characters"
-msgstr "chữ · %s ký tự"
+msgstr "văn bản · %s ký tự"
 
 #: src/features/code/code.result.ts:234
 msgid "ok"
@@ -1309,11 +1403,6 @@ msgstr "chạy thử"
 #: src/features/code/code.result.ts:235
 msgid "writes committed"
 msgstr "đã ghi thật"
-
-#: src/features/code/code.result.ts:236
-#: src/features/code/code.result.ts:272
-msgid "%s ms"
-msgstr "%s ms"
 
 #: src/features/code/code.result.ts:237
 msgid "%s calls"
@@ -1336,12 +1425,12 @@ msgid "page not refreshed"
 msgstr "chưa làm mới trang"
 
 #: src/features/code/code.result.ts:244
-msgid "Dry run: the code ran for real, then everything it changed was rolled back."
-msgstr "Chạy thử: code đã chạy thật, rồi mọi thay đổi của nó được rollback."
+msgid "Dry run: the code really ran, then all its changes were rolled back."
+msgstr "Chạy thử: code đã chạy thật, rồi mọi thay đổi đã được rollback."
 
 #: src/features/code/code.result.ts:245
-msgid "Dry run: the writing calls below were listed, not sent; reads after them show the values before."
-msgstr "Chạy thử: các lệnh ghi bên dưới chỉ được liệt kê, không gửi đi; các lần đọc sau đó vẫn thấy giá trị cũ."
+msgid "Dry run: the writes below were not sent; later reads show the old values."
+msgstr "Chạy thử: các lệnh ghi bên dưới không được gửi; các lần đọc sau vẫn thấy giá trị cũ."
 
 #: src/features/code/code.result.ts:254
 msgid "No return value: end with return … to see one."
@@ -1356,12 +1445,12 @@ msgid "Go to Line"
 msgstr "Đến dòng"
 
 #: src/features/code/code.result.ts:264
-msgid "This page's Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src)."
-msgstr "Content-Security-Policy của trang này không cho chạy code (proxy trước Odoo đã thêm script-src)."
+msgid "Blocked by this page's Content-Security-Policy: check script-src on the proxy in front of Odoo."
+msgstr "Bị Content-Security-Policy của trang chặn: kiểm tra script-src ở proxy trước Odoo."
 
 #: src/features/code/code.result.ts:265
-msgid "Nothing was saved: the error rolled back everything the code had changed."
-msgstr "Không có gì được lưu: lỗi đã rollback mọi thay đổi của code."
+msgid "Nothing was saved: the error rolled back all changes."
+msgstr "Không có gì được lưu: lỗi đã rollback mọi thay đổi."
 
 #: src/features/code/code.result.ts:271
 msgid "not sent"
@@ -1402,8 +1491,8 @@ msgstr "Đếm theo một field"
 
 #: src/features/code/code.snippets.ts:12
 #: src/features/code/code.snippets.ts:28
-msgid "how many records of the screen's model per value (change state)"
-msgstr "số bản ghi của model trên màn hình theo từng giá trị (đổi state)"
+msgid "records per state on this model (swap state for any field)"
+msgstr "số bản ghi theo state trên model này (đổi state thành field khác)"
 
 #: src/features/code/code.snippets.ts:17
 #: src/features/code/code.snippets.ts:31
@@ -1422,8 +1511,8 @@ msgstr "Quyền của tôi trên bản ghi này"
 
 #: src/features/code/code.snippets.ts:18
 #: src/features/code/code.snippets.ts:32
-msgid "what the server answers for each operation"
-msgstr "server trả lời gì cho từng thao tác"
+msgid "read / write / create / unlink: allowed or not"
+msgstr "read / write / create / unlink: có được phép không"
 
 #: src/features/code/code.snippets.ts:22
 #: src/features/code/code.snippets.ts:37
@@ -1468,12 +1557,12 @@ msgid "Available variables:"
 msgstr "Các biến có sẵn:"
 
 #: src/features/code/code.snippets.ts:85
-msgid "environment of the logged-in user, with their access rights and record rules; env['res.partner'] is an empty recordset"
-msgstr "môi trường của người đang đăng nhập, với quyền truy cập và record rule của họ; env['res.partner'] là một recordset rỗng"
+msgid "the logged-in user's environment and rights; env['res.partner'] is an empty recordset"
+msgstr "môi trường và quyền của user đang đăng nhập; env['res.partner'] là recordset rỗng"
 
 #: src/features/code/code.snippets.ts:86
-msgid "the record opened, the records selected (else the one opened), the screen's model: as in a server action"
-msgstr "bản ghi đang mở, các bản ghi đang chọn (nếu không thì bản ghi đang mở), model của màn hình: như trong server action"
+msgid "opened record, selected records (or the opened one), screen's model, as in a server action"
+msgstr "bản ghi đang mở, các bản ghi đang chọn (hoặc bản ghi đang mở), model của màn hình, như trong server action"
 
 #: src/features/code/code.snippets.ts:87
 msgid "current user, current company, active companies"
@@ -1481,7 +1570,7 @@ msgstr "user hiện tại, công ty hiện tại, các công ty đang bật"
 
 #: src/features/code/code.snippets.ts:88
 msgid "record of an external id, if you can read it"
-msgstr "record của một external id, nếu bạn có quyền đọc"
+msgstr "bản ghi của một external id, nếu bạn có quyền đọc"
 
 #: src/features/code/code.snippets.ts:89
 #: src/features/code/code.snippets.ts:104
@@ -1517,47 +1606,41 @@ msgid "write: refused in read-only, listed but not sent in a dry run"
 msgstr "ghi dữ liệu: bị chặn khi chỉ đọc, chỉ liệt kê mà không gửi khi chạy thử"
 
 #: src/features/code/code.snippets.ts:101
-msgid "Available variables (a server action's):"
-msgstr "Biến có sẵn (như của server action):"
+msgid "Available variables (as in a server action):"
+msgstr "Biến có sẵn (như trong server action):"
 
 #: src/features/code/code.snippets.ts:102
-msgid "environment of the logged-in user (their rights; sudo() is yours to call)"
-msgstr "môi trường của người đang đăng nhập (quyền của họ; muốn sudo() thì tự gọi)"
+msgid "the logged-in user's environment and rights (call sudo() yourself)"
+msgstr "môi trường và quyền của user đang đăng nhập (sudo() thì tự gọi)"
 
 #: src/features/code/code.snippets.ts:103
-msgid "the record opened, the records selected (else the one opened), the screen's model"
-msgstr "bản ghi đang mở, các bản ghi đang chọn (nếu không thì bản ghi đang mở), model của màn hình"
+msgid "opened record, selected records (or the opened one), screen's model"
+msgstr "bản ghi đang mở, các bản ghi đang chọn (hoặc bản ghi đang mở), model của màn hình"
 
 #: src/features/code/code.snippets.ts:105
-msgid "the value shown, as what it is"
-msgstr "giá trị được hiển thị theo đúng kiểu của nó"
+msgid "the value to show"
+msgstr "giá trị cần hiển thị"
 
 #: src/features/code/code.snippets.ts:106
-msgid "what a server action has"
-msgstr "những gì server action có"
+msgid "as in a server action"
+msgstr "như trong server action"
 
 #: src/features/code/code.snippets.ts:108
 msgid "Runs:"
 msgstr "Cách chạy:"
 
 #: src/features/code/code.snippets.ts:109
-#: src/features/code/code.tab.ts:29
-#: src/features/code/code.tab.ts:30
-msgid "Dry run"
-msgstr "Chạy thử"
-
-#: src/features/code/code.snippets.ts:109
-msgid "the code runs for real, then everything is rolled back: try a write, see what it does"
-msgstr "code chạy thật, rồi mọi thứ được rollback: thử ghi để xem nó làm gì"
+msgid "runs for real, then everything is rolled back: try a write and see"
+msgstr "chạy thật, rồi mọi thứ được rollback: cứ thử ghi để xem"
 
 #: src/features/code/code.snippets.ts:110
-#: src/features/code/code.tab.ts:30
+#: src/features/code/code.tab.ts:33
 msgid "Commit"
 msgstr "Ghi thật"
 
 #: src/features/code/code.snippets.ts:110
-msgid "saved at once; an error rolls back everything the code changed"
-msgstr "lưu ngay; nếu lỗi thì rollback mọi thay đổi của code"
+msgid "saved at once; an error rolls back all changes"
+msgstr "lưu ngay; nếu lỗi thì rollback mọi thay đổi"
 
 #: src/features/code/code.snippets.ts:111
 msgid "Odoo's sandbox: no import, no dunder (__x__) names; Settings rights needed"
@@ -1567,90 +1650,94 @@ msgstr "sandbox của Odoo: không import, không dùng tên dunder (__x__); c�
 msgid "Suggestions: env[' (models), '… (fields), . (methods and fields); ↑ ↓ Enter / Tab, Esc, Ctrl+Space. ⌘/Ctrl+Enter runs."
 msgstr "Gợi ý: env[' (model), '… (field), . (method và field); ↑ ↓ Enter / Tab, Esc, Ctrl+Space. ⌘/Ctrl+Enter để chạy."
 
-#: src/features/code/code.tab.ts:25
+#: src/features/code/code.tab.ts:28
 msgid "// JavaScript with env, record, records, model, print, Command. ⌘/Ctrl+Enter runs it."
 msgstr "// JavaScript với env, record, records, model, print, Command. ⌘/Ctrl+Enter để chạy."
 
-#: src/features/code/code.tab.ts:26
+#: src/features/code/code.tab.ts:29
 msgid "# Python with env, record, records, model, print, Command; return a value. ⌘/Ctrl+Enter runs it."
 msgstr "# Python với env, record, records, model, print, Command; return một giá trị. ⌘/Ctrl+Enter để chạy."
 
-#: src/features/code/code.tab.ts:29
-#: src/features/view/view.tpl.html:92
-msgid "Read-only"
-msgstr "Chỉ đọc"
-
-#: src/features/code/code.tab.ts:29
-msgid "Allow writes"
-msgstr "Cho phép ghi"
-
-#: src/features/code/code.tab.ts:56
+#: src/features/code/code.tab.ts:70
 msgid "Runs as %s (uid %s): their access rights, record rules and companies apply."
 msgstr "Chạy với user %s (uid %s): áp dụng đúng quyền truy cập, record rule và công ty của user đó."
 
-#: src/features/code/code.tab.ts:58
+#: src/features/code/code.tab.ts:72
 msgid "Runs on:"
 msgstr "Chạy trên:"
 
-#: src/features/code/code.tab.ts:59
-msgid "no model on this screen: record, records and model are empty"
-msgstr "màn hình này không có model: record, records và model đều rỗng"
-
-#: src/features/code/code.tab.ts:62
-msgid "record #%s"
-msgstr "bản ghi #%s"
-
-#: src/features/code/code.tab.ts:62
-msgid "no record opened"
-msgstr "chưa mở bản ghi nào"
-
-#: src/features/code/code.tab.ts:63
-msgid "%s selected"
-msgstr "đang chọn %s"
-
-#: src/features/code/code.tab.ts:65
+#: src/features/code/code.tab.ts:79
 msgid "Read the selection again"
 msgstr "Đọc lại các bản ghi đang chọn"
 
-#: src/features/code/code.tab.ts:73
+#: src/features/code/code.tab.ts:89
 msgid "Run"
 msgstr "Chạy"
 
-#: src/features/code/code.tab.ts:73
+#: src/features/code/code.tab.ts:89
 msgid "Run (⌘/Ctrl+Enter)"
 msgstr "Chạy (⌘/Ctrl+Enter)"
 
-#: src/features/code/code.tab.ts:75
+#: src/features/code/code.tab.ts:91
 msgid "Auto Refresh"
 msgstr "Tự làm mới"
 
-#: src/features/code/code.tab.ts:75
-msgid "After a run that wrote, reload the data of the view on screen (Odoo's soft_reload), without reloading the page"
-msgstr "Sau một lần chạy có ghi dữ liệu, tải lại dữ liệu của view đang mở (soft_reload của Odoo) mà không tải lại trang"
+#: src/features/code/code.tab.ts:91
+msgid "After a run that writes, reload the view's data (soft_reload), not the whole page"
+msgstr "Sau lần chạy có ghi, tải lại dữ liệu của view (soft_reload), không tải lại cả trang"
 
-#: src/features/code/code.tab.ts:100
+#: src/features/code/code.tab.ts:124
 msgid "Snippets"
 msgstr "Snippet"
 
-#: src/features/code/code.tab.ts:100
-msgid "Ready-made snippets, and the ones you saved for this Odoo"
-msgstr "Các snippet có sẵn, và các snippet bạn đã lưu cho Odoo này"
+#: src/features/code/code.tab.ts:124
+msgid "Built-in snippets and the ones you saved for this Odoo"
+msgstr "Snippet có sẵn và snippet bạn đã lưu cho Odoo này"
 
-#: src/features/code/code.tab.ts:101
+#: src/features/code/code.tab.ts:125
+msgid "History"
+msgstr "Lịch sử"
+
+#: src/features/code/code.tab.ts:125
+msgid "Inspect recent runs, restore code, or save a run as a snippet"
+msgstr "Xem các lần chạy gần đây, khôi phục code hoặc lưu thành snippet"
+
+#: src/features/code/code.tab.ts:126
 msgid "Guide: available variables, recordset API, examples"
 msgstr "Hướng dẫn: biến có sẵn, API recordset, ví dụ"
 
-#: src/features/code/code.tab.ts:119
+#: src/features/code/code.tab.ts:151
+#: src/features/code/code.tab.ts:162
 msgid "Name of the snippet:"
 msgstr "Tên snippet:"
 
-#: src/features/code/code.tab.ts:155
+#: src/features/code/code.tab.ts:208
 msgid "Python runs as a server action: it needs Settings rights (base.group_system)."
 msgstr "Python chạy dưới dạng server action: cần quyền Settings (base.group_system)."
 
-#: src/features/code/code.tpl.html:36
+#: src/features/code/code.tpl.html:21
 msgid "Suggestions"
 msgstr "Gợi ý"
+
+#: src/features/code/code.tpl.html:115
+msgid "Last 20 completed runs for this database and user; lost when the panel closes."
+msgstr "20 lần chạy hoàn tất gần nhất của database và user này; mất khi đóng panel."
+
+#: src/features/code/code.tpl.html:115
+msgid "Clear history"
+msgstr "Xoá lịch sử"
+
+#: src/features/code/code.tpl.html:127
+msgid "Executed code"
+msgstr "Code đã chạy"
+
+#: src/features/code/code.tpl.html:129
+msgid "Restore only fills the editor, with writes off. Nothing runs until you click Run."
+msgstr "Khôi phục chỉ điền code vào trình soạn thảo và tắt ghi. Code chỉ chạy khi bạn bấm Chạy."
+
+#: src/features/code/code.tpl.html:130
+msgid "Values as saved; field labels and record names are not read again."
+msgstr "Giá trị như lúc lưu; nhãn field và tên bản ghi không được đọc lại."
 
 #: src/features/menus/menus.logic.ts:10
 msgid "Record Rules"
@@ -1797,7 +1884,7 @@ msgstr "Thời gian CPU của tiến trình server (Odoo 19)"
 
 #: src/features/perf/perf.request.ts:75
 msgid "By code: where the time goes"
-msgstr "Theo code: thời gian đi đâu"
+msgstr "Theo code: thời gian tiêu vào đâu"
 
 #: src/features/perf/perf.request.ts:76
 msgid "No SQL recorded for this request (the SQL collector was off?)."
@@ -1826,7 +1913,7 @@ msgstr "Số lần"
 #: src/features/perf/perf.request.ts:86
 #: src/features/perf/perf.request.ts:172
 #: src/features/perf/perf.request.ts:195
-#: src/features/perf/perf.tab.ts:117
+#: src/features/perf/perf.tab.ts:124
 msgid "Time"
 msgstr "Thời gian"
 
@@ -1835,8 +1922,8 @@ msgid "Odoo itself"
 msgstr "Chính Odoo"
 
 #: src/features/perf/perf.request.ts:83
-msgid "The same SQL sent several times. If a count follows the number of records shown (10 records → 10×), it is an N+1: the code reads records one by one where one query could read them all."
-msgstr "Cùng một câu SQL được gửi nhiều lần. Nếu số lần tăng theo số bản ghi đang hiển thị (10 bản ghi → 10×), đó là N+1: code đọc từng bản ghi một, trong khi một câu truy vấn có thể đọc hết."
+msgid "The same SQL sent several times. If the count matches the records shown (10 records → 10×), it is an N+1: one query could read them all."
+msgstr "Cùng một câu SQL gửi nhiều lần. Nếu số lần bằng số bản ghi đang hiện (10 bản ghi → 10×), đó là N+1: một câu SQL có thể đọc hết."
 
 #: src/features/perf/perf.request.ts:84
 msgid "✓ No statement runs twice."
@@ -1851,8 +1938,8 @@ msgid "✓ No slow query (the slowest took %s): the database is not the problem 
 msgstr "✓ Không có truy vấn chậm (chậm nhất %s): database không phải vấn đề ở đây."
 
 #: src/features/perf/perf.request.ts:90
-msgid "The slowest took %s. Check the columns it filters or joins on have an index, and that it does not read more rows than needed."
-msgstr "Truy vấn chậm nhất mất %s. Kiểm tra các cột dùng để lọc hoặc join đã có index chưa, và nó có đọc nhiều dòng hơn cần thiết không."
+msgid "The slowest took %s. Check that its filter and join columns are indexed and it reads no more rows than needed."
+msgstr "Truy vấn chậm nhất mất %s. Kiểm tra cột lọc và join đã có index, và nó không đọc thừa dòng."
 
 #: src/features/perf/perf.request.ts:116
 msgid "Reads %s"
@@ -1868,7 +1955,7 @@ msgstr "Cập nhật bảng %s"
 
 #: src/features/perf/perf.request.ts:116
 msgid "Deletes from %s"
-msgstr "Xoá trong bảng %s"
+msgstr "Xoá khỏi bảng %s"
 
 #: src/features/perf/perf.request.ts:120
 msgid "Runs a SQL query"
@@ -1879,7 +1966,7 @@ msgid "N+1: one query runs %s× in this request"
 msgstr "N+1: một câu truy vấn chạy %s lần trong request này"
 
 #: src/features/perf/perf.request.ts:136
-msgid "%s runs it once per record: read them all at once instead (a recordset, mapped(), read_group…)."
+msgid "%s runs it once per record: read them all at once (recordset, mapped(), read_group…)."
 msgstr "%s chạy nó một lần cho mỗi bản ghi: hãy đọc tất cả một lần (recordset, mapped(), read_group…)."
 
 #: src/features/perf/perf.request.ts:137
@@ -1895,8 +1982,8 @@ msgid "Most of the time is in Python (≈ %s of %s)"
 msgstr "Phần lớn thời gian nằm ở Python (≈ %s trên %s)"
 
 #: src/features/perf/perf.request.ts:140
-msgid "The SQL is not the problem: see which code takes the time below, or every function in the Flame Graph."
-msgstr "SQL không phải nguyên nhân: xem đoạn code nào tốn thời gian ở bên dưới, hoặc từng hàm trong Flame Graph."
+msgid "Not the SQL: see which code takes the time below, or the Flame Graph."
+msgstr "Không phải do SQL: xem code nào tốn thời gian bên dưới, hoặc Flame Graph."
 
 #: src/features/perf/perf.request.ts:141
 msgid "✓ Fast request (%s)"
@@ -1919,16 +2006,16 @@ msgid "SQL %s, Python ≈ %s"
 msgstr "SQL %s, Python ≈ %s"
 
 #: src/features/perf/perf.request.ts:168
-msgid "The functions of the modules (outside the ORM and the server) the time went to, SQL they ran included. Sampled every 10 ms or so: approximate."
-msgstr "Các hàm của module (ngoài ORM và server) mà thời gian tiêu vào, tính cả SQL chúng chạy. Lấy mẫu khoảng 10 ms một lần: chỉ là ước lượng."
+msgid "Module functions (outside the ORM and server) taking the time, their SQL included. Sampled every ~10 ms: approximate."
+msgstr "Các hàm của module (ngoài ORM và server) tốn thời gian, tính cả SQL chúng chạy. Lấy mẫu khoảng 10 ms một lần: chỉ ước lượng."
 
 #: src/features/perf/perf.request.ts:169
 msgid "No time in the modules' code: the server itself (routing, ORM) took it."
 msgstr "Không tốn thời gian trong code của module: thời gian nằm ở chính server (routing, ORM)."
 
 #: src/features/perf/perf.request.ts:170
-msgid "No Python samples: this request was recorded without them (Collect: Python stacks)."
-msgstr "Không có mẫu Python: request này được ghi lại mà không có chúng (Thu thập: Stack Python)."
+msgid "No Python samples: turn on Python stacks (Collect) and record it again."
+msgstr "Không có mẫu Python: bật Stack Python (Thu thập) rồi ghi lại request."
 
 #: src/features/perf/perf.request.ts:172
 msgid "Function"
@@ -1964,8 +2051,8 @@ msgid "Odoo itself (no addon line in the stack)"
 msgstr "Chính Odoo (stack không đi qua dòng nào của addon)"
 
 #: src/features/perf/perf.request.ts:207
-msgid "The line of an addon under the ORM that caused the queries. Many queries from one line, one statement repeated: a loop reading record by record (N+1)."
-msgstr "Dòng code của addon (ngay dưới ORM) đã gây ra các câu SQL. Nhiều câu từ một dòng, một câu lệnh lặp lại: một vòng lặp đọc từng bản ghi một (N+1)."
+msgid "The addon line (just under the ORM) that sent the queries. Many queries, one statement repeated: a record-by-record loop (N+1)."
+msgstr "Dòng code của addon (ngay dưới ORM) đã gửi SQL. Nhiều câu SQL, một câu lệnh lặp lại: vòng lặp đọc từng bản ghi (N+1)."
 
 #: src/features/perf/perf.request.ts:214
 msgid "The baseline was deleted."
@@ -2004,199 +2091,241 @@ msgid "In SQL"
 msgstr "Trong SQL"
 
 #: src/features/perf/perf.request.ts:230
-msgid "Repeated statements: the same as the baseline."
-msgstr "Câu lệnh lặp lại: giống như mốc."
+msgid "Same repeated statements as the baseline."
+msgstr "Câu lệnh lặp lại giống hệt mốc."
 
 #: src/features/perf/perf.tab.ts:49
-msgid "The Perf tab needs Settings rights (base.group_system): the profiles are ir.profile records."
-msgstr "Tab Perf cần quyền Settings (base.group_system): profile là các bản ghi ir.profile."
+msgid "The Perf tab needs Settings rights (base.group_system) to read ir.profile."
+msgstr "Tab Perf cần quyền Settings (base.group_system) để đọc ir.profile."
 
 #: src/features/perf/perf.tab.ts:75
-#: src/features/perf/perf.tab.ts:224
+#: src/features/perf/perf.tab.ts:264
 msgid "Every session"
 msgstr "Mọi phiên"
 
-#: src/features/perf/perf.tab.ts:86
+#: src/features/perf/perf.tab.ts:87
 msgid "Profile session"
 msgstr "Phiên profile"
 
-#: src/features/perf/perf.tab.ts:87
+#: src/features/perf/perf.tab.ts:88
 msgid "Filter requests…"
 msgstr "Lọc request…"
 
-#: src/features/perf/perf.tab.ts:88
+#: src/features/perf/perf.tab.ts:89
 msgid "Read the profiles again"
 msgstr "Đọc lại các profile"
 
-#: src/features/perf/perf.tab.ts:90
+#: src/features/perf/perf.tab.ts:92
+msgid "Group by method"
+msgstr "Nhóm theo phương thức"
+
+#: src/features/perf/perf.tab.ts:93
+msgid "Group requests by model and method, or by route when there is none"
+msgstr "Nhóm request theo model và phương thức, hoặc theo route nếu không có"
+
+#: src/features/perf/perf.tab.ts:97
 msgid "Static Files (%s)"
 msgstr "File tĩnh (%s)"
 
-#: src/features/perf/perf.tab.ts:90
+#: src/features/perf/perf.tab.ts:97
 msgid "Scripts, images, manifest…: nothing to optimise in a module"
 msgstr "Script, ảnh, manifest…: không có gì để tối ưu trong module"
 
-#: src/features/perf/perf.tab.ts:97
-msgid "Recording: do the slow action on the Odoo page, then ⟳. Every request of this session writes a profile."
-msgstr "Đang ghi: làm thao tác bị chậm trên trang Odoo, rồi bấm ⟳. Mỗi request của phiên này ghi một profile."
+#: src/features/perf/perf.tab.ts:104
+msgid "Recording: do the slow action on the Odoo page, then ⟳."
+msgstr "Đang ghi: làm thao tác bị chậm trên trang Odoo, rồi bấm ⟳."
 
-#: src/features/perf/perf.tab.ts:98
+#: src/features/perf/perf.tab.ts:105
 msgid "No request in this session."
 msgstr "Phiên này chưa có request nào."
 
-#: src/features/perf/perf.tab.ts:98
-msgid "No profile yet: Start, use the Odoo page, then come back here."
-msgstr "Chưa có profile: bấm Bắt đầu, thao tác trên trang Odoo, rồi quay lại đây."
+#: src/features/perf/perf.tab.ts:105
+msgid "No profile yet: Start Profiling, use the Odoo page, then come back."
+msgstr "Chưa có profile: bấm Bật profiling, thao tác trên trang Odoo, rồi quay lại."
 
-#: src/features/perf/perf.tab.ts:104
+#: src/features/perf/perf.tab.ts:111
 msgid "Click a request to see where its time goes."
 msgstr "Bấm vào một request để xem thời gian của nó tiêu vào đâu."
 
-#: src/features/perf/perf.tab.ts:108
+#: src/features/perf/perf.tab.ts:115
 msgid "baseline"
 msgstr "mốc"
 
-#: src/features/perf/perf.tab.ts:117
-msgid "Request"
-msgstr "Request"
-
-#: src/features/perf/perf.tab.ts:117
+#: src/features/perf/perf.tab.ts:124
 msgid "At"
 msgstr "Lúc"
 
-#: src/features/perf/perf.tab.ts:119
+#: src/features/perf/perf.tab.ts:130
+msgid "%s groups · %s requests"
+msgstr "%s nhóm · %s request"
+
+#: src/features/perf/perf.tab.ts:131
+msgid "Open a group, then a request to inspect its SQL, baseline and flame graph."
+msgstr "Mở một nhóm, rồi chọn request để xem SQL, mốc so sánh và flame graph."
+
+#: src/features/perf/perf.tab.ts:132
+msgid "Method / route"
+msgstr "Phương thức / route"
+
+#: src/features/perf/perf.tab.ts:132
+msgid "Calls"
+msgstr "Số lần gọi"
+
+#: src/features/perf/perf.tab.ts:132
+msgid "Sum of times"
+msgstr "Tổng thời gian"
+
+#: src/features/perf/perf.tab.ts:132
+msgid "Median"
+msgstr "Trung vị"
+
+#: src/features/perf/perf.tab.ts:139
+#: src/features/perf/perf.tab.ts:149
 msgid "%s requests"
 msgstr "%s request"
 
-#: src/features/perf/perf.tab.ts:130
-msgid "RECORDING"
-msgstr "ĐANG ĐO"
+#: src/features/perf/perf.tab.ts:140
+#: src/features/perf/perf.tab.ts:147
+msgid "Request"
+msgstr "Request"
 
-#: src/features/perf/perf.tab.ts:130
+#: src/features/perf/perf.tab.ts:154
+msgid "%s latest profiles loaded (limit %s), without panel requests or hidden static files. Sum of times is not page load time."
+msgstr "Đã tải %s profile mới nhất (giới hạn %s), không tính request của panel và file tĩnh đang ẩn. Tổng thời gian không phải thời gian tải trang."
+
+#: src/features/perf/perf.tab.ts:155
+msgid "Routes with no model and method in their URL are grouped by path."
+msgstr "Route không có model và phương thức trong URL được nhóm theo đường dẫn."
+
+#: src/features/perf/perf.tab.ts:169
+msgid "RECORDING"
+msgstr "ĐANG GHI"
+
+#: src/features/perf/perf.tab.ts:169
 msgid "off"
 msgstr "tắt"
 
-#: src/features/perf/perf.tab.ts:131
+#: src/features/perf/perf.tab.ts:170
 msgid "since %s"
 msgstr "từ %s"
 
-#: src/features/perf/perf.tab.ts:138
+#: src/features/perf/perf.tab.ts:177
 msgid "Stop Profiling"
 msgstr "Tắt profiling"
 
-#: src/features/perf/perf.tab.ts:138
+#: src/features/perf/perf.tab.ts:177
 msgid "Start Profiling"
 msgstr "Bật profiling"
 
-#: src/features/perf/perf.tab.ts:158
+#: src/features/perf/perf.tab.ts:197
 msgid "Collect:"
 msgstr "Thu thập:"
 
-#: src/features/perf/perf.tab.ts:159
+#: src/features/perf/perf.tab.ts:198
 msgid "Every query, its time and stack: always"
 msgstr "Mọi câu SQL, thời gian và stack: luôn bật"
 
-#: src/features/perf/perf.tab.ts:160
+#: src/features/perf/perf.tab.ts:199
 msgid "Python stacks"
 msgstr "Stack Python"
 
-#: src/features/perf/perf.tab.ts:160
-msgid "The Python stack sampled every few ms: the flame graph"
-msgstr "Stack Python được lấy mẫu vài ms một lần: dùng cho flame graph"
+#: src/features/perf/perf.tab.ts:199
+msgid "Samples the Python stack every few ms, for the flame graph"
+msgstr "Lấy mẫu stack Python vài ms một lần, cho flame graph"
 
-#: src/features/perf/perf.tab.ts:161
+#: src/features/perf/perf.tab.ts:200
 msgid "The QWeb directives rendered and their time (reports, website pages)"
 msgstr "Các directive QWeb được render và thời gian (báo cáo, trang website)"
 
-#: src/features/perf/perf.tab.ts:163
-msgid "Every request of this session writes one profile (ir.profile); the panel's own are left out of the list."
-msgstr "Mỗi request của phiên này ghi một profile (ir.profile); request của chính panel được ẩn khỏi danh sách."
+#: src/features/perf/perf.tab.ts:202
+msgid "Each request of this session writes an ir.profile; the panel's own are not listed."
+msgstr "Mỗi request của phiên này ghi một ir.profile; request của panel không được liệt kê."
 
-#: src/features/perf/perf.tab.ts:164
-msgid "Odoo's own profiler: SQL and Python of every request of this session, read back here (Settings rights)."
-msgstr "Profiler có sẵn của Odoo: SQL và Python của mọi request trong phiên này, đọc lại ở đây (quyền Settings)."
+#: src/features/perf/perf.tab.ts:203
+msgid "Odoo's built-in profiler: the SQL and Python of each request in this session (Settings rights)."
+msgstr "Profiler có sẵn của Odoo: SQL và Python của từng request trong phiên này (quyền Settings)."
 
-#: src/features/perf/perf.tab.ts:165
+#: src/features/perf/perf.tab.ts:204
 msgid "Allowed on this database until %s."
 msgstr "Database cho phép profiling tới %s."
 
-#: src/features/perf/perf.tab.ts:165
-msgid "Not allowed on this database yet: Start asks for how long."
-msgstr "Database chưa cho phép profiling: bấm Bắt đầu sẽ hỏi cho phép trong bao lâu."
+#: src/features/perf/perf.tab.ts:204
+msgid "Not allowed on this database yet: Start Profiling asks for how long."
+msgstr "Database chưa cho phép profiling: Bật profiling sẽ hỏi cho phép bao lâu."
 
-#: src/features/perf/perf.tab.ts:173
+#: src/features/perf/perf.tab.ts:212
 msgid "Cannot change what the profiler collects."
 msgstr "Không đổi được các collector của profiler."
 
-#: src/features/perf/perf.tab.ts:179
+#: src/features/perf/perf.tab.ts:218
 msgid "Profiling is not allowed on this database. Allow it for:"
 msgstr "Database chưa cho phép profiling. Cho phép trong:"
 
-#: src/features/perf/perf.tab.ts:180
+#: src/features/perf/perf.tab.ts:219
 msgid "5 minutes"
 msgstr "5 phút"
 
-#: src/features/perf/perf.tab.ts:180
+#: src/features/perf/perf.tab.ts:219
 msgid "1 hour"
 msgstr "1 giờ"
 
-#: src/features/perf/perf.tab.ts:180
+#: src/features/perf/perf.tab.ts:219
 msgid "1 day"
 msgstr "1 ngày"
 
-#: src/features/perf/perf.tab.ts:181
+#: src/features/perf/perf.tab.ts:220
 msgid "(writes base.profiling_enabled_until)"
 msgstr "(ghi base.profiling_enabled_until)"
 
-#: src/features/perf/perf.tab.ts:186
+#: src/features/perf/perf.tab.ts:225
 msgid "Profiling"
 msgstr "Đang profile"
 
-#: src/features/perf/perf.tab.ts:191
+#: src/features/perf/perf.tab.ts:230
 msgid "Sent (HTTP %s), but no profile of it was found."
 msgstr "Đã gửi (HTTP %s), nhưng không tìm thấy profile của nó."
 
-#: src/features/perf/perf.tab.ts:194
+#: src/features/perf/perf.tab.ts:234
 msgid "HTTP %s · %s · %s queries · opened below"
 msgstr "HTTP %s · %s · %s câu SQL · đã mở bên dưới"
 
-#: src/features/perf/perf.tab.ts:206
+#: src/features/perf/perf.tab.ts:246
 msgid "Profiled"
 msgstr "Đã profile"
 
-#: src/features/perf/perf.tab.ts:213
+#: src/features/perf/perf.tab.ts:253
 msgid "Nothing to delete."
 msgstr "Không có gì để xoá."
 
-#: src/features/perf/perf.tab.ts:214
-msgid "%s: delete %s profiles (ir.profile)? The panel's own reads, not listed, are among them."
-msgstr "%s: xoá %s profile (ir.profile)? Trong đó có cả các request của panel, vốn không hiện trong danh sách."
+#: src/features/perf/perf.tab.ts:254
+msgid "%s: delete %s profiles (ir.profile)? This includes the panel's own, which are not listed."
+msgstr "%s: xoá %s profile (ir.profile)? Gồm cả profile của panel, vốn không hiện trong danh sách."
 
-#: src/features/perf/perf.tab.ts:221
+#: src/features/perf/perf.tab.ts:261
 msgid "Clean up:"
 msgstr "Dọn dẹp:"
 
-#: src/features/perf/perf.tab.ts:222
+#: src/features/perf/perf.tab.ts:262
 msgid "This session (%s)"
 msgstr "Phiên này (%s)"
 
-#: src/features/perf/perf.tab.ts:222
+#: src/features/perf/perf.tab.ts:262
 msgid "This session"
 msgstr "Phiên này"
 
-#: src/features/perf/perf.tab.ts:223
+#: src/features/perf/perf.tab.ts:263
 msgid "Mine"
 msgstr "Của tôi"
 
-#: src/features/perf/perf.tab.ts:223
+#: src/features/perf/perf.tab.ts:263
 msgid "Your sessions"
 msgstr "Các phiên của bạn"
 
-#: src/features/perf/perf.tab.ts:223
+#: src/features/perf/perf.tab.ts:263
 msgid "Every session of %s"
 msgstr "Mọi phiên của %s"
 
-#: src/features/perf/perf.tab.ts:224
+#: src/features/perf/perf.tab.ts:264
 msgid "Every profile of the database (Odoo deletes them after 30 days anyway)"
 msgstr "Mọi profile trong database (dù sao Odoo cũng tự xoá sau 30 ngày)"
 
@@ -2209,69 +2338,154 @@ msgid "Do the slow action on the Odoo page: open the record, save, confirm…"
 msgstr "Làm thao tác bị chậm trên trang Odoo: mở bản ghi, lưu, xác nhận…"
 
 #: src/features/perf/perf.tpl.html:13
-msgid "Come back and refresh: the requests show slowest first; click one to see why it is slow."
-msgstr "Quay lại đây và làm mới: request chậm nhất nằm trên cùng; bấm vào một request để xem vì sao nó chậm."
+msgid "Come back and refresh (⟳): slowest requests first; click one to see why."
+msgstr "Quay lại và làm mới (⟳): request chậm nhất ở trên cùng; bấm vào một request để xem vì sao."
+
+#: src/features/record/record.comparison.ts:45
+msgid "Pinned: %s (#%s)"
+msgstr "Đã ghim: %s (#%s)"
+
+#: src/features/record/record.comparison.ts:52
+msgid "Could not read the selected records."
+msgstr "Không đọc được các bản ghi đang chọn."
+
+#: src/features/record/record.comparison.ts:55
+msgid "The screen changed. Reload Data before comparing records."
+msgstr "Màn hình đã đổi. Hãy tải lại dữ liệu trước khi so sánh bản ghi."
+
+#: src/features/record/record.comparison.ts:65
+msgid "Could not identify the database and user: comparison is off."
+msgstr "Không xác định được database và user: không so sánh được."
+
+#: src/features/record/record.comparison.ts:85
+msgid "Open a saved record before pinning it."
+msgstr "Mở một bản ghi đã lưu trước khi ghim."
+
+#: src/features/record/record.comparison.ts:104
+msgid "Select 2–5 individual records, not every record matching the search."
+msgstr "Chọn riêng 2–5 bản ghi, thay vì chọn tất cả bản ghi khớp tìm kiếm."
+
+#: src/features/record/record.comparison.ts:105
+msgid "Could not read the selection. Select records in a list or kanban, or pin one."
+msgstr "Không đọc được các bản ghi đang chọn. Hãy chọn trong danh sách hoặc kanban, hoặc ghim một bản ghi."
+
+#: src/features/record/record.comparison.ts:109
+msgid "Only saved records can be compared."
+msgstr "Chỉ so sánh được bản ghi đã lưu."
+
+#: src/features/record/record.comparison.ts:110
+msgid "Select 2–5 different saved records of this model."
+msgstr "Chọn 2–5 bản ghi đã lưu khác nhau của model này."
+
+#: src/features/record/record.comparison.ts:138
+msgid "Partial: stored values only"
+msgstr "Một phần: chỉ giá trị đã lưu"
+
+#: src/features/record/record.comparison.ts:138
+#: src/features/record/record.comparison.ts:142
+#: src/features/record/record.comparison.ts:192
+msgid "Record unreadable"
+msgstr "Không đọc được bản ghi"
+
+#: src/features/record/record.comparison.ts:142
+msgid "Record #%s: %s"
+msgstr "Bản ghi #%s: %s"
+
+#: src/features/record/record.comparison.ts:142
+#: src/features/record/record.tab.ts:135
+msgid "A computed field failed: only stored values are shown."
+msgstr "Một field compute bị lỗi: chỉ hiện giá trị stored."
+
+#: src/features/record/record.comparison.ts:147
+msgid "Record #%s: could not read the size of %s."
+msgstr "Bản ghi #%s: không đọc được kích thước của %s."
+
+#: src/features/record/record.comparison.ts:159
+msgid "Different"
+msgstr "Khác nhau"
+
+#: src/features/record/record.comparison.ts:159
+msgid "Unknown"
+msgstr "Chưa xác định"
+
+#: src/features/record/record.comparison.ts:164
+msgid "(unset)"
+msgstr "(chưa đặt)"
+
+#: src/features/record/record.comparison.ts:176
+#: src/features/record/record.tab.ts:111
+#: src/features/view/view.field.ts:202
+msgid "%s fields"
+msgstr "%s field"
+
+#: src/features/record/record.comparison.ts:176
+#: src/features/record/record.tab.ts:111
+#: src/features/view/view.field.ts:202
+msgid "%s/%s fields"
+msgstr "%s/%s field"
+
+#: src/features/record/record.comparison.ts:191
+msgid "Restricted / not returned"
+msgstr "Bị hạn chế / không được trả về"
+
+#: src/features/record/record.comparison.ts:193
+msgid "Value unavailable"
+msgstr "Chưa đọc được giá trị"
+
+#: src/features/record/record.comparison.ts:194
+msgid "Not returned"
+msgstr "Không được trả về"
 
 #: src/features/record/record.logic.ts:62
 msgid "change → recomputes %s"
 msgstr "đổi → tính lại %s"
 
-#: src/features/record/record.tab.ts:28
+#: src/features/record/record.tab.ts:36
 #: src/features/view/view.tab.ts:33
-msgid "This screen is not bound to a model."
-msgstr "Màn hình này không gắn với model nào."
+msgid "No model on this screen."
+msgstr "Màn hình này không có model."
 
-#: src/features/record/record.tab.ts:29
+#: src/features/record/record.tab.ts:37
 msgid "Identity & metadata"
 msgstr "Định danh & metadata"
 
-#: src/features/record/record.tab.ts:47
-msgid "(none / several records)"
-msgstr "(chưa có / nhiều record)"
+#: src/features/record/record.tab.ts:39
+msgid "Compare saved records"
+msgstr "So sánh bản ghi đã lưu"
 
-#: src/features/record/record.tab.ts:49
+#: src/features/record/record.tab.ts:56
+msgid "(none / several records)"
+msgstr "(không có / nhiều bản ghi)"
+
+#: src/features/record/record.tab.ts:58
 msgid "created by"
 msgstr "tạo bởi"
 
-#: src/features/record/record.tab.ts:49
+#: src/features/record/record.tab.ts:58
 msgid "last updated by"
 msgstr "sửa bởi"
 
-#: src/features/record/record.tab.ts:108
+#: src/features/record/record.tab.ts:96
 msgid "Click to copy the value"
 msgstr "Bấm để copy giá trị"
 
-#: src/features/record/record.tab.ts:123
-#: src/features/view/view.field.ts:202
-msgid "%s fields"
-msgstr "%s field"
-
-#: src/features/record/record.tab.ts:123
-#: src/features/view/view.field.ts:202
-msgid "%s/%s fields"
-msgstr "%s/%s field"
-
-#: src/features/record/record.tab.ts:124
+#: src/features/record/record.tab.ts:112
 msgid "Filter name / label / value / type / module"
-msgstr "Lọc tên / nhãn / giá trị / type / module"
+msgstr "Lọc tên / nhãn / giá trị / kiểu / module"
 
-#: src/features/record/record.tab.ts:135
+#: src/features/record/record.tab.ts:123
 msgid "Field · type · value"
 msgstr "Field · kiểu · giá trị"
 
-#: src/features/record/record.tab.ts:135
+#: src/features/record/record.tab.ts:123
 msgid "Label · storage · compute · module"
 msgstr "Nhãn · lưu trữ · compute · module"
 
-#: src/features/record/record.tab.ts:147
-msgid "A computed field failed: values of the stored fields only."
-msgstr "Một field compute bị lỗi: chỉ hiện giá trị của các field stored."
-
-#: src/features/record/record.tab.ts:152
+#: src/features/record/record.tab.ts:140
 msgid "Modules and indexes need Access Rights (base.group_erp_manager)."
 msgstr "Cột module và index cần quyền Access Rights (base.group_erp_manager)."
 
-#: src/features/record/record.tab.ts:153
+#: src/features/record/record.tab.ts:141
 msgid "Modules and indexes unavailable: %s"
 msgstr "Không lấy được module và index: %s"
 
@@ -2300,73 +2514,145 @@ msgstr "Copy dạng JSON"
 msgid "Copy the values of the record as JSON"
 msgstr "Copy giá trị của bản ghi dưới dạng JSON"
 
-#: src/features/rpc/rpc.logic.ts:162
+#: src/features/record/record.tpl.html:47
+msgid "Compare selected"
+msgstr "So sánh bản ghi đang chọn"
+
+#: src/features/record/record.tpl.html:48
+msgid "Compare with pinned"
+msgstr "So sánh với bản ghi đã ghim"
+
+#: src/features/record/record.tpl.html:49
+msgid "Pin current record"
+msgstr "Ghim bản ghi hiện tại"
+
+#: src/features/record/record.tpl.html:50
+#: src/features/record/record.tpl.html:50
+msgid "Clear pin"
+msgstr "Bỏ ghim"
+
+#: src/features/record/record.tpl.html:52
+msgid "Select 2–5 saved records in a list or kanban, or pin one and open another. Unsaved edits are not compared; Reload Data clears the pin."
+msgstr "Chọn 2–5 bản ghi đã lưu trong danh sách hoặc kanban, hoặc ghim một bản ghi rồi mở bản ghi khác. Không so sánh thay đổi chưa lưu; Tải lại dữ liệu sẽ bỏ ghim."
+
+#: src/features/record/record.tpl.html:61
+#: src/features/record/record.tpl.html:61
+msgid "Filter field name / label / type"
+msgstr "Lọc tên field / nhãn / kiểu"
+
+#: src/features/record/record.tpl.html:63
+msgid "Differences only"
+msgstr "Chỉ hiện khác biệt"
+
+#: src/features/record/record.tpl.html:68
+#: src/features/security/security.model.ts:75
+msgid "Field"
+msgstr "Field"
+
+#: src/features/record/record.tpl.html:72
+msgid "No matching fields."
+msgstr "Không có field phù hợp."
+
+#: src/features/record/record.tpl.html:73
+msgid "Fields you can't access are not listed. Differences only keeps unknown values. Binaries are compared by size, not content."
+msgstr "Không liệt kê field bạn không có quyền xem. Chỉ hiện khác biệt vẫn giữ giá trị chưa xác định. Dữ liệu nhị phân được so theo kích thước, không theo nội dung."
+
+#: src/features/rpc/rpc.logic.ts:226
 msgid "Signature of %s.%s unknown: ids and argument names are guessed."
 msgstr "Không rõ chữ ký của %s.%s: ids và tên tham số được đoán."
 
-#: src/features/rpc/rpc.logic.ts:163
+#: src/features/rpc/rpc.logic.ts:227
 msgid "JSON-2 takes named arguments only: rename %s."
 msgstr "JSON-2 chỉ nhận tham số có tên: hãy đổi tên %s."
 
+#: src/features/rpc/rpc.tab.ts:44
+msgid "Slow (≥ 1 s)"
+msgstr "Chậm (≥ 1 giây)"
+
+#: src/features/rpc/rpc.tab.ts:44
+msgid "Errors"
+msgstr "Lỗi"
+
 #: src/features/rpc/rpc.tab.ts:46
+msgid "RPC status"
+msgstr "Trạng thái RPC"
+
+#: src/features/rpc/rpc.tab.ts:59
 msgid "Method · model · duration"
 msgstr "Method · model · thời gian"
 
-#: src/features/rpc/rpc.tab.ts:46
+#: src/features/rpc/rpc.tab.ts:59
 msgid "Time · route"
 msgstr "Giờ · route"
 
-#: src/features/rpc/rpc.tab.ts:50
-msgid "Select a call to edit its parameters, send it again and see its result."
-msgstr "Chọn một lời gọi để sửa tham số, gửi lại và xem kết quả."
+#: src/features/rpc/rpc.tab.ts:63
+msgid "Select a call to edit it, resend it and see its result."
+msgstr "Chọn một lời gọi để sửa, gửi lại và xem kết quả."
 
-#: src/features/rpc/rpc.tab.ts:115
-msgid "Cut at 200 KB by the recorder: its body is not whole, it cannot be profiled."
-msgstr "Bộ ghi đã cắt ở 200 KB: body không còn nguyên vẹn, không profile được."
+#: src/features/rpc/rpc.tab.ts:146
+#: src/features/rpc/rpc.tab.ts:180
+msgid "Response unavailable"
+msgstr "Không ghi được phản hồi"
 
-#: src/features/rpc/rpc.tab.ts:129
+#: src/features/rpc/rpc.tab.ts:162
+msgid "Body cut at 200 KB by the recorder: it cannot be profiled."
+msgstr "Body bị bộ ghi cắt ở 200 KB: không profile được."
+
+#: src/features/rpc/rpc.tab.ts:186
+msgid "The page changed before the response arrived; the server result is unknown."
+msgstr "Trang đã đổi trước khi có phản hồi; chưa rõ kết quả trên server."
+
+#: src/features/rpc/rpc.tab.ts:191
+msgid "Waiting for response · %s ms"
+msgstr "Đang chờ phản hồi · %s ms"
+
+#: src/features/rpc/rpc.tab.ts:192
+msgid "Observed wait · %s ms"
+msgstr "Đã chờ · %s ms"
+
+#: src/features/rpc/rpc.tab.ts:192
 msgid "Recorded at %s · %s ms"
 msgstr "Ghi lúc %s · %s ms"
 
-#: src/features/rpc/rpc.tab.ts:140
+#: src/features/rpc/rpc.tab.ts:202
 msgid "Cut at 200 KB by the recorder: only its start is kept."
 msgstr "Bộ ghi đã cắt ở 200 KB: chỉ giữ phần đầu."
 
-#: src/features/rpc/rpc.tab.ts:178
+#: src/features/rpc/rpc.tab.ts:234
+msgid "Body (JSON)"
+msgstr "Body (JSON)"
+
+#: src/features/rpc/rpc.tab.ts:245
 msgid "Invalid JSON: %s"
 msgstr "JSON không hợp lệ: %s"
 
-#: src/features/rpc/rpc.tab.ts:202
-msgid "call_kw: the JSON-2 API (/json/2, named arguments), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
-msgstr "call_kw: API JSON-2 (/json/2, tham số có tên), với API key của người dùng này trong $ODOO_API_KEY. Các route khác: cookie session_id trong $ODOO_SESSION."
+#: src/features/rpc/rpc.tab.ts:269
+msgid "call_kw: JSON-2 API (/json/2), this user's API key in $ODOO_API_KEY. Other routes: session_id cookie in $ODOO_SESSION."
+msgstr "call_kw: API JSON-2 (/json/2), API key của user này trong $ODOO_API_KEY. Route khác: cookie session_id trong $ODOO_SESSION."
 
-#: src/features/rpc/rpc.tab.ts:203
-msgid "call_kw: the external API (execute_kw), with an API key of this user in $ODOO_API_KEY. Other routes: the session_id cookie in $ODOO_SESSION."
-msgstr "call_kw: qua API ngoài (execute_kw), với API key của người dùng này trong $ODOO_API_KEY. Các route khác: cookie session_id trong $ODOO_SESSION."
+#: src/features/rpc/rpc.tab.ts:270
+msgid "call_kw: external API (execute_kw), this user's API key in $ODOO_API_KEY. Other routes: session_id cookie in $ODOO_SESSION."
+msgstr "call_kw: API ngoài (execute_kw), API key của user này trong $ODOO_API_KEY. Route khác: cookie session_id trong $ODOO_SESSION."
 
 #: src/features/rpc/rpc.tpl.html:6
 msgid "Filter model / method"
 msgstr "Lọc model / method"
 
-#: src/features/rpc/rpc.tpl.html:7
-msgid "Errors Only"
-msgstr "Chỉ lỗi"
-
-#: src/features/rpc/rpc.tpl.html:9
-#: src/features/rpc/rpc.tpl.html:35
+#: src/features/rpc/rpc.tpl.html:8
+#: src/features/rpc/rpc.tpl.html:34
 msgid "New Request"
 msgstr "Request mới"
 
-#: src/features/rpc/rpc.tpl.html:26
+#: src/features/rpc/rpc.tpl.html:25
 msgid "No RPC yet. Use the Odoo page to record some."
 msgstr "Chưa có RPC nào. Thao tác trên trang Odoo để ghi lại."
 
-#: src/features/rpc/rpc.tpl.html:27
-msgid "Calls Odoo answers from its own cache (views, actions…) never reach the network: they are not logged."
-msgstr "Các lời gọi Odoo trả lời từ cache của nó (view, action…) không đi ra mạng nên không được ghi lại."
+#: src/features/rpc/rpc.tpl.html:26
+msgid "Calls Odoo answers from its cache (views, actions…) are not logged."
+msgstr "Lời gọi Odoo trả lời từ cache (view, action…) không được ghi lại."
 
-#: src/features/rpc/rpc.tpl.html:36
-#: src/features/rpc/rpc.tpl.html:36
+#: src/features/rpc/rpc.tpl.html:35
+#: src/features/rpc/rpc.tpl.html:35
 msgid "Close"
 msgstr "Đóng"
 
@@ -2379,16 +2665,12 @@ msgid "⏱ Profile → Perf"
 msgstr "⏱ Profile → Perf"
 
 #: src/features/rpc/rpc.tpl.html:60
-msgid "Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)"
-msgstr "Gửi lại với profiler của Odoo đang bật: xem SQL, dòng code gửi SQL, nghi vấn N+1 (Perf)"
+msgid "Resend with Odoo's profiler: SQL, the Python lines behind each query, N+1 suspects"
+msgstr "Gửi lại với profiler của Odoo: SQL, dòng Python sinh ra từng truy vấn, nghi vấn N+1"
 
 #: src/features/rpc/rpc.tpl.html:67
 msgid "Route"
 msgstr "Route"
-
-#: src/features/rpc/rpc.tpl.html:68
-msgid "Body (JSON)"
-msgstr "Body (JSON)"
 
 #: src/features/rpc/rpc.tpl.html:70
 msgid "Send"
@@ -2400,7 +2682,7 @@ msgstr "Ctrl/⌘ + Enter"
 
 #: src/features/rpc/rpc.tpl.html:89
 msgid "Copy as cURL"
-msgstr "Sao chép dạng cURL"
+msgstr "Copy dạng cURL"
 
 #: src/features/security/security.bar.ts:25
 #: src/features/security/security.system.ts:44
@@ -2434,8 +2716,8 @@ msgid "Another user, to compare…"
 msgstr "User khác để so sánh…"
 
 #: src/features/security/security.bar.ts:59
-msgid "Archived users too, in both searches"
-msgstr "Gồm cả user đã lưu trữ, cho cả hai ô tìm kiếm"
+msgid "Include archived users in both searches"
+msgstr "Tìm cả user đã lưu trữ ở cả hai ô tìm kiếm"
 
 #: src/features/security/security.bar.ts:77
 msgid "%s · #%s · %s groups"
@@ -2473,12 +2755,12 @@ msgid "as in the page's switcher"
 msgstr "giống bộ chọn công ty trên trang"
 
 #: src/features/security/security.bar.ts:101
-msgid "their default company: their switcher can't be seen from here"
-msgstr "công ty mặc định của họ: không xem được bộ chọn công ty của họ từ đây"
+msgid "their default company (their switcher isn't visible here)"
+msgstr "công ty mặc định của họ (không xem được bộ chọn công ty của họ từ đây)"
 
 #: src/features/security/security.bar.ts:109
-msgid "Trying %s: every view is simulated with it, nothing is written."
-msgstr "Đang thử %s: mọi màn hình được mô phỏng với nhóm này, chưa ghi gì."
+msgid "Trying %s in every view: simulated, nothing is written."
+msgstr "Đang thử %s ở mọi view của tab: chỉ mô phỏng, chưa ghi gì."
 
 #: src/features/security/security.bar.ts:111
 #: src/features/security/security.groups.ts:229
@@ -2487,23 +2769,23 @@ msgstr "Thêm %s cho %s?"
 
 #: src/features/security/security.bar.ts:125
 msgid "Applied…"
-msgstr "Đã áp…"
+msgstr "Đã áp dụng…"
 
 #: src/features/security/security.bar.ts:130
 msgid "Applied on %s: %s"
-msgstr "Đã áp trên %s: %s"
+msgstr "Đã áp dụng trên %s: %s"
 
 #: src/features/security/security.bar.ts:131
-msgid "Applied: no operation changed on this record."
-msgstr "Đã áp: không thao tác nào thay đổi trên bản ghi này."
+msgid "Applied: access to this record didn't change."
+msgstr "Đã áp dụng: quyền trên bản ghi này không đổi."
 
 #: src/features/security/security.data.ts:246
 msgid "You cannot read this record yourself, so its rules cannot be checked."
-msgstr "Chính bạn không đọc được record này nên không kiểm được rule."
+msgstr "Chính bạn không đọc được bản ghi này nên không kiểm tra được rule."
 
 #: src/features/security/security.data.ts:250
-msgid "Its 'access' condition is checked with your own rights, not the simulated user's: it cannot be told."
-msgstr "Điều kiện 'access' của nó được kiểm tra bằng quyền của chính bạn, không phải của người dùng đang mô phỏng: không xác định được."
+msgid "Its 'access' condition uses your rights, not the simulated user's, so it can't be checked."
+msgstr "Điều kiện 'access' dùng quyền của bạn, không phải của user đang mô phỏng, nên không kiểm tra được."
 
 #: src/features/security/security.data.ts:275
 #: src/features/security/security.data.ts:275
@@ -2511,8 +2793,8 @@ msgid "no result"
 msgstr "không có kết quả"
 
 #: src/features/security/security.groups.ts:41
-msgid "Choose a group: its rights, rules and users show here."
-msgstr "Chọn một nhóm: quyền, rule và user của nhóm hiện ở đây."
+msgid "Pick a group to see its rights, rules and users."
+msgstr "Chọn một nhóm để xem quyền, rule và user của nhóm."
 
 #: src/features/security/security.groups.ts:44
 #: src/features/security/security.model.ts:30
@@ -2537,7 +2819,7 @@ msgstr "Khác"
 #: src/features/security/security.groups.ts:46
 #: src/features/security/security.groups.ts:71
 msgid "%s groups"
-msgstr "%s group"
+msgstr "%s nhóm"
 
 #: src/features/security/security.groups.ts:48
 msgid "%s has %s"
@@ -2634,8 +2916,8 @@ msgid "Rule"
 msgstr "Rule"
 
 #: src/features/security/security.groups.ts:144
-msgid "A group's rules: the user sees a record if any of their group rules matches (and every global rule). Click a rule for its domain, evaluated for %s."
-msgstr "Rule của nhóm: user thấy một bản ghi nếu khớp ít nhất một rule nhóm của họ (và mọi rule toàn cục). Bấm vào rule để xem domain, đánh giá với %s."
+msgid "A record must match every global rule and one of the user's group rules. Click a rule for its domain, evaluated for %s."
+msgstr "Bản ghi phải khớp mọi rule toàn cục và một rule nhóm của user. Bấm vào rule để xem domain, đánh giá với %s."
 
 #: src/features/security/security.groups.ts:148
 msgid "%s users"
@@ -2655,11 +2937,11 @@ msgstr "Nếu thêm cho %s"
 
 #: src/features/security/security.groups.ts:158
 msgid "No new right on any model."
-msgstr "Không thêm quyền nào trên model khác."
+msgstr "Không thêm quyền trên model nào."
 
 #: src/features/security/security.groups.ts:166
-msgid "● set on the user · ◐ implied by another group · + being tried · ○ not. ACL: models its ACLs open · Rules: rules it carries · Users: users in it. Click a group for the details."
-msgstr "● đặt trực tiếp cho user · ◐ ngầm định qua nhóm khác · + đang thử · ○ không có. ACL: số model nhóm mở · Rule: số rule của nhóm · User: số user trong nhóm. Bấm vào nhóm để xem chi tiết."
+msgid "● set on the user · ◐ implied by another group · + being tried · ○ not. ACL: models it opens. Click a group for details."
+msgstr "● đặt trực tiếp cho user · ◐ ngầm định qua nhóm khác · + đang thử · ○ không có. ACL: số model nhóm mở. Bấm vào nhóm để xem chi tiết."
 
 #: src/features/security/security.groups.ts:167
 msgid "Risks of %s"
@@ -2675,7 +2957,7 @@ msgstr "Đặt trực tiếp cho %s"
 
 #: src/features/security/security.groups.ts:199
 msgid "Implied by %s"
-msgstr "Kế thừa từ %s"
+msgstr "Ngầm định qua %s"
 
 #: src/features/security/security.groups.ts:200
 #: src/features/security/security.model.ts:24
@@ -2723,7 +3005,7 @@ msgstr "Thử cho %s"
 #: src/features/security/security.groups.ts:228
 #: src/features/security/security.record.ts:166
 msgid "Simulate this group in every view, nothing is written"
-msgstr "Mô phỏng nhóm này ở mọi màn hình, không ghi gì"
+msgstr "Mô phỏng nhóm này ở mọi view của tab, không ghi gì"
 
 #: src/features/security/security.groups.ts:229
 msgid "Add to %s"
@@ -2742,8 +3024,8 @@ msgid "Added"
 msgstr "Được thêm"
 
 #: src/features/security/security.groups.ts:250
-msgid "Removed by \"the same\"; kept by \"add only\""
-msgstr "Bị gỡ nếu chọn \"đặt giống hệt\"; giữ lại nếu chọn \"chỉ thêm\""
+msgid "Removed by \"Make them the same\", kept by \"Add only the missing ones\""
+msgstr "Bị gỡ nếu chọn \"Đặt giống hệt\", giữ lại nếu chọn \"Chỉ thêm các nhóm còn thiếu\""
 
 #: src/features/security/security.groups.ts:253
 msgid "Change the groups of %s?"
@@ -2758,8 +3040,8 @@ msgid "Remove: %s"
 msgstr "Gỡ: %s"
 
 #: src/features/security/security.groups.ts:256
-msgid "Warning: one is a portal user, the other is not: the user type changes."
-msgstr "Lưu ý: một người là user portal, người kia thì không: loại user sẽ thay đổi."
+msgid "Warning: the user type changes (one is a portal user, the other is not)."
+msgstr "Lưu ý: loại user sẽ thay đổi (một người là user portal, người kia thì không)."
 
 #: src/features/security/security.groups.ts:259
 msgid "Add only the missing ones (%s)"
@@ -2788,7 +3070,7 @@ msgstr "Không có ACL nào: chỉ superuser truy cập được model này."
 
 #: src/features/security/security.logic.ts:341
 msgid "ACL \"%s\" has no group → applies to EVERY user, portal/public included (%s)."
-msgstr "ACL \"%s\" không có group → áp dụng cho MỌI user, kể cả portal/public (%s)."
+msgstr "ACL \"%s\" không có nhóm → áp dụng cho MỌI user, kể cả portal/public (%s)."
 
 #: src/features/security/security.logic.ts:343
 msgid "ACL \"%s\" grants %s to %s."
@@ -2796,7 +3078,7 @@ msgstr "ACL \"%s\" cấp %s cho %s."
 
 #: src/features/security/security.logic.ts:347
 msgid "Has company_id but no global multi-company rule → records may leak across companies."
-msgstr "Có company_id nhưng không có global rule multi-company → record có thể lộ giữa các công ty."
+msgstr "Có company_id nhưng không có rule toàn cục multi-company → bản ghi có thể lộ giữa các công ty."
 
 #: src/features/security/security.logic.ts:349
 msgid "Field \"%s\" looks sensitive but has no groups=."
@@ -2868,7 +3150,7 @@ msgstr "Quản trị Settings (base.group_system)."
 
 #: src/features/security/security.logic.ts:411
 msgid "Access Rights manager (base.group_erp_manager): can grant itself any group."
-msgstr "Quản lý Access Rights (base.group_erp_manager): tự cấp được mọi group."
+msgstr "Quản lý Access Rights (base.group_erp_manager): tự cấp được mọi nhóm."
 
 #: src/features/security/security.logic.ts:412
 msgid "Has Technical Features (base.group_no_one)."
@@ -2900,7 +3182,7 @@ msgstr "Có %s API key: gọi RPC trực tiếp bằng quyền của user này."
 
 #: src/features/security/security.logic.ts:418
 msgid "User is archived."
-msgstr "User đang bị lưu trữ (archived)."
+msgstr "User đã bị lưu trữ."
 
 #: src/features/security/security.model.ts:24
 #: src/features/security/security.record.ts:75
@@ -2963,10 +3245,6 @@ msgstr "Kiểm tra cấu hình"
 #: src/features/security/security.model.ts:70
 msgid "No field is restricted to groups."
 msgstr "Không field nào giới hạn theo nhóm."
-
-#: src/features/security/security.model.ts:75
-msgid "Field"
-msgstr "Field"
 
 #: src/features/security/security.model.ts:79
 msgid "%s sees this field"
@@ -3033,12 +3311,12 @@ msgid "Only differences"
 msgstr "Chỉ chỗ khác nhau"
 
 #: src/features/security/security.models.ts:106
-msgid "Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
-msgstr "Mỗi ô: %s | %s. ✓ có ACL cấp quyền thao tác đó, · không có. Rules: số record rule giới hạn bản ghi. Bấm một module để mở, bấm một model để xem điều gì quyết định quyền."
+msgid "Each cell: %s | %s. ✓ an ACL grants it, · none does. Rules: how many record rules limit the records. Click a model for why."
+msgstr "Mỗi ô: %s | %s. ✓ có ACL cấp quyền, · không có. Rule: số record rule giới hạn bản ghi. Bấm vào model để xem lý do."
 
 #: src/features/security/security.models.ts:107
-msgid "✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it."
-msgstr "✓ có ACL cấp quyền thao tác đó, · không có; +✓ do group đang thử thêm vào. Rules: số record rule giới hạn bản ghi. Bấm một module để mở, bấm một model để xem điều gì quyết định quyền."
+msgid "✓ an ACL grants it, · none does, +✓ added by the tried groups. Rules: how many record rules limit the records. Click a model for why."
+msgstr "✓ có ACL cấp quyền, · không có, +✓ do nhóm đang thử thêm. Rule: số record rule giới hạn bản ghi. Bấm vào model để xem lý do."
 
 #: src/features/security/security.models.ts:115
 msgid "1 model"
@@ -3073,12 +3351,12 @@ msgid "Not %s."
 msgstr "Không được %s."
 
 #: src/features/security/security.models.ts:129
-msgid "1 record rule decides which records: only the ones it allows."
-msgstr "1 record rule quyết định bản ghi nào: chỉ những bản ghi nó cho phép."
+msgid "1 record rule limits the records."
+msgstr "1 record rule giới hạn các bản ghi."
 
 #: src/features/security/security.models.ts:130
-msgid "%s record rules decide which records: only the ones they allow."
-msgstr "%s record rule quyết định bản ghi nào: chỉ những bản ghi chúng cho phép."
+msgid "%s record rules limit the records."
+msgstr "%s record rule giới hạn các bản ghi."
 
 #: src/features/security/security.models.ts:130
 msgid "No record rule: every record."
@@ -3094,7 +3372,7 @@ msgstr "không có quyền"
 
 #: src/features/security/security.models.ts:137
 msgid "Every user (an ACL without a group)"
-msgstr "Mọi người dùng (ACL không gắn group)"
+msgstr "Mọi user (ACL không gắn nhóm)"
 
 #: src/features/security/security.models.ts:138
 msgid "being tried"
@@ -3110,11 +3388,11 @@ msgstr "ACL này không cấp"
 
 #: src/features/security/security.models.ts:146
 msgid "global: applies to every user"
-msgstr "toàn cục: áp dụng cho mọi người dùng"
+msgstr "toàn cục: áp dụng cho mọi user"
 
 #: src/features/security/security.models.ts:146
 msgid "for the group %s"
-msgstr "cho group %s"
+msgstr "cho nhóm %s"
 
 #: src/features/security/security.models.ts:147
 msgid "Limits the records for %s"
@@ -3134,19 +3412,19 @@ msgstr "Được cấp bởi"
 
 #: src/features/security/security.models.ts:155
 msgid "No ACL of this user's groups grants anything on this model."
-msgstr "Không ACL nào thuộc các group của người dùng này cấp quyền gì trên model này."
+msgstr "Các nhóm của user này không có ACL nào cấp quyền trên model này."
 
 #: src/features/security/security.models.ts:156
 msgid "An operation is allowed when at least one of these ACLs grants it."
-msgstr "Một thao tác được phép khi ít nhất một ACL ở trên cấp quyền cho nó."
+msgstr "Chỉ cần một ACL ở trên cấp quyền là thao tác được phép."
 
 #: src/features/security/security.models.ts:157
 msgid "Record rules: which records"
 msgstr "Record rule: những bản ghi nào"
 
 #: src/features/security/security.models.ts:158
-msgid "For an operation, a record must match every global rule and at least one of the group rules. Click a rule for its domain; the Record view evaluates them on a record."
-msgstr "Với một thao tác, bản ghi phải khớp mọi rule toàn cục và ít nhất một rule theo group. Bấm một rule để xem domain; view Record đánh giá chúng trên một bản ghi cụ thể."
+msgid "A record must match every global rule and at least one group rule. Click a rule for its domain."
+msgstr "Bản ghi phải khớp mọi rule toàn cục và ít nhất một rule nhóm. Bấm vào rule để xem domain."
 
 #: src/features/security/security.record.ts:34
 #: src/features/security/security.record.ts:146
@@ -3164,12 +3442,12 @@ msgid "Odoo says: refused"
 msgstr "Odoo trả lời: bị chặn"
 
 #: src/features/security/security.record.ts:36
-msgid "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): this is the server's answer for you, without the why."
-msgstr "Đọc ACL và record rule cần quyền Access Rights (base.group_erp_manager): đây là câu trả lời của server cho bạn, không có phần vì sao."
+msgid "Only the server's answer for you: the reasons need Access Rights (base.group_erp_manager)."
+msgstr "Chỉ có câu trả lời của server cho bạn: xem lý do cần quyền Access Rights (base.group_erp_manager)."
 
 #: src/features/security/security.record.ts:37
-msgid "Reading the ACLs and record rules needs Access Rights (base.group_erp_manager): nothing can be said for another user."
-msgstr "Đọc ACL và record rule cần quyền Access Rights (base.group_erp_manager): không kết luận được cho user khác."
+msgid "Simulating another user or tried groups needs Access Rights (base.group_erp_manager)."
+msgstr "Mô phỏng user khác hoặc nhóm đang thử cần quyền Access Rights (base.group_erp_manager)."
 
 #: src/features/security/security.record.ts:48
 msgid "From an error"
@@ -3200,8 +3478,8 @@ msgid "no record in the message: debug mode adds them"
 msgstr "thông báo không có bản ghi: chế độ debug sẽ thêm vào"
 
 #: src/features/security/security.record.ts:61
-msgid "No record open: the ACLs only, the rules are checked on a record."
-msgstr "Chưa mở bản ghi: chỉ xét ACL, rule được kiểm tra trên một bản ghi."
+msgid "No record open: ACLs only (rules need a record)."
+msgstr "Chưa mở bản ghi: chỉ xét ACL (rule cần một bản ghi)."
 
 #: src/features/security/security.record.ts:83
 msgid "An ACL of the user's groups grants it"
@@ -3254,7 +3532,7 @@ msgid "the record must match one of the user's"
 msgstr "bản ghi chỉ cần khớp một rule của user"
 
 #: src/features/security/security.record.ts:122
-msgid "No group rule of the user for this operation: no restriction from them"
+msgid "The user has no group rule for this operation: no restriction"
 msgstr "User không có rule nhóm nào cho thao tác này: không bị giới hạn"
 
 #: src/features/security/security.record.ts:123
@@ -3306,7 +3584,7 @@ msgstr "Kết quả"
 
 #: src/features/security/security.record.ts:146
 msgid "Odoo's own answer for you, same companies"
-msgstr "câu trả lời của chính Odoo cho bạn, cùng các công ty"
+msgstr "câu trả lời của Odoo cho bạn, cùng các công ty đang bật"
 
 #: src/features/security/security.record.ts:147
 msgid "The server disagrees with the simulation"
@@ -3426,8 +3704,8 @@ msgid "The user is not in this company"
 msgstr "User không thuộc công ty này"
 
 #: src/features/security/security.system.ts:69
-msgid "Default: the company the user starts in. On: enabled in the page's company switcher (record rules read these)."
-msgstr "Mặc định: công ty user vào khi đăng nhập. Bật: đang bật trong bộ chọn công ty của trang (record rule đọc các công ty này)."
+msgid "Default: the company the user starts in. On: enabled in the page's switcher, read by record rules."
+msgstr "Mặc định: công ty user vào khi đăng nhập. Bật: đang bật trong bộ chọn công ty, record rule đọc theo đây."
 
 #: src/features/security/security.system.ts:71
 msgid "Company"
@@ -3499,7 +3777,7 @@ msgid "Diagnose an access error message"
 msgstr "Chẩn đoán thông báo lỗi phân quyền"
 
 #: src/features/security/security.tpl.html:63
-msgid "Paste the message of the error dialog (debug mode adds the records and the rules)"
+msgid "Paste the error dialog's message (debug mode adds records and rules)"
 msgstr "Dán nội dung hộp thoại lỗi (chế độ debug có thêm bản ghi và rule)"
 
 #: src/features/security/security.tpl.html:63
@@ -3540,15 +3818,15 @@ msgstr "Đang thử: chỉ mô phỏng, chưa ghi gì"
 
 #: src/features/security/security.ui.ts:83
 msgid "cannot evaluate: %s"
-msgstr "không eval được: %s"
+msgstr "không đánh giá được: %s"
 
 #: src/features/security/security.ui.ts:163
 msgid "Log in as %s in an incognito window"
 msgstr "Đăng nhập thành %s trong cửa sổ ẩn danh"
 
 #: src/features/translations/translations.find.ts:28
-msgid "Type a text shown on the page, or pick it: its source, its English text and where to change it are listed."
-msgstr "Gõ một chữ đang hiện trên trang, hoặc chọn trên trang: panel liệt kê nguồn, chữ gốc tiếng Anh và nơi sửa."
+msgid "Type or pick a text on the page to find its source and where to change it."
+msgstr "Gõ hoặc chọn một chữ trên trang để xem nguồn và nơi sửa."
 
 #: src/features/translations/translations.find.ts:35
 msgid "Click a text on the page… (Esc to cancel)"
@@ -3566,7 +3844,7 @@ msgstr "có chứa chữ này"
 
 #: src/features/translations/translations.find.ts:61
 msgid "Selection"
-msgstr "Lựa chọn"
+msgstr "Giá trị selection"
 
 #: src/features/translations/translations.find.ts:61
 msgid "Field label"
@@ -3582,20 +3860,20 @@ msgid "Menu"
 msgstr "Menu"
 
 #: src/features/translations/translations.find.ts:63
-msgid "The menu's name (translated in Odoo, or the module's .po)"
-msgstr "Tên menu (dịch trong Odoo, hoặc file .po của module)"
+msgid "Translate the menu's name in Odoo or in the module's .po"
+msgstr "Dịch tên menu trong Odoo hoặc trong file .po của module"
 
 #: src/features/translations/translations.find.ts:67
-msgid "The action's name (translated in Odoo, or the module's .po)"
-msgstr "Tên action (dịch trong Odoo, hoặc file .po của module)"
+msgid "Translate the action's name in Odoo or in the module's .po"
+msgstr "Dịch tên action trong Odoo hoặc trong file .po của module"
 
 #: src/features/translations/translations.find.ts:69
-msgid "Translations › Record: edit it there"
-msgstr "Translations › Bản ghi: sửa ở đó"
+msgid "Edit it in Translations › Record"
+msgstr "Sửa ở Translations › Record"
 
 #: src/features/translations/translations.find.ts:70
-msgid "Translations › View: edit it there"
-msgstr "Translations › View: sửa ở đó"
+msgid "Edit it in Translations › View"
+msgstr "Sửa ở Translations › View"
 
 #: src/features/translations/translations.find.ts:73
 msgid "Source"
@@ -3610,16 +3888,16 @@ msgid "Where to change it"
 msgstr "Sửa ở đâu"
 
 #: src/features/translations/translations.find.ts:74
-msgid "Not found in %s. It may be a code text with no translation (it then shows in English), data of a record not on this screen, or a text built from several parts: pick a smaller piece."
-msgstr "Không tìm thấy trong %s. Có thể là chữ trong code chưa có bản dịch (khi đó hiện tiếng Anh), dữ liệu của bản ghi không nằm trên màn hình này, hoặc chữ ghép từ nhiều phần: hãy chọn một phần nhỏ hơn."
+msgid "Not found in %s: maybe untranslated code text, another record's data, or joined texts (pick a smaller piece)."
+msgstr "Không tìm thấy trong %s: có thể là chữ trong code chưa dịch, dữ liệu của bản ghi khác, hoặc chữ ghép từ nhiều phần (hãy chọn một phần nhỏ hơn)."
 
 #: src/features/translations/translations.find.ts:75
-msgid "The views' terms were not searched: reading views needs Settings rights (base.group_system)."
-msgstr "Chưa tìm trong chữ của view: đọc view cần quyền Settings (base.group_system)."
+msgid "Views not searched: reading them needs Settings rights (base.group_system)."
+msgstr "Chưa tìm trong view: đọc view cần quyền Settings (base.group_system)."
 
 #: src/features/translations/translations.find.ts:76
-msgid "Your language is English: code texts have no translation to find. Switch language in Translations › Languages to look for one."
-msgstr "Ngôn ngữ của bạn là tiếng Anh: chữ trong code không có bản dịch để tìm. Đổi ngôn ngữ ở Translations › Ngôn ngữ để tìm."
+msgid "Your language is English: code texts have no translation. Switch it in Translations › Languages."
+msgstr "Ngôn ngữ của bạn là tiếng Anh: chữ trong code không có bản dịch. Đổi ở Translations › Ngôn ngữ."
 
 #: src/features/translations/translations.langs.ts:30
 msgid "Working… (loading terms can take a minute)"
@@ -3695,8 +3973,8 @@ msgid "Back to %s"
 msgstr "Trở về %s"
 
 #: src/features/translations/translations.langs.ts:75
-msgid "Users: internal users with this language. Update reloads the terms from the modules (what a module upgrade does)."
-msgstr "Số user: user nội bộ dùng ngôn ngữ này. Cập nhật là nạp lại bản dịch từ các module (giống khi nâng cấp module)."
+msgid "Users: internal users with this language. Update reloads the terms from the modules, like a module upgrade."
+msgstr "Số user: user nội bộ dùng ngôn ngữ này. Cập nhật nạp lại bản dịch từ các module, như khi nâng cấp module."
 
 #: src/features/translations/translations.modules.ts:29
 msgid "Exporting translations needs Settings rights (base.group_system)."
@@ -3752,8 +4030,8 @@ msgid "%s terms"
 msgstr "%s câu"
 
 #: src/features/translations/translations.modules.ts:121
-msgid "Share of the template's terms translated in each language; fuzzy ones count as not translated. Click a module for the missing terms."
-msgstr "Tỉ lệ câu trong file mẫu đã được dịch ở mỗi ngôn ngữ; câu fuzzy tính là chưa dịch. Bấm vào module để xem các câu còn thiếu."
+msgid "Share of template terms translated (fuzzy = not translated). Click a module to list the missing ones."
+msgstr "Tỉ lệ câu của file mẫu đã dịch (fuzzy = chưa dịch). Bấm vào module để xem các câu còn thiếu."
 
 #: src/features/translations/translations.modules.ts:123
 msgid "Template"
@@ -3796,8 +4074,8 @@ msgid "Open a record to see its translations."
 msgstr "Mở một bản ghi để xem bản dịch của nó."
 
 #: src/features/translations/translations.record.ts:19
-msgid "%s has no translated field."
-msgstr "%s không có field nào được dịch."
+msgid "%s has no translatable field."
+msgstr "%s không có field nào dịch được."
 
 #: src/features/translations/translations.record.ts:29
 msgid "Fields translated whole"
@@ -3808,8 +4086,8 @@ msgid "%s · translated term by term (%s terms)"
 msgstr "%s · dịch theo từng cụm (%s cụm)"
 
 #: src/features/translations/translations.record.ts:39
-msgid "✗ not translated: Odoo shows the English value. Click a row to edit its translations."
-msgstr "✗ chưa dịch: Odoo hiện giá trị tiếng Anh. Bấm vào một dòng để sửa bản dịch."
+msgid "✗ not translated: Odoo shows the English value. Click a row to edit."
+msgstr "✗ chưa dịch: Odoo hiện giá trị tiếng Anh. Bấm vào một dòng để sửa."
 
 #: src/features/translations/translations.tab.ts:35
 msgid "Find a Text"
@@ -3914,16 +4192,16 @@ msgid "%s views"
 msgstr "%s view"
 
 #: src/features/translations/translations.view.ts:34
-msgid "✗ not translated: the screen shows the English text. Click a row to edit its translations."
-msgstr "✗ chưa dịch: màn hình hiện chữ tiếng Anh. Bấm vào một dòng để sửa bản dịch."
+msgid "✗ not translated: the screen shows the English text. Click a row to edit."
+msgstr "✗ chưa dịch: màn hình hiện chữ tiếng Anh. Bấm vào một dòng để sửa."
 
 #: src/features/view/view.action.ts:11
 msgid "Action & context"
 msgstr "Action & ngữ cảnh"
 
 #: src/features/view/view.action.ts:17
-msgid "Opened without an action: by the URL of a record. The webclient made one up to show it."
-msgstr "Mở mà không qua action: bằng URL của một bản ghi. Webclient tự tạo một action để hiển thị."
+msgid "Opened by a record's URL, without an action: the webclient made one up."
+msgstr "Mở bằng URL của bản ghi, không qua action: webclient tự tạo một action."
 
 #: src/features/view/view.action.ts:21
 msgid "menu"
@@ -3955,8 +4233,8 @@ msgid "No %s view."
 msgstr "Không có view %s."
 
 #: src/features/view/view.arch.ts:18
-msgid "View #%s with every extension applied, as the webclient receives it (elements of groups you are not in are already removed)."
-msgstr "View #%s sau khi áp mọi extension, đúng như webclient nhận được (phần tử của các nhóm bạn không thuộc đã bị bỏ)."
+msgid "View #%s with all extensions applied, as the webclient gets it: elements of groups you're not in are removed."
+msgstr "View #%s sau khi áp mọi extension, như webclient nhận: đã bỏ phần tử của các nhóm bạn không thuộc."
 
 #: src/features/view/view.composition.ts:18
 msgid "How the view is built"
@@ -4018,7 +4296,7 @@ msgstr "%s di chuyển"
 
 #: src/features/view/view.composition.ts:153
 msgid "%s attributes changed"
-msgstr "%s thuộc tính đổi"
+msgstr "%s thuộc tính bị đổi"
 
 #: src/features/view/view.composition.ts:154
 msgid "%s removed"
@@ -4030,7 +4308,7 @@ msgstr "+%s phần tử"
 
 #: src/features/view/view.composition.ts:157
 msgid "changes nothing visible"
-msgstr "không đổi gì nhìn thấy được"
+msgstr "không đổi gì thấy được"
 
 #: src/features/view/view.field.ts:23
 msgid "One field"
@@ -4041,16 +4319,16 @@ msgid "Picking… (Esc to cancel)"
 msgstr "Đang chọn… (Esc để huỷ)"
 
 #: src/features/view/view.field.ts:42
-msgid "Type a field, pick it on the page or in the list below: its story through the views shows here."
-msgstr "Gõ tên field, chọn trên trang hoặc trong danh sách bên dưới: câu chuyện của field qua các view sẽ hiện ở đây."
+msgid "Type a field name, or pick one on the page or in the list below."
+msgstr "Gõ tên field, hoặc chọn trên trang hay trong danh sách bên dưới."
 
 #: src/features/view/view.field.ts:75
 msgid "not a field of this model"
 msgstr "không phải field của model này"
 
 #: src/features/view/view.field.ts:82
-msgid "The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible."
-msgstr "Field không tự ẩn nhưng không có trên màn hình: nằm trong tab notebook khác hoặc node cha (group/page/div) bị invisible."
+msgid "Not on screen: it is on another notebook page, or a parent (group/page/div) is invisible."
+msgstr "Không có trên màn hình: nằm ở tab notebook khác, hoặc node cha (group/page/div) bị invisible."
 
 #: src/features/view/view.field.ts:85
 msgid "Not on this form."
@@ -4069,8 +4347,8 @@ msgid "on the field"
 msgstr "trên field"
 
 #: src/features/view/view.field.ts:120
-msgid "Groups set by the views: unknown without Settings rights (base.group_system)."
-msgstr "Nhóm do các view đặt: không biết được nếu thiếu quyền Settings (base.group_system)."
+msgid "Needs Settings rights (base.group_system) to see the groups set by the views."
+msgstr "Cần quyền Settings (base.group_system) để xem nhóm do các view đặt."
 
 #: src/features/view/view.field.ts:121
 msgid "None: every user who sees the view sees it."

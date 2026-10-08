@@ -16,7 +16,7 @@ export function recordView(body: HTMLElement, c: TranslationsCtx) {
   if (!model || !resId) { body.append(note(_t('Open a record to see its translations.'))); return; }
   fill(body, async () => {
     const [langs, fields] = await Promise.all([c.columns, translatableFields(model)]);
-    if (!fields.length) return note(_t('%s has no translated field.', model));
+    if (!fields.length) return note(_t('%s has no translatable field.', model));
     const all = await Promise.all(fields.map(async (f) => ({ f, ...(await fieldTranslations(model, resId, f.name, langs)) })));
     const save = (field: string, byTerm: boolean) => async (source: string, changed: Map<string, string>) => {
       const translations = Object.fromEntries([...changed].map(([l, v]) => [l, byTerm ? { [source]: v } : v || false]));
@@ -36,7 +36,7 @@ export function recordView(body: HTMLElement, c: TranslationsCtx) {
     }
     const total = sections.reduce((n, s) => n + s.rows.length, 0);
     const table = matrix(`${model} #${resId}`, langs, sections, -1, true);
-    const legend = note(_t('✗ not translated: Odoo shows the English value. Click a row to edit its translations.'));
+    const legend = note(_t('✗ not translated: Odoo shows the English value. Click a row to edit.'));
     legend.classList.add('legend');
     return frag(tableFilter(table, total, ['%s texts', '%s of %s texts']), table, legend);
   });

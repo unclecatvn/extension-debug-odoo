@@ -56,7 +56,7 @@ export function securityBar(parent: HTMLElement, c: SecurityCtx) {
   const arch = tpl('archived', { label: HTMLLabelElement, box: HTMLInputElement }).refs;
   arch.box.checked = archived.value;
   arch.box.addEventListener('change', () => archived.set(arch.box.checked));
-  arch.label.title = _t('Archived users too, in both searches');
+  arch.label.title = _t('Include archived users in both searches');
   fact('').append(arch.label);
 
   parent.append(r.bar);
@@ -98,7 +98,7 @@ function companies(value: HTMLElement, sim: Simulated, c: SecurityCtx) {
     b.setAttribute('aria-pressed', String(on.has(id)));
     value.append(b);
   }
-  const note = sim.pageCompanies ? _t('as in the page\'s switcher') : !sim.isMe && !c.s.companies ? _t('their default company: their switcher can\'t be seen from here') : '';
+  const note = sim.pageCompanies ? _t('as in the page\'s switcher') : !sim.isMe && !c.s.companies ? _t('their default company (their switcher isn\'t visible here)') : '';
   if (note) { const n = box(note); n.className = 'muted'; value.append(n); }
 }
 
@@ -106,7 +106,7 @@ async function tryBar(sim: Simulated, c: SecurityCtx, out: HTMLElement) {
   const graph = await groupGraph(c.a);
   const r = tpl('trybar', { text: HTMLSpanElement, apply: HTMLButtonElement, discard: HTMLButtonElement }).refs;
   const names = [...sim.tried].map((g) => graph.name(g)).join(', ');
-  r.text.textContent = _t('Trying %s: every view is simulated with it, nothing is written.', names);
+  r.text.textContent = _t('Trying %s in every view: simulated, nothing is written.', names);
   r.apply.addEventListener('click', () => {
     if (confirm(_t('Add %s to %s?', names, sim.user.name))) {
       afterWrite(c, sim.user.id, () => writeGroups(sim.user.id, [...sim.tried].map((g) => [4, g]), c.a)).catch((e: unknown) => errBoxTo(out, e));
@@ -128,7 +128,7 @@ function appliedLine(c: SecurityCtx, sim: Simulated) {
     const sym = (v: boolean | null | undefined) => (v === true ? '✓' : v === false ? '✗' : '?');
     const changes = MODES.flatMap((m, i) => (before.verdicts[i] !== now[i] ? [`${modeLabel(m)} ${sym(before.verdicts[i])} → ${sym(now[i])}`] : []));
     r.text.textContent = changes.length ? _t('Applied on %s: %s', `${before.model}${before.resId ? ` #${before.resId}` : ''}`, changes.join(' · '))
-      : _t('Applied: no operation changed on this record.');
+      : _t('Applied: access to this record didn\'t change.');
   });
   r.close.addEventListener('click', () => r.text.parentElement!.remove());
   return r.text.parentElement!;

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { jsonCount, jsonEntries, jsonKind, jsonScalar } from '../../../src/ui/json.ts';
+import { jsonCount, jsonEntries, jsonKind, jsonScalar, jsonTokens } from '../../../src/ui/json.ts';
 
 test('kinds, scalars, counts, entries', () => {
   assert.deepEqual([null, [1], {}, 'a', 1, false, undefined].map(jsonKind), ['null', 'array', 'object', 'string', 'number', 'boolean', 'other']);
@@ -32,3 +32,14 @@ test('a folded object previews what tells it apart', async () => {
   assert.equal(long.length, 20);
   assert.ok(long.startsWith('note: "x') && long.endsWith('…'));
 });
+
+test('JSON text coloured: keys apart from string values, the whole text covered, half-typed text too', () => {
+  const text = '{\n  "model": "res.partner", "ids": [7, -1.5e2], "ok": true, "x": null, "half": "unclo';
+  const tokens = jsonTokens(text);
+  assert.equal(tokens.map(([, t]) => t).join(''), text);
+  assert.deepEqual(tokens.filter(([type]) => type === 'fn').map(([, t]) => t), ['"model"', '"ids"', '"ok"', '"x"', '"half"']);
+  assert.deepEqual(tokens.filter(([type]) => type === 'string').map(([, t]) => t), ['"res.partner"', '"unclo']);
+  assert.deepEqual(tokens.filter(([type]) => type === 'number').map(([, t]) => t), ['7', '-1.5e2']);
+  assert.deepEqual(tokens.filter(([type]) => type === 'kw').map(([, t]) => t), ['true', 'null']);
+});
+

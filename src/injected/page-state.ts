@@ -8,6 +8,8 @@ export interface PageState {
   origin: string;
   /** performance.timeOrigin: changes on every page load (not on Odoo's pushState navigation); the panel's cache lives that long */
   loadedAt: number;
+  /** Wall time when this snapshot was captured, before asynchronous delivery to a detached panel. */
+  observedAt?: number;
   odoo: boolean;
   debug: string;
   model?: string | null;
@@ -23,7 +25,7 @@ export interface PageState {
 
 export function pageState(): PageState {
   const odoo = window.odoo;
-  const base = { url: location.href, origin: location.origin, loadedAt: performance.timeOrigin, odoo: !!odoo, debug: odoo?.debug || '' };
+  const base = { url: location.href, origin: location.origin, loadedAt: performance.timeOrigin, observedAt: Date.now(), odoo: !!odoo, debug: odoo?.debug || '' };
   const c = odoo?.__WOWL_DEBUG__?.root?.env?.services?.action?.currentController;
   if (!c) {
     // Fallback when the webclient internals aren't reachable: /odoo/<...>/<model.name>/<id>

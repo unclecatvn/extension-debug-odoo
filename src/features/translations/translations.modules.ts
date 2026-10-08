@@ -118,7 +118,7 @@ function coverage(files: { name: string; data: Uint8Array }[], modules: string[]
       detail: () => missing(m, langs),
     };
   });
-  const legend = note(_t('Share of the template\'s terms translated in each language; fuzzy ones count as not translated. Click a module for the missing terms.'));
+  const legend = note(_t('Share of template terms translated (fuzzy = not translated). Click a module to list the missing ones.'));
   legend.classList.add('legend');
   return frag(matrix(_t('Module'), [_t('Template'), ...langs], [{ rows }], -1, true), legend);
 }

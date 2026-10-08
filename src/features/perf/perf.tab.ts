@@ -20,10 +20,10 @@ import { filterMatrix, matrix, type MxRow } from '../../ui/matrix.ts';
 import { frag, note } from '../../ui/parts.ts';
 import type { TabModule } from '../registry.ts';
 import {
-  allowProfiling, deleteProfiles, NotAllowedError, enabledUntil, profileCall, profileIdsOf, profilingState, readProfiles, readSessions, setProfiling, type Collector,
+  allowProfiling, deleteProfiles, NotAllowedError, enabledUntil, PROFILE_LIMIT, profileCall, profileIdsOf, profilingState, readProfiles, readSessions, setProfiling, type Collector,
 } from './perf.data.ts';
 import { pageGet } from './perf.injected.ts';
-import { isAsset, isOwnRequest, isSessionOf, ms, sessionLabel, type ProfileRow } from './perf.logic.ts';
+import { groupProfiles, isAsset, isOwnRequest, isSessionOf, ms, requestName, sessionLabel, type ProfileRow } from './perf.logic.ts';
 import { MANY_SQL, nameNodes, requestDetail, type RequestEnv } from './perf.request.ts';
 import { collectors, forgetAll, keepCollectors, stateOf, type PerfState } from './perf.state.ts';
 import { box, button, row, select, text, tpl } from './perf.ui.ts';
@@ -46,7 +46,7 @@ export const perfTab: TabModule = {
 
 async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: CallToProfile | null, redraw: () => void): Promise<Node> {
   const info = await sessionInfo();
-  if (!info.is_system) return note(_t('The Perf tab needs Settings rights (base.group_system): the profiles are ir.profile records.'));
+  if (!info.is_system) return note(_t('The Perf tab needs Settings rights (base.group_system) to read ir.profile.'));
   const a = odoo.adapter;
   const [recording, until] = await Promise.all([profilingState(), enabledUntil(a).catch(() => null)]);
   const out = box();
@@ -74,7 +74,8 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
   if (recording && !sessions.some((x) => x.session === recording)) options.unshift([recording, `● ${sessionLabel(recording, today)} (0)`]);
   options.push(['all', _t('Every session')]);
 
-  const read = chosen ? (await readProfiles(a, chosen === 'all' ? null : chosen)).filter((r) => !isOwnRequest(r.name)) : [];
+  const loaded = chosen ? await readProfiles(a, chosen === 'all' ? null : chosen) : [];
+  const read = loaded.filter((r) => !isOwnRequest(r.name));
   // the slowest first; static files (scripts, images…: nothing to optimise in a module) only when asked
   const assets = read.filter((r) => isAsset(r.name)).length;
   const rows = (s.assets ? read : read.filter((r) => !isAsset(r.name))).sort((x, y) => y.duration - x.duration);
@@ -83,9 +84,15 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
 
   const { bar } = tpl('toolbar', { bar: HTMLDivElement }).refs;
   const count = text('', 'muted');
-  if (options.length > 1) bar.append(select(options, chosen ?? 'all', (v) => { s.session = v; s.selected = null; redraw(); }, _t('Profile session')));
+  if (options.length > 1) bar.append(select(options, chosen ?? 'all', (v) => { s.session = v; s.selected = null; s.group = null; redraw(); }, _t('Profile session')));
   const f = filterBox([], _t('Filter requests…'));
-  bar.append(f.input, count, button('⟳', redraw, 'chip', _t('Read the profiles again')));
+  const again = button('⟳', redraw, 'chip', _t('Read the profiles again'));
+  again.classList.add('reload'); // an icon (panel.css)
+  bar.append(f.input, count, again);
+  const grouped = button(_t('Group by method'), () => { s.grouped = !s.grouped; redraw(); }, 'chip',
+    _t('Group requests by model and method, or by route when there is none'));
+  grouped.setAttribute('aria-pressed', String(s.grouped));
+  bar.append(grouped);
   if (assets) {
     const toggle = button(_t('Static Files (%s)', assets), () => { s.assets = !s.assets; redraw(); }, 'chip', _t('Scripts, images, manifest…: nothing to optimise in a module'));
     toggle.setAttribute('aria-pressed', String(s.assets));
@@ -94,8 +101,8 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
 
   if (!rows.length) {
     out.append(bar, note(recording
-      ? _t('Recording: do the slow action on the Odoo page, then ⟳. Every request of this session writes a profile.')
-      : chosen ? _t('No request in this session.') : _t('No profile yet: Start, use the Odoo page, then come back here.')));
+      ? _t('Recording: do the slow action on the Odoo page, then ⟳.')
+      : chosen ? _t('No request in this session.') : _t('No profile yet: Start Profiling, use the Odoo page, then come back.')));
     return frag(out, cleanup(chosen, info.name, rows, s, redraw));
   }
 
@@ -103,7 +110,7 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
   const md = tpl('perf-md', { root: HTMLDivElement, list: HTMLDivElement, pane: HTMLElement }).refs;
   md.pane.append(note(_t('Click a request to see where its time goes.')));
   const cpu = rows.some((r) => r.cpu_duration !== undefined);
-  const tableRows: MxRow[] = rows.map((r) => ({
+  const tableRows = (requests: readonly ProfileRow[]): MxRow[] => requests.map((r) => ({
     id: String(r.id),
     label: [...(s.baseline === r.id ? [pill(_t('baseline'), 'accent')] : []), ...nameNodes(r.name)],
     sub: `#${r.id}${chosen === 'all' ? ` · ${r.session}` : ''}`,
@@ -114,13 +121,45 @@ async function build(page: PageState, odoo: OdooContext, s: PerfState, handed: C
     open: r.id === s.selected,
     detail: () => { s.selected = r.id; return requestDetail(r, env); },
   }));
-  const table = matrix(_t('Request'), ['SQL', _t('Time'), ...(cpu ? ['CPU'] : []), _t('At')], [{ rows: tableRows }], -1, false, md.pane);
-  md.list.append(table);
-  const apply = () => { count.textContent = _t('%s requests', filterMatrix(table, f.input.value)); };
-  f.input.addEventListener('input', apply);
-  apply();
+  const heads = ['SQL', _t('Time'), ...(cpu ? ['CPU'] : []), _t('At')];
+  if (s.grouped) {
+    const apply = () => {
+      const q = f.input.value.trim().toLowerCase();
+      const matches = rows.filter((r) => `${r.name} ${r.id}`.toLowerCase().includes(q));
+      const groups = groupProfiles(matches);
+      count.textContent = _t('%s groups · %s requests', groups.length, matches.length);
+      md.pane.replaceChildren(note(_t('Open a group, then a request to inspect its SQL, baseline and flame graph.')));
+      md.list.replaceChildren(matrix(_t('Method / route'), [_t('Calls'), _t('Sum of times'), _t('Median'), 'SQL'], [{ rows: groups.map((g): MxRow => ({
+        id: g.key,
+        ...groupLabel(g.name),
+        cells: [String(g.count), ms(g.duration), ms(g.median), String(g.sql)],
+        open: s.group === g.key || (s.group === null && g.rows.some((r) => r.id === s.selected)),
+        detail: () => {
+          s.group = g.key;
+          return box(row(...nameNodes(g.name), text(_t('%s requests', g.count), 'muted')),
+            matrix(_t('Request'), heads, [{ rows: tableRows(g.rows) }]));
+        },
+      })) }], -1, false, md.pane));
+    };
+    f.input.addEventListener('input', apply);
+    apply();
+  } else {
+    const table = matrix(_t('Request'), heads, [{ rows: tableRows(rows) }], -1, false, md.pane);
+    md.list.append(table);
+    const apply = () => { count.textContent = _t('%s requests', filterMatrix(table, f.input.value)); };
+    f.input.addEventListener('input', apply);
+    apply();
+  }
   out.append(bar, md.root);
+  if (s.grouped) out.append(note(_t('%s latest profiles loaded (limit %s), without panel requests or hidden static files. Sum of times is not page load time.', loaded.length, PROFILE_LIMIT)),
+    note(_t('Routes with no model and method in their URL are grouped by path.')));
   return frag(out, cleanup(chosen, info.name, rows, s, redraw));
+}
+
+/** Five aggregate columns leave little room beside the page: keep the model below the method, not competing for it. */
+function groupLabel(name: string): Pick<MxRow, 'label' | 'sub'> {
+  const n = requestName(name);
+  return 'method' in n ? { label: [text(n.method, 'name')], sub: n.model } : { label: nameNodes(name) };
 }
 
 /** On / off, what it collects, until when the database allows it. */
@@ -157,12 +196,12 @@ function recorder(recording: string | null, until: string | null, redraw: () => 
   };
   r.collectors.append(text(_t('Collect:'), 'muted'),
     chip('sql', 'SQL', _t('Every query, its time and stack: always')),
-    chip('traces_async', _t('Python stacks'), _t('The Python stack sampled every few ms: the flame graph')),
+    chip('traces_async', _t('Python stacks'), _t('Samples the Python stack every few ms, for the flame graph')),
     chip('qweb', 'QWeb', _t('The QWeb directives rendered and their time (reports, website pages)')));
   r.note.textContent = [
-    recording ? _t('Every request of this session writes one profile (ir.profile); the panel\'s own are left out of the list.')
-      : _t('Odoo\'s own profiler: SQL and Python of every request of this session, read back here (Settings rights).'),
-    until ? _t('Allowed on this database until %s.', until) : _t('Not allowed on this database yet: Start asks for how long.'),
+    recording ? _t('Each request of this session writes an ir.profile; the panel\'s own are not listed.')
+      : _t('Odoo\'s built-in profiler: the SQL and Python of each request in this session (Settings rights).'),
+    until ? _t('Allowed on this database until %s.', until) : _t('Not allowed on this database yet: Start Profiling asks for how long.'),
   ].join(' ');
   return r.root;
 }
@@ -191,6 +230,7 @@ async function profileHanded(c: CallToProfile, s: PerfState, slot: HTMLElement, 
     if (!r.row) throw new Error(_t('Sent (HTTP %s), but no profile of it was found.', r.status));
     s.session = r.session;
     s.selected = r.row.id;
+    s.group = null;
     s.profiled = { label: c.label, text: _t('HTTP %s · %s · %s queries · opened below', r.status, ms(r.row.duration), r.row.sql_count) };
     slot.replaceChildren(profiledLine(s.profiled.label, s.profiled.text));
   };
@@ -211,7 +251,7 @@ function cleanup(chosen: string | null, userName: string, rows: readonly Profile
   const del = (label: string, domain: Json[]) => async () => {
     const ids = await profileIdsOf(domain);
     if (!ids.length) { out.replaceChildren(note(_t('Nothing to delete.'))); return; }
-    if (!confirm(_t('%s: delete %s profiles (ir.profile)? The panel\'s own reads, not listed, are among them.', label, ids.length))) return;
+    if (!confirm(_t('%s: delete %s profiles (ir.profile)? This includes the panel\'s own, which are not listed.', label, ids.length))) return;
     await deleteProfiles(ids);
     if (s.selected && ids.includes(s.selected)) s.selected = null;
     if (s.baseline && ids.includes(s.baseline)) s.baseline = null;

@@ -11,13 +11,16 @@ import type { OdooContext } from '../../odoo/detect.ts';
 import { sessionInfo } from '../../odoo/reads.ts';
 import { errBox, loading } from '../../ui/components.ts';
 import { segmented } from '../../ui/parts.ts';
-import type { TabModule } from '../registry.ts';
+import type { PanelContext, TabModule } from '../registry.ts';
 import { runJs, runPython, screenOf, softReload, type Screen } from './code.data.ts';
 import { codeEditor, replaceRange, smartKey, type Editor } from './code.editor.ts';
+import { historyPane } from './code.history.ts';
+import { captureRun, historyScope, restoreMode, sameRunPage } from './code.history.logic.ts';
+import type { RunResult } from './code.injected.ts';
 import { callStats, codeKey, type Lang, type RunMode } from './code.logic.ts';
 import { resultView, type Fmt } from './code.result.ts';
 import { guide, saveSnippet, snippetList, type Snippet } from './code.snippets.ts';
-import { forgetRun, keepAutoRefresh, keepLang, last, loadCode, saveCode } from './code.state.ts';
+import { forgetRun, history, keepAutoRefresh, keepLang, last, loadCode, saveCode, selectScope } from './code.state.ts';
 import { suggester } from './code.suggest.ts';
 import { button, check, text, tpl } from './code.ui.ts';
 
@@ -31,18 +34,29 @@ const MODES: Record<Lang, [RunMode, string][]> = {
 };
 
 /** The console on screen (a run that ends after a rebuild is shown in the new one). */
-let view: { output: HTMLElement; run: HTMLButtonElement; ed: Editor; fmt: Fmt } | null = null;
+let view: { output: HTMLElement; run: HTMLButtonElement; ed: Editor; scope: string; drawAside(): void } | null = null;
+let panel: PanelContext | null = null;
+let renderVersion = 0;
+let paintVersion = 0;
 
 export const codeTab: TabModule = {
+  mount(_section, context) { panel = context; },
   render(section, page, odoo) {
+    const version = ++renderVersion;
+    view = null;
     section.replaceChildren(loading());
-    void build(section, page, odoo).catch((e: unknown) => section.replaceChildren(errBox(e)));
+    void build(section, page, odoo, version).catch((e: unknown) => {
+      if (version === renderVersion) section.replaceChildren(errBox(e));
+    });
   },
   reset: forgetRun,
 };
 
-async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
+async function build(section: HTMLElement, page: PageState, odoo: OdooContext, version: number) {
   const info = await sessionInfo();
+  if (version !== renderVersion) return;
+  const scope = historyScope(page.origin, info.db, info.uid);
+  selectScope(scope);
   const cloned = tpl('console', { root: HTMLDivElement, bar: HTMLDivElement, acts: HTMLDivElement, screen: HTMLDivElement, editor: HTMLDivElement, guide: HTMLDivElement, output: HTMLDivElement });
   const r = cloned.refs;
   const lang = () => last.lang;
@@ -56,23 +70,25 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
   const who = text(`${info.username || info.name} · uid ${info.uid}`, 'muted who', _t('Runs as %s (uid %s): their access rights, record rules and companies apply.', info.username || info.name, info.uid));
   const drawScreen = () => {
     const parts: (Node | string)[] = [text(_t('Runs on:'), '')];
-    if (!screen.model) parts.push(text(_t('no model on this screen: record, records and model are empty'), 'muted'));
+    if (!screen.model) parts.push(text(_t('no model on this screen'), 'muted'));
     else {
       parts.push(text(screen.model, 'mono'));
       parts.push(text(screen.resId ? _t('record #%s', screen.resId) : _t('no record opened'), 'muted'));
       if (screen.ids.length) parts.push(text(_t('%s selected', screen.ids.length), 'muted', screen.ids.slice(0, 40).join(', ')));
     }
-    parts.push(button('⟳', () => void readScreen(), 'chip', _t('Read the selection again')));
+    const again = button('⟳', () => { void readScreen().catch((error: unknown) => r.screen.append(errBox(error))); }, 'chip', _t('Read the selection again'));
+    again.classList.add('reload'); // an icon (panel.css)
+    parts.push(again);
     r.screen.replaceChildren(...parts, who);
   };
-  const readScreen = async () => { screen = await screenOf(page.model, page.resId); drawScreen(); return screen; };
+  const readScreen = async () => { screen = await screenOf(page); drawScreen(); return screen; };
   drawScreen();
-  void readScreen();
+  void readScreen().catch(() => {}); // a failed initial selection read is reported if the user runs
 
   // ---------- the bar ----------
   const run = button(`▶ ${_t('Run')}`, () => void go(), 'btn', _t('Run (⌘/Ctrl+Enter)'));
   run.classList.add('primary');
-  const refreshBox = check(_t('Auto Refresh'), last.autoRefresh, keepAutoRefresh, _t('After a run that wrote, reload the data of the view on screen (Odoo\'s soft_reload), without reloading the page'));
+  const refreshBox = check(_t('Auto Refresh'), last.autoRefresh, keepAutoRefresh, _t('After a run that writes, reload the view\'s data (soft_reload), not the whole page'));
   const modeSlot = text('');
   const drawMode = () => {
     const l = lang();
@@ -84,7 +100,7 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
     r.root.classList.toggle('writes-on', writes);
     refreshBox.hidden = !writes;
   };
-  const langSeg = segmented<Lang>([['js', 'JavaScript'], ['python', 'Python']], lang(), (l) => {
+  const changeLanguage = (l: Lang) => {
     saveCode(key(), ed.ta.value);
     keepLang(l);
     ed.ta.value = loadCode(key()) ?? '';
@@ -92,14 +108,23 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
     ed.setLang(l);
     drawMode();
     drawAside();
-  });
-  const asideBtn = (which: 'guide' | 'snippets', label: string, hint: string) => {
-    const b = button(label, () => { last.aside = last.aside === which ? null : which; drawAside(); }, 'chip', hint);
+    void paint();
+  };
+  const langSeg = text('');
+  const drawLanguage = () => langSeg.replaceChildren(segmented<Lang>([['js', 'JavaScript'], ['python', 'Python']], lang(), changeLanguage));
+  drawLanguage();
+  // an icon, and its name when the panel has room for it (panel.css: .aside-btn); the hint names it either way
+  const asideBtn = (which: 'guide' | 'snippets' | 'history', label: string, hint: string) => {
+    const b = button('', () => { last.aside = last.aside === which ? null : which; drawAside(); }, 'chip', hint);
+    b.classList.add('aside-btn');
+    b.dataset.aside = which;
+    b.append(text(label));
     return b;
   };
-  const snippetsBtn = asideBtn('snippets', _t('Snippets'), _t('Ready-made snippets, and the ones you saved for this Odoo'));
+  const snippetsBtn = asideBtn('snippets', _t('Snippets'), _t('Built-in snippets and the ones you saved for this Odoo'));
+  const historyBtn = asideBtn('history', _t('History'), _t('Inspect recent runs, restore code, or save a run as a snippet'));
   const guideBtn = asideBtn('guide', '?', _t('Guide: available variables, recordset API, examples'));
-  r.acts.append(snippetsBtn, guideBtn, run); // what to do: Run last, where the eye ends
+  r.acts.append(snippetsBtn, historyBtn, guideBtn, run); // what to do: Run last, where the eye ends
   langSeg.classList.add('console-lang');
   modeSlot.classList.add('console-mode');
   r.acts.before(langSeg, modeSlot, refreshBox); // how it runs (narrow panel: language beside the actions, mode below; panel.css)
@@ -109,8 +134,26 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
   function drawAside() {
     snippetsBtn.setAttribute('aria-pressed', String(last.aside === 'snippets'));
     guideBtn.setAttribute('aria-pressed', String(last.aside === 'guide'));
+    historyBtn.setAttribute('aria-pressed', String(last.aside === 'history'));
     r.guide.hidden = !last.aside;
-    if (last.aside === 'guide') r.guide.replaceChildren(guide(lang()));
+    if (last.aside === 'history') {
+      r.guide.replaceChildren(historyPane(history.list(scope), last.historyId, {
+        select: (id) => { last.historyId = id; drawAside(); },
+        restore: (entry) => {
+          last.mode[entry.lang] = restoreMode(entry.lang, entry.mode);
+          changeLanguage(entry.lang);
+          drawLanguage();
+          replaceRange(ed.ta, 0, ed.ta.value.length, entry.code);
+          ed.ta.setSelectionRange(entry.code.length, entry.code.length);
+          void paint();
+        },
+        save: (entry) => {
+          const name = prompt(_t('Name of the snippet:'))?.trim();
+          if (name) saveSnippet(page.origin, { name, lang: entry.lang, code: entry.code });
+        },
+        clear: () => { history.clear(scope); last.historyId = null; drawAside(); },
+      }));
+    } else if (last.aside === 'guide') r.guide.replaceChildren(guide(lang()));
     else if (last.aside === 'snippets') {
       r.guide.replaceChildren(snippetList(page.origin, lang(), (s: Snippet) => {
         replaceRange(ed.ta, 0, ed.ta.value.length, s.code); // one undo step: Ctrl+Z brings the code back
@@ -144,47 +187,73 @@ async function build(section: HTMLElement, page: PageState, odoo: OdooContext) {
 
   // ---------- running ----------
   async function go() {
-    if (last.running) return;
-    const l = lang();
-    const mode = last.mode[l];
-    saveCode(key(), ed.ta.value);
-    Object.assign(last, { running: true, result: null, error: null });
+    if (last.running || version !== renderVersion) return;
+    const onOriginalPage = () => sameRunPage(page, panel?.state() ?? page);
+    // Capture before readScreen(): typing, a language switch or a restored entry during that await must not change
+    // what actually runs. The screen's selected IDs are copied as soon as its asynchronous read finishes.
+    let snapshot = captureRun({ scope, code: ed.ta.value, lang: lang(), mode: last.mode[lang()], screen, fmt, startedAt: Date.now() });
+    const { code, lang: l, mode } = snapshot;
+    const autoRefresh = last.autoRefresh;
+    const started = performance.now();
+    saveCode(key(), code);
+    Object.assign(last, { running: true, runningScope: scope, result: null, error: null });
     void paint();
+    let result: RunResult | null = null;
+    let error: unknown = null;
+    let refreshed: { ok: true } | { error: string } | null = null;
     try {
       const sc = await readScreen();
+      snapshot = captureRun({ ...snapshot, screen: sc });
+      if (version !== renderVersion || last.scope !== scope || !onOriginalPage()) throw new Error(_t('The screen changed before the run. Run again.'));
       if (l === 'python' && !info.is_system) throw new Error(_t('Python runs as a server action: it needs Settings rights (base.group_system).'));
-      const res = l === 'python' ? await runPython(ed.ta.value, mode, sc)
-        : await runJs(ed.ta.value, mode, odoo.adapter, sc, info.user_context ?? {}, info.uid);
-      last.result = { r: res, lang: l, refreshed: null };
-      const wrote = mode === 'write' && (l === 'python' ? res.ok : callStats(res.calls).written > 0);
-      if (wrote && last.autoRefresh) {
+      result = l === 'python' ? await runPython(code, mode, sc, page)
+        : await runJs(code, mode, odoo.adapter, sc, info.user_context ?? {}, info.uid, page);
+      const finished: NonNullable<typeof last.result> = { r: result, lang: l, code, fmt, refreshed };
+      if (last.scope === scope) last.result = finished;
+      const wrote = mode === 'write' && (l === 'python' ? result.ok : callStats(result.calls).written > 0);
+      // A completed run belongs to its original screen; do not refresh a different screen reached while it ran.
+      if (wrote && autoRefresh && version === renderVersion && last.scope === scope && onOriginalPage()) {
         void paint();
-        last.result.refreshed = await softReload();
+        refreshed = await softReload(page);
+        finished.refreshed = refreshed;
       }
     } catch (e) {
-      last.error = e;
+      error = e;
+      if (last.scope === scope) last.error = e;
     } finally {
+      history.add({ ...snapshot, completedAt: Date.now(), durationMs: result?.ms ?? Math.round(performance.now() - started),
+        outcome: result ? { result } : { error }, refreshed });
       last.running = false;
+      last.runningScope = null;
+      view?.drawAside();
       void paint();
     }
   }
 
   r.output.setAttribute('aria-live', 'polite');
   section.replaceChildren(cloned.root);
-  view = { output: r.output, run, ed, fmt };
+  view = { output: r.output, run, ed, scope, drawAside };
   void paint(); // the last result, when the tab was rebuilt after (or during) a run
 }
 
 /** Shows `last` in the console on screen: Running…, then the result. */
 async function paint() {
   const v = view;
-  if (!v) return;
+  const revision = ++paintVersion;
+  if (!v || v.scope !== last.scope) return;
   v.run.disabled = last.running;
   if (last.error) { v.output.replaceChildren(errBox(last.error)); return; }
-  if (!last.result) { v.output.replaceChildren(...(last.running ? [loading()] : [])); return; }
-  const { r, lang, refreshed } = last.result;
-  const parts = await resultView(r, v.fmt, { lang, refreshed, goToLine: (n) => goToLine(v.ed, n) });
-  if (view === v) v.output.replaceChildren(...parts);
+  const result = last.result;
+  if (!result) { v.output.replaceChildren(...(last.running && last.runningScope === v.scope ? [loading()] : [])); return; }
+  const { r, lang, refreshed, code, fmt } = result;
+  const matchesEditor = () => v.ed.lang === lang && v.ed.ta.value === code;
+  try {
+    const parts = await resultView(r, fmt, { lang, refreshed,
+      ...(matchesEditor() ? { goToLine: (n: number) => { if (matchesEditor()) goToLine(v.ed, n); } } : {}) });
+    if (view === v && revision === paintVersion && last.result === result) v.output.replaceChildren(...parts);
+  } catch (error) {
+    if (view === v && revision === paintVersion && last.result === result) v.output.replaceChildren(errBox(error));
+  }
 }
 
 /** Selects line `n` (1-based) of the editor. */

@@ -21,8 +21,8 @@ async function guardPending(a: OdooAdapter) {
   if (!waiting.length) return;
   const list = waiting.map((m) => `${m.name} (${m.state})`).join(', ');
   throw new Error(a.modules.refusesWhilePending
-    ? _t('Modules are waiting for an operation: %s. Odoo refuses another one until they are applied or cancelled (Pending).', list)
-    : _t('Modules are waiting for an operation: %s. Odoo %s would run them along with this one: apply or cancel them first (Pending).', list, a.major));
+    ? _t('Modules are waiting: %s. Odoo refuses a new operation until they are applied or cancelled (Pending).', list)
+    : _t('Modules are waiting: %s. Odoo %s would run them with this one: apply or cancel them first (Pending).', list, a.major));
 }
 
 /** Runs `fn` with the log, a failure ending its current step; the buttons `lock` are disabled meanwhile. */

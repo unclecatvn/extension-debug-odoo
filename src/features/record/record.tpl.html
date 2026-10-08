@@ -37,3 +37,51 @@
 <template data-tpl="no-value">
   <span class="grow"></span>
 </template>
+
+<!-- Read-only saved-record comparison (record.comparison.ts; styles: panel.css, "Record › Compare"). The actions the
+     screen allows (list / kanban: Compare selected; form: Compare with pinned, Pin current record), the pin as a facet,
+     what it does until a first comparison, then the field × record table edge to edge. -->
+<template data-tpl="comparison">
+  <div class="compare">
+    <div class="toolbar compare-bar pad-x">
+      <button type="button" class="btn primary" data-ref="selected" data-i18n="text">Compare selected</button>
+      <button type="button" class="btn primary" data-ref="compare" data-i18n="text">Compare with pinned</button>
+      <button type="button" class="chip" data-ref="pin" data-i18n="text">Pin current record</button>
+      <span class="facet" data-ref="pinbox"><span data-ref="pinned"></span><button type="button" class="facet-x" data-ref="clear" title="Clear pin" aria-label="Clear pin" data-i18n="title,aria-label">×</button></span>
+    </div>
+    <p class="note compare-intro pad-x" data-i18n="text">Select 2–5 saved records in a list or kanban, or pin one and open another. Unsaved edits are not compared; Reload Data clears the pin.</p>
+    <div class="compare-status pad-x" data-ref="status" role="status" aria-live="polite"></div>
+    <div class="compare-out" data-ref="output"></div>
+  </div>
+</template>
+<!-- The table: the filter bar on top, a column per record, the field names kept in sight while it scrolls sideways. -->
+<template data-tpl="comparison-matrix">
+  <div>
+    <div class="toolbar">
+      <input type="search" class="filter" data-ref="search" placeholder="Filter field name / label / type" aria-label="Filter field name / label / type" data-i18n="placeholder,aria-label">
+      <span class="muted" data-ref="count"></span>
+      <button type="button" class="chip" aria-pressed="false" data-ref="differences" data-i18n="text">Differences only</button>
+    </div>
+    <div class="pad-x" data-ref="notes"></div>
+    <div class="table-wrap compare-wrap">
+      <table class="matrix compare-table">
+        <thead><tr data-ref="columns"><th scope="col" data-i18n="text">Field</th></tr></thead>
+        <tbody data-ref="rows"></tbody>
+      </table>
+    </div>
+    <div class="empty" data-ref="empty" data-i18n="text">No matching fields.</div>
+    <p class="note pad-x" data-i18n="text">Fields you can't access are not listed. Differences only keeps unknown values. Binaries are compared by size, not content.</p>
+  </div>
+</template>
+<template data-tpl="comparison-column">
+  <th scope="col" data-ref="cell"><span class="compare-col" data-ref="head"><span data-ref="name"></span></span><span class="muted compare-col-status" data-ref="status"></span></th>
+</template>
+<template data-tpl="comparison-row">
+  <tr data-ref="row"><th scope="row"><div class="row"><span class="name" data-ref="field"></span><span data-ref="equality"></span></div><div class="meta" data-ref="label"></div></th></tr>
+</template>
+<template data-tpl="comparison-cell">
+  <td data-ref="value"></td>
+</template>
+<template data-tpl="comparison-error">
+  <div><div class="note" data-ref="title"></div><div data-ref="detail"></div></div>
+</template>

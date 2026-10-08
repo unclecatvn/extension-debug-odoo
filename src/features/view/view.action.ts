@@ -14,7 +14,7 @@ export function actionPart(parent: HTMLElement, state: PageState) {
     const [menus, xmlId] = ref ? await Promise.all([menusOf(ref), actionXmlId(ref, action?.xml_id)]) : [[], ''];
     const views = ((action?.views as [number | false, string][] | undefined) ?? []).map(([id, t]) => (id ? `${t} #${id}` : t)).join(', ');
     return frag(
-      ref ? null : note(_t('Opened without an action: by the URL of a record. The webclient made one up to show it.')),
+      ref ? null : note(_t('Opened by a record\'s URL, without an action: the webclient made one up.')),
       action && kv({
         name: action.name ?? '—', id: action.id ?? '—', xml_id: xmlId || '—', type: action.type ?? '—', res_model: action.res_model ?? state.model ?? '—',
         target: action.target ?? '—', ...(action.path ? { path: `/odoo/${String(action.path)}` } : {}), views: views || '—',

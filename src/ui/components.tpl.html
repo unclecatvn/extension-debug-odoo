@@ -93,6 +93,19 @@
 <template data-tpl="code-inline">
   <code class="code-inline" data-ref="code"></code>
 </template>
+<!-- The code editor (editor.ts): a transparent textarea over a <pre> painting the same text in colours, line numbers
+     beside it. -->
+<template data-tpl="code-editor">
+  <div class="editor" data-ref="root">
+    <div class="editor-body" data-ref="body">
+      <pre class="hl" aria-hidden="true" data-ref="paint"></pre>
+      <textarea class="code" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" writingsuggestions="false" data-ref="ta"></textarea>
+    </div>
+  </div>
+</template>
+<template data-tpl="hl-line">
+  <div data-ref="line"></div>
+</template>
 <!-- One coloured token (tok-* classes: panel.css, they follow the theme). -->
 <template data-tpl="tok">
   <span data-ref="tok"></span>

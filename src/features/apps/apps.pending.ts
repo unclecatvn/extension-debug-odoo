@@ -41,7 +41,7 @@ export function pendingView(body: HTMLElement, c: AppsCtx) {
         st.done();
         c.rerender();
       });
-    }, 'btn', _t('Back to installed (to upgrade, to remove) or not installed (to install): nothing runs'));
+    }, 'btn', _t('Nothing runs: each module goes back to installed or not installed'));
     ops.push(apply, cancel);
     return box(why, matrix(_t('Module'), [_t('Waiting for')], [{ rows }]), row(apply, cancel), ul);
   });

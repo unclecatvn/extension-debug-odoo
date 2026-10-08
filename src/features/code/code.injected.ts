@@ -3,7 +3,11 @@
 // differs (the public read methods, the @api.model ones, how rows are grouped) comes in as arguments (odoo/adapter.ts → orm).
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+/** The actual page identity expected by this run. It is checked again at the execution/refresh boundary. */
+export interface RunPageIdentity { origin: string; url: string; loadedAt: number; model?: string | null; resId?: number | null }
+
 export interface RunOptions {
+  page?: RunPageIdentity;
   /** read: a writing call is refused · dry: it is listed, not sent · write: it is sent (committed at once) */
   mode: 'read' | 'dry' | 'write';
   /** the session's user context (lang, tz, companies) when the webclient's can't be read */
@@ -44,6 +48,18 @@ export interface RunResult {
  */
 export async function pageRunCode(code: string, opts: RunOptions): Promise<RunResult> {
   const N_ = (s: string) => s; // error msgids, translated by the panel
+  if (opts.page) {
+    const expected = opts.page;
+    const controller = window.odoo?.__WOWL_DEBUG__?.root?.env?.services?.action?.currentController;
+    const props = controller?.props;
+    const viewType = controller?.view?.type;
+    const fallback = location.pathname.match(/\/odoo\/(?:.*\/)?([a-z0-9_]+\.[a-z0-9_.]+)\/(\d+)/);
+    const currentModel = props?.resModel || controller?.action?.res_model || (!controller && fallback?.[1]) || null;
+    const currentId = controller ? (viewType === 'form' ? controller.currentState?.resId : props?.resId) || null : Number(fallback?.[2]) || null;
+    const changed = expected.origin !== location.origin || expected.url !== location.href || expected.loadedAt !== performance.timeOrigin
+      || (expected.model ?? null) !== currentModel || (expected.resId ?? null) !== currentId;
+    if (changed) throw new Error(N_('The screen changed before the run. Run again.'));
+  }
   const { mode, context: fallback, uid: fallbackUid, screen } = opts;
   const READ = new Set(opts.readMethods);
   const MODEL_LEVEL = new Set(opts.modelMethods);
@@ -208,7 +224,7 @@ export async function pageRunCode(code: string, opts: RunOptions): Promise<RunRe
       get(_, prop) {
         if (prop === 'then') return (ok: (v: unknown) => unknown, ko: (e: unknown) => unknown) => resolvePath(rs, path).then(ok, ko);
         if (prop === Symbol.toPrimitive || prop === 'toString' || prop === 'valueOf') {
-          return () => { throw fail(N_('%s is read from the server: await it before using its value'), [label], `${label} is read from the server: await it before using its value`); };
+          return () => { throw fail(N_('%s is read from the server: await it first'), [label], `${label} is read from the server: await it before using its value`); };
         }
         if (typeof prop === 'symbol' || prop === 'toJSON') return undefined;
         return lazy(rs, [...path, prop]);
@@ -447,26 +463,19 @@ export async function pageRunCode(code: string, opts: RunOptions): Promise<RunRe
   }
 }
 
-/** The records selected in the list or kanban on screen (their ids), [] when none or not readable: the controller's
- * model is found by walking the component tree from the webclient's root (debug mode exposes it). */
-export function pageSelectedIds(): number[] {
-  try {
-    const root = (window.odoo as any)?.__WOWL_DEBUG__?.root;
-    const queue: any[] = root?.__owl__ ? [root.__owl__] : [];
-    for (let n = 0; queue.length && n < 5000; n++) {
-      const node = queue.shift();
-      const sel = node?.component?.model?.root?.selection;
-      if (Array.isArray(sel)) return sel.map((r: any) => r.resId).filter((id: unknown) => typeof id === 'number');
-      for (const child of Object.values(node?.children ?? {})) queue.push(child);
-    }
-  } catch { /* webclient internals moved */ }
-  return [];
-}
-
 /** Reloads the data of the view on screen, without reloading the page: Odoo's own `soft_reload` client action (18 and
  * 19). A form with unsaved changes is saved first, as when leaving it. */
-export async function pageSoftReload(): Promise<{ ok: true } | { error: string }> {
+export async function pageSoftReload(expected: RunPageIdentity): Promise<{ ok: true } | { error: string }> {
   const N_ = (s: string) => s;
+  const controller = window.odoo?.__WOWL_DEBUG__?.root?.env?.services?.action?.currentController;
+  const props = controller?.props;
+  const viewType = controller?.view?.type;
+  const fallback = location.pathname.match(/\/odoo\/(?:.*\/)?([a-z0-9_]+\.[a-z0-9_.]+)\/(\d+)/);
+  const currentModel = props?.resModel || controller?.action?.res_model || (!controller && fallback?.[1]) || null;
+  const currentId = controller ? (viewType === 'form' ? controller.currentState?.resId : props?.resId) || null : Number(fallback?.[2]) || null;
+  const changed = expected.origin !== location.origin || expected.url !== location.href || expected.loadedAt !== performance.timeOrigin
+    || (expected.model ?? null) !== currentModel || (expected.resId ?? null) !== currentId;
+  if (changed) return { error: N_('The screen changed during the run, so it was not refreshed.') };
   const action = (window.odoo as any)?.__WOWL_DEBUG__?.root?.env?.services?.action;
   if (!action?.currentController) return { error: N_('No view to refresh on this page') };
   try {

@@ -122,9 +122,9 @@ export function modulesView(body: HTMLElement, c: AppsCtx) {
       return b;
     };
     p.actions.append(
-      op(_t('Activate'), _t('Update Apps List, then install every module picked (with its dependencies)'), (list, begin) => activate(list, c.a, simulate, begin)),
-      op(_t('Upgrade'), _t('Upgrade every module picked (they must be installed)'), (list, begin) => upgrade(list, c.a, begin)),
-      op(_t('Open Forms ↗'), _t('Open the form of every module picked in a new tab'), (list, begin) => openModuleForms(list, c.page.origin, begin)),
+      op(_t('Activate'), _t('Update Apps List, then install the picked modules with their dependencies'), (list, begin) => activate(list, c.a, simulate, begin)),
+      op(_t('Upgrade'), _t('Upgrade the picked modules (must be installed)'), (list, begin) => upgrade(list, c.a, begin)),
+      op(_t('Open Forms ↗'), _t('Open each picked module\'s form in a new tab'), (list, begin) => openModuleForms(list, c.page.origin, begin)),
     );
     const clear = button(_t('Clear'), () => { for (const n of [...picked]) setPicked(n, false, false); save(); drawPicked(); apply(); }, 'chip', _t('Unpick every module'));
     p.actions.append(clear);
@@ -136,7 +136,7 @@ export function modulesView(body: HTMLElement, c: AppsCtx) {
       p.actions.append(button(_t('+ This screen: %s', custom.length > 3 ? _t('%s modules', custom.length) : custom.join(', ')), () => {
         for (const n of custom) setPicked(n, true, false);
         save(); drawPicked(); apply();
-      }, 'chip', _t('Pick the modules not by Odoo S.A. defining or extending %s: %s (all of them: %s)', c.page.model ?? '', custom.join(', '), names.join(', '))));
+      }, 'chip', _t('Pick the non-Odoo S.A. modules defining or extending %s: %s (all: %s)', c.page.model ?? '', custom.join(', '), names.join(', '))));
     });
     if (drifted.length) {
       p.actions.append(button(_t('+ Upgrade needed (%s)', drifted.length), () => {
@@ -172,8 +172,8 @@ function versionCell(m: AppModule, disk: string | false | undefined): Node | str
   const drift = versionDrift(m.latest_version, disk);
   if (!drift) return m.latest_version || '';
   return tip(text(`⚠ ${m.latest_version || ''}`, 'drift'), drift === 'disk-newer'
-    ? _t('On disk: %s, newer than the database: Upgrade applies it', disk || '')
-    : _t('On disk: %s, older than the database', disk || ''));
+    ? _t('Newer on disk (%s): Upgrade applies it', disk || '')
+    : _t('Older on disk (%s)', disk || ''));
 }
 
 function waitingLine(pending: readonly AppModule[], c: AppsCtx): HTMLElement {

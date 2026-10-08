@@ -1,4 +1,5 @@
-// JSON for reading: how a value shows in the JSON viewer (json-view.ts). Pure: tested by tests/unit/ui/json.test.ts.
+// JSON for reading: how a value shows in the JSON viewer (json-view.ts), how JSON text is coloured in an editor
+// (editor.ts). Pure: tested by tests/unit/ui/json.test.ts.
 
 export type JsonKind = 'string' | 'number' | 'boolean' | 'null' | 'array' | 'object' | 'other';
 
@@ -51,3 +52,22 @@ export function jsonPreview(obj: Record<string, unknown>, max = 60): string {
   }
   return out.length > max ? `${out.slice(0, max - 1)}…` : out;
 }
+
+const JSON_TOKEN = /("(?:[^"\\\n]|\\.)*"?)(\s*:)?|(-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)|\b(true|false|null)\b|([{}[\],:])/g;
+
+/** JSON text → [type, text] covering all of it, coloured as the JSON viewer does (keys fn, strings, numbers, true /
+ * false / null kw, punctuation). Never throws on half-typed JSON. */
+export function jsonTokens(text: string): [string, string][] {
+  const out: [string, string][] = [];
+  let at = 0;
+  for (const m of text.matchAll(JSON_TOKEN)) {
+    if (m.index > at) out.push(['', text.slice(at, m.index)]);
+    at = m.index + m[0].length;
+    const [all, str, colon, num, word] = m;
+    if (str) out.push([colon ? 'fn' : 'string', str], ...(colon ? [['punct', colon] as [string, string]] : []));
+    else out.push([num ? 'number' : word ? 'kw' : 'punct', all]);
+  }
+  if (at < text.length) out.push(['', text.slice(at)]);
+  return out;
+}
+

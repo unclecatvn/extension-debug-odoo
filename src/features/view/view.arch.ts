@@ -15,7 +15,7 @@ export function archPart(parent: HTMLElement, comps: { type: string; promise: Pr
       const comp = await comps.find((c) => c.type === type)!.promise;
       if (!comp) return note(_t('No %s view.', type));
       // Odoo returns it combined, its indentation a mix of every view's: re-indented to be read
-      return frag(note(_t('View #%s with every extension applied, as the webclient receives it (elements of groups you are not in are already removed).', comp.view.id)),
+      return frag(note(_t('View #%s with all extensions applied, as the webclient gets it: elements of groups you\'re not in are removed.', comp.view.id)),
         xmlCode(prettyXml(comp.view.arch)).root);
     });
     show(comps[0]!.type);

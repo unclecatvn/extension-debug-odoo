@@ -85,7 +85,26 @@ export function matrix(first: string, heads: readonly string[], sections: readon
     table.append(sec.body);
   }
   stickHead(table);
+  if (pane) followLayout(table);
   return table;
+}
+
+/** Full screen on / off (lists.ts: WIDE) with a pane: the detail open moves between under its row and the pane, never
+ * shown in both. */
+function followLayout(table: HTMLTableElement) {
+  const sync = () => {
+    if (!table.isConnected) { WIDE.removeEventListener('change', sync); return; } // re-rendered away
+    if (WIDE.matches) {
+      const open = [...table.querySelectorAll<HTMLTableRowElement>('tr.opens.open')];
+      for (const r of open) { r.classList.remove('open'); if (r.nextElementSibling?.classList.contains('mx-detail')) (r.nextElementSibling as HTMLElement).hidden = true; }
+      open[0]?.click(); // into the pane
+    } else {
+      const selected = table.querySelector<HTMLTableRowElement>('tr.selected');
+      selected?.classList.remove('selected');
+      selected?.click(); // unfolds under it
+    }
+  };
+  WIDE.addEventListener('change', sync);
 }
 
 /** The column names stay in sight while the table scrolls by: under the sticky bar above the table if there is one (a
@@ -104,12 +123,14 @@ function stickHead(table: HTMLTableElement) {
   ro.observe(table);
 }
 
-/** The nearest element sticking above `el`: a sticky earlier sibling of it or of one of its ancestors, within its tab. */
+/** The nearest element sticking above `el`: a sticky earlier sibling of it or of one of its ancestors, within its tab
+ * and its scrolling box (a bar outside a pane that scrolls by itself does not cover the pane's top). */
 function stickyAbove(el: Element): HTMLElement | null {
   for (let n: Element | null = el; n && !n.classList.contains('tab'); n = n.parentElement) {
     for (let s = n.previousElementSibling; s; s = s.previousElementSibling) {
       if (s instanceof HTMLElement && getComputedStyle(s).position === 'sticky') return s;
     }
+    if (n.parentElement && /auto|scroll/.test(getComputedStyle(n.parentElement).overflowY)) return null;
   }
   return null;
 }

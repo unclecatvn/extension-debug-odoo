@@ -2,6 +2,28 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
+## [2.1.0] - 2026-10-08
+
+### Added
+
+- **RPC pending requests**: elapsed waiting time and All / Pending / Slow (≥ 1 s) / Errors filters. Completion updates the original row without replacing edited request parameters; Clear does not bring back an in-flight call when it finishes. Detached panels mark requests from a replaced page as response unavailable rather than leaving them pending forever.
+- **Code history**: the last 20 completed runs per Odoo origin, database and user, in panel memory only. Inspect saved output, restore code without executing or enabling writes, save as a snippet, or clear history. Oversized outputs are explicitly omitted; historical inspection does not refetch record names or field metadata.
+- **Record comparison**: select 2–5 saved records in a list/kanban, or pin one and open another of the same model. Compare fields side by side with search and Differences only, preserving unknown/unreadable cells. Unsaved form changes are excluded; binary values compare sizes, not contents.
+- **Perf groups**: aggregate the loaded requests by model/method (or route), with count, sum, median and SQL count; drill down to existing request details and baseline tools. Aggregates cover the latest 200 fetched profiles after exclusions, not the whole database; summed duration is not page load time.
+- **Browser regression smoke**: `npm run build && npm run test:browser` drives the built extension in Chrome against an isolated in-memory fixture. This is not new live-Odoo version coverage.
+
+### Changed
+
+- **RPC**: Errors Only becomes a status filter (All / Pending / Slow / Errors), one at a time, under the search box on the narrow panel. A request's JSON body is edited in the code editor of the Code tab (now shared, `ui/editor.ts`): coloured like the answer, with line numbers.
+- **Wording**: notes, hints, tooltips and messages say one thing, shorter (174 strings, English and Vietnamese); Vietnamese terms made consistent (field, user, bản ghi, nhóm, Xoá).
+- **Layout**: Record's comparison card comes after Fields and shows only the actions the screen allows (Compare selected on a list / kanban, the pin on a form), differing values tinted, field names kept in sight while the table scrolls sideways. Code's Snippets, History and Guide buttons carry an icon and keep only it on the narrow panel, so the bar stays on two lines; the ⟳ buttons (Code, Perf) use the reload icon.
+- **Folds** (a Perf request's parts, a Security group's, an Apps module's): sections of one plane under a title line, their tables without a frame of their own: no more cards inside cards.
+
+### Fixed
+
+- **Perf**: a request opened on the narrow panel no longer shows twice (under its row and in the pane) after switching to full screen, and back; the column names of a table in the pane stick to the pane's top while it scrolls, no rows showing above them.
+- **Code**: line numbers from 10 on no longer break digit by digit in the gutter.
+
 ## [2.0.0]
 
 The TypeScript rewrite of Odoo Debug, for Odoo 18.0, 19.0 and 20.0: every difference between them in one adapter per

@@ -11,6 +11,9 @@ export type RpcAnswer =
 
 /** A row of the log. */
 export type RpcEntry = {
+  id?: string;
+  /** unavailable is local: the page was replaced, not evidence of server failure/cancellation. */
+  phase: 'pending' | 'complete' | 'unavailable';
   path: string;
   /** path + query: what Edit & Resend posts to */
   route: string;
@@ -28,8 +31,68 @@ export type RpcEntry = {
   answerCut: boolean;
 } & RpcAnswer;
 
-/** What entrypoints/rpc-recorder keeps of a body or an answer (BODY_MAX there). */
+/** What entrypoints/rpc-recorder keeps of a body or an answer. */
 export const CUT_AT = 200_000;
+
+export type RpcFilter = 'all' | 'pending' | 'slow' | 'errors';
+export const SLOW_MS = 1000;
+
+/** Wall time is available across page/panel contexts; completed durations retain the recorder's monotonic clock. */
+export function elapsedRpc(e: RpcEntry, now = Date.now()): number {
+  const start = Date.parse(e.at);
+  return e.phase === 'pending' && Number.isFinite(start) ? Math.max(0, now - start) : e.ms;
+}
+
+export function matchesRpc(e: RpcEntry, query: string, filter: RpcFilter, now = Date.now()): boolean {
+  return `${e.model} ${e.method}`.toLowerCase().includes(query.toLowerCase()) &&
+    (filter === 'all' || (filter === 'pending' ? e.phase === 'pending' : filter === 'slow' ? elapsedRpc(e, now) >= SLOW_MS : e.error !== undefined));
+}
+
+/** Keeps row objects stable during completion. After Clear, only a seen start may complete: no tombstone growth. */
+export class RpcLog {
+  readonly entries: RpcEntry[] = [];
+  private requireStart = false;
+  private documentStart = 0;
+  private observedAt = 0;
+  private readonly max: number;
+  constructor(max = 300) { this.max = max; }
+
+  add(e: RpcEntry): RpcEntry | null {
+    const old = e.id ? this.entries.find((x) => x.id === e.id) : undefined;
+    if (old) {
+      if (old.phase === 'complete' || e.phase === 'pending') return null;
+      return Object.assign(old, e);
+    }
+    this.endObservation(e, this.observedAt);
+    if (this.requireStart && e.id && e.phase !== 'pending') return null;
+    this.entries.push(e);
+    this.entries.sort((a, b) => a.at.localeCompare(b.at));
+    if (this.entries.length > this.max && this.entries.shift() === e) return null;
+    return e;
+  }
+
+  clear(): void { this.entries.length = 0; this.requireStart = true; }
+
+  /** BFCache can restore an older origin. Compare request time to snapshot capture, not document age. */
+  observeDocument(loadedAt: number, observedAt = Date.now()): RpcEntry[] {
+    if (!Number.isFinite(loadedAt) || loadedAt <= 0 || !Number.isFinite(observedAt) || observedAt < this.observedAt) return [];
+    this.documentStart = loadedAt;
+    this.observedAt = observedAt;
+    return this.entries.filter((e) => this.endObservation(e, observedAt));
+  }
+
+  private endObservation(e: RpcEntry, now: number): boolean {
+    // The recorder's ID is performance.timeOrigin:documentNonce:sequence, shared with PageState.loadedAt.
+    const origin = Number(e.id?.split(':')[0]);
+    const start = Date.parse(e.at);
+    // A same-millisecond/newer start may belong to a replacement page whose refresh is still in flight.
+    if (e.phase !== 'pending' || !Number.isFinite(origin) || origin <= 0 || origin === this.documentStart ||
+      !Number.isFinite(start) || start >= this.observedAt) return false;
+    e.ms = elapsedRpc(e, now);
+    e.phase = 'unavailable';
+    return true;
+  }
+}
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 
@@ -40,8 +103,9 @@ export function parseRpc(raw: RawRpc): RpcEntry | null {
   const path = u.pathname;
   let body: unknown = null;
   try { body = JSON.parse(raw.body || ''); } catch { /* not JSON, or cut by the recorder (> 200 KB) */ }
-  const answer: RpcAnswer = raw.error ? { error: raw.error, errorType: 'network' } : parseRpcResponse(raw.response ?? '', raw.status);
-  const base = { path, route: path + u.search, body: raw.body, ms: raw.ms || 0, status: raw.status || 0, at: raw.at, ...answer,
+  const phase = raw.phase === 'pending' ? 'pending' as const : 'complete' as const;
+  const answer: RpcAnswer = phase === 'pending' ? { result: undefined } : raw.error ? { error: raw.error, errorType: 'network' } : parseRpcResponse(raw.response ?? '', raw.status);
+  const base = { id: typeof raw.id === 'string' ? raw.id : undefined, phase, path, route: path + u.search, body: raw.body, ms: raw.ms || 0, status: raw.status || 0, at: typeof raw.at === 'string' ? raw.at : '', ...answer,
     bodyCut: (raw.body?.length ?? 0) >= CUT_AT && body == null, answerCut: (raw.response?.length ?? 0) >= CUT_AT && typeof answer.result === 'string' };
   // A cut body can't be parsed: show its beginning, take model/method from the URL.
   const head = typeof raw.body === 'string' ? `${raw.body.slice(0, 2000)}…` : null;

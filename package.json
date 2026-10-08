@@ -18,7 +18,8 @@
     "check:markup": "node scripts/check-markup.ts",
     "check:imports": "node scripts/check-imports.ts",
     "screenshots": "node tools/screenshots.mjs",
-    "intro": "node tools/intro.mjs"
+    "intro": "node tools/intro.mjs",
+    "test:browser": "node tests/browser/debug-workflows.mjs"
   },
   "devDependencies": {
     "@types/chrome": "^0.3.4",

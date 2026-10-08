@@ -17,21 +17,6 @@
   </div>
 </template>
 
-<!-- The editor: a transparent textarea over a <pre> painting the same text in colours, line numbers beside it. -->
-<template data-tpl="editor">
-  <div class="editor" data-ref="root">
-    <div class="editor-body" data-ref="body">
-      <pre class="hl" aria-hidden="true" data-ref="paint"></pre>
-      <textarea class="code" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" writingsuggestions="false" data-ref="ta"></textarea>
-    </div>
-  </div>
-</template>
-<template data-tpl="hl-line">
-  <div data-ref="line"></div>
-</template>
-<template data-tpl="tok">
-  <span data-ref="tok"></span>
-</template>
 <template data-tpl="suggest">
   <ul class="suggest" role="listbox" aria-label="Suggestions" data-i18n="aria-label" data-ref="box" hidden></ul>
 </template>
@@ -121,4 +106,27 @@
 </template>
 <template data-tpl="check">
   <label class="check" data-ref="label"><input type="checkbox" data-ref="box"> <span data-ref="text"></span></label>
+</template>
+
+<!-- Automatic history is separate from named snippets and remains in this panel's memory only (code.history.ts): the
+     runs, one line each (scrolling past six), then the one picked: its actions, code and saved result. -->
+<template data-tpl="history">
+  <div class="history" data-ref="root">
+    <div class="row history-head"><span class="note grow" data-i18n="text">Last 20 completed runs for this database and user; lost when the panel closes.</span><button type="button" class="chip" data-ref="clear" data-i18n="text">Clear history</button></div>
+    <div class="history-list" data-ref="list"></div>
+    <div class="history-detail" data-ref="detail" hidden></div>
+  </div>
+</template>
+<template data-tpl="history-entry">
+  <button type="button" class="history-entry" aria-pressed="false" data-ref="pick"><span data-ref="mark"></span><span class="ms" data-ref="time"></span><code data-ref="code"></code><span class="ms" data-ref="meta"></span></button>
+</template>
+<template data-tpl="history-detail">
+  <div data-ref="root">
+    <div class="row history-detail-head"><div class="help-title grow" data-ref="head"></div><div class="row" data-ref="actions"></div></div>
+    <div class="meta" data-ref="screen"></div>
+    <details><summary data-i18n="text">Executed code</summary><pre class="value-text" data-ref="code"></pre></details>
+    <div data-ref="output"></div>
+    <p class="note" data-i18n="text">Restore only fills the editor, with writes off. Nothing runs until you click Run.</p>
+    <p class="note" data-i18n="text">Values as saved; field labels and record names are not read again.</p>
+  </div>
 </template>

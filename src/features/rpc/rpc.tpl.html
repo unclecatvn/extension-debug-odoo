@@ -1,10 +1,9 @@
 <!-- features/rpc/rpc.tab.ts: the RPC tab (styles: ui/panel.css). data-ref: filled by the code, text only. -->
 
-<!-- Top of the tab: filter, Errors Only, Clear, New Request; the column names (list-head) are added by the code. -->
+<!-- Top of the tab: text filter, Clear, New Request; the status filter (segmented) and column names are added by the code. -->
 <template data-tpl="toolbar">
   <div class="toolbar" data-ref="bar">
     <input type="search" data-ref="filter" placeholder="Filter model / method" data-i18n="placeholder">
-    <button type="button" class="chip" aria-pressed="false" data-ref="errors" data-i18n="text">Errors Only</button>
     <button type="button" class="chip" data-ref="clear" data-i18n="text">Clear</button>
     <button type="button" class="chip" aria-pressed="false" data-ref="compose" data-i18n="text">New Request</button>
   </div>
@@ -24,7 +23,7 @@
 <template data-tpl="empty-log">
   <div class="empty">
     <span data-i18n="text">No RPC yet. Use the Odoo page to record some.</span>
-    <p class="note" data-i18n="text">Calls Odoo answers from its own cache (views, actions…) never reach the network: they are not logged.</p>
+    <p class="note" data-i18n="text">Calls Odoo answers from its cache (views, actions…) are not logged.</p>
   </div>
 </template>
 
@@ -46,6 +45,7 @@
       <span class="dot"></span>
       <span class="name" data-ref="method"></span>
       <span class="grow muted" data-ref="model"></span>
+      <span data-ref="state"></span>
       <span class="ms" data-ref="ms"></span>
     </div>
     <div class="meta" data-ref="meta"></div>
@@ -57,7 +57,7 @@
   <button type="button" class="btn" data-ref="button" data-i18n="text">Why was it blocked? → Security</button>
 </template>
 <template data-tpl="profile">
-  <button type="button" class="btn" data-ref="button" title="Send it again with Odoo's profiler on: its SQL, the lines sending it, N+1 suspects (Perf)" data-i18n="text,title">⏱ Profile → Perf</button>
+  <button type="button" class="btn" data-ref="button" title="Resend with Odoo's profiler: SQL, the Python lines behind each query, N+1 suspects" data-i18n="text,title">⏱ Profile → Perf</button>
 </template>
 
 <!-- A request as sent, editable: Send (or Ctrl/⌘ + Enter) posts it with the page's session; the answer shows below, in
@@ -65,7 +65,7 @@
 <template data-tpl="composer">
   <form class="composer" data-ref="form">
     <input type="text" spellcheck="false" data-ref="route" aria-label="Route" data-i18n="aria-label">
-    <textarea spellcheck="false" data-ref="text" aria-label="Body (JSON)" data-i18n="aria-label"></textarea>
+    <div data-ref="text"></div> <!-- the JSON body: a code editor (ui/editor.ts), put here by the code -->
     <div class="row actions-bar" data-ref="actions">
       <button type="submit" class="btn primary" data-ref="send" data-i18n="text">Send</button>
       <span class="muted" data-ref="hint" data-i18n="text">Ctrl/⌘ + Enter</span>

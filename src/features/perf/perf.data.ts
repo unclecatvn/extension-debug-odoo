@@ -48,7 +48,8 @@ export async function setProfiling(on: boolean, collectors: readonly Collector[]
 }
 
 /** The profiled requests, newest first: of `session`, or of every session. */
-export const readProfiles = (a: OdooAdapter, session: string | null, limit = 200) =>
+export const PROFILE_LIMIT = 200;
+export const readProfiles = (a: OdooAdapter, session: string | null, limit = PROFILE_LIMIT) =>
   call<ProfileRow[]>('ir.profile', 'search_read', [session ? [['session', '=', session]] : []], { fields: [...a.profiler.listFields], limit, order: 'id desc' });
 
 /** The sessions that profiled something, with how many requests each (newest first). */
