@@ -38,7 +38,7 @@ export function groupsView(body: HTMLElement, c: SecurityCtx) {
       : graph.all.find((g) => directOf(sim, graph, c).has(g.id))?.id ?? graph.all[0]?.id;
 
     const md = tpl('groups-md', { root: HTMLDivElement, list: HTMLDivElement, pane: HTMLElement }).refs;
-    md.pane.append(note(_t('Choose a group: its rights, rules and users show here.')));
+    md.pane.append(note(_t('Pick a group to see its rights, rules and users.')));
     const num = (n: number | undefined) => (n ? String(n) : '·');
     // applications folded (but the one holding the group opened): their title says how many groups, how many the user has
     const table = matrix(_t('Group'), [...people.map((u) => u.user.name), 'ACL', _t('Rules'), _t('Users')], byApp(graph.all).map(({ app, groups }) => ({
@@ -141,7 +141,7 @@ export function groupsView(body: HTMLElement, c: SecurityCtx) {
           detail: () => domainDetail(r.domain_force || '[]', evaluated.get(r.id)),
         }));
         return frag(matrix(_t('Rule'), modeHeads(), [{ rows }]),
-          legend(_t('A group\'s rules: the user sees a record if any of their group rules matches (and every global rule). Click a rule for its domain, evaluated for %s.', sim.user.name)));
+          legend(_t('A record must match every global rule and one of the user\'s group rules. Click a rule for its domain, evaluated for %s.', sim.user.name)));
       }));
 
       // its users
@@ -163,7 +163,7 @@ export function groupsView(body: HTMLElement, c: SecurityCtx) {
     }
 
     return frag(bar, md.root,
-      legend(_t('● set on the user · ◐ implied by another group · + being tried · ○ not. ACL: models its ACLs open · Rules: rules it carries · Users: users in it. Click a group for the details.')),
+      legend(_t('● set on the user · ◐ implied by another group · + being tried · ○ not. ACL: models it opens. Click a group for details.')),
       out, other && copyBlock(sim, other, graph, c, out), title(_t('Risks of %s', sim.user.name)), findings(userRisks(sim.user, sim.has)));
   });
 }
@@ -247,13 +247,13 @@ function copyBlock(sim: Simulated, other: Simulated, graph: GroupGraph, c: Secur
   if (!same.adds.length && !same.removes.length) return frag(title(_t('Copy the groups of %s', other.user.name)), note(_t('Same groups set on both.')));
   const rows: MxRow[] = [
     ...same.adds.map((id): MxRow => ({ label: [graph.name(id)], cells: [{ v: true, plus: true, title: _t('Added') }] })),
-    ...same.removes.map((id): MxRow => ({ label: [graph.name(id)], cells: [{ v: false, title: _t('Removed by "the same"; kept by "add only"') }] })),
+    ...same.removes.map((id): MxRow => ({ label: [graph.name(id)], cells: [{ v: false, title: _t('Removed by "Make them the same", kept by "Add only the missing ones"') }] })),
   ];
   const confirmText = (plan: ReturnType<typeof copyGroups>) => [
     _t('Change the groups of %s?', sim.user.name), '',
     plan.adds.length > 0 && _t('Add: %s', plan.adds.map((g) => graph.name(g)).join(', ')),
     plan.removes.length > 0 && _t('Remove: %s', plan.removes.map((g) => graph.name(g)).join(', ')),
-    sim.user.share !== other.user.share && _t('Warning: one is a portal user, the other is not: the user type changes.'),
+    sim.user.share !== other.user.share && _t('Warning: the user type changes (one is a portal user, the other is not).'),
   ].filter((x) => x !== false).join('\n');
   const actionsRow = box(
     add.adds.length > 0 && button(_t('Add only the missing ones (%s)', add.adds.length), () => { if (confirm(confirmText(add))) write(c, out, sim.user.id, add.commands); }),

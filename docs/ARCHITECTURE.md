@@ -58,7 +58,7 @@ src/
   types/                       ambient declarations only: odoo-page.d.ts (window.odoo), page-events.d.ts, assets.d.ts
 tests/
   unit/                        unit tests, the same tree as src/: tests/unit/odoo/version.test.ts ↔ src/odoo/version.ts
-  e2e/                         against a real Odoo 18 / 19 (Docker), with the first ported tab
+  browser/                     built-extension smoke against an isolated in-memory Odoo-shaped fixture
 static/                        manifest.json, icons, i18n/*.po: copied to dist/ as they are
 assets/                        sources of static files (icon.svg → static/icons/*.png)
 scripts/                       build, check-page-fns, check-markup, check-imports, i18n (run by Node as .ts)
@@ -84,8 +84,27 @@ An MV3 extension runs in several contexts, each with its own APIs. Each is a Typ
 ## Tests
 
 `src/` holds only code that ships. Tests live in `tests/`: `tests/unit/` mirrors the `src/` tree (the test of
-`src/<path>/<name>.ts` is `tests/unit/<path>/<name>.test.ts`), `tests/e2e/` drives the built extension against a real
-Odoo. Unit tests cover pure code (`*.logic.ts`, `odoo/`, `contracts/`…); what needs Chrome or Odoo is the e2e's job.
+`src/<path>/<name>.ts` is `tests/unit/<path>/<name>.test.ts`). `tests/browser/debug-workflows.mjs` drives the built
+extension against an isolated in-memory HTTP fixture, not a real database. Run `npm run build && npm run test:browser`.
+Puppeteer needs Chrome for Testing; `PUPPETEER_EXECUTABLE_PATH` can select an existing compatible binary. It uses a
+fresh temporary browser profile, checks RPC pending lifecycle, Code history, Record comparison and Perf drilldown,
+and never sends calls to a user Odoo instance. Existing `tools/screenshots.mjs` / `tools/intro.mjs` use throwaway Odoo.
+
+### Debug workflow state
+
+- RPC messages carry optional document-scoped `id` / `phase`; old completed messages remain readable. The recorder
+  updates one bounded buffer entry; the panel merges lifecycle events and keeps edited request DOM intact. One timer
+  updates pending elapsed values and stops when none remain. Clearing a log suppresses late completions. A replaced
+  document ends its pending observations as response unavailable (not a claim that the server canceled them).
+- Code history is in-memory, keyed by origin/database/user: 20 immutable completed runs per scope. Output retention
+  is capped at 128K serialized UTF-16 code units per result; larger outputs are explicitly omitted. Historical
+  rendering uses snapshots only, never current server metadata. Restoring code neither executes nor enables writes.
+- Record comparison separates pure equality/validation, independently tested server reads and UI. Pins are scoped
+  to origin/database/model/user. Selection comes from a self-contained injected function. Each record is read
+  independently; failed computes, hidden fields and missing values are not mistaken for equal values. Many2many
+  order is ignored, one2many order retained; binaries are size-only. Actual-page checks reject stale comparisons.
+- Perf aggregation is pure and input-bounded. The UI passes only loaded profiles after exclusions, shows the fetch
+  limit, and reuses request detail/baseline functionality for drilldown. No aggregate claims total page elapsed time.
 
 ## File names
 

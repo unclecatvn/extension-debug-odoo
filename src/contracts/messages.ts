@@ -3,8 +3,12 @@
 // isExtMessage(): a part that changes a message without the other side failing to type-check is a bug caught here.
 // The MAIN ↔ ISOLATED world CustomEvents are typed in types/odoo-page.d.ts (DocumentEventMap).
 
-/** A call recorded by entrypoints/rpc-recorder (bodies cut at 200 KB). `error`: no response at all (network, timeout, abort). */
+/** A call recorded by entrypoints/rpc-recorder (bodies cut at 200 KB). Pending calls have no response yet.
+ * `error`: request/capture failure (network, timeout, abort, or an unreadable response stream). */
 export interface RawRpc {
+  /** Stable per request, scoped to its document load. Older recorders omit both fields (completed-only events). */
+  id?: string;
+  phase?: 'pending' | 'complete';
   method: string;
   url: string;
   body: string;

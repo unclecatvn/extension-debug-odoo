@@ -1,8 +1,7 @@
-// Code tab: the editor. A transparent <textarea> (caret, selection, IME and undo stay the browser's) over a <pre> that
-// paints the same text in colours, with line numbers beside it (panel.css). Typing is smarter than a textarea's
+// Code tab: the editor (ui/editor.ts) in JavaScript or Python: its colours, and typing smarter than a textarea's
 // (code.logic.ts → smartEdit), in the language chosen.
+import { editor, type Editor as BaseEditor } from '../../ui/editor.ts';
 import { smartEdit, tokenize, type Lang } from './code.logic.ts';
-import { tpl } from './code.ui.ts';
 
 /** Replaces text[from, to) of `ta` by `text` the way typing does (one undo step, an `input` event). */
 export function replaceRange(ta: HTMLTextAreaElement, from: number, to: number, text: string) {
@@ -45,34 +44,12 @@ export function caretPoint(ta: HTMLTextAreaElement, paint: HTMLElement): { left:
   return { left: rect.left - at.left, bottom: rect.bottom - at.top };
 }
 
-export interface Editor { root: HTMLElement; ta: HTMLTextAreaElement; body: HTMLElement; paint: HTMLElement; lang: Lang; setLang(l: Lang): void; refresh(): void }
+export interface Editor extends BaseEditor { lang: Lang; setLang(l: Lang): void }
 
-/** The editor; `lang` colours and types (setLang switches it). Long lines wrap: one painted block per line, numbered
- * by CSS, so a wrapped line keeps one number. */
+/** The editor (ui/editor.ts) in `lang`: its colours (setLang switches them). */
 export function codeEditor(value: string, label: string, lang: Lang): Editor {
-  const r = tpl('editor', { root: HTMLDivElement, body: HTMLDivElement, paint: HTMLPreElement, ta: HTMLTextAreaElement }).refs;
-  r.ta.value = value;
-  r.ta.setAttribute('aria-label', label);
-  const ed: Editor = {
-    root: r.root, ta: r.ta, body: r.body, paint: r.paint, lang,
-    setLang(l) { ed.lang = l; ed.refresh(); },
-    refresh() {
-      const lines: HTMLElement[] = [tpl('hl-line', { line: HTMLDivElement }).refs.line];
-      for (const [type, text] of tokenize(r.ta.value, ed.lang)) {
-        text.split('\n').forEach((part, i) => {
-          if (i) lines.push(tpl('hl-line', { line: HTMLDivElement }).refs.line);
-          if (!part) return;
-          if (type) { const { tok } = tpl('tok', { tok: HTMLSpanElement }).refs; tok.className = `tok-${type}`; tok.textContent = part; lines[lines.length - 1]!.append(tok); }
-          else lines[lines.length - 1]!.append(part);
-        });
-      }
-      r.paint.replaceChildren(...lines);
-      r.body.style.setProperty('--digits', String(Math.max(2, String(lines.length).length))); // the gutter grows with the line count
-      r.paint.scrollTop = r.ta.scrollTop;
-    },
-  };
-  r.ta.addEventListener('input', () => ed.refresh());
-  r.ta.addEventListener('scroll', () => { r.paint.scrollTop = r.ta.scrollTop; });
-  ed.refresh();
+  let current = lang;
+  const base = editor(value, label, (text) => tokenize(text, current));
+  const ed: Editor = Object.assign(base, { lang, setLang(l: Lang) { current = ed.lang = l; base.refresh(); } });
   return ed;
 }

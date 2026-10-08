@@ -9,13 +9,13 @@ export interface Snippet { name: string; lang: Lang; code: string; desc?: string
 const BUILTIN: Snippet[] = [
   { lang: 'js', name: N_('This record'), desc: N_('every field of the record opened'), code: 'return record.read()' },
   { lang: 'js', name: N_('Selected records'), desc: N_('the records ticked in the list, else the one opened'), code: "return records.read(['display_name'])" },
-  { lang: 'js', name: N_('Count by a field'), desc: N_('how many records of the screen\'s model per value (change state)'), code: [
+  { lang: 'js', name: N_('Count by a field'), desc: N_('records per state on this model (swap state for any field)'), code: [
     "const rows = await model.search_read([], ['state'])",
     'const count = {}',
     'for (const r of rows) count[r.state] = (count[r.state] || 0) + 1',
     'return count'].join('\n') },
   { lang: 'js', name: N_('Empty field'), desc: N_('records missing a value'), code: "return env['res.partner'].search_read([['email', '=', false]], ['display_name', 'email'], { limit: 50 })" },
-  { lang: 'js', name: N_('My access to this record'), desc: N_('what the server answers for each operation'), code: [
+  { lang: 'js', name: N_('My access to this record'), desc: N_('read / write / create / unlink: allowed or not'), code: [
     'const ops = {}',
     "for (const op of ['read', 'write', 'create', 'unlink']) ops[op] = await record.call('has_access', [op])",
     'return ops'].join('\n') },
@@ -25,11 +25,11 @@ const BUILTIN: Snippet[] = [
     "return record.read(['name'])"].join('\n') },
   { lang: 'python', name: N_('This record'), desc: N_('every field of the record opened'), code: "return record.read()[0] if record else 'Open a record first'" },
   { lang: 'python', name: N_('Selected records'), desc: N_('the records ticked in the list, else the one opened'), code: 'return records' },
-  { lang: 'python', name: N_('Count by a field'), desc: N_('how many records of the screen\'s model per value (change state)'), code: [
+  { lang: 'python', name: N_('Count by a field'), desc: N_('records per state on this model (swap state for any field)'), code: [
     "groups = model._read_group([], ['state'], ['__count'])",
     "return [{'state': state, 'count': count} for state, count in groups]"].join('\n') },
   { lang: 'python', name: N_('Empty field'), desc: N_('records missing a value'), code: "return env['res.partner'].search_read([('email', '=', False)], ['display_name', 'email'], limit=50)" },
-  { lang: 'python', name: N_('My access to this record'), desc: N_('what the server answers for each operation'), code: [
+  { lang: 'python', name: N_('My access to this record'), desc: N_('read / write / create / unlink: allowed or not'), code: [
     'ops = {}',
     "for op in ('read', 'write', 'create', 'unlink'):",
     '    ops[op] = record.has_access(op)',
@@ -82,8 +82,8 @@ export function snippetList(origin: string, lang: Lang, load: (s: Snippet) => vo
 const GUIDE: Record<Lang, { title: string; items: [string, string, boolean?][] }[]> = {
   js: [
     { title: N_('Available variables:'), items: [
-      ['env', N_('environment of the logged-in user, with their access rights and record rules; env[\'res.partner\'] is an empty recordset')],
-      ['record, records, model', N_('the record opened, the records selected (else the one opened), the screen\'s model: as in a server action')],
+      ['env', N_('the logged-in user\'s environment and rights; env[\'res.partner\'] is an empty recordset')],
+      ['record, records, model', N_('opened record, selected records (or the opened one), screen\'s model, as in a server action')],
       ['env.user, env.company, env.companies', N_('current user, current company, active companies')],
       ['env.ref(\'module.xmlid\')', N_('record of an external id, if you can read it')],
       ['print(…)', N_('shows values above the result')],
@@ -98,16 +98,16 @@ const GUIDE: Record<Lang, { title: string; items: [string, string, boolean?][] }
     ] },
   ],
   python: [
-    { title: N_('Available variables (a server action\'s):'), items: [
-      ['env', N_('environment of the logged-in user (their rights; sudo() is yours to call)')],
-      ['record, records, model', N_('the record opened, the records selected (else the one opened), the screen\'s model')],
+    { title: N_('Available variables (as in a server action):'), items: [
+      ['env', N_('the logged-in user\'s environment and rights (call sudo() yourself)')],
+      ['record, records, model', N_('opened record, selected records (or the opened one), screen\'s model')],
       ['print(…)', N_('shows values above the result')],
-      ['return …', N_('the value shown, as what it is')],
-      ['Command, UserError, datetime, dateutil, time, log', N_('what a server action has')],
+      ['return …', N_('the value to show')],
+      ['Command, UserError, datetime, dateutil, time, log', N_('as in a server action')],
     ] },
     { title: N_('Runs:'), items: [
-      [N_('Dry run'), N_('the code runs for real, then everything is rolled back: try a write, see what it does'), true],
-      [N_('Commit'), N_('saved at once; an error rolls back everything the code changed'), true],
+      [N_('Dry run'), N_('runs for real, then everything is rolled back: try a write and see'), true],
+      [N_('Commit'), N_('saved at once; an error rolls back all changes'), true],
       ['safe_eval', N_('Odoo\'s sandbox: no import, no dunder (__x__) names; Settings rights needed')],
     ] },
   ],

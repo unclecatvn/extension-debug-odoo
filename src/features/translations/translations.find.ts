@@ -25,7 +25,7 @@ export function findView(body: HTMLElement, c: TranslationsCtx) {
   const results = box();
   const run = (q: string) => {
     c.s.query = q;
-    if (!normalize(q)) { results.replaceChildren(note(_t('Type a text shown on the page, or pick it: its source, its English text and where to change it are listed.'))); return; }
+    if (!normalize(q)) { results.replaceChildren(note(_t('Type or pick a text on the page to find its source and where to change it.'))); return; }
     fill(results, () => search(normalize(q), c));
   };
   r.input.value = c.s.query;
@@ -60,20 +60,20 @@ async function search(q: string, c: TranslationsCtx): Promise<Node> {
     cells: [text(t.msgid, 'mono'), text(`${t.module}/i18n/${lang}.po`, 'mono')] });
   for (const l of labels) rows.push({ label: [kind(l.selection ? _t('Selection') : _t('Field label'), 'info'), `${model}.${l.field}`],
     cells: [text(l.en), text(_t('Field %s: its module\'s .po (model:ir.model.fields…), or Settings › Technical › Fields', l.field))] });
-  for (const m of menus) rows.push({ label: [kind(_t('Menu'), 'info'), m.complete_name], cells: [text(m.en), text(_t('The menu\'s name (translated in Odoo, or the module\'s .po)'))] });
+  for (const m of menus) rows.push({ label: [kind(_t('Menu'), 'info'), m.complete_name], cells: [text(m.en), text(_t('Translate the menu\'s name in Odoo or in the module\'s .po'))] });
   if (action && typeof action.name === 'string' && normalize(action.name) === q) {
     const en = typeof action.id === 'number' && typeof action.type === 'string'
       ? await call<{ name: string }[]>(action.type, 'read', [[action.id], ['name']], { context: { lang: 'en_US' } }).then((r) => r[0]?.name ?? '', () => '') : '';
-    rows.push({ label: [kind(_t('Action'), 'info'), String(action.xml_id || action.id || '')], cells: [text(en || '—'), text(_t('The action\'s name (translated in Odoo, or the module\'s .po)'))] });
+    rows.push({ label: [kind(_t('Action'), 'info'), String(action.xml_id || action.id || '')], cells: [text(en || '—'), text(_t('Translate the action\'s name in Odoo or in the module\'s .po'))] });
   }
-  for (const f of record) rows.push({ label: [kind(_t('Record'), 'ok'), `${model} #${resId}`], sub: f.field, cells: [text(f.en || '—'), text(_t('Translations › Record: edit it there'))] });
-  for (const v of views ?? []) rows.push({ label: [kind(_t('View'), 'ok'), v.view], cells: [text(v.source), text(_t('Translations › View: edit it there'))] });
+  for (const f of record) rows.push({ label: [kind(_t('Record'), 'ok'), `${model} #${resId}`], sub: f.field, cells: [text(f.en || '—'), text(_t('Edit it in Translations › Record'))] });
+  for (const v of views ?? []) rows.push({ label: [kind(_t('View'), 'ok'), v.view], cells: [text(v.source), text(_t('Edit it in Translations › View'))] });
 
   const out: (Node | null)[] = [];
   out.push(rows.length ? matrix(_t('Source'), [_t('English (source)'), _t('Where to change it')], [{ rows }], -1, true)
-    : note(_t('Not found in %s. It may be a code text with no translation (it then shows in English), data of a record not on this screen, or a text built from several parts: pick a smaller piece.', lang)));
-  if (views === null) out.push(note(_t('The views\' terms were not searched: reading views needs Settings rights (base.group_system).')));
-  if (lang === 'en_US') out.push(note(_t('Your language is English: code texts have no translation to find. Switch language in Translations › Languages to look for one.')));
+    : note(_t('Not found in %s: maybe untranslated code text, another record\'s data, or joined texts (pick a smaller piece).', lang)));
+  if (views === null) out.push(note(_t('Views not searched: reading them needs Settings rights (base.group_system).')));
+  if (lang === 'en_US') out.push(note(_t('Your language is English: code texts have no translation. Switch it in Translations › Languages.')));
   return frag(...out);
 }
 

@@ -39,7 +39,7 @@ export function fieldPart(parent: HTMLElement, model: string, comps: { type: str
   const show = (field: string) => {
     tools.input.value = field;
     fill(holder, async () => {
-      if (!field) return note(_t('Type a field, pick it on the page or in the list below: its story through the views shows here.'));
+      if (!field) return note(_t('Type a field name, or pick one on the page or in the list below.'));
       const [fields, formFields, ...composed] = await loaded;
       return inspectionOf(field, fields, formFields && 'fields' in formFields ? formFields.fields : null,
         composed.map((c, i) => ({ type: comps[i]!.type, comp: c })));
@@ -79,7 +79,7 @@ async function inspectionOf(field: string, fields: FieldsGet, nodes: FormField[]
   if (node) {
     const notShown = !node.invisible.value && !node.inDom;
     r.now.append(...MODIFIERS.map((k) => modifierRow(k, node[k], node.vars)));
-    if (notShown) r.now.append(note(_t('The field is not invisible itself but is not on screen: it is on another notebook page, or a parent node (group/page/div) is invisible.')));
+    if (notShown) r.now.append(note(_t('Not on screen: it is on another notebook page, or a parent (group/page/div) is invisible.')));
   } else {
     r.nowTitle.remove();
     if (nodes) r.now.append(note(_t('Not on this form.')));
@@ -117,7 +117,7 @@ async function inspectionOf(field: string, fields: FieldsGet, nodes: FormField[]
   const names = await groupNames([...new Set(specs.flatMap((s) => parseGroups(s).map((g) => g.xmlid)))]);
   if (def?.groups) r.groups.append(groupRow(_t('on the field'), def.groups, names));
   for (const x of restricts) r.groups.append(groupRow(x.who, x.spec, names));
-  if (unreadable) r.groups.append(note(_t('Groups set by the views: unknown without Settings rights (base.group_system).')));
+  if (unreadable) r.groups.append(note(_t('Needs Settings rights (base.group_system) to see the groups set by the views.')));
   else if (!r.groups.childElementCount) r.groups.append(note(_t('None: every user who sees the view sees it.')));
   return r.id.parentElement!;
 }

@@ -69,11 +69,11 @@ export function dependencyDiagram(m: AppModule, e: ModuleEnv): Node {
     requestAnimationFrame(showCenter);
   };
   const onEsc = (ev: KeyboardEvent) => { if (ev.key === 'Escape') { ev.preventDefault(); ev.stopPropagation(); expand(false); } };
-  const full = button('⤢', () => expand(!r.root.classList.contains('full')), 'chip', _t('Over the whole tab (Esc to come back)'));
+  const full = button('⤢', () => expand(!r.root.classList.contains('full')), 'chip', _t('Expand to the whole tab (Esc to exit)'));
   const count = text('', 'muted');
   r.bar.append(segmented(modes, mode, (v) => { mode = v; draw(); }), depthSeg, instLabel, hubLabel,
     button('−', () => zoom(1 / 1.25), 'chip', _t('Zoom out (Ctrl + wheel)')), button('+', () => zoom(1.25), 'chip', _t('Zoom in (Ctrl + wheel)')),
-    button(_t('Fit'), () => zoom('fit'), 'chip', _t('The whole diagram in the width')), full, count);
+    button(_t('Fit'), () => zoom('fit'), 'chip', _t('Fit the diagram to the width')), full, count);
   r.scroll.addEventListener('wheel', (ev) => {
     if (!ev.ctrlKey && !ev.metaKey) return;
     ev.preventDefault();
@@ -153,7 +153,7 @@ export function dependencyDiagram(m: AppModule, e: ModuleEnv): Node {
       if (why.get(name)) parts.push(text(why.get(name)!, 'muted'));
       if (x) parts.push(button(_t('Open'), () => e.open(name), 'chip', _t('Open this module')));
     } else {
-      parts.push(text(_t('Arrows point to what a module depends on. Click a module for the chain to %s; double-click to open it.', m.name), 'muted'));
+      parts.push(text(_t('Arrows point to dependencies. Click a module for its chain to %s; double-click to open it.', m.name), 'muted'));
     }
     if (layout.hidden.length) parts.push(text(_t('Hidden hubs: %s', layout.hidden.join(', ')), 'muted'));
     if (layout.more) parts.push(text(_t('… and %s more not drawn', layout.more), 'muted'));

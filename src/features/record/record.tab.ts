@@ -5,7 +5,7 @@
 // record.logic.ts.
 import { _t, N_, translateDom } from '../../i18n/i18n.ts';
 import { cached } from '../../extension/page-cache.ts';
-import type { FieldsGet, IrModelField } from '../../odoo/models.ts';
+import type { IrModelField } from '../../odoo/models.ts';
 import { groupsLabel, parseGroups } from '../../odoo/groups.ts';
 import { odoo } from '../../odoo/detect.ts';
 import { fieldsOf, groupNames } from '../../odoo/reads.ts';
@@ -16,18 +16,27 @@ import { xmlCode } from '../../ui/code.ts';
 import { jsonView } from '../../ui/json-view.ts';
 import { expandable } from '../../ui/lists.ts';
 import { templates } from '../../ui/template.ts';
-import type { TabModule } from '../registry.ts';
-import { binarySizes, copyValue, describeField, fmtValue, linkedRecord, matchesAll, recordJson, reverseDeps, valueDisplay, QUICK_FILTERS, type QuickFilter } from './record.logic.ts';
+import type { PanelContext, TabModule } from '../registry.ts';
+import { copyValue, describeField, fmtValue, linkedRecord, matchesAll, recordJson, reverseDeps, valueDisplay, QUICK_FILTERS, type QuickFilter } from './record.logic.ts';
 import html from './record.tpl.html';
+import { clearRecordPin, comparisonPanel } from './record.comparison.ts';
+import { readValues } from './record.data.ts';
 
 const tpl = templates(html, translateDom);
+let panel: PanelContext | null = null;
+let generation = 0;
 
 export const recordTab: TabModule = {
-  render(section, state) {
+  mount(_section, context) { panel = context; },
+  reset() { ++generation; clearRecordPin(); },
+  render(section, state, context) {
+    const view = ++generation;
+    const current = () => view === generation && (!panel || panel.state() === state);
     const { model, resId, origin } = state;
-    if (!model) { section.append(empty(_t('This screen is not bound to a model.'))); return; }
+    if (!model) { section.append(empty(_t('No model on this screen.'))); return; }
     block(section, 'identity', _t('Identity & metadata'), () => identity(model, resId ?? null));
     block(section, 'fields', _t('Fields'), () => fieldList(model, resId ?? null, origin));
+    block(section, 'compare', _t('Compare saved records'), () => comparisonPanel(state, context, current)); // an occasional task: last
   },
 };
 
@@ -48,27 +57,6 @@ async function identity(model: string, resId: number | null) {
     xmlid: m?.xmlids?.map((x) => `${x.xmlid}${x.noupdate ? ' (noupdate)' : ''}`).join(', ') || '—',
     ...(m && 'create_uid' in m ? { [_t('created by')]: who(m.create_uid, m.create_date), [_t('last updated by')]: who(m.write_uid, m.write_date) } : {}),
   });
-}
-
-/** Every field of the record. read() without fields computes every non-stored one: a single compute that raises (often
- * the very bug being debugged) fails them all, so the stored fields are read again on their own, with the error kept.
- * Binaries as their size: context bin_size, or (20) read apart with load='web', which gives no content. */
-async function readValues(model: string, resId: number, fields: FieldsGet): Promise<{ values: Record<string, unknown>; error?: unknown; partial?: boolean }> {
-  const web = (await odoo()).adapter.orm.binaryRead === 'web';
-  const binaries = web ? Object.keys(fields).filter((n) => fields[n]!.type === 'binary') : [];
-  const read = (names?: string[]) => call<Record<string, unknown>[]>(model, 'read', [[resId], ...(names ? [names] : [])], web ? {} : { context: { bin_size: true } })
-    .then((r) => r[0] || {});
-  const sizes = binaries.length
-    ? call<Record<string, unknown>[]>(model, 'read', [[resId], binaries], { load: 'web' }).then((r) => binarySizes(r[0] || {}, binaries), () => ({}))
-    : Promise.resolve({});
-  const others = binaries.length ? Object.keys(fields).filter((n) => !binaries.includes(n)) : undefined;
-  try {
-    const [values, bins] = await Promise.all([read(others), sizes]);
-    return { values: { ...values, ...bins } };
-  } catch (error) {
-    const stored = Object.entries(fields).filter(([n, f]) => f.store && !binaries.includes(n)).map(([name]) => name);
-    return Promise.all([read(stored), sizes]).then(([values, bins]) => ({ values: { ...values, ...bins }, error, partial: true }), () => ({ values: {}, error }));
-  }
 }
 
 /** ir.model.fields: the modules defining a field, and whether it is indexed. Access Rights only (both versions). */
@@ -93,7 +81,7 @@ function note(text: string) {
 async function fieldList(model: string, resId: number | null, origin: string) {
   const fields = await fieldsOf(model);
   const restricted = [...new Set(Object.values(fields).flatMap((f) => (f.groups ? parseGroups(f.groups).map((g) => g.xmlid) : [])))];
-  const [ir, read, names] = await Promise.all([irFields(model), resId ? readValues(model, resId, fields) : null, groupNames(restricted)]);
+  const [ir, read, names] = await Promise.all([irFields(model), resId ? odoo().then((context) => readValues(model, resId, fields, context.adapter.orm.binaryRead)) : null, groupNames(restricted)]);
   const values = read?.values ?? {};
   const irByName = new Map(ir.rows.map((f) => [f.name, f]));
   const recompute = reverseDeps(fields);
@@ -144,7 +132,7 @@ async function fieldList(model: string, resId: number | null, origin: string) {
 
   const notes: HTMLElement[] = [];
   if (read?.error) {
-    notes.push(...(read.partial ? [note(_t('A computed field failed: values of the stored fields only.'))] : []));
+    notes.push(...(read.partial ? [note(_t('A computed field failed: only stored values are shown.'))] : []));
     notes.push(errBox(read.error));
   }
   if (ir.error) {

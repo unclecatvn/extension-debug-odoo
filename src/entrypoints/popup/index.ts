@@ -1,6 +1,5 @@
 // Toolbar popup (only enabled on Odoo pages, see entrypoints/background) and options page: language, theme, shortcuts, and
-// (popup only) the page's host, Odoo version, database, the panel in its own window, debug mode.
-import type { ExtMessage } from '../../contracts/messages.ts';
+// (popup only) the page's host, Odoo version, database, debug mode.
 import { THEMES, applyTheme, isTheme, loadSettings, type Theme } from '../../extension/settings.ts';
 import { LANGS, N_, _t, lang, loadLang, translateDom } from '../../i18n/i18n.ts';
 import { pageDebug, pageDebugMode } from '../../injected/debug-mode.ts';
@@ -80,10 +79,6 @@ if (tab?.id != null) {
   // Logged in: the session info has both. Logged out (login page): the version only, the database comes with a session.
   sessionInfo().then((i) => show(i.server_version, i.db),
     () => rpc<{ server_version?: Json }>('/web/webclient/version_info', {}).then((v) => show(String(v.server_version ?? '')), () => show()));
-  $('#detach').addEventListener('click', () => { // entrypoints/background/detached-panel.ts opens it (or brings it to the front)
-    chrome.runtime.sendMessage({ type: 'odoo-detach', tabId } satisfies ExtMessage).catch(() => {});
-    window.close();
-  });
   // Odoo's debug mode of this tab: reloads it with ?debug=0 / 1 / assets (Odoo keeps it in the session)
   const [res] = await chrome.scripting.executeScript({ target: { tabId }, world: 'MAIN', func: pageDebugMode })
     .catch(() => []); // not scriptable (chrome:// …): no current mode shown

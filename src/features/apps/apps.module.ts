@@ -64,7 +64,7 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
   h.icon.addEventListener('load', () => { h.icon.hidden = false; });
   void detail.then((d) => { if (d.icon) h.icon.src = new URL(d.icon, origin).href; }, () => {});
   h.meta.append(...[copyable(m.name), statePill(m.state), m.application && pill(_t('App'), 'accent'), m.category_id && pill(m.category_id[1]),
-    m.auto_install && tip(pill(_t('auto-install')), _t('Installed by itself once every module it depends on is')),
+    m.auto_install && tip(pill(_t('auto-install')), _t('Installs itself once all its dependencies are installed')),
     m.to_buy && pill(_t('Enterprise'), 'info')].filter((x): x is HTMLElement => !!x));
   if (m.summary) h.summary.textContent = m.summary;
   else h.summary.remove();
@@ -74,7 +74,7 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
   if (installed || m.latest_version) {
     const disk = e.disk.get(m.id);
     const drift = versionDrift(m.latest_version, disk);
-    line(text(_t('Installed: %s', m.latest_version || '—'), 'mono', _t('ir.module.module.latest_version: the version in the database, written by the last install or upgrade')),
+    line(text(_t('Installed: %s', m.latest_version || '—'), 'mono', _t('latest_version: the database\'s version, from the last install or upgrade')),
       text('·', 'muted'),
       text(_t('On disk: %s', disk || '—'), 'mono', _t('installed_version: the version in the manifest on the server\'s addons path')),
       drift && pill(drift === 'disk-newer' ? _t('upgrade needed') : _t('older on disk'), 'med'));
@@ -95,12 +95,12 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
   const pickChip = button(e.isPicked(m.name) ? _t('Picked ✓') : _t('Pick'), () => {
     e.togglePick(m.name);
     pickChip.textContent = e.isPicked(m.name) ? _t('Picked ✓') : _t('Pick');
-  }, 'chip', _t('Add to / remove from the modules picked for an action'));
+  }, 'chip', _t('Add to or remove from the picked modules'));
   const uninstallPart = installed ? uninstallFold() : null;
   h.actions.append(...[
     m.state === 'uninstalled' && op(_t('Install'), _t('Update Apps List, then install it with its dependencies'), (begin) => activate([m.name], c.a, e.simulate, begin)),
     (m.state === 'installed' || m.state === 'to upgrade') && op(_t('Upgrade'), _t('Upgrade it now (and the modules depending on it)'), (begin) => upgrade([m.name], c.a, begin)),
-    uninstallPart && button(_t('Uninstall…'), () => { uninstallPart.open = true; uninstallPart.scrollIntoView({ block: 'nearest' }); }, 'btn', _t('What it would remove, then confirm')),
+    uninstallPart && button(_t('Uninstall…'), () => { uninstallPart.open = true; uninstallPart.scrollIntoView({ block: 'nearest' }); }, 'btn', _t('See what it would remove, then confirm')),
     pickChip,
     odooLink(origin, formPath(m.id), _t('Form ↗')),
   ].filter((x): x is HTMLButtonElement | HTMLAnchorElement => !!x));
@@ -126,16 +126,16 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
     const added = (reason: 'depends' | 'auto') => sim?.brought.filter((b) => b.reason === reason && b.name !== m.name) ?? [];
     const why = new Map(sim?.brought.map((b) => [b.name, b.reason === 'auto' ? _t('auto-installed: %s all installed or being installed', b.via.join(', ')) : _t('a dependency of %s', b.via.join(', '))]));
     return box(
-      title(_t('Declared in its manifest')), depends.length ? chips(depends, e) : note(_t('Nothing: it depends on no module.')),
+      title(_t('Declared in its manifest')), depends.length ? chips(depends, e) : note(_t('It depends on no module.')),
       title(_t('Needs in all (%s)', all.length)), all.length ? chips(all, e) : note(_t('Nothing.')),
       sim && frag(
         title(_t('Installing it also installs (%s)', added('depends').length)),
-        added('depends').length ? chips(added('depends').map((b) => b.name), e, why) : note(_t('Nothing: every dependency is installed.')),
+        added('depends').length ? chips(added('depends').map((b) => b.name), e, why) : note(_t('Every dependency is already installed.')),
         title(_t('And auto-installs (%s)', added('auto').length)),
         added('auto').length ? chips(added('auto').map((b) => b.name), e, why) : note(_t('Nothing.')),
         sim.missing.length > 0 && note(_t('Odoo will refuse it: %s', sim.missing.map((x) => _t('%s depends on %s, not on this server', x.module, x.dependency)).join('; '))),
         sim.uninstallable.length > 0 && note(_t('Not installable, the install will fail: %s', sim.uninstallable.join(', '))),
-        note(_t('As Odoo\'s button_install computes it: the dependencies not installed, then every auto_install module whose triggers are all installed or being installed (and, for a localization, a company in its countries).'))),
+        note(_t('Computed like Odoo\'s button_install: an auto_install module joins once all its triggers are installed; a localization also needs a company in its country.'))),
       legend());
   }));
 
@@ -150,7 +150,7 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
 
   parts.push(fold('data', _t('Data (xmlids)'), '', async () => {
     const rows = await ownData();
-    if (!rows.length) return note(installed ? _t('No xmlid: the module brings no data.') : _t('Not installed: its data is known once it is.'));
+    if (!rows.length) return note(installed ? _t('No xmlid: the module brings no data.') : _t('Not installed: its data shows after install.'));
     const tableRows: MxRow[] = byKind(rows).map((k) => {
       const label = KIND_LABEL[k.model];
       const noupdate = k.rows.filter((r) => r.noupdate).length;
@@ -165,7 +165,7 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
 
   parts.push(fold('models', _t('Models'), '', async () => {
     const ids = (await ownData()).filter((r) => r.model === 'ir.model').map((r) => r.res_id);
-    if (!ids.length) return note(installed ? _t('It creates or extends no model.') : _t('Not installed: its models are known once it is.'));
+    if (!ids.length) return note(installed ? _t('It creates or extends no model.') : _t('Not installed: its models show after install.'));
     const models = await readModels(ids);
     const creates: MxRow[] = [];
     const extendsRows: MxRow[] = [];
@@ -199,15 +199,15 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
         if (!confirm(lines.join('\n'))) return;
         const typed = prompt(_t('Type %s to uninstall it.', m.name));
         if (typed == null) return;
-        if (typed.trim() !== m.name) { ulog.clear(); ulog.error(new Error(_t('Not the module\'s name: nothing was uninstalled.'))); return; }
+        if (typed.trim() !== m.name) { ulog.clear(); ulog.error(new Error(_t('The name doesn\'t match: nothing was uninstalled.'))); return; }
         void run(ulog, [go, ...ops], (begin) => uninstall(m, c.a, begin));
       }, 'btn', _t('Asks to confirm, then to type its name'));
       go.classList.add('danger');
       return box(
-        note(_t('What Odoo\'s uninstall wizard computes: every module depending on it goes too, and the models only these modules define lose their table and data.')),
+        note(_t('Per Odoo\'s uninstall wizard: modules depending on it are removed too; models only they define lose their table and data.')),
         title(_t('Modules removed with it (%s)', names.length)), names.length ? chips(names, e) : note(_t('No other module.')),
         title(_t('Models whose data is deleted (%s)', p.models.length)),
-        p.models.length ? plainList(p.models.map((x) => row(copyable(x.model), text(x.name, 'muted')))) : note(_t('None: no model loses its data.')),
+        p.models.length ? plainList(p.models.map((x) => row(copyable(x.model), text(x.name, 'muted')))) : note(_t('No model loses its data.')),
         row(go), out);
     });
   }
@@ -216,7 +216,7 @@ export async function moduleDetail(m: AppModule, e: ModuleEnv): Promise<Node> {
 /** What the state pill can't say: why it can't be installed, or that it waits. */
 function stateExplained(m: AppModule): string | null {
   switch (m.state) {
-    case 'uninstallable': return _t('Not installable: its manifest says installable: False, or it is not on this server\'s addons path any more.');
+    case 'uninstallable': return _t('Not installable: installable: False in its manifest, or no longer in the addons path.');
     case 'to install': case 'to upgrade': case 'to remove': return _t('%s: waiting for Odoo\'s next module operation (see Pending).', stateLabel(m.state));
     default: return null;
   }

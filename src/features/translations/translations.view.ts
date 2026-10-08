@@ -31,7 +31,7 @@ export function viewView(body: HTMLElement, c: TranslationsCtx) {
     if (!sections.length) return note(_t('The views of this screen have no translatable text.'));
     const total = sections.reduce((n, s) => n + s.rows.length, 0);
     const table = matrix(_t('%s views', views.length), langs, sections, -1, true);
-    const legend = note(_t('✗ not translated: the screen shows the English text. Click a row to edit its translations.'));
+    const legend = note(_t('✗ not translated: the screen shows the English text. Click a row to edit.'));
     legend.classList.add('legend');
     return frag(tableFilter(table, total, ['%s texts', '%s of %s texts']), table, legend);
   });

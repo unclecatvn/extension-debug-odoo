@@ -40,6 +40,13 @@ Câu trả lời hiện ngay trên trang, cho chính bạn hoặc cho bất kỳ
 
 Ảnh chụp từng tab: [odoo-debug.unclecatvn.com](https://odoo-debug.unclecatvn.com/#features).
 
+### Cải tiến luồng debug (bản phát triển)
+
+- **RPC**: thấy request đang chờ cùng thời gian đã chờ; lọc Đang chờ, Chậm (≥ 1 giây), hoặc Lỗi. Phản hồi cập nhật ngay trên dòng cũ, giữ phần request đang chỉnh sửa.
+- **Code → Lịch sử**: xem 20 lần chạy gần nhất, khôi phục code mà không chạy lại hoặc bật quyền ghi, lưu thành snippet. Lịch sử tách theo database/người dùng và chỉ ở bộ nhớ phiên panel; tải lại hoặc hủy phiên panel sẽ mất lịch sử (thu nhỏ panel vẫn giữ). Kết quả quá lớn được bỏ qua kèm thông báo.
+- **Record → So sánh bản ghi đã lưu**: chọn 2–5 bản ghi trong danh sách/kanban, hoặc ghim A rồi mở B. Lọc **Chỉ hiện khác biệt**; giá trị chưa đọc được vẫn hiện rõ. Chỉ so sánh dữ liệu đã lưu, dữ liệu nhị phân so theo kích thước; Tải lại dữ liệu sẽ bỏ ghim.
+- **Perf → Nhóm theo phương thức**: số lần gọi, tổng thời gian, trung vị và tổng SQL; mở từng request để xem chi tiết. Chỉ tính trong 200 profile mới nhất đã tải sau khi loại request của panel và file tĩnh đang ẩn. Tổng thời gian request không phải thời gian tải trang.
+
 ## Cài đặt
 
 1. Cài **[Odoo Debug từ Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)**. Chạy trên Chrome, Edge, Brave và các trình duyệt nhân Chromium khác (Edge: cho phép extension từ store khác trước), và tự cập nhật.

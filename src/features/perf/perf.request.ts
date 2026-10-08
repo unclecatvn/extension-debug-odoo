@@ -80,14 +80,14 @@ export async function requestDetail(r: ProfileRow, e: RequestEnv): Promise<Node>
       ? frag(matrix(_t('Statement'), [_t('Runs'), _t('Time')], [{ rows: sum.repeated.map((g): MxRow => ({
         label: [querySays(g.query)], sub: g.callers.map((x) => (x === FRAMEWORK_CALLER ? _t('Odoo itself') : x)).join(' · '), q: g.query,
         cells: [pill(`${g.count}×`, g.count >= 5 ? 'err' : 'med'), ms(g.time)], detail: () => queryDetail(g.first),
-      })) }], -1), note(_t('The same SQL sent several times. If a count follows the number of records shown (10 records → 10×), it is an N+1: the code reads records one by one where one query could read them all.')))
+      })) }], -1), note(_t('The same SQL sent several times. If the count matches the records shown (10 records → 10×), it is an N+1: one query could read them all.')))
       : note(_t('✓ No statement runs twice.'))), true));
     const slowest = sum.slowest[0]?.time ?? 0;
     parts.push(fold('slowest', _t('Slowest queries'), String(sum.slowest.length), () => frag(matrix(_t('Statement'), [_t('Time')], [{
       rows: sum.slowest.map((x): MxRow => ({ label: [querySays(x.query)], sub: frameText(appFrame(x.stack)), q: normalizeQuery(x.query), cells: [ms(x.time)], detail: () => queryDetail(x) })),
     }], -1), note(slowest < 0.01
       ? _t('✓ No slow query (the slowest took %s): the database is not the problem here.', ms(slowest))
-      : _t('The slowest took %s. Check the columns it filters or joins on have an index, and that it does not read more rows than needed.', ms(slowest))))));
+      : _t('The slowest took %s. Check that its filter and join columns are indexed and it reads no more rows than needed.', ms(slowest))))));
   }
   return box(...parts);
 }
@@ -133,11 +133,11 @@ function diagnosis(r: ProfileRow, sum: SqlSummary): HTMLElement {
   const at = appFrame(sum.repeated[0]?.first.stack);
   const [tone, title, advice]: [string, string, (Node | string | null)[]] = {
     n1: ['err', _t('N+1: one query runs %s× in this request', sum.repeated[0]?.count ?? 0),
-      [...tNodes(N_('%s runs it once per record: read them all at once instead (a recordset, mapped(), read_group…).'), codeRef(at)), codeLine(at)]],
+      [...tNodes(N_('%s runs it once per record: read them all at once (recordset, mapped(), read_group…).'), codeRef(at)), codeLine(at)]],
     sql: ['med', _t('Most of the time is in the database (%s of %s)', ms(sum.time), ms(r.duration)),
       [_t('See the slowest queries below: a missing index, a large join, a search on a non-stored field…')]],
     python: ['info', _t('Most of the time is in Python (≈ %s of %s)', ms(python), ms(r.duration)),
-      [_t('The SQL is not the problem: see which code takes the time below, or every function in the Flame Graph.')]],
+      [_t('Not the SQL: see which code takes the time below, or the Flame Graph.')]],
     fast: ['ok', _t('✓ Fast request (%s)', ms(r.duration)), [_t('Nothing to optimise here.')]],
   }[kind] as [string, string, (Node | string | null)[]];
   const d = tpl('diag', { box: HTMLDivElement, title: HTMLElement, advice: HTMLDivElement }).refs;
@@ -165,9 +165,9 @@ async function byCode(r: ProfileRow, entries: readonly SqlEntry[], e: RequestEnv
   const samples = await samplesOf(e.s, r.id);
   const spots = hotspots(samples, entries);
   const intro = note(spots.length
-    ? _t('The functions of the modules (outside the ORM and the server) the time went to, SQL they ran included. Sampled every 10 ms or so: approximate.')
+    ? _t('Module functions (outside the ORM and server) taking the time, their SQL included. Sampled every ~10 ms: approximate.')
     : samples.length ? _t('No time in the modules\' code: the server itself (routing, ORM) took it.')
-      : _t('No Python samples: this request was recorded without them (Collect: Python stacks).'));
+      : _t('No Python samples: turn on Python stacks (Collect) and record it again.'));
   if (!spots.length) return intro;
   return frag(matrix(_t('Function'), [_t('Time'), 'SQL'], [{ rows: spots.map((h): MxRow => ({
     label: [codeRef(h.frame)!],
@@ -204,7 +204,7 @@ function callersTable(entries: readonly SqlEntry[], sum: SqlSummary): Node {
         })) }], -1);
       },
     })) }], -1),
-    note(_t('The line of an addon under the ORM that caused the queries. Many queries from one line, one statement repeated: a loop reading record by record (N+1).')));
+    note(_t('The addon line (just under the ORM) that sent the queries. Many queries, one statement repeated: a record-by-record loop (N+1).')));
 }
 
 /** This request against the baseline: counts and durations, then the repeated statements gone, new, still there. */
@@ -227,5 +227,5 @@ async function comparison(r: ProfileRow, sum: SqlSummary, e: RequestEnv): Promis
     matrix('', [_t('Baseline'), _t('This one'), _t('Change')], [{ rows: [
       line(_t('Queries'), c.sql, String), line(_t('Total'), c.duration, ms), line(_t('In SQL'), c.sqlTime, ms),
     ] }], -1),
-    ...(groups.length ? groups : [note(_t('Repeated statements: the same as the baseline.'))]));
+    ...(groups.length ? groups : [note(_t('Same repeated statements as the baseline.'))]));
 }

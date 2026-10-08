@@ -247,7 +247,7 @@ export async function assess(model: string, resId: number | null, sim: Simulated
     const domain = ev.domain as Json[];
     if (!domain.length) return passed.set(r.id, true);
     // 20's ('field', 'access', operation) is resolved for whoever runs the search: the viewer, not the simulated user
-    if ((!sim.isMe || sim.tried.size) && usesAccessOperator(domain)) return notes.set(r.id, N_('Its \'access\' condition is checked with your own rights, not the simulated user\'s: it cannot be told.'));
+    if ((!sim.isMe || sim.tried.size) && usesAccessOperator(domain)) return notes.set(r.id, N_('Its \'access\' condition uses your rights, not the simulated user\'s, so it can\'t be checked.'));
     try { passed.set(r.id, (await count(r.via ? [[r.via.link, 'any', domain]] : domain)) > 0); } catch (e) { notes.set(r.id, (e as Error).message); }
   }));
   const input: VerdictInput = { superuser: sim.superuser, groupIds: sim.groupIds, acls: sec.acls, rules, resId, passed,

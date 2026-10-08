@@ -93,6 +93,23 @@
 <template data-tpl="code-inline">
   <code class="code-inline" data-ref="code"></code>
 </template>
+<!-- The code editor (editor.ts): a transparent textarea over a <pre> painting the same text in colours, line numbers
+     beside it. -->
+<template data-tpl="code-editor">
+  <div class="editor" data-ref="root">
+    <div class="editor-body" data-ref="body">
+      <pre class="hl" aria-hidden="true" data-ref="paint"></pre>
+      <textarea class="code" rows="10" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" writingsuggestions="false" data-ref="ta"></textarea>
+    </div>
+  </div>
+</template>
+<template data-tpl="hl-line">
+  <div data-ref="line"></div>
+</template>
+<!-- An icon copying a block of text (components.ts → copyButton); the check shows once copied. -->
+<template data-tpl="copy-btn">
+  <button type="button" class="copy-btn" data-ref="button"><span class="copy-icons" aria-hidden="true"><svg class="i-copy" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><svg class="i-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></button>
+</template>
 <!-- One coloured token (tok-* classes: panel.css, they follow the theme). -->
 <template data-tpl="tok">
   <span data-ref="tok"></span>

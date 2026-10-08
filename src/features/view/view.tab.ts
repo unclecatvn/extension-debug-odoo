@@ -30,7 +30,7 @@ export const viewTab: TabModule = {
     if (model !== lastModel) { lastModel = model ?? null; if (inspectedField()) inspect(''); } // another model: another field list
     if (picked) { inspect(picked); picked = null; }
     if (!model) {
-      section.append(empty(_t('This screen is not bound to a model.')));
+      section.append(empty(_t('No model on this screen.')));
       if (state.action) actionPart(section, state);
       return;
     }

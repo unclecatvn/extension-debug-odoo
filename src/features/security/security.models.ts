@@ -103,8 +103,8 @@ export function modelsView(body: HTMLElement, c: SecurityCtx) {
       button(_t('Collapse All'), () => foldAll(true), 'chip', _t('Fold every module back to its line')),
       ...(sim.tried.size ? [toggle('added', _t('Only what the tried groups add'))] : []), ...(theirs ? [toggle('differs', _t('Only differences'))] : []), count);
     apply();
-    const legend = note(theirs ? _t('Each cell: %s | %s. ✓ an ACL grants the operation, · none does. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it.', sim.user.name, other!.user.name)
-      : _t('✓ an ACL grants the operation, · none does; +✓ added by the tried groups. Rules: how many record rules limit which records. Click a module to open it, a model for what decides it.'));
+    const legend = note(theirs ? _t('Each cell: %s | %s. ✓ an ACL grants it, · none does. Rules: how many record rules limit the records. Click a model for why.', sim.user.name, other!.user.name)
+      : _t('✓ an ACL grants it, · none does, +✓ added by the tried groups. Rules: how many record rules limit the records. Click a model for why.'));
     legend.classList.add('legend');
     return box(bar, table, legend);
   });
@@ -126,8 +126,8 @@ function detail(model: { name: string; tech: string }, a: ModelRights | undefine
   const sentence = [
     can.length ? _t('%s can %s %s.', sim.user.name, listModes(can), model.name) : _t('%s has no access to %s.', sim.user.name, model.name),
     can.length && cannot.length ? _t('Not %s.', listModes(cannot)) : '',
-    can.length ? (rules.length === 1 ? _t('1 record rule decides which records: only the ones it allows.')
-      : rules.length ? _t('%s record rules decide which records: only the ones they allow.', rules.length) : _t('No record rule: every record.')) : '',
+    can.length ? (rules.length === 1 ? _t('1 record rule limits the records.')
+      : rules.length ? _t('%s record rules limit the records.', rules.length) : _t('No record rule: every record.')) : '',
     other ? _t('%s: %s.', other.user.name, MODES.filter((m) => b?.modes.has(m)).map((m) => modeLabel(m).toLowerCase()).join(', ') || _t('no access')) : '',
   ].filter(Boolean).join(' ');
 
@@ -155,7 +155,7 @@ function detail(model: { name: string; tech: string }, a: ModelRights | undefine
     aclRows.length ? matrix(_t('Granted by'), modeHeads(), [{ rows: aclRows }]) : note(_t('No ACL of this user\'s groups grants anything on this model.')),
     note(_t('An operation is allowed when at least one of these ACLs grants it.')),
     ...(ruleRows.length ? [title(_t('Record rules: which records')), matrix(_t('Rule'), modeHeads(), [{ rows: ruleRows }]),
-      note(_t('For an operation, a record must match every global rule and at least one of the group rules. Click a rule for its domain; the Record view evaluates them on a record.'))] : []));
+      note(_t('A record must match every global rule and at least one group rule. Click a rule for its domain.'))] : []));
   out.className = 'model-detail';
   return out;
 }

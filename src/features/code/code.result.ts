@@ -75,7 +75,7 @@ const sizeText = (bytes: number) => (bytes > 1e6 ? `${(bytes / 1e6).toFixed(1)} 
 
 function recordsetChip(v: RecordsetValue, f: Fmt): Node {
   const n = v.count ?? v.ids.length;
-  if (v.ids.some((id) => id <= 0)) return text(`${v.$recordset}(${v.ids.join(', ')})`, 'mono', _t('Not created: a dry run answers create() with an id no record has'));
+  if (v.ids.some((id) => id <= 0)) return text(`${v.$recordset}(${v.ids.join(', ')})`, 'mono', _t('Not created: in a dry run, create() returns a fake id'));
   if (n === 1) return link(v.names?.[0] ?? `${v.$recordset}(${v.ids[0]})`, recordUrl(f, v.$recordset, v.ids[0]!), `${v.$recordset} #${v.ids[0]}`);
   return text(`${v.$recordset}(${v.ids.slice(0, 8).join(', ')}${n > 8 ? ', …' : ''})`, 'mono', _t('%s records', n));
 }
@@ -143,7 +143,7 @@ function exportBar(rows: readonly Record<string, unknown>[], value: unknown): HT
 }
 
 /** A value shown as what it is (see the header). */
-export async function valueView(v: unknown, f: Fmt): Promise<HTMLElement> {
+export async function valueView(v: unknown, f: Fmt, snapshot = false): Promise<HTMLElement> {
   const r = tpl('value-box', { box: HTMLDivElement, head: HTMLDivElement, body: HTMLDivElement }).refs;
   const kind = kindOf(v);
   const head = (...n: (Node | string)[]) => r.head.append(...n);
@@ -151,18 +151,18 @@ export async function valueView(v: unknown, f: Fmt): Promise<HTMLElement> {
     const rs = v as RecordsetValue;
     const n = rs.count ?? rs.ids.length;
     let names = rs.names;
-    if (!names && rs.ids.length) names = (await call<{ id: number; display_name: string }[]>(rs.$recordset, 'read', [rs.ids.slice(0, MAX_ROWS), ['display_name']]).catch(() => []))
+    if (!snapshot && !names && rs.ids.length) names = (await call<{ id: number; display_name: string }[]>(rs.$recordset, 'read', [rs.ids.slice(0, MAX_ROWS), ['display_name']]).catch(() => []))
       .map((x) => x.display_name);
     const rows = rs.ids.slice(0, MAX_ROWS).map((id, i) => ({ id, display_name: names?.[i] ?? '' }));
     head(pill(_t('recordset'), 'accent'), text(rs.$recordset, 'mono'), text(_t('%s records', n), 'muted'));
-    const fields = await modelFields(rs.$recordset);
+    const fields = snapshot ? null : await modelFields(rs.$recordset);
     if (rows.length) { r.body.append(table(rows, f, fields)); head(exportBar(rows, v)); }
     if (n > rows.length) r.body.append(text(_t('… and %s more', n - rows.length), 'muted'));
   } else if (kind === 'rows' || kind === 'table') {
     const model = kind === 'rows' ? (v as { $rows: string }).$rows : null;
     const rows = kind === 'rows' ? (v as { rows: Record<string, unknown>[] }).rows : (v as Record<string, unknown>[]);
     head(pill(model ? _t('rows of %s', model) : _t('table'), 'accent'), text(rows.length > MAX_ROWS ? _t('%s rows (first %s shown)', rows.length, MAX_ROWS) : _t('%s rows', rows.length), 'muted'));
-    r.body.append(table(rows, f, model ? await modelFields(model) : null));
+    r.body.append(table(rows, f, model && !snapshot ? await modelFields(model) : null));
     head(exportBar(rows, v));
   } else if (kind === 'number' || kind === 'string' || kind === 'boolean' || kind === 'null' || kind === 'date' || kind === 'datetime') {
     r.body.append(big(v, kind, f));
@@ -225,7 +225,7 @@ function printLine(values: readonly unknown[], f: Fmt): HTMLElement {
   return line;
 }
 
-export interface ResultOptions { lang: Lang; refreshed?: { ok: true } | { error: string } | null; goToLine(line: number): void }
+export interface ResultOptions { lang: Lang; refreshed?: { ok: true } | { error: string } | null; goToLine?(line: number): void; snapshot?: boolean }
 
 /** The whole result of a run. */
 export async function resultView(r: RunResult, f: Fmt, o: ResultOptions): Promise<Node[]> {
@@ -241,8 +241,8 @@ export async function resultView(r: RunResult, f: Fmt, o: ResultOptions): Promis
   const parts: Node[] = [head];
   if (r.mode === 'dry' && (o.lang === 'python' || stats.held)) {
     parts.push(text(o.lang === 'python'
-      ? _t('Dry run: the code ran for real, then everything it changed was rolled back.')
-      : _t('Dry run: the writing calls below were listed, not sent; reads after them show the values before.'), 'muted dry-note'));
+      ? _t('Dry run: the code really ran, then all its changes were rolled back.')
+      : _t('Dry run: the writes below were not sent; later reads show the old values.'), 'muted dry-note'));
   }
   if (r.out.length) {
     const { box: prints } = tpl('prints', { box: HTMLDivElement }).refs;
@@ -250,7 +250,7 @@ export async function resultView(r: RunResult, f: Fmt, o: ResultOptions): Promis
     parts.push(prints);
   }
   if (!r.ok && r.error) parts.push(errorView(r, o));
-  else if (r.hasValue) parts.push(await valueView(r.value, f));
+  else if (r.hasValue) parts.push(await valueView(r.value, f, o.snapshot));
   else parts.push(text(_t('No return value: end with return … to see one.'), 'muted'));
   if (r.calls.length) parts.push(callList(r.calls));
   return parts;
@@ -260,9 +260,9 @@ function errorView(r: RunResult, o: ResultOptions): HTMLElement {
   const e = r.error!;
   const message = e.msgid ? _t(e.msgid, ...e.args) : e.message;
   const out = box(errBox({ message: `${e.type ? `${e.type.split('.').pop()}: ` : ''}${message}`, traceback: e.traceback || undefined }));
-  if (e.line) out.append(row(text(_t('Line %s', e.line), 'muted'), button(_t('Go to Line'), () => o.goToLine(e.line!), 'chip')));
-  if (e.name === 'EvalError') out.append(text(_t('This page\'s Content-Security-Policy forbids running code (a proxy in front of Odoo adds script-src).'), 'muted'));
-  if (o.lang === 'python' && r.mode === 'write') out.append(text(_t('Nothing was saved: the error rolled back everything the code had changed.'), 'muted'));
+  if (e.line) out.append(row(text(_t('Line %s', e.line), 'muted'), o.goToLine ? button(_t('Go to Line'), () => o.goToLine!(e.line!), 'chip') : null));
+  if (e.name === 'EvalError') out.append(text(_t('Blocked by this page\'s Content-Security-Policy: check script-src on the proxy in front of Odoo.'), 'muted'));
+  if (o.lang === 'python' && r.mode === 'write') out.append(text(_t('Nothing was saved: the error rolled back all changes.'), 'muted'));
   return out;
 }
 

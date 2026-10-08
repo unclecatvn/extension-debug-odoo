@@ -32,6 +32,7 @@ export function systemView(body: HTMLElement, c: SecurityCtx) {
 /** A titled section, built at once; `again` builds it anew. */
 function section(name: string, build: (again: () => void) => Promise<Node>): Node {
   const content = box();
+  content.classList.add('sys-section'); // one rhythm inside (panel.css)
   const run = () => fill(content, () => build(run));
   run();
   return frag(title(name), content);
@@ -66,7 +67,7 @@ async function companies(uc: unknown): Promise<Node> {
     cells: [String(co.id), co.id === data.current_company ? { v: true, title: _t('The user\'s default company') } : { v: 'na', title: _t('Not the default company') },
       allowed && on.has(co.id) ? { v: true, title: _t('On in the page\'s company switcher') } : { v: 'na', title: allowed ? _t('Off in the page\'s company switcher') : _t('The user is not in this company') }],
   }));
-  const legend = note(_t('Default: the company the user starts in. On: enabled in the page\'s company switcher (record rules read these).'));
+  const legend = note(_t('Default: the company the user starts in. On: enabled in the page\'s switcher, read by record rules.'));
   legend.classList.add('legend');
   return frag(title(_t('Companies')), matrix(_t('Company'), ['ID', _t('Default'), _t('On')], [{ rows }]), legend);
 }

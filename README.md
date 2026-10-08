@@ -42,6 +42,13 @@ It answers on the page itself, for the user you are or any user you pick. Made f
 
 Screenshots of every tab: [odoo-debug.unclecatvn.com](https://odoo-debug.unclecatvn.com/#features).
 
+### Debug workflow additions (development build)
+
+- **RPC**: see in-flight requests and their elapsed time; filter Pending, Slow (≥ 1 s), or Errors. The same row updates when the response arrives.
+- **Code → History**: inspect the last 20 completed runs, restore code without running it, or save it as a snippet. History is per database/user in panel memory; reloading or destroying the panel discards it (minimizing does not). Large outputs may be omitted with a notice.
+- **Record → Compare saved records**: select 2–5 records in a list/kanban, or pin record A and navigate to B. Use **Differences only** to focus on changed fields. Reads saved server values, not unsaved form edits; binary comparison uses size only. Reload Data clears the pin.
+- **Perf → Group by method**: count, total request time, median and SQL count, with individual request drilldown. Only the latest 200 fetched profiles are considered, excluding panel requests and hidden static files; concurrent request times are added, not interpreted as page load time.
+
 ## Install
 
 1. Install **[Odoo Debug from the Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)**. It works in Chrome, Edge, Brave and other Chromium browsers (Edge: allow extensions from other stores first), and updates itself.

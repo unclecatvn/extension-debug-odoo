@@ -72,7 +72,7 @@ export function langsView(body: HTMLElement, c: TranslationsCtx) {
       }, 'chip'))
       : null;
     if (back === mine) remember(null);
-    const legend = note(_t('Users: internal users with this language. Update reloads the terms from the modules (what a module upgrade does).'));
+    const legend = note(_t('Users: internal users with this language. Update reloads the terms from the modules, like a module upgrade.'));
     legend.classList.add('legend');
     return frag(banner, bar, table, legend, out);
   });

@@ -37,6 +37,8 @@ export interface TabModule {
   mount?(section: HTMLElement, ctx: PanelContext): void | Promise<void>;
   /** A message from the page (RPC recorded, field picked). Returns the tab to show, if any. */
   onMessage?(msg: ExtMessage): TabName | null;
+  /** A confirmed page snapshot; consumers distinguish document replacement from SPA navigation by loadedAt. */
+  pageObserved?(previous: PageState, next: PageState): void;
   /** ⟳ Reload Data: forget what is kept between renders (last run, picks…). */
   reset?(): void;
 }
