@@ -389,7 +389,7 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .code-help pre { margin-top: 4px; }
 .example { position: relative; }
 .example pre { padding-right: 36px; }
-/* icon-only copy button, tooltip above it (as on a code block) */
+/* copyButton() (components.ts): an icon at the top right of a block (an SQL query), ✓ once copied; its tooltip: tooltip.ts */
 .copy-btn { position: absolute; top: 4px; right: 4px; display: grid; place-items: center; width: 26px; height: 26px; padding: 0;
   border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer; }
 .copy-btn:hover, .copy-btn:focus-visible { background: var(--line); color: var(--fg); text-decoration: none; }
@@ -398,11 +398,6 @@ textarea.code::selection { background: color-mix(in srgb, var(--accent) 35%, tra
 .copy-btn .i-check, .copy-btn.copied .i-copy { display: none; }
 .copy-btn.copied .i-check { display: block; color: var(--ok); }
 .copy-btn.copied::after { content: none; } /* the check icon replaces the ✓ text of other copy buttons */
-.copy-btn::before { content: attr(data-tip); position: absolute; bottom: calc(100% + 6px); right: 0; /* right-aligned: centred, it would be clipped by the card */
-  padding: 4px 8px; border-radius: 6px; background: light-dark(#1f1d24, #3d3a42); color: #fff; font-size: var(--fs-xs); line-height: 1.3;
-  white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s; z-index: 2; }
-.copy-btn:hover::before, .copy-btn:focus-visible::before, .copy-btn.copied::before { opacity: 1; }
-.copy-btn.copied::before { content: attr(data-done); }
 .table-wrap td { font-family: var(--mono); font-size: var(--fs-xs); white-space: pre-wrap; }
 /* Code tab: suggestions under the caret (left / top set by suggest.js) */
 .suggest { font: var(--sans); /* not the editor's monospace, which it sits in */ position: absolute; z-index: 5; min-width: 220px; max-width: 100%; list-style: none; margin: 0; padding: 2px 0; max-height: 180px; overflow: auto;
@@ -999,3 +994,17 @@ table.compare-table { border: 0; border-radius: 0; }
 /* the pane scrolls by itself: no padding above its content, or rows would show above a header sticking in it */
 .groups-pane { padding-top: 0; }
 .groups-pane > :first-child { margin-top: 14px; }
+/* a table opened inside another table's row (narrow panel): its column names scroll with it, only the outer ones stick,
+   or two sticky heads would cover each other */
+.mx-detail table.matrix thead th { position: static; }
+
+/* Security › System (security.system.ts): each section a column with one rhythm, its sub-titles (user_context,
+   Companies) spaced like the section titles, not pressed against what is above them */
+.sys-section { display: flex; flex-direction: column; gap: 8px; }
+.sys-section > .story-title { margin: 10px 0 -2px; }
+.sys-section > :is(.note, .legend) { margin: 0; }
+.sys-section > :is(button, .btn) { align-self: flex-start; }
+/* the views (Record, By model, the model, Groups, System): when they wrap (a long model name), each line is filled, no
+   button left alone at the start of a line */
+.subview-head .seg button { flex: 1 1 auto; }
+

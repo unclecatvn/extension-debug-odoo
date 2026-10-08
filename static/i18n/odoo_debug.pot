@@ -2341,6 +2341,10 @@ msgstr ""
 msgid "Come back and refresh (⟳): slowest requests first; click one to see why."
 msgstr ""
 
+#: src/features/perf/perf.ui.ts:78
+msgid "Copy the query"
+msgstr ""
+
 #: src/features/record/record.comparison.ts:45
 msgid "Pinned: %s (#%s)"
 msgstr ""
@@ -2685,7 +2689,7 @@ msgid "Copy as cURL"
 msgstr ""
 
 #: src/features/security/security.bar.ts:25
-#: src/features/security/security.system.ts:44
+#: src/features/security/security.system.ts:45
 msgid "User"
 msgstr ""
 
@@ -2694,8 +2698,8 @@ msgid "Search a user by name or login…"
 msgstr ""
 
 #: src/features/security/security.bar.ts:33
-#: src/features/security/security.system.ts:60
-#: src/features/security/security.system.ts:71
+#: src/features/security/security.system.ts:61
+#: src/features/security/security.system.ts:72
 msgid "Companies"
 msgstr ""
 
@@ -2750,32 +2754,24 @@ msgstr ""
 msgid "The current company (the first one on)"
 msgstr ""
 
-#: src/features/security/security.bar.ts:101
-msgid "as in the page's switcher"
-msgstr ""
-
-#: src/features/security/security.bar.ts:101
-msgid "their default company (their switcher isn't visible here)"
-msgstr ""
-
-#: src/features/security/security.bar.ts:109
+#: src/features/security/security.bar.ts:107
 msgid "Trying %s in every view: simulated, nothing is written."
 msgstr ""
 
-#: src/features/security/security.bar.ts:111
+#: src/features/security/security.bar.ts:109
 #: src/features/security/security.groups.ts:229
 msgid "Add %s to %s?"
 msgstr ""
 
-#: src/features/security/security.bar.ts:125
+#: src/features/security/security.bar.ts:123
 msgid "Applied…"
 msgstr ""
 
-#: src/features/security/security.bar.ts:130
+#: src/features/security/security.bar.ts:128
 msgid "Applied on %s: %s"
 msgstr ""
 
-#: src/features/security/security.bar.ts:131
+#: src/features/security/security.bar.ts:129
 msgid "Applied: access to this record didn't change."
 msgstr ""
 
@@ -3663,91 +3659,91 @@ msgstr ""
 msgid "Instance check"
 msgstr ""
 
-#: src/features/security/security.system.ts:50
+#: src/features/security/security.system.ts:51
 msgid "Become Superuser"
 msgstr ""
 
-#: src/features/security/security.system.ts:51
+#: src/features/security/security.system.ts:52
 msgid "Switch the current session to superuser (bypasses every rule)?"
 msgstr ""
 
-#: src/features/security/security.system.ts:52
+#: src/features/security/security.system.ts:53
 msgid "Odoo's built-in /web/become route, base.group_system only"
 msgstr ""
 
-#: src/features/security/security.system.ts:60
+#: src/features/security/security.system.ts:61
 msgid "Not in the session info."
 msgstr ""
 
-#: src/features/security/security.system.ts:64
+#: src/features/security/security.system.ts:65
 msgid "parent only: the user is not in it"
 msgstr ""
 
-#: src/features/security/security.system.ts:66
+#: src/features/security/security.system.ts:67
 msgid "The user's default company"
 msgstr ""
 
-#: src/features/security/security.system.ts:66
+#: src/features/security/security.system.ts:67
 msgid "Not the default company"
 msgstr ""
 
-#: src/features/security/security.system.ts:67
+#: src/features/security/security.system.ts:68
 msgid "On in the page's company switcher"
 msgstr ""
 
-#: src/features/security/security.system.ts:67
+#: src/features/security/security.system.ts:68
 msgid "Off in the page's company switcher"
 msgstr ""
 
-#: src/features/security/security.system.ts:67
+#: src/features/security/security.system.ts:68
 msgid "The user is not in this company"
 msgstr ""
 
-#: src/features/security/security.system.ts:69
+#: src/features/security/security.system.ts:70
 msgid "Default: the company the user starts in. On: enabled in the page's switcher, read by record rules."
 msgstr ""
 
-#: src/features/security/security.system.ts:71
+#: src/features/security/security.system.ts:72
 msgid "Company"
 msgstr ""
 
-#: src/features/security/security.system.ts:71
+#: src/features/security/security.system.ts:72
 msgid "Default"
 msgstr ""
 
-#: src/features/security/security.system.ts:71
+#: src/features/security/security.system.ts:72
 msgid "On"
 msgstr ""
 
-#: src/features/security/security.system.ts:76
+#: src/features/security/security.system.ts:77
 msgid "Needs Settings rights (base.group_system)."
 msgstr ""
 
-#: src/features/security/security.system.ts:78
+#: src/features/security/security.system.ts:79
 msgid "No parameter."
 msgstr ""
 
-#: src/features/security/security.system.ts:79
+#: src/features/security/security.system.ts:80
 msgid "Key"
 msgstr ""
 
-#: src/features/security/security.system.ts:87
+#: src/features/security/security.system.ts:88
 msgid "Copy the value"
 msgstr ""
 
-#: src/features/security/security.system.ts:93
+#: src/features/security/security.system.ts:94
 msgid "Filter key / value"
 msgstr ""
 
-#: src/features/security/security.system.ts:94
+#: src/features/security/security.system.ts:95
 msgid "%s of %s parameters"
 msgstr ""
 
-#: src/features/security/security.system.ts:105
+#: src/features/security/security.system.ts:106
 msgid "Raw data"
 msgstr ""
 
-#: src/features/security/security.system.ts:106
+#: src/features/security/security.system.ts:107
 msgid "Check Again"
 msgstr ""
 
@@ -4570,7 +4566,7 @@ msgstr ""
 msgid "Loading…"
 msgstr ""
 
-#: src/ui/components.ts:117
+#: src/ui/components.ts:132
 msgid "Open /odoo/%s"
 msgstr ""
 

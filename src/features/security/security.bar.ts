@@ -98,8 +98,6 @@ function companies(value: HTMLElement, sim: Simulated, c: SecurityCtx) {
     b.setAttribute('aria-pressed', String(on.has(id)));
     value.append(b);
   }
-  const note = sim.pageCompanies ? _t('as in the page\'s switcher') : !sim.isMe && !c.s.companies ? _t('their default company (their switcher isn\'t visible here)') : '';
-  if (note) { const n = box(note); n.className = 'muted'; value.append(n); }
 }
 
 async function tryBar(sim: Simulated, c: SecurityCtx, out: HTMLElement) {

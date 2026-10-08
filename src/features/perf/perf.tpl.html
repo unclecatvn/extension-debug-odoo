@@ -66,9 +66,9 @@
   <div class="perf-query" data-ref="box"><div class="row perf-calls" data-ref="calls"></div></div>
 </template>
 
-<!-- A query opened: as run (with its values), then its stack, the app frame first. -->
+<!-- A query opened: as run (with its values) and a button copying it, then its stack, the app frame first. -->
 <template data-tpl="query">
-  <div class="perf-query" data-ref="box"><pre class="code-plain mono" data-ref="sql"></pre><pre class="code-plain mono muted" data-ref="stack"></pre></div>
+  <div class="perf-query" data-ref="box"><div class="example" data-ref="sqlbox"><pre class="code-plain mono" data-ref="sql"></pre></div><pre class="code-plain mono muted" data-ref="stack"></pre></div>
 </template>
 
 <!-- Small pieces. -->

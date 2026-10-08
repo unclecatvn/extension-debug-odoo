@@ -1,6 +1,7 @@
 // Perf tab: the pieces its parts share. Markup: perf.tpl.html. Tables: ui/matrix.ts.
-import { translateDom } from '../../i18n/i18n.ts';
+import { _t, translateDom } from '../../i18n/i18n.ts';
 import { fill, rememberedOpen } from '../../ui/cards.ts';
+import { copyButton } from '../../ui/components.ts';
 import { templates } from '../../ui/template.ts';
 import { tip } from '../../ui/tooltip.ts';
 import { frameText, type Frame, type SqlEntry } from './perf.logic.ts';
@@ -72,8 +73,9 @@ export function fold(key: string, name: string, count: string, build: () => Node
 
 /** A query opened: as run (its values in), then its stack, innermost last. */
 export function queryDetail(e: SqlEntry): HTMLElement {
-  const r = tpl('query', { box: HTMLDivElement, sql: HTMLPreElement, stack: HTMLPreElement }).refs;
+  const r = tpl('query', { box: HTMLDivElement, sqlbox: HTMLDivElement, sql: HTMLPreElement, stack: HTMLPreElement }).refs;
   r.sql.textContent = e.full_query || e.query;
+  r.sqlbox.append(copyButton(() => r.sql.textContent ?? '', _t('Copy the query')));
   if (e.stack?.length) r.stack.textContent = e.stack.map((f: Frame) => frameText(f)).join('\n');
   else r.stack.remove();
   return r.box;

@@ -32,6 +32,7 @@ export function systemView(body: HTMLElement, c: SecurityCtx) {
 /** A titled section, built at once; `again` builds it anew. */
 function section(name: string, build: (again: () => void) => Promise<Node>): Node {
   const content = box();
+  content.classList.add('sys-section'); // one rhythm inside (panel.css)
   const run = () => fill(content, () => build(run));
   run();
   return frag(title(name), content);

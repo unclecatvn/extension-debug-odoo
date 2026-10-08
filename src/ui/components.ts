@@ -100,6 +100,21 @@ export function copyable(text: string, cls = 'name', label = text): HTMLButtonEl
   return button;
 }
 
+/** An icon button copying `text()` (a block: an SQL query…), ✓ for a second after; `hint` names it (tooltip, aria-label).
+ * Placed at the top right of a relative block (panel.css: .example). */
+export function copyButton(text: () => string, hint: string): HTMLButtonElement {
+  const { button } = tpl('copy-btn', { button: HTMLButtonElement }).refs;
+  button.dataset.tip = hint; // tooltip.ts
+  button.setAttribute('aria-label', hint);
+  button.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    await copyText(text());
+    button.classList.add('copied');
+    setTimeout(() => button.classList.remove('copied'), 1000);
+  });
+  return button;
+}
+
 export const loading = (): HTMLElement => tpl('loading').root;
 
 /** Column names of a .list, shown only when the list is laid out as a table (wide panel). */

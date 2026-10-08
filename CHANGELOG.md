@@ -10,6 +10,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - **Code history**: the last 20 completed runs per Odoo origin, database and user, in panel memory only. Inspect saved output, restore code without executing or enabling writes, save as a snippet, or clear history. Oversized outputs are explicitly omitted; historical inspection does not refetch record names or field metadata.
 - **Record comparison**: select 2–5 saved records in a list/kanban, or pin one and open another of the same model. Compare fields side by side with search and Differences only, preserving unknown/unreadable cells. Unsaved form changes are excluded; binary values compare sizes, not contents.
 - **Perf groups**: aggregate the loaded requests by model/method (or route), with count, sum, median and SQL count; drill down to existing request details and baseline tools. Aggregates cover the latest 200 fetched profiles after exclusions, not the whole database; summed duration is not page load time.
+- **Perf › copy a query**: an icon at the top right of a query opened (repeated, slowest, by line of code) copies it as run, with its values.
 - **Browser regression smoke**: `npm run build && npm run test:browser` drives the built extension in Chrome against an isolated in-memory fixture. This is not new live-Odoo version coverage.
 
 ### Changed
@@ -23,6 +24,8 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 
 - **Perf**: a request opened on the narrow panel no longer shows twice (under its row and in the pane) after switching to full screen, and back; the column names of a table in the pane stick to the pane's top while it scrolls, no rows showing above them.
 - **Code**: line numbers from 10 on no longer break digit by digit in the gutter.
+- **Tables in tables** (a Perf request opened on the narrow panel): only the outer column names stick while scrolling, no longer covered by the inner ones.
+- **Security › System**: its sub-titles (user_context, Companies) spaced like the section titles; the views bar, when it wraps (a long model name), fills each line.
 
 ## [2.0.0]
 
