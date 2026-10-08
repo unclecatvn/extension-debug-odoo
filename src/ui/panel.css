@@ -167,8 +167,12 @@ details.card { margin-top: 0; }
   .toolbar:has(> input[type=search]) > input[type=search] { flex-basis: 200px; }
   .toolbar:has(> input[type=search])::after { display: none; }
 }
-input[type=search], select { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 5px 10px; transition: border-color .15s, box-shadow .15s; }
+input[type=search], select { background-color: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 5px 10px; transition: border-color .15s, box-shadow .15s; }
 input[type=search]:focus, select:focus { outline: 0; box-shadow: var(--ring); border-color: var(--accent); }
+/* selects: the browser's arrow sits against the border (and differs by OS); ours is as far from the right edge as the
+   text is from the left one. A mid grey that reads on every theme (a background image can't take currentColor). */
+select { appearance: none; padding-right: 30px; text-overflow: ellipsis; background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a8a93' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>"); }
 .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
 .chip[aria-pressed=true] { background: var(--fg); color: var(--surface); border-color: var(--fg); }
 .btn { border: 1px solid var(--line); background: var(--surface); color: var(--accent); border-radius: var(--r); padding: 3px 10px; text-decoration: none; font-weight: 500; }
@@ -325,7 +329,7 @@ body.popup { width: 320px; height: auto; display: block; padding-bottom: 14px; b
 [data-info=host] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20'/></svg>"); }
 [data-info=version] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z'/><circle cx='7.5' cy='7.5' r='1'/></svg>"); }
 [data-info=db] { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='5' rx='9' ry='3'/><path d='M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0'/></svg>"); }
-.pop-select { width: 100%; padding: 5px 8px; font-size: var(--fs-sm); }
+.pop-select { width: 100%; padding: 6px 30px 6px 10px; font-size: var(--fs-sm); }
 .pop-check { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: var(--fs-sm); cursor: pointer; }
 #shortcuts { color: var(--muted); font-size: var(--fs-sm); }
 #shortcuts kbd { font: 600 var(--fs-xs) var(--mono); color: var(--fg); }
@@ -722,7 +726,7 @@ button[data-tip] { cursor: pointer; }
 .mod-chooser input { flex: 1; min-width: 0; }
 .chips { gap: 6px; }
 .import-form .row { align-items: center; }
-.import-form select { background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: var(--r); padding: 4px 8px; }
+.import-form select { background-color: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: var(--r); padding: 4px 30px 4px 10px; }
 .cov-full { color: var(--ok); font-weight: 600; }
 .cov-good { color: var(--fg); }
 .cov-low { color: var(--warn); font-weight: 600; }
@@ -806,7 +810,7 @@ button[data-tip] { cursor: pointer; }
 .perf-recorder { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .perf-recorder .row { align-items: center; gap: 8px; }
 .perf-note { font-size: var(--fs-xs); }
-.perf-select { background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: var(--r); padding: 4px 8px; max-width: 360px; }
+.perf-select { background-color: var(--surface); color: var(--fg); border: 1px solid var(--line); border-radius: var(--r); padding: 4px 30px 4px 10px; max-width: 360px; }
 .perf-totals { gap: 6px 16px; }
 .perf-total { display: inline-flex; align-items: baseline; gap: 4px; }
 .perf-total b { font-size: var(--fs-md); }

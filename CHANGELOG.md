@@ -27,6 +27,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - **Code**: line numbers from 10 on no longer break digit by digit in the gutter.
 - **Tables in tables** (a Perf request opened on the narrow panel): only the outer column names stick while scrolling, no longer covered by the inner ones.
 - **Security › System**: its sub-titles (user_context, Companies) spaced like the section titles; the views bar, when it wraps (a long model name), fills each line.
+- **Selects** (popup theme, Perf session, Translations import): the arrow is as far from the right edge as the text from the left one, the same on every OS, instead of the browser's against the border.
 
 ## [2.0.0]
 
