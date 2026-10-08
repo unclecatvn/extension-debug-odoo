@@ -19,6 +19,7 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 - **Wording**: notes, hints, tooltips and messages say one thing, shorter (174 strings, English and Vietnamese); Vietnamese terms made consistent (field, user, bản ghi, nhóm, Xoá).
 - **Layout**: Record's comparison card comes after Fields and shows only the actions the screen allows (Compare selected on a list / kanban, the pin on a form), differing values tinted, field names kept in sight while the table scrolls sideways. Code's Snippets, History and Guide buttons carry an icon and keep only it on the narrow panel, so the bar stays on two lines; the ⟳ buttons (Code, Perf) use the reload icon.
 - **Folds** (a Perf request's parts, a Security group's, an Apps module's): sections of one plane under a title line, their tables without a frame of their own: no more cards inside cards.
+- **Popup**: no more Open the Panel in Its Own Window button; the panel's ⧉ button and the shortcut (chrome://extensions/shortcuts) still do it.
 
 ### Fixed
 

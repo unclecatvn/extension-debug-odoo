@@ -134,80 +134,76 @@ msgid "This page"
 msgstr "This page"
 
 #: src/entrypoints/popup/index.html:19
-msgid "Open the Panel in Its Own Window"
-msgstr "Open the Panel in Its Own Window"
-
 #: src/entrypoints/popup/index.html:20
-#: src/entrypoints/popup/index.html:21
 msgid "Debug Mode"
 msgstr "Debug Mode"
 
-#: src/entrypoints/popup/index.html:22
+#: src/entrypoints/popup/index.html:21
 msgid "Keep it on for this Odoo"
 msgstr "Keep it on for this Odoo"
 
-#: src/entrypoints/popup/index.html:25
+#: src/entrypoints/popup/index.html:24
 #: src/features/translations/translations.langs.ts:55
 msgid "Language"
 msgstr "Language"
 
+#: src/entrypoints/popup/index.html:28
 #: src/entrypoints/popup/index.html:29
-#: src/entrypoints/popup/index.html:30
 msgid "Theme"
 msgstr "Theme"
 
-#: src/entrypoints/popup/index.html:33
+#: src/entrypoints/popup/index.html:32
 msgid "Shortcuts"
 msgstr "Shortcuts"
 
-#: src/entrypoints/popup/index.html:34
+#: src/entrypoints/popup/index.html:33
 #: src/features/perf/perf.request.ts:227
 #: src/features/security/security.groups.ts:263
 msgid "Change"
 msgstr "Change"
 
-#: src/entrypoints/popup/index.html:36
+#: src/entrypoints/popup/index.html:35
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 
-#: src/entrypoints/popup/index.ts:15
+#: src/entrypoints/popup/index.ts:14
 #: src/features/security/security.tab.ts:65
 msgid "System"
 msgstr "System"
 
-#: src/entrypoints/popup/index.ts:15
+#: src/entrypoints/popup/index.ts:14
 msgid "Light"
 msgstr "Light"
 
-#: src/entrypoints/popup/index.ts:15
+#: src/entrypoints/popup/index.ts:14
 msgid "Dark"
 msgstr "Dark"
 
-#: src/entrypoints/popup/index.ts:51
+#: src/entrypoints/popup/index.ts:50
 msgid "panel"
 msgstr "panel"
 
-#: src/entrypoints/popup/index.ts:51
+#: src/entrypoints/popup/index.ts:50
 msgid "window"
 msgstr "window"
 
-#: src/entrypoints/popup/index.ts:51
+#: src/entrypoints/popup/index.ts:50
 msgid "debug"
 msgstr "debug"
 
-#: src/entrypoints/popup/index.ts:77
+#: src/entrypoints/popup/index.ts:76
 msgid "Host"
 msgstr "Host"
 
-#: src/entrypoints/popup/index.ts:78
+#: src/entrypoints/popup/index.ts:77
 msgid "Odoo version"
 msgstr "Odoo version"
 
-#: src/entrypoints/popup/index.ts:78
+#: src/entrypoints/popup/index.ts:77
 msgid "Database"
 msgstr "Database"
 
-#: src/entrypoints/popup/index.ts:109
+#: src/entrypoints/popup/index.ts:104
 msgid "Turn Debug Off"
 msgstr "Turn Debug Off"
 

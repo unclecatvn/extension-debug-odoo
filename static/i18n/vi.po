@@ -134,80 +134,76 @@ msgid "This page"
 msgstr "Trang hiện tại"
 
 #: src/entrypoints/popup/index.html:19
-msgid "Open the Panel in Its Own Window"
-msgstr "Mở panel trong cửa sổ riêng"
-
 #: src/entrypoints/popup/index.html:20
-#: src/entrypoints/popup/index.html:21
 msgid "Debug Mode"
 msgstr "Chế độ debug"
 
-#: src/entrypoints/popup/index.html:22
+#: src/entrypoints/popup/index.html:21
 msgid "Keep it on for this Odoo"
 msgstr "Luôn bật cho Odoo này"
 
-#: src/entrypoints/popup/index.html:25
+#: src/entrypoints/popup/index.html:24
 #: src/features/translations/translations.langs.ts:55
 msgid "Language"
 msgstr "Ngôn ngữ"
 
+#: src/entrypoints/popup/index.html:28
 #: src/entrypoints/popup/index.html:29
-#: src/entrypoints/popup/index.html:30
 msgid "Theme"
 msgstr "Giao diện"
 
-#: src/entrypoints/popup/index.html:33
+#: src/entrypoints/popup/index.html:32
 msgid "Shortcuts"
 msgstr "Phím tắt"
 
-#: src/entrypoints/popup/index.html:34
+#: src/entrypoints/popup/index.html:33
 #: src/features/perf/perf.request.ts:227
 #: src/features/security/security.groups.ts:263
 msgid "Change"
 msgstr "Đổi"
 
-#: src/entrypoints/popup/index.html:36
+#: src/entrypoints/popup/index.html:35
 msgid "Tip: ⌥/Alt + click a field on the Odoo page to copy its technical name."
 msgstr "Mẹo: ⌥/Alt + click vào một field trên trang Odoo để copy tên kỹ thuật."
 
-#: src/entrypoints/popup/index.ts:15
+#: src/entrypoints/popup/index.ts:14
 #: src/features/security/security.tab.ts:65
 msgid "System"
 msgstr "Hệ thống"
 
-#: src/entrypoints/popup/index.ts:15
+#: src/entrypoints/popup/index.ts:14
 msgid "Light"
 msgstr "Sáng"
 
-#: src/entrypoints/popup/index.ts:15
+#: src/entrypoints/popup/index.ts:14
 msgid "Dark"
 msgstr "Tối"
 
-#: src/entrypoints/popup/index.ts:51
+#: src/entrypoints/popup/index.ts:50
 msgid "panel"
 msgstr "panel"
 
-#: src/entrypoints/popup/index.ts:51
+#: src/entrypoints/popup/index.ts:50
 msgid "window"
 msgstr "cửa sổ"
 
-#: src/entrypoints/popup/index.ts:51
+#: src/entrypoints/popup/index.ts:50
 msgid "debug"
 msgstr "debug"
 
-#: src/entrypoints/popup/index.ts:77
+#: src/entrypoints/popup/index.ts:76
 msgid "Host"
 msgstr "Host"
 
-#: src/entrypoints/popup/index.ts:78
+#: src/entrypoints/popup/index.ts:77
 msgid "Odoo version"
 msgstr "Phiên bản Odoo"
 
-#: src/entrypoints/popup/index.ts:78
+#: src/entrypoints/popup/index.ts:77
 msgid "Database"
 msgstr "Database"
 
-#: src/entrypoints/popup/index.ts:109
+#: src/entrypoints/popup/index.ts:104
 msgid "Turn Debug Off"
 msgstr "Tắt debug"
 
