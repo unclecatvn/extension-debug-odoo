@@ -1,6 +1,6 @@
 <!-- entrypoints/popup/index.ts: the popup's repeated pieces (the page itself: index.html; styles: ui/panel.css). -->
 
-<!-- One choice of a segmented control (language, debug mode). -->
+<!-- One choice of a segmented control (debug mode). -->
 <template data-tpl="seg-option">
   <button type="button" role="radio" aria-checked="false" data-ref="button"></button>
 </template>
@@ -10,8 +10,8 @@
   <span class="info" data-ref="info"><span data-ref="text"></span></span>
 </template>
 
-<!-- One theme of the theme list. -->
-<template data-tpl="theme-option">
+<!-- One choice of a list (language, theme). -->
+<template data-tpl="option">
   <option data-ref="option"></option>
 </template>
 

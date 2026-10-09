@@ -143,6 +143,7 @@ msgid "Keep it on for this Odoo"
 msgstr "Keep it on for this Odoo"
 
 #: src/entrypoints/popup/index.html:24
+#: src/entrypoints/popup/index.html:25
 #: src/features/translations/translations.langs.ts:55
 msgid "Language"
 msgstr "Language"
@@ -179,31 +180,31 @@ msgstr "Light"
 msgid "Dark"
 msgstr "Dark"
 
-#: src/entrypoints/popup/index.ts:50
+#: src/entrypoints/popup/index.ts:56
 msgid "panel"
 msgstr "panel"
 
-#: src/entrypoints/popup/index.ts:50
+#: src/entrypoints/popup/index.ts:56
 msgid "window"
 msgstr "window"
 
-#: src/entrypoints/popup/index.ts:50
+#: src/entrypoints/popup/index.ts:56
 msgid "debug"
 msgstr "debug"
 
-#: src/entrypoints/popup/index.ts:76
+#: src/entrypoints/popup/index.ts:82
 msgid "Host"
 msgstr "Host"
 
-#: src/entrypoints/popup/index.ts:77
+#: src/entrypoints/popup/index.ts:83
 msgid "Odoo version"
 msgstr "Odoo version"
 
-#: src/entrypoints/popup/index.ts:77
+#: src/entrypoints/popup/index.ts:83
 msgid "Database"
 msgstr "Database"
 
-#: src/entrypoints/popup/index.ts:104
+#: src/entrypoints/popup/index.ts:110
 msgid "Turn Debug Off"
 msgstr "Turn Debug Off"
 
@@ -1831,6 +1832,7 @@ msgid "Both flame graphs in speedscope"
 msgstr "Both flame graphs in speedscope"
 
 #: src/features/perf/perf.request.ts:60
+#: src/features/security/security.ui.ts:17
 msgid "Delete"
 msgstr "Delete"
 
@@ -3792,6 +3794,34 @@ msgstr "For the user"
 msgid "✓ No issue found."
 msgstr "✓ No issue found."
 
+#: src/features/security/security.ui.ts:17
+msgid "Read"
+msgstr "Read"
+
+#: src/features/security/security.ui.ts:17
+msgid "Write"
+msgstr "Write"
+
+#: src/features/security/security.ui.ts:17
+msgid "Create"
+msgstr "Create"
+
+#: src/features/security/security.ui.ts:21
+msgid "HIGH"
+msgstr "HIGH"
+
+#: src/features/security/security.ui.ts:21
+msgid "MEDIUM"
+msgstr "MEDIUM"
+
+#: src/features/security/security.ui.ts:21
+msgid "LOW"
+msgstr "LOW"
+
+#: src/features/security/security.ui.ts:21
+msgid "INFO"
+msgstr "INFO"
+
 #: src/features/security/security.ui.ts:62
 msgid "Has this group: set on the user"
 msgstr "Has this group: set on the user"
@@ -4150,6 +4180,14 @@ msgstr "Filter the texts…"
 #: src/features/translations/translations.ui.ts:114
 msgid "Everything is translated."
 msgstr "Everything is translated."
+
+#: src/features/translations/translations.ui.ts:114
+msgid "%s texts"
+msgstr "%s texts"
+
+#: src/features/translations/translations.ui.ts:114
+msgid "%s of %s texts"
+msgstr "%s of %s texts"
 
 #: src/features/translations/translations.ui.ts:116
 msgid "Only missing translations"

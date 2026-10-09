@@ -74,7 +74,7 @@ Tải `odoo-debug-v<phiên bản>.zip` ở trang [Releases](https://github.com/u
 
 - **Odoo:** 18.0, 19.0, 20.0, nhận diện trên từng trang
 - **Trình duyệt:** Chrome, Edge, Brave và các trình duyệt nhân Chromium khác (Manifest V3)
-- **Ngôn ngữ:** English, Tiếng Việt
+- **Ngôn ngữ:** العربية, Deutsch, English, Español, Français, Bahasa Indonesia, 日本語, Português (Brasil), Tiếng Việt, 简体中文
 - **Không hỗ trợ:** Odoo 17 trở về trước; Firefox và Safari
 
 ## Quyền riêng tư

@@ -58,7 +58,7 @@ export function compositionPart(parent: HTMLElement, origin: string, comps: { ty
     const items = comp.views.map((cv) => {
       const r = tpl('view-row', { row: HTMLLIElement, head: HTMLDivElement, branch: HTMLSpanElement, does: HTMLDivElement, meta: HTMLDivElement }).refs;
       const { view, depth } = cv;
-      r.row.style.paddingLeft = `${10 + depth * 14}px`;
+      r.row.style.paddingInlineStart = `${10 + depth * 14}px`;
       if (!depth) r.branch.remove();
       if (view.id === comp.view.id) r.row.classList.add('current');
       if (!view.active) r.row.classList.add('inactive');

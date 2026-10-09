@@ -1,7 +1,7 @@
 // Toolbar popup (only enabled on Odoo pages, see entrypoints/background) and options page: language, theme, shortcuts, and
 // (popup only) the page's host, Odoo version, database, debug mode.
 import { THEMES, applyTheme, isTheme, loadSettings, type Theme } from '../../extension/settings.ts';
-import { LANGS, N_, _t, lang, loadLang, translateDom } from '../../i18n/i18n.ts';
+import { LANGS, N_, RTL, _t, lang, loadLang, translateDom } from '../../i18n/i18n.ts';
 import { pageDebug, pageDebugMode } from '../../injected/debug-mode.ts';
 import { setTab } from '../../extension/run-in-tab.ts';
 import type { Json } from '../../contracts/json.ts';
@@ -17,7 +17,7 @@ const EDITOR_THEMES: Partial<Record<Theme, string>> = { 'github-light': 'GitHub 
 
 const saved = await loadSettings();
 await loadLang(saved.lang);
-document.documentElement.lang = lang;
+Object.assign(document.documentElement, { lang, dir: RTL.has(lang) ? 'rtl' : 'ltr' });
 translateDom();
 const tpl = templates(html, translateDom);
 $('#version').textContent = `v${chrome.runtime.getManifest().version}`;
@@ -34,14 +34,20 @@ function segmented<V extends string>(box: HTMLElement, options: [V, string, stri
     return button;
   }));
 }
-segmented($('#lang'), Object.entries(LANGS) as [string, string][], lang, (v) => { void chrome.storage.local.set({ lang: v }); }); // loadSettings reloads the page
+const option = (value: string, label: string) => {
+  const { option } = tpl('option', { option: HTMLOptionElement }).refs;
+  option.value = value;
+  option.textContent = label;
+  return option;
+};
+const langBox = $<HTMLSelectElement>('#lang');
+langBox.append(...Object.entries(LANGS).map(([code, name]) => option(code, name)));
+langBox.value = lang;
+langBox.addEventListener('change', () => { void chrome.storage.local.set({ lang: langBox.value }); }); // loadSettings reloads the page
 const themeBox = $<HTMLSelectElement>('#theme');
 themeBox.append(...THEMES.map((t) => {
-  const { option } = tpl('theme-option', { option: HTMLOptionElement }).refs;
   const odooLabel = THEME_LABELS[t];
-  option.value = t;
-  option.textContent = odooLabel ? `Odoo · ${_t(odooLabel)}` : EDITOR_THEMES[t] ?? t;
-  return option;
+  return option(t, odooLabel ? `Odoo · ${_t(odooLabel)}` : EDITOR_THEMES[t] ?? t);
 }));
 themeBox.value = isTheme(saved.theme) ? saved.theme : 'auto';
 themeBox.addEventListener('change', () => { applyTheme(themeBox.value); void chrome.storage.local.set({ theme: themeBox.value }); }); // every open panel follows

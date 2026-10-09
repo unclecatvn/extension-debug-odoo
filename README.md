@@ -76,7 +76,7 @@ Download `odoo-debug-v<version>.zip` from the [Releases](https://github.com/uncl
 
 - **Odoo:** 18.0, 19.0, 20.0, detected on each page
 - **Browsers:** Chrome, Edge, Brave and other Chromium browsers (Manifest V3)
-- **Languages:** English, Tiếng Việt
+- **Languages:** العربية, Deutsch, English, Español, Français, Bahasa Indonesia, 日本語, Português (Brasil), Tiếng Việt, 简体中文
 - **Not supported:** Odoo 17 and earlier; Firefox and Safari
 
 ## Privacy

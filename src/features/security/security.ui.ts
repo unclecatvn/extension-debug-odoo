@@ -14,11 +14,11 @@ import html from './security.tpl.html';
 
 export const tpl = templates(html, translateDom);
 
-const MODE_LABEL: Record<Mode, string> = { read: 'Read', write: 'Write', create: 'Create', unlink: 'Delete' };
+const MODE_LABEL: Record<Mode, string> = { read: N_('Read'), write: N_('Write'), create: N_('Create'), unlink: N_('Delete') };
 export const modeLabel = (m: Mode) => _t(MODE_LABEL[m]);
 export const modeHeads = () => MODES.map(modeLabel);
 
-const LEVEL: Record<Level, string> = { high: 'HIGH', med: 'MEDIUM', low: 'LOW', info: 'INFO' };
+const LEVEL: Record<Level, string> = { high: N_('HIGH'), med: N_('MEDIUM'), low: N_('LOW'), info: N_('INFO') };
 
 export function findings(list: readonly Finding[]): HTMLElement {
   if (!list.length) return tpl('okline').root;

@@ -33,6 +33,6 @@ export function viewView(body: HTMLElement, c: TranslationsCtx) {
     const table = matrix(_t('%s views', views.length), langs, sections, -1, true);
     const legend = note(_t('✗ not translated: the screen shows the English text. Click a row to edit.'));
     legend.classList.add('legend');
-    return frag(tableFilter(table, total, ['%s texts', '%s of %s texts']), table, legend);
+    return frag(tableFilter(table, total), table, legend);
   });
 }
