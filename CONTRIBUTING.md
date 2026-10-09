@@ -26,7 +26,7 @@ How the code is organized, the rules it follows and how the Odoo versions are ha
 ## Pull requests
 
 1. `npm run check` passes and `npm run i18n` leaves `static/i18n/` unchanged (CI checks both).
-2. New strings are translated in `static/i18n/vi.po`.
+2. New strings are translated in `static/i18n/vi.po`, in the other `.po` files when you can (an untranslated string shows in English). A new language: add it to `LANGS` in `src/i18n/i18n.ts` (and to `RTL` if it is written right to left), run `npm run i18n`, translate its `.po`.
 3. It was tried on at least one Odoo instance; say which version in the pull request.
 4. The Contributor License Agreement box below is ticked.
 

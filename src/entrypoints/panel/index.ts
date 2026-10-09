@@ -8,7 +8,7 @@ import { clearCache } from '../../extension/page-cache.ts';
 import { exec, isExecError, setTab, tabId } from '../../extension/run-in-tab.ts';
 import { loadSettings } from '../../extension/settings.ts';
 import { TABS, TAB_NAMES, isTabName, type PanelContext, type TabName } from '../../features/registry.ts';
-import { _t, lang, loadLang, translateDom } from '../../i18n/i18n.ts';
+import { RTL, _t, lang, loadLang, translateDom } from '../../i18n/i18n.ts';
 import { pageState, type PageState } from '../../injected/page-state.ts';
 import { odoo, type OdooContext } from '../../odoo/detect.ts';
 import { copyable, empty, pill } from '../../ui/components.ts';
@@ -20,7 +20,7 @@ import html from './panel.tpl.html';
 
 const settings = await loadSettings();
 await loadLang(settings.lang); // before anything renders: every _t() below needs the catalog
-document.documentElement.lang = lang;
+Object.assign(document.documentElement, { lang, dir: RTL.has(lang) ? 'rtl' : 'ltr' });
 translateDom();
 startTooltips();
 const tpl = templates(html, translateDom);

@@ -104,14 +104,14 @@ export function translationMxRows(rows: { source: string; values: Map<string, st
 }
 
 /** The filter of a translations table: a text, and "only missing". → the toolbar. */
-export function tableFilter(table: HTMLTableElement, total: number, unit: [string, string]): HTMLElement {
+export function tableFilter(table: HTMLTableElement, total: number): HTMLElement {
   const { bar } = tpl('toolbar', { bar: HTMLDivElement }).refs;
   const { text: count } = tpl('count', { text: HTMLSpanElement }).refs;
   const f = filterBox([], _t('Filter the texts…'));
   let onlyMissing = false;
   const apply = () => {
     const n = filterMatrix(table, f.input.value, (r) => !onlyMissing || (r.dataset.tags ?? '').includes('missing'));
-    count.textContent = onlyMissing && !n ? _t('Everything is translated.') : n === total ? _t(unit[0], total) : _t(unit[1], n, total);
+    count.textContent = onlyMissing && !n ? _t('Everything is translated.') : n === total ? _t('%s texts', total) : _t('%s of %s texts', n, total);
   };
   const missing = button(_t('Only missing translations'), () => { onlyMissing = !onlyMissing; missing.setAttribute('aria-pressed', String(onlyMissing)); apply(); }, 'chip');
   missing.setAttribute('aria-pressed', 'false');

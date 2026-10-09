@@ -38,6 +38,6 @@ export function recordView(body: HTMLElement, c: TranslationsCtx) {
     const table = matrix(`${model} #${resId}`, langs, sections, -1, true);
     const legend = note(_t('✗ not translated: Odoo shows the English value. Click a row to edit.'));
     legend.classList.add('legend');
-    return frag(tableFilter(table, total, ['%s texts', '%s of %s texts']), table, legend);
+    return frag(tableFilter(table, total), table, legend);
   });
 }

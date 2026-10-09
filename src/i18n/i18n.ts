@@ -1,6 +1,12 @@
 // Gettext-style i18n. msgids are the English source strings; translations live in static/i18n/<lang>.po (read at
 // run time). Regenerate the .pot / merge the .po files with `npm run i18n`.
-export const LANGS = { en: 'English', vi: 'Tiếng Việt' } as const;
+// Keyed by Chrome's UI language without its region (pt-BR → pt, zh-CN → zh): pt is Brazilian, zh Simplified Chinese.
+export const LANGS = {
+  ar: 'العربية', de: 'Deutsch', en: 'English', es: 'Español', fr: 'Français', id: 'Bahasa Indonesia', ja: '日本語',
+  pt: 'Português (Brasil)', vi: 'Tiếng Việt', zh: '简体中文',
+} as const;
+/** Right-to-left languages: the panel and the popup get dir="rtl". */
+export const RTL: ReadonlySet<string> = new Set(['ar']);
 export type Lang = keyof typeof LANGS;
 const isLang = (code: unknown): code is Lang => typeof code === 'string' && code in LANGS;
 

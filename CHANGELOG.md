@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
+## [2.2.0] - 2026-10-09
+
+### Added
+
+- **Languages**: Arabic, German, Spanish, French, Indonesian, Japanese, Brazilian Portuguese and Simplified Chinese, besides English and Vietnamese. Chrome's language picks one, the popup changes it. Arabic lays the panel and the popup out right to left; code, technical names and keys stay left to right.
+
+### Changed
+
+- **Popup**: the language is a list, like the theme.
+
+### Fixed
+
+- **Security**: the Read / Write / Create column names, the HIGH / MEDIUM / LOW / INFO pills and the sentences that name an operation ("This group may read") are translated, no longer English in Vietnamese.
+- **Translations**: the "%s texts" count of a record's or a view's texts is translated.
+
 ## [2.1.0] - 2026-10-08
 
 ### Added
