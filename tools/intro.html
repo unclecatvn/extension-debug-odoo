@@ -1,8 +1,9 @@
 <!doctype html>
 <!-- The intro film's editing room, rendered frame by frame by tools/intro.mjs (render). 120 BPM (tools/score.mjs):
        0.5 s   four questions the panel answers, one every two beats, word by word, each with its tab's icon
-       4.5 s   a montage: the take's best moments, one close-up a beat, a flash on each cut
-       6.5 s   the build: light rays closing in on a glow, the rest goes dark
+       4.5 s   the storm: what an Odoo day throws at you, one a beat (an access error, a traceback, an N+1's queries, a load
+               that won't end), piling up
+       6.5 s   the build: light rays closing in on a glow, the storm pulled into it
        8.0 s   the drop: a flash, a shockwave, the logo and the name landing, the tagline, the nine tabs
       10.5 s   the window flies in; then the take (real frames of the extension in use, /take/frames/*.jpg and its log
                /take/take.json) in a browser window on a dark stage, a camera following the action, captions
@@ -64,13 +65,23 @@
     background: rgba(255, 255, 255, .05); border-bottom: 1px solid rgba(255, 255, 255, .08); }
   .note pre { margin: 0; padding: 16px 18px 20px; font: 500 17px/1.5 ui-monospace, 'SF Mono', Menlo, monospace; color: #d8f5d0; white-space: pre-wrap; word-break: break-all; }
 
-  /* the montage: close-ups of the take's best moments */
-  #montage { perspective: 1800px; }
-  .shot { position: absolute; overflow: hidden; border-radius: 18px; opacity: 0; background: #fff;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, .16), 0 50px 140px rgba(0, 0, 0, .85), 0 0 160px rgba(180, 124, 208, .3); }
-  .shot img { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
-  .shot b { position: absolute; left: 22px; bottom: 18px; padding: 6px 12px; border-radius: 8px; background: rgba(16, 16, 20, .82);
-    font-size: 15px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: #e3b8f0; }
+  /* the storm: Odoo's own dialogs and what a slow screen hides, as cards slammed one on the other */
+  .err { position: absolute; border-radius: 14px; overflow: hidden; opacity: 0; background: #fff; color: #1f1f23;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .18), 0 40px 120px rgba(0, 0, 0, .75), 0 0 140px rgba(180, 124, 208, .25); }
+  .err header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; font-size: 32px; font-weight: 700; border-bottom: 1px solid #e7e7ea; }
+  .err header i { width: 14px; height: 14px; border-radius: 50%; background: #d23f3a; box-shadow: 0 0 0 5px rgba(210, 63, 58, .18); }
+  .err header b { margin-left: auto; padding: 4px 16px; border-radius: 999px; background: #d23f3a; color: #fff; font-size: 26px; font-variant-numeric: tabular-nums; }
+  .err p { margin: 0; padding: 22px 28px; font-size: 26px; line-height: 1.45; white-space: pre-line; color: #3b3b41; }
+  .err pre { margin: 0; padding: 20px 28px 24px; font: 500 19px/1.5 ui-monospace, 'SF Mono', Menlo, monospace; white-space: pre-wrap; color: #9b2c2c; background: #fbf4f4; }
+  .err footer { padding: 0 28px 24px; }
+  .err footer span { display: inline-block; padding: 9px 20px; border-radius: 8px; background: #714b67; color: #fff; font-size: 22px; font-weight: 600; }
+  .err.term { background: #0f0f14; }
+  .err.term header { color: #e3b8f0; background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .08); }
+  .err.term .lines { height: 290px; overflow: hidden; }
+  .err.term .lines div div { padding: 0 28px; font: 500 21px/1.6 ui-monospace, 'SF Mono', Menlo, monospace; white-space: nowrap; color: #b9e6b0; }
+  .err.wait header { border: 0; }
+  .err.wait header u { width: 32px; height: 32px; border-radius: 50%; border: 4px solid #e7dce5; border-top-color: #714b67; }
+  .err.wait strong { display: block; padding: 0 28px 28px; font-size: 96px; font-weight: 750; letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: #714b67; }
   #flash { pointer-events: none; background: radial-gradient(1100px 650px at 50% 50%, rgba(235, 205, 255, .75), transparent 70%); opacity: 0; }
 
   /* the build and the drop: rays closing in, a core of light, a shockwave */
@@ -108,7 +119,7 @@
   <div class="glow" id="g2" style="background: radial-gradient(closest-side, rgba(60, 90, 200, .35), transparent)"></div>
   <div id="grid" class="layer"></div>
   <div id="questions" class="layer"></div>
-  <div id="montage" class="layer"></div>
+  <div id="storm" class="layer"></div>
   <div id="rays" class="layer"></div>
   <div id="core"></div>
   <div id="wave"></div>
@@ -148,7 +159,7 @@ const TABS = [['record', 'Record'], ['view', 'View'], ['rpc', 'RPC'], ['security
 // ---------- the opening's beat (120 BPM): every cue on it; the score follows ----------
 const BEAT = .5;
 const QUESTIONS = [1, 3, 5, 7].map((k) => k * BEAT); // 0.5 … 3.5: one every two beats
-const MONTAGE = [9, 10, 11, 12].map((k) => k * BEAT); // 4.5 … 6.0: one close-up a beat
+const MONTAGE = [9, 10, 11, 12].map((k) => k * BEAT); // 4.5 … 6.0: the storm, one card a beat
 const RISER = [13 * BEAT, 15.5 * BEAT]; // 6.5 … 7.75, then a beat's half of silence
 const IMPACT = 16 * BEAT; // 8.0: the drop
 const WIN_IN = 21 * BEAT; // 10.5: the window flies in
@@ -157,13 +168,17 @@ const OPEN = 25 * BEAT; // 12.5: the take starts playing
 // ---------- the edit: the take without its cuts, its long typing sped up; between the opening and an ending ----------
 const END = 5.5;
 const S0 = take.start + .9, S1 = take.end; // source times kept
-const marks = [S0, S1, ...take.cuts.flat(), ...take.fast.flatMap(([a, b]) => [a, b])].filter((x) => x >= S0 && x <= S1).sort((a, b) => a - b);
+// the way to each answer (clicks, a page loading, the cursor travelling) plays faster than the answer, held at 1×
+const answers = [...take.spots, ...take.notes].sort((a, b) => a.t - b.t);
+const ways = answers.slice(1).map((x, i) => [answers[i].t + answers[i].dur + .3, x.t - .5, 1.6]).filter(([a, b]) => b - a > .8);
+const fast = [...take.fast, ...ways]; // the first match wins: typing keeps its own pace
+const marks = [S0, S1, ...take.cuts.flat(), ...fast.flatMap(([a, b]) => [a, b])].filter((x) => x >= S0 && x <= S1).sort((a, b) => a - b);
 const pieces = []; // { s0, s1, rate, o0 }: source span s0..s1 plays at `rate` from output time o0
 let o = OPEN;
 for (let i = 0; i < marks.length - 1; i++) {
   const s0 = marks[i], s1 = marks[i + 1], mid = (s0 + s1) / 2;
   if (s1 - s0 < .01 || take.cuts.some(([a, b]) => mid > a && mid < b)) continue;
-  const rate = take.fast.find(([a, b]) => mid > a && mid < b)?.[2] ?? 1;
+  const rate = fast.find(([a, b]) => mid > a && mid < b)?.[2] ?? 1;
   pieces.push({ s0, s1, rate, o0: o });
   o += (s1 - s0) / rate;
 }
@@ -238,7 +253,7 @@ const QS = [
 });
 
 // ---------- captions: each from its time until shortly before the next one ----------
-const CAP_TAB = { 'Record': 'record', '⌥ + click': 'record', 'View': 'view', 'i18n': 'translations', 'RPC': 'rpc', 'Code': 'code', 'Security': 'security', 'Apps': 'apps', 'Perf': 'perf', 'Menus': 'menus', 'Yours': 'apps' };
+const CAP_TAB = { 'Record': 'record', '⌥ + click': 'record', 'Compare': 'record', 'View': 'view', 'i18n': 'translations', 'RPC': 'rpc', 'Code': 'code', 'Security': 'security', 'Apps': 'apps', 'Perf': 'perf', 'Menus': 'menus', 'Yours': 'apps' };
 const caps = take.captions.filter((c) => c.title !== 'Odoo Debug').map((c) => ({ ...c, o: toOut(c.t) }));
 caps.forEach((c, i) => {
   c.until = (caps[i + 1]?.o ?? o) - .55; // gone (0.45 s fade) before the next one starts
@@ -256,7 +271,8 @@ const spots = (take.spots ?? []).map((sp) => {
   n.append(el('b', '', sp.label));
   $('#spots').append(n);
   return { ...sp, o: toOut(sp.t), n };
-});
+}).sort((a, b) => a.o - b.o);
+spots.forEach((sp, i) => { if (spots[i + 1]) sp.dur = Math.min(sp.dur, spots[i + 1].o - sp.o - .4); }); // one label at a time
 const notes = (take.notes ?? []).map((nt) => {
   const n = el('div', 'note');
   n.append(el('b', '', nt.title), el('pre', '', nt.text));
@@ -264,21 +280,31 @@ const notes = (take.notes ?? []).map((nt) => {
   return { ...nt, o: toOut(nt.t), n };
 });
 
-// ---------- the montage: the highlights, cropped close, in the order of the questions ----------
-const LABELS = ['View', 'Security', 'RPC', 'Perf'];
-const shots = LABELS.map((label, k) => {
-  const h = take.highlights.find((x) => x.label === label) ?? take.highlights[k];
-  const fit = Math.min(1250 / h.r.w, 680 / h.r.h); // page px → shot px
-  const w = h.r.w * fit, ht = h.r.h * fit;
-  const n = el('div', 'shot');
-  Object.assign(n.style, { left: `${(1920 - w) / 2}px`, top: `${(1080 - ht) / 2 - 20}px`, width: `${w}px`, height: `${ht}px` });
-  const img = el('img');
-  Object.assign(img.style, { width: `${VW * fit}px`, height: `${VH * fit}px`, transform: `translate(${-h.r.x * fit}px, ${-h.r.y * fit}px)` });
-  img.src = `/take/frames/${idx(h.t)}`;
-  n.append(img, el('b', '', label));
-  $('#montage').append(n);
-  return { n, side: k % 2 ? 1 : -1 };
-});
+// ---------- the storm: the cards, each with its place and tilt; what moves in them (a count, a clock) set per frame ----------
+const card = (cls, x, y, w, rot, title, ...body) => {
+  const n = el('div', `err ${cls}`), head = el('header');
+  head.append(cls === 'wait' ? el('u') : el('i'), title);
+  n.append(head, ...body);
+  Object.assign(n.style, { left: `${x}px`, top: `${y}px`, width: `${w}px` });
+  $('#storm').append(n);
+  return { n, x, y, w, rot, head };
+};
+const close = el('footer');
+close.append(el('span', '', 'Close'));
+const sqlBox = el('div', 'lines'), sqlLines = el('div'); // the box keeps the lines under the title while they scroll
+for (let k = 0; k < 30; k++) sqlLines.append(el('div', '', `SELECT name, list_price FROM product_template WHERE id = ${41 + k * 3}`));
+sqlBox.append(sqlLines);
+const sqlCount = el('b'), clock = el('strong');
+const STORM = [
+  card('', 70, 90, 800, -4, 'Access Error',
+    el('p', '', "Uh-oh! Looks like you have stumbled upon some top-secret records.\n\nSorry, Marc Demo (id=6) doesn't have 'read' access to:\n- Sales Order (sale.order)"), close),
+  card('', 960, 60, 880, 3.5, 'Odoo Server Error',
+    el('pre', '', 'Traceback (most recent call last):\n  File "odoo/http.py", line 1957, in _transactioning\n  File "addons/sale/models/sale_order.py", line 1012, in action_confirm\npsycopg2.errors.NotNullViolation: null value in column "partner_id" of relation "sale_order" violates not-null constraint')),
+  card('term', 180, 560, 900, 2.5, 'SQL', sqlBox),
+  card('wait', 1220, 600, 560, -3, 'Loading…', clock),
+];
+STORM[2].head.append(sqlCount);
+for (const c of STORM) c.h = c.n.offsetHeight;
 
 // ---------- the rays of the build ----------
 const RAYS = Array.from({ length: 18 }, (_, k) => { const r = el('i'); $('#rays').append(r); return { r, a: k * 20 + (k % 3) * 4 }; });
@@ -319,17 +345,26 @@ window.renderAt = async (T) => {
     });
   }
 
-  // montage: each close-up punches in on its beat (a flash), drifts, and is cut by the next
+  // the storm: each card slams in on its beat (a flash, a shake), the older ones darken under it; the build pulls the
+  // pile into the light, gone on the drop
   let flash = 0;
-  shots.forEach(({ n, side }, k) => {
-    const u = T - MONTAGE[k], on = u > -.05 && u < BEAT + .05;
-    if (!on) { n.style.opacity = 0; return; }
-    const a = out(u / .14), p = clamp(u / BEAT), b = k === shots.length - 1 ? smooth(BEAT - .12, BEAT + .05, u) : 0;
-    n.style.opacity = a * (1 - b);
-    n.style.transform = `scale(${lerp(1.18, 1, out(u / .22)) + p * .04}) rotateY(${side * lerp(8, 3, ease(p))}deg) rotateX(${lerp(5, 2, p)}deg)`;
-    n.style.filter = `blur(${(1 - a) * 10 + b * 10}px) brightness(${1 + .5 * Math.exp(-u / .08)})`;
-    flash = Math.max(flash, .55 * Math.exp(-Math.max(0, u) / .09));
+  const pull = ease(smooth(RISER[0], IMPACT, T));
+  STORM.forEach((c, k) => {
+    const u = T - MONTAGE[k];
+    if (u < -.05 || T > IMPACT) { c.n.style.opacity = 0; return; }
+    const a = out(u / .16), shake = Math.exp(-u / .12) * 16 * Math.sin(u * 90);
+    const under = MONTAGE.filter((m, j) => j > k && T > m).length;
+    const dx = (960 - c.x - c.w / 2) * pull, dy = (540 - c.y - c.h / 2) * pull;
+    c.n.style.opacity = a * (1 - smooth(.55, 1, pull));
+    c.n.style.transform = `translate(${dx + shake}px, ${dy}px) rotate(${c.rot * (1 - pull) + pull * 40 * (k % 2 ? 1 : -1)}deg) scale(${lerp(1.3, 1, a) * lerp(1, .12, pull)})`;
+    c.n.style.filter = `blur(${(1 - a) * 10 + pull * 14}px) brightness(${(1 + .6 * Math.exp(-Math.max(0, u) / .08)) * (1 - .22 * under)})`;
+    flash = Math.max(flash, .45 * Math.exp(-Math.max(0, u) / .09));
   });
+  const uSql = Math.max(0, T - MONTAGE[2]);
+  sqlCount.textContent = `×${Math.min(91, Math.floor(uSql * 55) + 1)}`;
+  sqlLines.style.transform = `translateY(${-(uSql * 300) % (33.6 * 15)}px)`;
+  clock.textContent = `${(2.1 + Math.max(0, T - MONTAGE[3]) * 3.4).toFixed(1)} s`;
+  STORM[3].head.firstChild.style.transform = `rotate(${T * 540}deg)`;
 
   // the build: the rays turn and close in on a growing core; the drop: a flash, a shockwave, the rays thrown out
   const build = smooth(RISER[0], RISER[1] + .2, T), after = T - IMPACT;

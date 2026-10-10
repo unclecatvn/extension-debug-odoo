@@ -1,7 +1,8 @@
 // npm run intro: the intro film, in two steps (or one of them: node tools/intro.mjs record | render).
 //   record  plays a real session with the built extension (dist/: npm run build) on the Odoo of tools/compose.yml
-//           (Sales + CRM demo data): the panel opened, fields filtered, an RPC edited and sent again in its detail,
-//           code typed and run, a user's access explained, a request profiled and diagnosed, a technical screen opened.
+//           (Sales + CRM demo data): the panel opened, fields filtered, two orders compared, an RPC edited and sent again
+//           in its detail, code typed and run, a user's access explained, a request profiled and diagnosed, the requests
+//           grouped by method, a technical screen opened, the themes and languages.
 //           Every frame Chrome paints is kept (2880×1800), with a log: where the camera looks, the captions, the waits to cut.
 //   render  edits that take in tools/intro.html (the questions, a montage, the title, then the window on a dark stage
 //           with a camera following the action and captions) frame by frame, scores it (tools/score.mjs, on its cues),
@@ -88,12 +89,10 @@ async function record() {
   await sleep(2000); // the chatter, the avatars
 
   // ---------- the director's log ----------
-  const log = { viewport: [VW, VH], cams: [], captions: [], cuts: [], fast: [], highlights: [], spots: [], notes: [] };
+  const log = { viewport: [VW, VH], cams: [], captions: [], cuts: [], fast: [], spots: [], notes: [] };
   /** The camera frames `r` ({ x, y, w, h } in page px; null: the whole page) from now on. */
   const cam = (r) => log.cams.push({ t: now(), r });
   const caption = (title, text) => log.captions.push({ t: now(), title, text });
-  /** A moment worth a close-up in the opening montage: `r` (page px) a little later, once it has settled. */
-  const highlight = (r, label, settle = .7) => log.highlights.push({ t: now() + settle, r, label });
   /** The answer on screen: a glowing outline around `r` (page px) with `label`, for `dur` s. */
   const spot = (r, label, dur = 2.8) => log.spots.push({ t: now() + .15, r, label, dur });
   /** A card beside the window: `title` and some lines of text (what was copied…), for `dur` s. */
@@ -108,6 +107,14 @@ async function record() {
   }
 
   let panel;
+  /** Waits until `scope` (in the panel) has nothing loading; that wait is cut, even a short one: a dissolve over it. */
+  async function settled(scope) {
+    const a = now();
+    await panel.waitForFunction((s) => !document.querySelector(`${s} .loading`), { timeout: 20_000 }, scope);
+    const b = now();
+    if (b - a > .1) log.cuts.push([a + .05, b + .1]);
+    await sleep(150);
+  }
   const boxOf = async (sel, pick) => { // an element's box in page px (in the panel: through its iframe)
     const r = await panel.evaluate((sel, pick) => {
       const n = pick ? [...document.querySelectorAll(sel)].find((x) => x.textContent.trim().startsWith(pick)) : document.querySelector(sel);
@@ -228,7 +235,6 @@ async function record() {
   const ro = await boxOfText('#view details.card[data-key=field]', "state in ['cancel', 'sale']", false, true);
   cam({ x: ro.x - 40, y: ro.y - 200, w: ro.w + 80, h: 460 });
   spot(pad(ro), 'read-only: state is "sale"');
-  highlight(pad({ x: ro.x, y: ro.y - 120, w: ro.w, h: 330 }, 0), 'View');
   await sleep(3000);
   const story = await boxOfText('#view details.card[data-key=field]', 'view_order_form', false, true);
   cam({ x: story.x - 40, y: story.y - 140, w: story.w + 80, h: 460 });
@@ -252,24 +258,45 @@ async function record() {
   await sleep(3400);
   await clickIn('#full', null, { ms: 800, after: 600 }); // back beside the page
 
-  // 6. RPC: the calls live; one opened is its request, edited and sent again right there, copied as cURL
-  caption('RPC', 'Every call, live. Edit it and send it again, right there, or copy it as cURL for the external API.');
-  await clickIn('.tabs [data-tab="rpc"]');
-  cam(null);
-  // back to the list, then the order again: their calls show up in the log as they happen
+  // 6. Compare: two orders ticked in the list, side by side, only the fields that differ
+  caption('Compare', 'Two orders side by side, saved values only: just the fields that differ.');
   const boxOnPage = (sel, text) => page.evaluate((sel, text) => {
     const n = [...document.querySelectorAll(sel)].find((x) => !text || x.textContent.includes(text));
     const b = n.getBoundingClientRect();
     return { x: b.x, y: b.y, w: b.width, h: b.height };
   }, sel, text);
+  cam(null);
   await click(...at(await boxOnPage('.o_breadcrumb .breadcrumb-item a, .o_breadcrumb a', 'Sales Orders')), { ms: 1000, after: 0 });
   await wait(page.waitForSelector('.o_list_view .o_data_row', { timeout: 15_000 }));
-  await sleep(900);
+  await sleep(700);
+  const tick = async (name) => click(...at(await boxOnPage('.o_data_row', name), 0, .5).map((v, k) => k ? v : v + 18), { ms: 700, after: 250 });
+  for (const name of ['S00007', 'S00006']) await tick(name);
+  onPanel();
+  await clickIn('.tabs [data-tab="record"]', null, { ms: 900 });
+  await wait(panel.waitForSelector('#record details.card[data-key=compare]', { timeout: 15_000 }));
+  if (!await panel.$eval('#record details.card[data-key=compare]', (c) => c.open)) await clickIn('#record details.card[data-key=compare] summary');
+  await clickIn('#record .compare-bar .btn', 'Compare selected', { after: 0 });
+  await wait(panel.waitForSelector('#record .compare-table tbody tr', { timeout: 15_000 }));
+  await clickIn('#record .compare .chip', 'Differences only', { after: 500 });
+  const diff = await boxOf('#record .compare-wrap');
+  cam({ x: diff.x - 30, y: diff.y - 120, w: diff.w + 60, h: Math.min(diff.h + 200, 560) });
+  spot(pad({ ...diff, h: Math.min(diff.h, 300) }), 'S00007 and S00006: only what differs');
+  await sleep(3200);
+  for (const name of ['S00007', 'S00006']) await page.evaluate((name) => [...document.querySelectorAll('.o_data_row')] // unticked, out of frame
+    .find((r) => r.textContent.includes(name))?.querySelector('.o_list_record_selector input')?.click(), name);
+
+  // 7. RPC: the calls live; one opened is its request, edited and sent again right there, copied as cURL
+  caption('RPC', 'Every call, live. Edit it and send it again, right there, or copy it as cURL for the external API.');
+  await clickIn('.tabs [data-tab="rpc"]');
+  cam(null);
+  // the order again: its calls show up in the log as they happen
+  await sleep(600);
   await click(...at(await boxOnPage('.o_data_row .o_data_cell[name=name]', 'S00007'), .3), { ms: 900, after: 0 });
   await wait(page.waitForSelector('.o_form_view', { timeout: 15_000 }));
   onPanel();
   await sleep(1300);
-  await clickIn('#rpc .list > li[data-q="sale.order web_read"] .name');
+  await panel.$$eval('#rpc .list > li', (lis) => lis.find((li) => li.querySelector('.name')?.textContent === 'web_read' && li.textContent.includes('sale.order'))?.classList.add('film-pick')); // the latest
+  await clickIn('#rpc .list > li.film-pick .name');
   await sleep(500);
   await wait(panel.waitForSelector('#rpc .detail form.composer textarea'));
   // the body, editable right away: `specification` cut down to three fields, typed where it starts
@@ -279,6 +306,7 @@ async function record() {
     t.value = JSON.stringify(body, null, 2).replace('"kwargs": {', '"kwargs": {\n      "specification": ');
     t.rows = 9;
     t.scrollTop = Math.max(0, t.value.slice(0, t.value.indexOf('"specification"')).split('\n').length * 16 - 60);
+    t.dispatchEvent(new Event('input')); t.dispatchEvent(new Event('scroll')); // the coloured copy over it (ui/editor.ts) repainted
   });
   const ta = await boxOf('#rpc .detail form.composer textarea');
   cam({ x: ta.x - 20, y: ta.y - 70, w: ta.w + 40, h: ta.h + 330 });
@@ -291,7 +319,6 @@ async function record() {
   log.posterAt = now();
   const answer = await boxOf('#rpc .detail form.composer .answer');
   spot(pad({ ...answer, h: Math.min(answer.h, 220) }), 'sent again: only the three fields asked');
-  highlight(await boxOf('#rpc .detail form.composer'), 'RPC');
   await sleep(2600);
   await page.evaluate(() => navigator.clipboard.writeText('')).catch(() => {});
   await clickIn('#rpc .detail form.composer .btn', 'Copy as cURL', { after: 600 });
@@ -299,7 +326,7 @@ async function record() {
   if (curl) note('Copied as cURL', curl.split('\n').slice(0, 9).join('\n'));
   await sleep(3000);
 
-  // 7. Code: a change tried for real, then rolled back (Python, dry run)
+  // 8. Code: a change tried for real, then rolled back (Python, dry run)
   caption('Code', 'Try a change for real, then roll it back: a Python dry run shows what it would do.');
   onPanel();
   await clickIn('.tabs [data-tab="code"]', null, { ms: 900 });
@@ -321,14 +348,14 @@ async function record() {
   const out = await boxOf('#code .output');
   cam({ x: out.x - 20, y: out.y - 220, w: out.w + 40, h: out.h + 260 });
   spot(pad({ ...out, h: Math.min(out.h, 260) }), 'total 1,706.00 → 1,535.40, then rolled back');
-  highlight({ x: out.x - 6, y: out.y - 6, w: out.w + 12, h: Math.min(out.h + 12, 330) }, 'Code');
   await sleep(3600);
 
-  // 8. Security, full screen: why Marc can't open this order, and the group that would let him
+  // 9. Security, full screen: why Marc can't open this order, and the group that would let him
   caption('Security', 'Why can\'t Marc open this order? The rule that refuses, and the group that would let him.');
-  await clickIn('#full', null, { ms: 900, after: 600 });
-  cam(null);
-  await clickIn('.tabs [data-tab="security"]', null, { ms: 900 });
+  cam(null); // wide before the panel changes size: never zoomed in on a place being redrawn
+  await sleep(1100);
+  await clickIn('#full', null, { ms: 800, after: 500 });
+  await clickIn('.tabs [data-tab="security"]', null, { ms: 800 });
   await wait(panel.waitForSelector('#security .user-search input', { timeout: 15_000 }));
   const search = await boxOf('#security .user-search input');
   const bar = await boxOf('#security .sec-bar');
@@ -340,34 +367,32 @@ async function record() {
   await page.keyboard.press('Enter');
   await wait(panel.waitForFunction(() => /Marc/.test(document.querySelector('#security .sec-bar .who')?.textContent || ''), { timeout: 15_000 }));
   await wait(panel.waitForFunction(() => /Personal Orders/.test(document.querySelector('#security .subview table.matrix')?.textContent || ''), { timeout: 20_000 }));
-  await sleep(500);
+  await settled('#security');
   const rule = await boxOfText('#security .subview table.matrix', 'Personal Orders', false, true);
   const result = await boxOfText('#security .subview table.matrix', 'Result', true);
   cam({ x: rule.x - 30, y: rule.y - 200, w: rule.w + 60, h: result.y + result.h - rule.y + 320 });
-  spot(pad(rule, 4), 'Personal Orders: only his own orders');
-  await sleep(2400);
-  spot(pad(result, 4), 'refused: read, write, create, delete');
-  highlight(pad({ x: rule.x, y: rule.y - 40, w: rule.w, h: result.y + result.h - rule.y + 60 }, 0), 'Security');
-  await sleep(2400);
+  await sleep(700); // the camera there first
+  spot(pad({ ...rule, h: result.y + result.h - rule.y }, 4), 'refused by Personal Orders: only his own orders', 3);
+  await sleep(3300);
   await panel.$$eval('#security .subview-body table.matrix', (ts) => ts.at(-1).classList.add('film-allow')); // "To allow it"
   const allow = await boxOfText('#security table.film-allow', 'Sales / User: All Documents', false, true);
   cam({ x: allow.x - 30, y: allow.y - 160, w: allow.w + 60, h: 420 });
-  spot(pad(allow, 4), 'the group that would allow it');
-  await sleep(2400);
+  await sleep(700);
+  spot(pad(allow, 4), 'the group that would allow it', 2.4);
+  await sleep(2700);
   await clickIn('#security .subview-body button', 'Try', { ms: 800, after: 0 });
   await wait(panel.waitForSelector('#security .trybar', { timeout: 15_000 }));
-  await sleep(800);
-  const tried = await boxOf('#security .trybar');
-  cam({ x: tried.x - 30, y: tried.y - 120, w: tried.w + 60, h: 360 });
-  spot(pad(tried, 4), 'tried, nothing written: Apply or Discard');
-  await sleep(2600);
+  await settled('#security'); // the rights read again with it: cut
   const now2 = await boxOfText('#security .subview table.matrix', 'Result', true, true);
   cam({ x: now2.x - 30, y: now2.y - 260, w: now2.w + 60, h: 460 });
-  spot(pad(now2, 4), 'with it: allowed');
-  await sleep(2400);
-  await clickIn('#security .trybar button', 'Discard', { after: 400 });
+  await sleep(700);
+  spot(pad(now2, 4), 'tried with it: allowed, nothing written', 2.6);
+  await sleep(2900);
+  cam(null);
+  await clickIn('#security .trybar button', 'Discard', { after: 0 });
+  await settled('#security');
 
-  // 9. Apps: what installing a module brings, as Odoo computes it, before the click
+  // 10. Apps: what installing a module brings, as Odoo computes it, before the click
   caption('Apps', 'What does installing a module bring? Odoo\'s own answer, before you click Install.');
   cam(null);
   await clickIn('.tabs [data-tab="apps"]', null, { ms: 900 });
@@ -390,7 +415,6 @@ async function record() {
   const pane = await boxOf('#apps .groups-pane');
   cam({ x: pane.x - 30, y: brings.y - 220, w: pane.w + 60, h: 560 });
   spot(pad({ x: pane.x + 12, y: brings.y - 6, w: pane.w - 24, h: 150 }, 0), 'installing it also installs these, and auto-installs those');
-  highlight({ x: pane.x, y: brings.y - 200, w: pane.w, h: 420 }, 'Apps');
   await sleep(3600);
   await panel.$$eval('#apps .groups-pane details.fold', (ds) => { const d = ds.find((x) => /^Dependency diagram/.test(x.querySelector('summary').textContent.trim())); if (d) { d.open = true; d.dispatchEvent(new Event('toggle')); } });
   await wait(panel.waitForSelector('#apps .groups-pane .dep-graph svg .g-node', { timeout: 20_000 }));
@@ -399,7 +423,7 @@ async function record() {
   cam({ x: graph.x - 30, y: graph.y - 40, w: graph.w + 60, h: Math.min(graph.h + 80, 620) });
   await sleep(3000);
 
-  // 10. Perf: a request profiled, what to look at first, and where the time goes
+  // 11. Perf: a request profiled, what to look at first, and where the time goes
   caption('Perf', 'Why is it slow? An N+1 and the line of code running it, and where the time goes.');
   cam(null);
   await clickIn('.tabs [data-tab="perf"]', null, { ms: 900 });
@@ -440,15 +464,23 @@ async function record() {
   const diag = await boxOf('#perf .groups-pane .perf-diag');
   cam({ x: diag.x - 30, y: diag.y - 200, w: diag.w + 60, h: 520 });
   spot(pad(diag, 4), best.kind === 'n1' ? `one query run ${best.n}×: the line that loops` : 'what to look at first');
-  highlight({ x: diag.x - 10, y: diag.y - 160, w: diag.w + 20, h: 420 }, 'Perf');
   await sleep(3400);
   const byCode = await boxOfText('#perf .groups-pane', 'By code: where the time goes', false, true);
   const hot = await boxOf('#perf .groups-pane details.fold[open] table.matrix');
   cam({ x: hot.x - 30, y: byCode.y - 40, w: hot.w + 60, h: Math.min(hot.y + hot.h - byCode.y + 80, 560) });
   spot(pad({ ...hot, h: Math.min(hot.h, 200) }, 4), 'the time, function by function of the modules');
   await sleep(3200);
+  // every request of the session, grouped by model and method
+  caption('Perf', 'Or the whole session, grouped by method: how often, how long, how many queries.');
+  await clickIn('#perf .toolbar .chip', 'Group by method', { ms: 900, after: 0 });
+  await wait(panel.waitForFunction(() => / groups · /.test(document.querySelector('#perf .toolbar .muted')?.textContent || ''), { timeout: 15_000 }));
+  await sleep(400);
+  const groups = await boxOf('#perf table.matrix');
+  cam({ x: groups.x - 30, y: groups.y - 80, w: groups.w + 60, h: Math.min(groups.h + 160, 560) });
+  spot(pad({ ...groups, h: Math.min(groups.h, 300) }, 4), 'count, total, median and SQL, per method');
+  await sleep(3200);
 
-  // 11. Menus: the technical screens, one click away; the page opens the one picked
+  // 12. Menus: the technical screens, one click away; the page opens the one picked
   caption('Menus', 'Models, views, record rules, crons… the technical screens, one click away.');
   cam(null);
   await clickIn('.tabs [data-tab="menus"]', null, { ms: 900 });
@@ -461,11 +493,11 @@ async function record() {
   cam(null);
   await sleep(2200);
 
-  // 12. themes, then the whole page
-  caption('Yours', 'Odoo\'s light or dark, or an editor theme. English or Tiếng Việt.');
+  // 13. themes, then the whole page
+  caption('Yours', 'Odoo\'s light or dark, or an editor theme. Ten languages, Arabic right to left.');
   cam(null);
   await glide(VW * .6, VH * .55, 900);
-  for (const theme of ['dracula', 'nord', 'github-light']) { await settings({ theme }); await sleep(1100); }
+  for (const [theme, lang] of [['dracula', 'fr'], ['nord', 'ja'], ['github-light', 'ar']]) { await settings({ theme, lang }); await sleep(1500); } // a language reloads the panel
   await sleep(600);
   log.end = now();
   await client.send('Page.stopScreencast');

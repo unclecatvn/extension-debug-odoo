@@ -14,9 +14,7 @@ Extension Chrome miễn phí để debug Odoo 18, 19 và 20, với bảng debug 
 
 </div>
 
-**Xem video giới thiệu** (2 phút rưỡi): từng tab trả lời một câu hỏi thật trên một đơn bán hàng.
-
-https://github.com/user-attachments/assets/d6254395-fac7-4999-ac39-f0c72e547428
+https://github.com/user-attachments/assets/ff679916-475a-48bb-b372-6da66bbeddce
 
 ## Vì sao
 

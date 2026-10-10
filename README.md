@@ -14,11 +14,9 @@ A free Chrome extension to debug Odoo 18, 19 and 20, with its panel right on the
 
 </div>
 
-**Watch the tour** (2½ min): every tab answering a real question on a sales order.
-
 <!-- website/intro.mp4 (npm run intro), uploaded as a GitHub attachment: GitHub plays no video from the repository.
      A new film: drag it into any comment box, put the user-attachments link it gives in place of this one. -->
-https://github.com/user-attachments/assets/d6254395-fac7-4999-ac39-f0c72e547428
+https://github.com/user-attachments/assets/ff679916-475a-48bb-b372-6da66bbeddce
 
 ## Why
 
