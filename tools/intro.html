@@ -1,474 +1,1456 @@
 <!doctype html>
-<!-- The intro film's editing room, rendered frame by frame by tools/intro.mjs (render). 120 BPM (tools/score.mjs):
-       0.5 s   four questions the panel answers, one every two beats, word by word, each with its tab's icon
-       4.5 s   the storm: what an Odoo day throws at you, one a beat (an access error, a traceback, an N+1's queries, a load
-               that won't end), piling up
-       6.5 s   the build: light rays closing in on a glow, the storm pulled into it
-       8.0 s   the drop: a flash, a shockwave, the logo and the name landing, the tagline, the nine tabs
-      10.5 s   the window flies in; then the take (real frames of the extension in use, /take/frames/*.jpg and its log
-               /take/take.json) in a browser window on a dark stage, a camera following the action, captions
-      the end  the window recedes behind the closing title.
-     Every frame is a pure function of t: window.renderAt(t). window.MUSIC: the cues the score follows. -->
+<!-- The intro film, a motion piece rendered frame by frame by tools/intro.mjs (render): no screen recording, the panel's
+     answers drawn here and set in motion, on the beat of the score (tools/score.mjs, 124 BPM, every cue in window.MUSIC).
+       bars 0–4    the panel's button beating, rippling; it becomes the logo; the name drafted letter by letter in other
+                   types, then cleaned up left to right; the tagline
+       bars 4–6    the drop: what an Odoo day throws at you, a coloured slide a beat
+       bars 6–8    a pill in rings, the nine tabs in it; it shrinks into the button of an Odoo page
+       bars 8–10   one click, the panel springs out of it
+       then        each feature: its question and answer in moving type, then its answer in the panel, drawn and animated,
+                   a caption in a pill; in three acts, each its stage: light (Record, ⌥ + click, View, i18n), a moving
+                   gradient (Compare, RPC, Code), dark with a grid and sparks (Security, Apps, Perf, Menus); an iris opens
+                   each act, a band wipes from a question to its answer, everything beats with the score
+       the end     and everything else, in one panel: dots into the button, the answers burst out as tiles, pulled back
+                   in; the logo, the tagline, the button, the sticker.
+     Every frame is a pure function of t: window.renderAt(t). -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <title>Odoo Debug · intro</title>
 <style>
-  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #050506; color: #f5f5f7;
-    font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-  .layer { position: absolute; inset: 0; }
-  #stage { perspective: 2200px; perspective-origin: 50% 40%; }
-  .glow { position: absolute; width: 1500px; height: 1100px; border-radius: 50%; filter: blur(90px); }
-  #grid { opacity: 0; background-image: linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px);
-    background-size: 80px 80px; mask-image: radial-gradient(900px 600px at 50% 50%, #000, transparent 75%); }
+  :root { --ink: #1d1d1f; --muted: #6e6e73; --grad: linear-gradient(100deg, #b3548f 10%, #714b67 50%, #0e9474 95%);
+    --fg: #18181b; --mut: #71717a; --line: #e7e7ea; --acc: #714b67; --acc-soft: #f1e9ef; --ok: #188038; --ok-soft: #e6f4ea;
+    --warn: #b06000; --err: #c5221f; --err-soft: #fce8e6; --info: #1a5fb4; --info-soft: #e8f0fe; --kw: #a626a4;
+    --font: -apple-system, 'SF Pro Display', system-ui, sans-serif; --mono: ui-monospace, 'SF Mono', Menlo, monospace; --sunk: #fafafa; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #f5f5f7; color: var(--ink); font-family: var(--font);
+    -webkit-font-smoothing: antialiased; }
+  .scene { position: absolute; inset: 0; transform-origin: 960px 540px; }
+  .abs { position: absolute; }
+  .g { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .ico { display: inline-block; width: 1em; height: 1em; flex: none; background: currentColor; mask: var(--icon) center / contain no-repeat; }
+  .mark { position: absolute; border-radius: 50%; background: linear-gradient(135deg, #9a6690, #553250); box-shadow: 0 18px 40px rgba(85, 50, 80, .35); }
+  .mark svg { position: absolute; inset: 6%; width: 88%; height: 88%; }
 
-  /* the questions: a tab's icon and name, then the question, word by word, its key word lit */
-  .q { position: absolute; left: 0; right: 0; top: 400px; text-align: center; opacity: 0; }
-  .q .tag { display: inline-flex; align-items: center; gap: 12px; padding: 8px 18px 8px 14px; border-radius: 999px; background: rgba(180, 124, 208, .14);
-    box-shadow: 0 0 0 1px rgba(201, 154, 224, .35); font-size: 20px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #e3b8f0; }
-  .q .tag i, .chips i { width: 26px; height: 26px; background: currentColor; mask: var(--icon) center / contain no-repeat; }
-  .q h2 { margin: 30px 0 0; font-size: 96px; font-weight: 750; letter-spacing: -.045em; line-height: 1.05; }
-  .q h2 span { display: inline-block; margin: 0 .12em; }
-  .q h2 span.key { background: linear-gradient(90deg, #f0c8ff, #b47cd0 55%, #7f6bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  /* the opening */
+  .lock { position: absolute; left: 0; right: 0; top: 400px; text-align: center; white-space: nowrap; }
+  .lock h1 { margin: 0; font-size: 150px; font-weight: 750; letter-spacing: -.05em; line-height: 1; }
+  .lock h1 span { display: inline-block; }
+  .lock .slot { width: 124px; height: 124px; margin-right: 34px; vertical-align: -14px; }
+  .sel { position: absolute; border: 2px solid #0a84ff; pointer-events: none; }
+  .sel i { position: absolute; width: 12px; height: 12px; background: #fff; border: 2px solid #0a84ff; }
+  .anchor { position: absolute; width: 11px; height: 11px; margin: -6px; background: #fff; border: 2px solid currentColor; }
+  .tagline { position: absolute; left: 0; right: 0; top: 590px; text-align: center; font-size: 50px; font-weight: 650; letter-spacing: -.025em; color: var(--muted); }
+  .tagline span { display: inline-block; margin: 0 .13em; }
+  .ripple { position: absolute; border-radius: 50%; border: 3px solid #9a6690; }
 
-  /* the browser window, the take inside it */
-  #win { position: absolute; left: 272px; top: 18px; width: 1376px; height: 896px; border-radius: 18px; overflow: hidden; background: #0d0d10;
-    transform-origin: 50% 60%; box-shadow: 0 0 0 1px rgba(255, 255, 255, .13), 0 40px 120px rgba(0, 0, 0, .7), 0 0 160px rgba(160, 110, 200, .12); }
-  #bar { position: absolute; left: 0; right: 0; top: 0; height: 36px; display: flex; align-items: center; gap: 8px; padding: 0 16px;
-    background: linear-gradient(#232327, #1b1b1e); border-bottom: 1px solid rgba(0, 0, 0, .6); }
-  #bar i { width: 12px; height: 12px; border-radius: 50%; }
-  #bar span { position: absolute; left: 50%; transform: translateX(-50%); padding: 3px 60px; border-radius: 7px; background: rgba(255, 255, 255, .06);
-    font: 500 13px -apple-system, system-ui; color: #9a9aa0; }
-  #view { position: absolute; left: 0; top: 36px; width: 1376px; height: 860px; overflow: hidden; background: #fff; }
-  #view img { position: absolute; left: 0; top: 0; width: 1440px; height: 900px; transform-origin: 0 0; }
-  #sheen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
-    background: linear-gradient(105deg, transparent 0%, transparent 40%, rgba(255, 255, 255, .22) 50%, transparent 60%, transparent 100%); background-size: 300% 100%; }
+  /* the slides: rows of words running */
+  .slide { position: absolute; inset: 0; overflow: hidden; }
+  .lane { position: absolute; left: 0; display: flex; gap: 90px; white-space: nowrap; font-size: 132px; font-weight: 800; letter-spacing: -.04em; color: #fff; }
+  .lane span { opacity: .3; }
 
-  /* captions in their own strip under the window: never over what it shows; one element each, so one fades out fully
-     before the next comes in */
-  .cap { position: absolute; left: 160px; right: 160px; top: 930px; text-align: center; opacity: 0; }
-  .cap b { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #c99ae0; }
-  .cap b i { width: 19px; height: 19px; background: currentColor; mask: var(--icon) center / contain no-repeat; }
-  .cap p { margin: 8px auto 0; max-width: 1500px; text-wrap: balance; font-size: 31px; font-weight: 650; letter-spacing: -.02em; line-height: 1.18; }
+  /* moving type: a question and its answer */
+  .hl { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .hl h2 { margin: 0; font-size: 100px; font-weight: 750; letter-spacing: -.045em; line-height: 1.15; white-space: nowrap; perspective: 1000px; }
+  .hl h2 span { display: inline-block; margin: 0 .12em; }
+  .hl .aw { margin-top: 6px; font-size: 100px; font-weight: 750; letter-spacing: -.045em; line-height: 1.2; white-space: nowrap; padding: 0 .1em .08em; }
+  .hl .aw span { display: inline-block; }
+  .hl .box { position: relative; display: inline-block; padding: 0 .12em; }
+  .hl .darkpill { display: inline-block; overflow: hidden; height: 150px; border-radius: 999px; background: #1d1d1f; color: #fff; font-size: 70px; font-weight: 700;
+    letter-spacing: -.03em; line-height: 150px; white-space: nowrap; text-align: center; }
+  .caret { display: inline-block; width: .07em; height: .9em; margin-left: .04em; vertical-align: -.08em; background: #714b67; border-radius: 3px; }
 
-  /* the answer on screen: a glowing outline following the camera, its label above it */
-  .spot { position: absolute; border-radius: 12px; opacity: 0; pointer-events: none;
-    box-shadow: 0 0 0 3px #b47cd0, 0 0 0 9999px rgba(10, 8, 16, .28), 0 0 40px 6px rgba(180, 124, 208, .65); }
-  .spot b { position: absolute; left: -3px; bottom: calc(100% + 10px); white-space: nowrap; padding: 7px 14px; border-radius: 10px;
-    background: linear-gradient(90deg, #8f5bb0, #6f55d8); color: #fff; font-size: 20px; font-weight: 650; letter-spacing: -.01em;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
-  .spot.below b { bottom: auto; top: calc(100% + 10px); }
-  /* a note beside the window: what was copied, as a terminal */
-  .note { position: absolute; left: 120px; top: 170px; width: 700px; border-radius: 16px; overflow: hidden; opacity: 0;
-    background: #0f0f14; box-shadow: 0 0 0 1px rgba(255, 255, 255, .14), 0 30px 90px rgba(0, 0, 0, .6), 0 0 120px rgba(160, 110, 200, .25); }
-  .note b { display: block; padding: 12px 18px; font-size: 16px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #c99ae0;
-    background: rgba(255, 255, 255, .05); border-bottom: 1px solid rgba(255, 255, 255, .08); }
-  .note pre { margin: 0; padding: 16px 18px 20px; font: 500 17px/1.5 ui-monospace, 'SF Mono', Menlo, monospace; color: #d8f5d0; white-space: pre-wrap; word-break: break-all; }
+  /* the panel's look, drawn larger */
+  .card { position: absolute; background: #fff; border-radius: 26px; overflow: hidden; color: var(--fg); font: 500 26px/1.45 var(--font);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 50px 110px rgba(60, 30, 60, .17), 0 10px 30px rgba(60, 30, 60, .08); }
+  .mid { translate: 0 -50%; }
+  .row { position: relative; display: flex; align-items: center; gap: 14px; padding: 0 32px; height: 68px; border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; flex: none; }
+  .mono { font-family: var(--mono); font-size: .92em; }
+  .b { font-weight: 700; } .mut { color: var(--mut); } .sp { flex: 1; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 3px 15px; border-radius: 999px; background: #f0f0f2; color: var(--mut);
+    font: 600 21px/1.35 var(--font); white-space: nowrap; flex: none; }
+  .pill.acc { background: var(--acc-soft); color: var(--acc); } .pill.ok { background: var(--ok-soft); color: var(--ok); }
+  .pill.err { background: var(--err-soft); color: var(--err); } .pill.info { background: var(--info-soft); color: var(--info); }
+  .pill.warn { background: #fef3e0; color: var(--warn); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 22px; border-radius: 14px; border: 1px solid var(--line); background: #fff; font: 600 23px var(--font); flex: none; }
+  .btn.pri { background: var(--acc); border-color: var(--acc); color: #fff; }
+  .lab { font: 700 19px var(--font); letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
+  .input { display: flex; align-items: center; height: 58px; padding: 0 20px; border: 2px solid var(--acc); border-radius: 14px; box-shadow: 0 0 0 5px rgba(113, 75, 103, .15); flex: 1; }
+  .ring { position: absolute; inset: 4px; border-radius: 16px; box-shadow: inset 0 0 0 3px #8e4f80, 0 0 30px rgba(179, 84, 143, .35); opacity: 0; pointer-events: none; }
+  .k { color: var(--info); } .s { color: var(--ok); } .n { color: var(--warn); } .kw { color: var(--kw); } .fn { color: var(--acc); }
+  .tip { position: absolute; padding: 10px 24px; border-radius: 14px; background: #18181b; color: #fff; font: 600 32px var(--mono); white-space: nowrap; box-shadow: 0 20px 40px rgba(0, 0, 0, .25); }
+  .term { position: absolute; border-radius: 22px; overflow: hidden; background: #17151b; color: #d8f5d0; font: 500 22px/1.55 var(--mono);
+    box-shadow: 0 40px 90px rgba(30, 15, 30, .35); }
+  .term b { display: block; padding: 14px 26px; font: 700 18px var(--font); letter-spacing: .16em; color: #e6b3d6; background: rgba(255, 255, 255, .05); }
+  .term pre { margin: 0; padding: 18px 26px 24px; white-space: pre-wrap; word-break: break-all; }
+  .key { position: absolute; width: 150px; height: 150px; border-radius: 30px; background: linear-gradient(#fff, #f1f1f4); color: var(--fg); font: 600 74px/150px var(--font);
+    text-align: center; box-shadow: 0 0 0 1px rgba(0, 0, 0, .08), 0 14px 0 #d6d6dc, 0 30px 50px rgba(0, 0, 0, .18); }
+  .stamp { position: absolute; padding: 12px 28px; border: 5px solid var(--acc); border-radius: 18px; color: var(--acc); font: 800 40px var(--font); letter-spacing: .06em;
+    text-transform: uppercase; background: rgba(255, 255, 255, .9); }
+  .node { position: absolute; padding: 10px 22px; border-radius: 14px; font: 600 23px var(--mono); white-space: nowrap; translate: -50% -50%; background: var(--acc-soft); color: var(--acc); }
+  .node.c { background: var(--acc); color: #fff; font-size: 28px; padding: 16px 30px; box-shadow: 0 16px 40px rgba(113, 75, 103, .4); }
+  .node.auto { background: var(--ok-soft); color: var(--ok); outline: 2px dashed rgba(24, 128, 56, .45); outline-offset: -2px; }
+  .flip { display: inline-block; width: 120px; text-align: center; font-weight: 800; }
+  .cursor { position: absolute; left: 0; top: 0; width: 40px; height: 46px; z-index: 50; pointer-events: none; }
+  .cursor svg { position: absolute; filter: drop-shadow(0 4px 8px rgba(0, 0, 0, .35)); transform-origin: 4px 3px; }
+  .cursor i { position: absolute; left: -32px; top: -32px; width: 64px; height: 64px; border-radius: 50%; border: 3px solid #b3548f; opacity: 0; }
 
-  /* the storm: Odoo's own dialogs and what a slow screen hides, as cards slammed one on the other */
-  .err { position: absolute; border-radius: 14px; overflow: hidden; opacity: 0; background: #fff; color: #1f1f23;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, .18), 0 40px 120px rgba(0, 0, 0, .75), 0 0 140px rgba(180, 124, 208, .25); }
-  .err header { display: flex; align-items: center; gap: 14px; padding: 20px 28px; font-size: 32px; font-weight: 700; border-bottom: 1px solid #e7e7ea; }
-  .err header i { width: 14px; height: 14px; border-radius: 50%; background: #d23f3a; box-shadow: 0 0 0 5px rgba(210, 63, 58, .18); }
-  .err header b { margin-left: auto; padding: 4px 16px; border-radius: 999px; background: #d23f3a; color: #fff; font-size: 26px; font-variant-numeric: tabular-nums; }
-  .err p { margin: 0; padding: 22px 28px; font-size: 26px; line-height: 1.45; white-space: pre-line; color: #3b3b41; }
-  .err pre { margin: 0; padding: 20px 28px 24px; font: 500 19px/1.5 ui-monospace, 'SF Mono', Menlo, monospace; white-space: pre-wrap; color: #9b2c2c; background: #fbf4f4; }
-  .err footer { padding: 0 28px 24px; }
-  .err footer span { display: inline-block; padding: 9px 20px; border-radius: 8px; background: #714b67; color: #fff; font-size: 22px; font-weight: 600; }
-  .err.term { background: #0f0f14; }
-  .err.term header { color: #e3b8f0; background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .08); }
-  .err.term .lines { height: 290px; overflow: hidden; }
-  .err.term .lines div div { padding: 0 28px; font: 500 21px/1.6 ui-monospace, 'SF Mono', Menlo, monospace; white-space: nowrap; color: #b9e6b0; }
-  .err.wait header { border: 0; }
-  .err.wait header u { width: 32px; height: 32px; border-radius: 50%; border: 4px solid #e7dce5; border-top-color: #714b67; }
-  .err.wait strong { display: block; padding: 0 28px 28px; font-size: 96px; font-weight: 750; letter-spacing: -.04em; font-variant-numeric: tabular-nums; color: #714b67; }
-  #flash { pointer-events: none; background: radial-gradient(1100px 650px at 50% 50%, rgba(235, 205, 255, .75), transparent 70%); opacity: 0; }
+  /* the caption: a short line in a pill */
+  #caps { position: absolute; inset: 0; z-index: 40; pointer-events: none; }
+  .cap { position: absolute; left: 0; right: 0; top: 948px; text-align: center; opacity: 0; }
+  .cap p { display: inline-block; margin: 0; padding: 16px 40px; border-radius: 999px; background: #fff; font-size: 40px; font-weight: 700; letter-spacing: -.02em;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 14px 40px rgba(40, 20, 40, .18); }
 
-  /* the build and the drop: rays closing in, a core of light, a shockwave */
-  #rays { opacity: 0; }
-  #rays i { position: absolute; left: 960px; top: 540px; width: 1400px; height: 3px; margin-top: -1.5px; transform-origin: 0 50%;
-    background: linear-gradient(90deg, rgba(240, 210, 255, .95), rgba(180, 124, 208, .4) 30%, transparent 70%); }
-  #core { position: absolute; left: 960px; top: 540px; width: 600px; height: 600px; margin: -300px 0 0 -300px; border-radius: 50%; opacity: 0;
-    background: radial-gradient(closest-side, rgba(255, 245, 255, .95), rgba(200, 140, 240, .5) 35%, transparent 70%); }
-  #wave { position: absolute; left: 960px; top: 480px; width: 400px; height: 400px; margin: -200px 0 0 -200px; border-radius: 50%; opacity: 0;
-    border: 6px solid rgba(225, 185, 250, .9); box-shadow: 0 0 60px rgba(200, 140, 240, .8), inset 0 0 40px rgba(200, 140, 240, .5); }
+  /* the end */
+  .tile { position: absolute; display: flex; align-items: center; gap: 16px; padding: 0 28px; border-radius: 26px; background: #fff; color: var(--fg);
+    font: 650 28px var(--font); white-space: nowrap; box-shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 24px 50px rgba(60, 30, 60, .16); box-sizing: border-box; }
+  .tile .ico { width: 34px; height: 34px; color: var(--acc); }
+  .tile.dark { background: #1d1d1f; color: #fff; } .tile.dark .ico { color: #e6b3d6; }
+  .tile.grad { background: linear-gradient(110deg, #b3548f, #714b67 55%, #0e9474); color: #fff; } .tile.grad .ico { color: #fff; }
+  .tile.big { flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; font-size: 24px; }
+  .tile.big strong { font-size: 44px; font-weight: 800; letter-spacing: -.03em; }
+  .free { position: absolute; padding: 8px 24px 10px; border-radius: 18px; background: linear-gradient(100deg, #e0457b, #b3548f); color: #fff; font: 750 42px var(--font);
+    box-shadow: 0 14px 30px rgba(179, 84, 143, .45); }
+  .cta { position: absolute; left: 50%; display: inline-flex; align-items: center; gap: 14px; padding: 20px 42px; border-radius: 999px; background: var(--ink); color: #fff;
+    font: 650 32px var(--font); box-shadow: 0 16px 40px rgba(0, 0, 0, .22); white-space: nowrap; }
+  .cta svg { width: 30px; height: 30px; }
+  #fade { position: absolute; inset: 0; background: #f5f5f7; opacity: 0; pointer-events: none; z-index: 100; }
 
-  /* the title: the logo, the name letter by letter, a light sweeping across it, the tagline, the tabs */
-  .title { position: absolute; left: 0; right: 0; text-align: center; }
-  .title h1 { margin: 0; font-size: 150px; font-weight: 750; letter-spacing: -.055em; line-height: 1; white-space: nowrap; }
-  .title h1 span { display: inline-block; }
-  .title h1 img { display: inline-block; width: 124px; height: 124px; vertical-align: -16px; margin-right: 30px; }
-  #open h1.sweep { position: absolute; left: 0; right: 0; top: 0; color: transparent;
-    background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, .95) 50%, transparent 65%); background-size: 260% 100%;
-    -webkit-background-clip: text; background-clip: text; }
-  #open h1.sweep img { visibility: hidden; }
-  .title p { margin: 26px 0 0; font-size: 42px; font-weight: 550; letter-spacing: -.02em; color: #a1a1a6; }
-  .title p span { background: linear-gradient(90deg, #f0c8ff, #b47cd0 55%, #7f6bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .chips { display: flex; justify-content: center; gap: 14px; margin-top: 40px; }
-  .chips span { display: inline-flex; align-items: center; gap: 9px; padding: 9px 16px 9px 12px; border-radius: 12px; font-size: 21px; font-weight: 600;
-    background: rgba(255, 255, 255, .06); box-shadow: 0 0 0 1px rgba(255, 255, 255, .12); color: #d6d6db; }
-  .chips i { width: 22px; height: 22px; color: #c99ae0; }
-  .title small { display: block; margin-top: 30px; font: 500 24px ui-monospace, 'SF Mono', Menlo, monospace; color: #7e7e85; }
-  #end h1 { font-size: 132px; }
-  #fade { background: #000; pointer-events: none; }
+  /* the stages behind the acts */
+  #bg, #bg > div { position: absolute; inset: 0; overflow: hidden; }
+  .blob { position: absolute; width: 1000px; height: 1000px; margin: -500px; border-radius: 50%; filter: blur(140px); }
+  .grid { position: absolute; left: -60%; right: -60%; top: 560px; height: 1400px; transform-origin: 50% 0; transform: perspective(600px) rotateX(74deg);
+    background-image: linear-gradient(rgba(255, 122, 195, .5) 2px, transparent 2px), linear-gradient(90deg, rgba(62, 240, 192, .35) 2px, transparent 2px);
+    background-size: 140px 140px; -webkit-mask-image: linear-gradient(transparent, #000 25%, #000 60%, transparent); }
+  .spark { position: absolute; border-radius: 50%; background: #fff; box-shadow: 0 0 10px #fff; }
+  .iris { position: absolute; border-radius: 50%; border: 8px solid #fff; box-shadow: 0 0 60px #fff, inset 0 0 60px #fff; opacity: 0; z-index: 35; pointer-events: none; }
+  .wipe { position: absolute; top: -300px; height: 1680px; width: 2900px; z-index: 30; pointer-events: none; }
+
+  /* the coloured act: white type; the dark act: light type, glass cards, neon */
+  .on-color .hl h2, .on-dark .hl h2 { color: #fff; }
+  .hl h2.qs { color: var(--muted); } .on-color .hl h2.qs, .on-dark .hl h2.qs { color: rgba(255, 255, 255, .78); }
+  .on-color .sel, .on-color .sel i { border-color: #fff; } .on-color .sel i { background: rgba(255, 255, 255, .25); }
+  .on-color .g { background: linear-gradient(100deg, #fff 15%, #ffd2ec 55%, #b8ffe9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .on-color .card .g, .on-dark .g { background: linear-gradient(100deg, #ff7ac3, #c38bff 50%, #3ef0c0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .on-color .card { box-shadow: 0 0 0 1px rgba(255, 255, 255, .35), 0 60px 130px rgba(40, 10, 50, .45); }
+  .on-dark { --fg: #ececef; --mut: #a1a1aa; --line: rgba(255, 255, 255, .09); --acc: #f0a6d8; --acc-soft: rgba(240, 166, 216, .16); --ok: #4ade80;
+    --ok-soft: rgba(74, 222, 128, .16); --warn: #fbbf24; --err: #ff6b81; --err-soft: rgba(255, 107, 129, .16); --info: #7cb4ff; --info-soft: rgba(124, 180, 255, .16);
+    --kw: #e08bf0; --sunk: rgba(255, 255, 255, .045); }
+  .on-dark .card { background: rgba(18, 15, 26, .9); box-shadow: 0 0 0 1px rgba(255, 255, 255, .11), 0 50px 120px rgba(0, 0, 0, .65), 0 0 160px rgba(179, 84, 143, .28); }
+  .on-dark .pill { background: rgba(255, 255, 255, .08); }
+  .on-dark .btn { background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .14); }
+  .on-dark .btn.pri { background: #c2549a; border-color: #c2549a; color: #fff; }
+  .on-dark .input { border-color: #ff7ac3; box-shadow: 0 0 0 5px rgba(255, 122, 195, .18), 0 0 30px rgba(255, 122, 195, .3); }
+  .on-dark .ring { box-shadow: inset 0 0 0 3px #ff7ac3, 0 0 50px rgba(255, 122, 195, .6); }
+  .on-dark .node { background: #2c1d2e; color: #f5c4e4; box-shadow: 0 0 0 1px rgba(240, 166, 216, .35), 0 0 30px rgba(240, 166, 216, .25); }
+  .on-dark .node.c { background: linear-gradient(100deg, #c2549a, #6b3fa0); color: #fff; box-shadow: 0 0 70px rgba(255, 122, 195, .7); }
+  .on-dark .node.auto { background: #102a26; color: #8ff7da; outline-color: rgba(62, 240, 192, .55); box-shadow: 0 0 30px rgba(62, 240, 192, .3); }
+  .on-dark .cursor svg path { fill: #fff; stroke: #111; }
+  .on-dark .term { box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 40px 90px rgba(0, 0, 0, .5); }
+  .packet { position: absolute; width: 22px; height: 22px; margin: -11px; border-radius: 50%; background: #fff; box-shadow: 0 0 20px 6px #ff7ac3, 0 0 50px 14px rgba(62, 240, 192, .6); z-index: 20; }
+  .beam { position: absolute; left: 0; right: 0; height: 4px; margin-top: -2px; pointer-events: none; z-index: 5; }
+  .wave { position: absolute; border-radius: 50%; pointer-events: none; }
+  .sql { font: 500 18px/1.5 var(--mono); color: var(--err); white-space: nowrap; }
+  .hl .bar { position: absolute; inset: -6px -24px; border-radius: 12px; background: linear-gradient(100deg, #ff7ac3, #c38bff 50%, #3ef0c0); transform-origin: 0 50%; }
 </style>
 </head>
 <body>
-<div id="stage" class="layer">
-  <div class="glow" id="g1" style="background: radial-gradient(closest-side, rgba(150, 90, 200, .55), transparent)"></div>
-  <div class="glow" id="g2" style="background: radial-gradient(closest-side, rgba(60, 90, 200, .35), transparent)"></div>
-  <div id="grid" class="layer"></div>
-  <div id="questions" class="layer"></div>
-  <div id="storm" class="layer"></div>
-  <div id="rays" class="layer"></div>
-  <div id="core"></div>
-  <div id="wave"></div>
-  <div id="flash" class="layer"></div>
-  <div id="win">
-    <div id="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>localhost/odoo/sales</span></div>
-    <div id="view"><img id="a" alt=""><img id="b" alt=""><div id="spots"></div><div id="sheen"></div></div>
-  </div>
-  <div id="notes"></div>
-  <div id="caps"></div>
-  <div class="title" id="open" style="top: 330px"><div style="position: relative"><h1 class="letters"><img src="/assets/icons/icon.svg" alt=""></h1><h1 class="sweep"><img src="/assets/icons/icon.svg" alt="">Odoo Debug</h1></div>
-    <p>See <span>why</span> Odoo does what it does.</p><div class="chips" id="open-chips"></div></div>
-  <div class="title" id="end" style="top: 290px"><h1><img src="/assets/icons/icon.svg" alt="">Odoo Debug</h1>
-    <p>A debug panel, <span>right on the Odoo page.</span></p><div class="chips" id="end-chips"></div>
-    <small>Free · Odoo 18, 19 and 20 · on the Chrome Web Store</small></div>
-</div>
-<div id="fade" class="layer"></div>
+<svg width="0" height="0" style="position: absolute">
+  <filter id="mb1" x="-30%" width="160%"><feGaussianBlur stdDeviation="14 0"/></filter>
+  <filter id="mb2" x="-30%" width="160%"><feGaussianBlur stdDeviation="34 0"/></filter>
+  <filter id="mb3" x="-30%" width="160%"><feGaussianBlur stdDeviation="70 0"/></filter>
+  <filter id="mv1" y="-40%" height="180%"><feGaussianBlur stdDeviation="0 12"/></filter>
+</svg>
+<div id="bg"></div>
+<div id="scenes"></div>
+<div id="fx"></div>
+<div id="caps"></div>
+<div id="fade"></div>
 
 <script type="module">
-const take = await (await fetch('/take/take.json')).json();
-const [VW, VH] = take.viewport; // the page, in px; the frames are 2×
 const $ = (s) => document.querySelector(s);
-const el = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, k) => a + (b - a) * k;
 const smooth = (a, b, t) => { const k = clamp((t - a) / (b - a)); return k * k * (3 - 2 * k); };
-const ease = (k) => (k < .5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2);
+const ease = (k) => (k = clamp(k), k < .5 ? 4 * k * k * k : 1 - (-2 * k + 2) ** 3 / 2);
 const out = (k) => 1 - (1 - clamp(k)) ** 3;
-const back = (k) => { k = clamp(k); const c = 1.9; return 1 + (c + 1) * (k - 1) ** 3 + c * (k - 1) ** 2; }; // overshoots, settles
+const inq = (k) => clamp(k) ** 3;
+/** A damped spring's step response u s after its start: 0 → 1, overshooting, at f Hz. */
+const spring = (u, f = 2, z = .45) => {
+  if (u <= 0) return 0;
+  const w = 2 * Math.PI * f, wd = w * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w * u) * (Math.cos(wd * u) + (z * w / wd) * Math.sin(wd * u));
+};
+const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }; // the same every render
+const num = (v, d = 0) => v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+const mb = (q) => (q < .04 ? '' : `url(#mb${q < .25 ? 1 : q < .55 ? 2 : 3})`); // a horizontal motion blur, by speed
+
+// ---------- the beat (124 BPM): every scene starts on one; the score follows the cues ----------
+const BPM = 124, BEAT = 60 / BPM, B = (n) => n * BEAT;
+const SFX = [];
+/** A sound at t s: tick, click, pop, blip (p: its pitch, a step of the scale), swish, whoosh, ding, thud, shine. */
+const cue = (t, k, g = 1, p = 0) => SFX.push({ t: +t.toFixed(4), k, g, p });
+
+function h(tag, a = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(a)) {
+    if (k === 'class') n.className = v; else if (k === 'style') n.style.cssText = v; else if (k === 'text') n.textContent = v;
+    else if (k === 'html') n.innerHTML = v; else n.setAttribute(k, v);
+  }
+  n.append(...kids.flat().filter((x) => x != null));
+  return n;
+}
+/** A line with its *key words* in the gradient. */
+const marked = (tag, text) => {
+  const n = h(tag);
+  text.split('*').forEach((part, i) => part && n.append(i % 2 ? h('span', { class: 'g', text: part }) : part));
+  return n;
+};
+/** n popped in u s after its cue: a spring from scale s / offset x, y / turn r, a quick fade, a blur clearing. */
+function P(n, u, o = {}) {
+  if (u < 0) { n.style.opacity = 0; return; }
+  const k = spring(u, o.f ?? 2.4, o.z ?? .45);
+  n.style.opacity = clamp(u / (o.fade ?? .08));
+  n.style.transform = `translate(${(o.x ?? 0) * (1 - k)}px, ${(o.y ?? 0) * (1 - k)}px) scale(${lerp(o.s ?? .4, 1, k)}) rotate(${(o.r ?? 0) * (1 - k)}deg)`;
+  const bl = (1 - clamp(u / .22)) * (o.b ?? 0);
+  n.style.filter = bl > .2 ? `blur(${bl}px)` : '';
+}
+const RISE = { s: 1, y: 46, f: 2, z: .62, b: 8 };
+const POP = { s: .3, f: 2.6, z: .4 };
+/** Collapses a row of height H, u s after it starts: its height, its opacity. */
+const collapse = (n, H, u) => { const k = ease(u / .3); n.style.height = `${H * (1 - k)}px`; n.style.opacity = 1 - k; n.style.borderBottomWidth = k > .95 ? '0' : ''; };
 
 // the tabs' icons, as the panel draws them (src/ui/panel.css: masks)
 const css = await (await fetch('/src/ui/panel.css')).text();
 const ICON = Object.fromEntries([...css.matchAll(/\[data-tab=(\w+)\] \{ --icon: (url\("data:image\/svg\+xml,[^"]+"\))/g)].map((m) => [m[1], m[2]]));
-const icon = (tab) => { const i = el('i'); i.style.setProperty('--icon', ICON[tab] ?? 'none'); return i; };
-const TABS = [['record', 'Record'], ['view', 'View'], ['rpc', 'RPC'], ['security', 'Security'], ['translations', 'i18n'], ['apps', 'Apps'], ['menus', 'Menus'], ['perf', 'Perf'], ['code', 'Code']];
+const ico = (tab) => { const i = h('i', { class: 'ico' }); i.style.setProperty('--icon', ICON[tab] ?? 'none'); return i; };
+const TABS = [['record', 'Record'], ['view', 'View'], ['rpc', 'RPC'], ['security', 'Security'], ['translations', 'Translations'], ['apps', 'Apps'], ['menus', 'Menus'], ['perf', 'Perf'], ['code', 'Code']];
+const BUG = '<svg viewBox="0 0 128 128"><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106"/><path d="M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/></svg>';
+const mark = () => h('div', { class: 'mark', html: BUG });
+/** Places a mark: its centre x, y, its size, its roundness (.5: a circle). */
+const putMark = (n, x, y, size, round = .5, o = 1) => Object.assign(n.style, { left: `${x - size / 2}px`, top: `${y - size / 2}px`, width: `${size}px`, height: `${size}px`, borderRadius: `${round * 100}%`, opacity: o });
+/** The centre of `n` on the stage, as laid out (measured when a scene is built: no motion on it yet), moved by dx, dy. */
+const centre = (n, dx = 0, dy = 0) => { const b = n.getBoundingClientRect(); return [b.x + b.width / 2 + dx, b.y + b.height / 2 + dy]; };
+const ARROW = '<svg width="40" height="46" viewBox="0 0 26 30"><path d="M3 2 L3 24 L8.6 18.8 L12.4 27.6 L16.2 26 L12.5 17.4 L20.2 17.2 Z" fill="#111" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>';
 
-// ---------- the opening's beat (120 BPM): every cue on it; the score follows ----------
-const BEAT = .5;
-const QUESTIONS = [1, 3, 5, 7].map((k) => k * BEAT); // 0.5 … 3.5: one every two beats
-const MONTAGE = [9, 10, 11, 12].map((k) => k * BEAT); // 4.5 … 6.0: the storm, one card a beat
-const RISER = [13 * BEAT, 15.5 * BEAT]; // 6.5 … 7.75, then a beat's half of silence
-const IMPACT = 16 * BEAT; // 8.0: the drop
-const WIN_IN = 21 * BEAT; // 10.5: the window flies in
-const OPEN = 25 * BEAT; // 12.5: the take starts playing
+await document.fonts.ready;
 
-// ---------- the edit: the take without its cuts, its long typing sped up; between the opening and an ending ----------
-const END = 5.5;
-const S0 = take.start + .9, S1 = take.end; // source times kept
-// the way to each answer (clicks, a page loading, the cursor travelling) plays faster than the answer, held at 1×
-const answers = [...take.spots, ...take.notes].sort((a, b) => a.t - b.t);
-const ways = answers.slice(1).map((x, i) => [answers[i].t + answers[i].dur + .3, x.t - .5, 1.6]).filter(([a, b]) => b - a > .8);
-const fast = [...take.fast, ...ways]; // the first match wins: typing keeps its own pace
-const marks = [S0, S1, ...take.cuts.flat(), ...fast.flatMap(([a, b]) => [a, b])].filter((x) => x >= S0 && x <= S1).sort((a, b) => a - b);
-const pieces = []; // { s0, s1, rate, o0 }: source span s0..s1 plays at `rate` from output time o0
-let o = OPEN;
-for (let i = 0; i < marks.length - 1; i++) {
-  const s0 = marks[i], s1 = marks[i + 1], mid = (s0 + s1) / 2;
-  if (s1 - s0 < .01 || take.cuts.some(([a, b]) => mid > a && mid < b)) continue;
-  const rate = fast.find(([a, b]) => mid > a && mid < b)?.[2] ?? 1;
-  pieces.push({ s0, s1, rate, o0: o });
-  o += (s1 - s0) / rate;
+// ---------- the acts: the stage behind the features, from these beats (on bar lines) ----------
+const ACTS = [{ b: 80, look: 'color' }, { b: 120, look: 'dark' }, { b: 168, look: 'light' }];
+const lookAt = (b) => ACTS.findLast((a) => b >= a.b)?.look ?? 'light';
+/** The kick's pulse at T: 1 on it, falling; four to the bar, in the dark act on 1 and the "and" of 2 (half time). */
+const pulse = (T) => {
+  const tb = T / BEAT;
+  if (lookAt(tb) !== 'dark') return Math.exp(-(tb % 1) / .14);
+  const p = (tb - 16) % 4;
+  return Math.max(Math.exp(-p / .16), p >= 2.5 ? Math.exp(-(p - 2.5) / .16) : 0);
+};
+
+// ---------- scenes: [b0, b1) in beats, built once, rendered from their local time ----------
+const scenes = [];
+function scene(b0, b1, make) {
+  const root = h('div', { class: `scene on-${lookAt(b0)}` });
+  $('#scenes').append(root);
+  const s = { t0: B(b0), t1: B(b1), dur: B(b1 - b0), root, at: (b) => B(b0 + b) };
+  s.render = make(root, s);
+  scenes.push(s);
+  return s;
 }
-// the take ends on a bar line of the score (its groove started on IMPACT), so the closing chord lands on a downbeat
-const BODY_END = IMPACT + Math.ceil((o - IMPACT) / (4 * BEAT)) * 4 * BEAT;
-const DURATION = BODY_END + END;
-const toSrc = (T) => {
-  const p = pieces.findLast((q) => q.o0 <= T) ?? pieces[0];
-  return clamp(p.s0 + (T - p.o0) * p.rate, p.s0, p.s1);
-};
-const toOut = (s) => { // a source time to the film's; inside a cut: where the film goes on
-  for (const p of pieces) if (s <= p.s1) return p.o0 + Math.max(0, s - p.s0) / p.rate;
-  return o;
-};
-const cutsOut = pieces.slice(1).filter((p, i) => p.s0 - pieces[i].s1 > .05).map((p) => p.o0); // jump cuts: a dissolve
-
-// ---------- the camera: keyframes of the take, eased moves in (centre, log zoom) ----------
-const view = { w: 1376, h: 860 }, base = view.w / VW; // page px → view px at zoom 1
-const shot = (r) => {
-  if (!r) return { cx: VW / 2, cy: VH / 2, z: 1 };
-  const z = clamp(Math.min(VW / r.w, VH / r.h) * .96, 1, 2.05);
-  const w = VW / z, h = VH / z;
-  return { cx: clamp(r.x + r.w / 2, w / 2, VW - w / 2), cy: clamp(r.y + r.h / 2, h / 2, VH - h / 2), z };
-};
-const keys = take.cams.map((c) => ({ t: Math.max(OPEN, toOut(c.t)), ...shot(c.r) }));
-const MOVE = 1.05;
-function camera(T) {
-  let cur = keys[0];
-  for (let i = 1; i < keys.length; i++) {
-    const k = keys[i];
-    if (T < k.t) break;
-    const e = ease(clamp((T - k.t) / MOVE));
-    cur = { cx: lerp(cur.cx, k.cx, e), cy: lerp(cur.cy, k.cy, e), z: Math.exp(lerp(Math.log(cur.z), Math.log(k.z), e)) };
-  }
-  return { ...cur, z: cur.z * (1 + .012 * Math.sin(T * .5)) }; // a slow drift: a held shot still breathes
-}
-
-// ---------- frames ----------
-const idx = (s) => { // the last frame painted at source time s
-  let lo = 0, hi = take.frames.length - 1;
-  while (lo < hi) { const m = (lo + hi + 1) >> 1; if (take.frames[m].t <= s) lo = m; else hi = m - 1; }
-  return take.frames[lo].f;
-};
-async function show(img, file) {
-  const src = `/take/frames/${file}`;
-  if (img.getAttribute('src') !== src) { img.src = src; await img.decode().catch(() => {}); }
-}
-/** In from below out of a blur at t0, out at t1 (opacity on `n`, the blur on its text only: never on a glass box). */
-function rise(n, t, t0, t1 = Infinity, d = 24, blurOn = n) {
-  const a = out((t - t0) / .7), b = t1 === Infinity ? 0 : smooth(t1, t1 + .45, t);
-  n.style.opacity = a * (1 - b);
-  n.style.transform = `translateY(${(1 - a) * d - b * 10}px)`;
-  blurOn.style.filter = `blur(${(1 - a) * 12 + b * 6}px)`;
-}
-
-// ---------- the questions ----------
-const QS = [
-  ['view', 'View', ['Why', 'is', 'this', 'field', '*read-only?']],
-  ['security', 'Security', ['Who', 'can', 'see', 'this', '*record?']],
-  ['rpc', 'RPC', ['What', 'did', 'that', '*call', 'send?']],
-  ['perf', 'Perf', ['Why', 'is', 'this', 'screen', '*slow?']],
-].map(([tab, name, words], k) => {
-  const n = el('div', 'q');
-  const tag = el('div', 'tag');
-  tag.append(icon(tab), name);
-  const h = el('h2');
-  const spans = words.map((w) => el('span', w.startsWith('*') ? 'key' : '', w.replace('*', '')));
-  h.append(...spans);
-  n.append(tag, el('br'), h);
-  $('#questions').append(n);
-  return { n, tag, spans, t: QUESTIONS[k] };
-});
-
-// ---------- captions: each from its time until shortly before the next one ----------
-const CAP_TAB = { 'Record': 'record', '⌥ + click': 'record', 'Compare': 'record', 'View': 'view', 'i18n': 'translations', 'RPC': 'rpc', 'Code': 'code', 'Security': 'security', 'Apps': 'apps', 'Perf': 'perf', 'Menus': 'menus', 'Yours': 'apps' };
-const caps = take.captions.filter((c) => c.title !== 'Odoo Debug').map((c) => ({ ...c, o: toOut(c.t) }));
-caps.forEach((c, i) => {
-  c.until = (caps[i + 1]?.o ?? o) - .55; // gone (0.45 s fade) before the next one starts
-  c.n = el('div', 'cap');
-  const inner = el('div'), b = el('b');
-  b.append(icon(CAP_TAB[c.title] ?? 'record'), c.title);
-  inner.append(b, el('p', '', c.text));
-  c.n.append(inner);
-  $('#caps').append(c.n);
-});
-
-// ---------- the answers on screen: outlines with a label, the camera's; notes beside the window ----------
-const spots = (take.spots ?? []).map((sp) => {
-  const n = el('div', 'spot');
-  n.append(el('b', '', sp.label));
-  $('#spots').append(n);
-  return { ...sp, o: toOut(sp.t), n };
-}).sort((a, b) => a.o - b.o);
-spots.forEach((sp, i) => { if (spots[i + 1]) sp.dur = Math.min(sp.dur, spots[i + 1].o - sp.o - .4); }); // one label at a time
-const notes = (take.notes ?? []).map((nt) => {
-  const n = el('div', 'note');
-  n.append(el('b', '', nt.title), el('pre', '', nt.text));
-  $('#notes').append(n);
-  return { ...nt, o: toOut(nt.t), n };
-});
-
-// ---------- the storm: the cards, each with its place and tilt; what moves in them (a count, a clock) set per frame ----------
-const card = (cls, x, y, w, rot, title, ...body) => {
-  const n = el('div', `err ${cls}`), head = el('header');
-  head.append(cls === 'wait' ? el('u') : el('i'), title);
-  n.append(head, ...body);
-  Object.assign(n.style, { left: `${x}px`, top: `${y}px`, width: `${w}px` });
-  $('#storm').append(n);
-  return { n, x, y, w, rot, head };
-};
-const close = el('footer');
-close.append(el('span', '', 'Close'));
-const sqlBox = el('div', 'lines'), sqlLines = el('div'); // the box keeps the lines under the title while they scroll
-for (let k = 0; k < 30; k++) sqlLines.append(el('div', '', `SELECT name, list_price FROM product_template WHERE id = ${41 + k * 3}`));
-sqlBox.append(sqlLines);
-const sqlCount = el('b'), clock = el('strong');
-const STORM = [
-  card('', 70, 90, 800, -4, 'Access Error',
-    el('p', '', "Uh-oh! Looks like you have stumbled upon some top-secret records.\n\nSorry, Marc Demo (id=6) doesn't have 'read' access to:\n- Sales Order (sale.order)"), close),
-  card('', 960, 60, 880, 3.5, 'Odoo Server Error',
-    el('pre', '', 'Traceback (most recent call last):\n  File "odoo/http.py", line 1957, in _transactioning\n  File "addons/sale/models/sale_order.py", line 1012, in action_confirm\npsycopg2.errors.NotNullViolation: null value in column "partner_id" of relation "sale_order" violates not-null constraint')),
-  card('term', 180, 560, 900, 2.5, 'SQL', sqlBox),
-  card('wait', 1220, 600, 560, -3, 'Loading…', clock),
-];
-STORM[2].head.append(sqlCount);
-for (const c of STORM) c.h = c.n.offsetHeight;
-
-// ---------- the rays of the build ----------
-const RAYS = Array.from({ length: 18 }, (_, k) => { const r = el('i'); $('#rays').append(r); return { r, a: k * 20 + (k % 3) * 4 }; });
-
-// ---------- the title, a span per letter; the tabs ----------
-const letters = [...'Odoo Debug'].map((ch) => el('span', '', ch === ' ' ? ' ' : ch));
-$('#open h1.letters').append(...letters);
-const chipsOf = (box) => TABS.map(([tab, name]) => { const c = el('span'); c.append(icon(tab), name); box.append(c); return c; });
-const openChips = chipsOf($('#open-chips')), endChips = chipsOf($('#end-chips'));
-const logo = $('#open h1.letters img');
-
-window.renderAt = async (T) => {
-  // the stage breathes: two glows drifting; brighter on the drop; the grid pulses on the beat until the title
-  const land = smooth(IMPACT - .05, IMPACT + .08, T) * (1 - smooth(IMPACT + .1, IMPACT + 1.8, T));
-  const pulse = T < IMPACT ? Math.exp(-((T % BEAT) / .12)) : 0;
-  $('#g1').style.transform = `translate(${-200 + 160 * Math.sin(T * .17)}px, ${-260 + 90 * Math.cos(T * .13)}px) scale(${1 + .3 * land + .05 * pulse})`;
-  $('#g2').style.transform = `translate(${760 + 140 * Math.cos(T * .15)}px, ${200 + 110 * Math.sin(T * .19)}px)`;
-  $('#g1').style.opacity = $('#g2').style.opacity = smooth(0, 1, T) * (1 - .6 * smooth(RISER[0], RISER[1], T) * (1 - smooth(IMPACT, IMPACT + .3, T)));
-  $('#grid').style.opacity = smooth(0, .5, T) * (1 - smooth(RISER[0], RISER[0] + .4, T)) * (.55 + .45 * pulse);
-
-  // the questions: the tag first, the words one after the other; up and away two beats later
-  for (const q of QS) {
-    const u = T - q.t, live = u > -.1 && u < 2 * BEAT + .2;
-    if (!live) { q.n.style.opacity = 0; continue; }
-    const gone = smooth(2 * BEAT - .28, 2 * BEAT - .02, u);
-    q.n.style.opacity = 1 - gone;
-    q.n.style.transform = `translateY(${-gone * 60}px) scale(${1 + gone * .06})`;
-    q.n.style.filter = `blur(${gone * 14}px)`;
-    const ta = out(u / .3);
-    q.tag.style.opacity = ta;
-    q.tag.style.transform = `translateY(${(1 - ta) * 16}px)`;
-    q.spans.forEach((s, i) => {
-      const a = out((u - .06 - i * .055) / .32);
-      s.style.opacity = a;
-      s.style.transform = `translateY(${(1 - a) * 46}px) rotateX(${(1 - a) * 50}deg)`;
-      s.style.filter = `blur(${(1 - a) * 10}px)`;
-      if (s.className === 'key') s.style.backgroundPosition = `${lerp(100, 0, clamp((u - .3) / .6))}% 0`;
-    });
-  }
-
-  // the storm: each card slams in on its beat (a flash, a shake), the older ones darken under it; the build pulls the
-  // pile into the light, gone on the drop
-  let flash = 0;
-  const pull = ease(smooth(RISER[0], IMPACT, T));
-  STORM.forEach((c, k) => {
-    const u = T - MONTAGE[k];
-    if (u < -.05 || T > IMPACT) { c.n.style.opacity = 0; return; }
-    const a = out(u / .16), shake = Math.exp(-u / .12) * 16 * Math.sin(u * 90);
-    const under = MONTAGE.filter((m, j) => j > k && T > m).length;
-    const dx = (960 - c.x - c.w / 2) * pull, dy = (540 - c.y - c.h / 2) * pull;
-    c.n.style.opacity = a * (1 - smooth(.55, 1, pull));
-    c.n.style.transform = `translate(${dx + shake}px, ${dy}px) rotate(${c.rot * (1 - pull) + pull * 40 * (k % 2 ? 1 : -1)}deg) scale(${lerp(1.3, 1, a) * lerp(1, .12, pull)})`;
-    c.n.style.filter = `blur(${(1 - a) * 10 + pull * 14}px) brightness(${(1 + .6 * Math.exp(-Math.max(0, u) / .08)) * (1 - .22 * under)})`;
-    flash = Math.max(flash, .45 * Math.exp(-Math.max(0, u) / .09));
-  });
-  const uSql = Math.max(0, T - MONTAGE[2]);
-  sqlCount.textContent = `×${Math.min(91, Math.floor(uSql * 55) + 1)}`;
-  sqlLines.style.transform = `translateY(${-(uSql * 300) % (33.6 * 15)}px)`;
-  clock.textContent = `${(2.1 + Math.max(0, T - MONTAGE[3]) * 3.4).toFixed(1)} s`;
-  STORM[3].head.firstChild.style.transform = `rotate(${T * 540}deg)`;
-
-  // the build: the rays turn and close in on a growing core; the drop: a flash, a shockwave, the rays thrown out
-  const build = smooth(RISER[0], RISER[1] + .2, T), after = T - IMPACT;
-  $('#rays').style.opacity = after < 0 ? build * .9 : .9 * Math.exp(-after / .35);
-  RAYS.forEach(({ r, a }, k) => {
-    const len = after < 0 ? lerp(1.15, .12, ease(build)) : lerp(.12, 1.6, out(after / .5));
-    const ang = a + (after < 0 ? 40 * build * build : 40 + after * 30);
-    r.style.transform = `rotate(${ang}deg) translateX(${after < 0 ? lerp(520, 30, ease(build)) : 30 + after * 900}px) scaleX(${len})`;
-    r.style.opacity = .5 + .5 * Math.sin(k * 1.7 + T * 9);
-  });
-  const core = after < 0 ? build : Math.exp(-after / .25);
-  $('#core').style.opacity = core * (after < 0 ? .85 : 1);
-  $('#core').style.transform = `scale(${after < 0 ? lerp(.15, .7, build) + .05 * Math.sin(T * 40) * build : lerp(.7, 2.4, out(after / .4))})`;
-  const w = clamp(after / .9);
-  $('#wave').style.opacity = after < 0 ? 0 : (1 - w) * .95;
-  $('#wave').style.transform = `scale(${lerp(.2, 5.5, out(w))})`;
-  $('#wave').style.borderWidth = `${lerp(10, 1, w)}px`;
-  $('#flash').style.opacity = Math.max(flash, land * .95);
-
-  // the title: the logo pops, the letters land and track in, a light sweeps across; the tagline, the tabs one by one;
-  // then it lifts away as the window comes
-  const lg = back((T - IMPACT + .02) / .5);
-  logo.style.opacity = clamp((T - IMPACT + .05) / .1);
-  logo.style.transform = `scale(${T < IMPACT - .05 ? 0 : lerp(.2, 1, lg)}) rotate(${(1 - clamp(lg)) * -25}deg)`;
-  letters.forEach((l, i) => {
-    const a = out((T - IMPACT - .08 - i * .03) / .45);
-    l.style.opacity = a;
-    l.style.transform = `translateY(${(1 - a) * 46}px) scale(${lerp(1.3, 1, a)})`;
-    l.style.filter = `blur(${(1 - a) * 16}px)`;
-  });
-  $('#open h1.letters').style.letterSpacing = `${lerp(.18, -.055, out((T - IMPACT) / 1.4))}em`;
-  const sw = $('#open h1.sweep');
-  sw.style.letterSpacing = $('#open h1.letters').style.letterSpacing;
-  sw.style.backgroundPosition = `${lerp(130, -30, clamp((T - IMPACT - .35) / 1.0))}% 0`;
-  sw.style.opacity = T > IMPACT + .3 && T < IMPACT + 1.5 ? 1 : 0;
-  rise($('#open p'), T, IMPACT + .6, Infinity, 22);
-  openChips.forEach((c, i) => rise(c, T, IMPACT + 1.0 + i * .06, Infinity, 18));
-  const lift = smooth(WIN_IN - .3, WIN_IN + .7, T);
-  $('#open').style.opacity = T < IMPACT - .05 ? 0 : 1 - lift;
-  $('#open').style.transform = `translateY(${-lift * 140}px) scale(${1 - lift * .1})`;
-  $('#open').style.filter = `blur(${lift * 10}px)`;
-  [...$('#end').children].forEach((n, i) => { if (n.id !== 'end-chips') rise(n, T, BODY_END + .5 + i * .35, Infinity, 30); });
-  endChips.forEach((c, i) => rise(c, T, BODY_END + 1.4 + i * .05, Infinity, 16));
-
-  // the window: rises tilted, settles; recedes, darker, behind the closing title
-  const inK = out((T - WIN_IN) / 2.1), endK = ease(clamp((T - BODY_END) / 1.8));
-  const win = $('#win');
-  win.style.opacity = smooth(WIN_IN - .05, WIN_IN + .7, T) * (1 - .8 * endK);
-  win.style.transform = `translateY(${(1 - inK) * 420 - endK * 60}px) rotateX(${(1 - inK) * 32 + endK * 16}deg) scale(${lerp(.78, 1, inK) * lerp(1, .74, endK)})`;
-  win.style.filter = `blur(${endK * 7}px) brightness(${1 - .6 * endK})`;
-
-  // the take at this instant (the window is hidden before it flies in), a dissolve over a jump cut
-  if (T > WIN_IN - .1) {
-    await show($('#a'), idx(toSrc(Math.max(T, OPEN))));
-    const cut = cutsOut.find((c) => T >= c && T < c + .35);
-    if (cut != null) {
-      await show($('#b'), idx(toSrc(cut - .01)));
-      $('#b').style.opacity = 1 - smooth(cut, cut + .35, T);
-    } else $('#b').style.opacity = 0;
-    const c = camera(T), z = base * c.z;
-    const tx = view.w / 2 - c.cx * z, ty = view.h / 2 - c.cy * z;
-    for (const img of [$('#a'), $('#b')]) img.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
-    // the spots, where the camera shows them: in, held, out; the label below when there is no room above
-    for (const sp of spots) {
-      const u = T - sp.o, live = u > -.05 && u < sp.dur + .4;
-      if (!live) { sp.n.style.opacity = 0; continue; }
-      const a = out(u / .35), b = smooth(sp.dur, sp.dur + .35, u);
-      const x = tx + sp.r.x * z, y = ty + sp.r.y * z, w = sp.r.w * z, h = sp.r.h * z;
-      Object.assign(sp.n.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
-      sp.n.classList.toggle('below', y < 70);
-      sp.n.style.opacity = a * (1 - b);
-      sp.n.style.transform = `scale(${lerp(1.06, 1, a)})`;
+/** A cursor in `root` along waypoints [beat, x, y, 'c' to click there]: it glides between them on an arc. */
+function cursor(root, s, keys) {
+  const n = h('div', { class: 'cursor', html: ARROW }), ring = h('i');
+  n.append(ring);
+  root.append(n);
+  const clicks = keys.filter((k) => k[3] === 'c').map((k) => k[0]);
+  for (const c of clicks) cue(s.at(c), 'click');
+  return (u) => {
+    const tb = u / BEAT, i = keys.findLastIndex((k) => k[0] <= tb);
+    if (i < 0) { n.style.opacity = 0; return; }
+    const a = keys[i], b = keys[i + 1];
+    let x = a[1], y = a[2];
+    if (b) {
+      const e = ease((tb - a[0]) / (b[0] - a[0]));
+      x = lerp(a[1], b[1], e); y = lerp(a[2], b[2], e) - Math.sin(Math.PI * e) * Math.hypot(b[1] - a[1], b[2] - a[2]) * .12;
     }
-  }
-  for (const nt of notes) {
-    const u = T - nt.o, live = u > -.05 && u < nt.dur + .5;
-    if (!live) { nt.n.style.opacity = 0; continue; }
-    const a = out(u / .45), b = smooth(nt.dur, nt.dur + .4, u);
-    nt.n.style.opacity = a * (1 - b);
-    nt.n.style.transform = `translateX(${(1 - a) * 60 + b * 30}px)`;
-  }
+    n.style.opacity = clamp((tb - keys[0][0]) / .25);
+    const c = clicks.findLast((x) => x <= tb), since = c == null ? 9 : B(tb - c);
+    n.style.transform = `translate(${x}px, ${y}px)`;
+    n.firstChild.style.transform = `scale(${since < .16 ? .8 : 1})`;
+    ring.style.opacity = since < .5 ? 1 - since / .5 : 0;
+    ring.style.transform = `scale(${.3 + since * 2.2})`;
+  };
+}
+const caps = [];
+function caption(b0, b1, text) {
+  const n = h('div', { class: 'cap' }, marked('p', text));
+  $('#caps').append(n);
+  caps.push({ t0: B(b0), t1: B(b1), n });
+}
 
-  // a soft light across the glass when a new part starts
-  const cur = caps.findLast((x) => T >= x.o - .2);
-  const sweep = cur ? clamp((T - cur.o + .2) / 1.2) : 1;
-  $('#sheen').style.opacity = sweep < 1 ? Math.sin(Math.PI * sweep) * .45 : 0;
-  $('#sheen').style.backgroundPosition = `${lerp(110, -10, sweep)}% 0`;
+/** A feature's answer in the panel: in from below and tilted (a spring), a slow turn and push while held, out whipped left. */
+function ui(b0, b1, o, build) {
+  return scene(b0, b1, (root, s) => {
+    const inner = build(root, s);
+    cue(s.t1 - B(.6), 'swish');
+    return (u) => {
+      const k = spring(u, 1.2, .62), p = clamp(u / s.dur), e = inq((u - (s.dur - B(.6))) / B(.6));
+      const rx = lerp(36, o.rx ?? 6, k), ry = lerp(o.ry0 ?? -12, o.ry1 ?? 9, ease(p)) - 25 * e;
+      const sc = lerp(.7, 1, k) * lerp(1, o.push ?? 1.06, p) * (1 + .014 * pulse(s.t0 + u)); // it beats with the kick
+      root.style.opacity = clamp(u / .12);
+      root.style.transform = `perspective(2200px) translate(${-2400 * e}px, ${lerp(260, 0, k)}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${sc})`;
+      root.style.filter = mb(e);
+      inner(u);
+    };
+  });
+}
 
+/** A band sweeping across the frame around beat b (covering it at b), in the act's colours: from a question to its answer. */
+const wipes = [];
+function wipe(b) {
+  const look = lookAt(b), n = h('div', { class: 'wipe' });
+  n.style.background = look === 'dark' ? 'linear-gradient(90deg, transparent, #ff7ac3 12%, #6b3fa0 50%, #3ef0c0 88%, transparent)'
+    : look === 'color' ? 'linear-gradient(90deg, transparent, #fff 10%, #fff 90%, transparent)' : 'linear-gradient(90deg, transparent, #b3548f 10%, #714b67 50%, #0e9474 90%, transparent)';
+  $('#fx').append(n);
+  wipes.push({ t: B(b), n });
+  cue(B(b) - B(.35), 'swish', .9);
+}
+
+/** A question and its answer in moving type; `style`: how they come (scatter, type, drop, slam, zoom, pill, giant, glitch, mask). */
+function headline(b0, b1, style, q, a) {
+  wipe(b1);
+  return scene(b0, b1, (root, s) => {
+    const box = h('div', { class: 'hl' }), h2 = h('h2'), aw = h('div', { class: 'aw' }), ans = h('span', { class: 'g', text: a });
+    const words = q.split(' ').map((w) => h('span', { text: w }));
+    aw.append(ans);
+    box.append(h2, aw);
+    root.append(box);
+    const zoom = style === 'zoom';
+    cue(s.t1 - B(zoom ? 1.4 : .5), 'whoosh');
+    let typed, pill, sel;
+    if (style === 'type') {
+      typed = h('span'); h2.append(typed, h('i', { class: 'caret' }));
+      aw.style.overflow = 'hidden'; // the answer slides up out of it
+      for (let i = 0; i < q.length; i += 2) cue(s.at(.15 + 1.2 * i / q.length), 'tick', .8);
+      cue(s.at(1.6), 'pop', 1, 4);
+    } else if (style === 'pill') {
+      pill = h('div', { class: 'darkpill', text: q });
+      h2.replaceWith(pill);
+      cue(s.at(.2), 'swish'); cue(s.at(1.5), 'pop', 1, 4);
+    } else {
+      h2.append(...words);
+      if (zoom) {
+        h2.style.fontSize = '72px'; h2.className = 'qs';
+        sel = h('span', { class: 'box' }); ans.replaceWith(sel); sel.append(ans);
+        const frame = h('i', { class: 'sel', style: 'inset: -4px -10px' });
+        for (const [x, y] of [[0, 0], [1, 0], [0, 1], [1, 1]]) frame.append(h('i', { style: `left: calc(${x * 100}% - 7px); top: calc(${y * 100}% - 7px)` }));
+        sel.append(frame);
+        cue(s.at(.9), 'pop', 1, 4);
+      } else if (style === 'slam' || style === 'giant') cue(s.at(style === 'giant' ? 1.75 : .95), 'thud');
+      else if (style === 'glitch') { cue(s.at(0), 'glitch'); cue(s.at(1.6), 'glitch'); }
+      else if (style === 'mask') { cue(s.at(.2), 'swish', .7); cue(s.at(1.4), 'swish', .7); }
+      else { cue(s.at(style === 'scatter' ? .5 : 0), 'swish', .7); cue(s.at(1.6), 'pop', 1, 4); }
+    }
+    const pillW = pill ? pill.scrollWidth + 120 : 0;
+    const bars = style === 'mask' ? [h2, aw].map((line) => { const bar = h('i', { class: 'bar' }); line.style.position = 'relative'; line.append(bar); return bar; }) : [];
+    const wave = h('div', { class: 'wave', style: 'left: 50%; top: 60%; width: 300px; height: 300px; margin: -150px; border: 5px solid rgba(255, 255, 255, .8)' });
+    if (style === 'giant') { h2.style.fontSize = '78px'; root.append(wave); }
+    const scatter = words.map((w, i) => ({ x: (rnd(i + b0) * 2 - 1) * 760, y: (rnd(i + b0 + 40) * 2 - 1) * 400, r: (rnd(i + b0 + 80) * 2 - 1) * 50, s: .5 + rnd(i + b0 + 9) }));
+    return (u) => {
+      const tb = u / BEAT;
+      if (style === 'scatter') {
+        words.forEach((w, i) => {
+          const k = spring(u - B(.5 + i * .07), 1.5, .55), sc = scatter[i];
+          w.style.opacity = clamp((tb - i * .06) / .2);
+          w.style.transform = `translate(${sc.x * (1 - k)}px, ${sc.y * (1 - k)}px) rotate(${sc.r * (1 - k)}deg) scale(${lerp(sc.s, 1, k)})`;
+          w.style.filter = k < .7 ? `blur(${(1 - k) * 6}px)` : '';
+        });
+        P(ans, u - B(1.7), { ...POP, b: 10 });
+      } else if (style === 'type') {
+        typed.textContent = q.slice(0, Math.round(clamp((tb - .15) / 1.2) * q.length));
+        h2.lastChild.style.opacity = tb < 1.5 || tb % 1 < .5 ? 1 : 0;
+        ans.style.transform = `translateY(${(1 - spring(u - B(1.6), 1.8, .6)) * 110}%)`;
+      } else if (style === 'drop' || zoom) {
+        words.forEach((w, i) => {
+          const k = spring(u - B(i * .09), 2, .5);
+          w.style.opacity = clamp((u - B(i * .09)) / .1);
+          w.style.transform = `translateY(${(1 - k) * -320}px) rotateX(${(1 - k) * 80}deg)`;
+        });
+        if (zoom) {
+          P(sel, u - B(.9), POP);
+          const z = inq((tb - 2.6) / 1.4);
+          if (z > 0) sel.style.transform = `scale(${1 + 9 * z})`;
+          h2.style.opacity = 1 - clamp(z * 4);
+          sel.style.filter = z > .3 ? `blur(${(z - .3) * 30}px)` : '';
+          if (z > 0) sel.style.opacity = 1 - smooth(.75, 1, z);
+        } else P(ans, u - B(1.6), POP);
+      } else if (style === 'slam') {
+        const k1 = spring(u - B(.1), 1.6, .5), k2 = spring(u - B(.55), 1.6, .5), hit = u - B(.95);
+        h2.style.transform = `translateX(${(1 - k1) * -1700}px)`;
+        aw.style.transform = `translateX(${(1 - k2) * 1700}px)`;
+        h2.style.filter = mb(clamp(1 - k1)); aw.style.filter = mb(clamp(1 - k2));
+        box.style.translate = hit > 0 ? `${Math.exp(-hit / .08) * 22 * Math.sin(hit * 80)}px 0` : '';
+      } else if (style === 'giant') { // the question drops in; the answer falls from the sky and hits
+        words.forEach((w, i) => { const k = spring(u - B(i * .08), 2, .5); w.style.opacity = clamp((u - B(i * .08)) / .1); w.style.transform = `translateY(${(1 - k) * -200}px)`; });
+        const f = inq((tb - 1.4) / .35), hit = u - B(1.75);
+        ans.style.opacity = clamp((tb - 1.4) / .1);
+        ans.style.transform = `scale(${hit < 0 ? lerp(5, 1, f) : 1 + .08 * Math.exp(-hit / .1) * Math.sin(hit * 50)})`;
+        ans.style.filter = hit < 0 ? `blur(${(1 - f) * 16}px)` : '';
+        box.style.translate = hit > 0 ? `0 ${Math.exp(-hit / .1) * 26 * Math.sin(hit * 70)}px` : '';
+        const w2 = clamp(hit / .7);
+        wave.style.opacity = hit > 0 ? (1 - w2) * .9 : 0;
+        wave.style.transform = `scale(${lerp(.5, 9, out(w2))})`;
+      } else if (style === 'glitch') { // shifted slices and split colours, a few frames a second, then clean
+        const jit = (tb < 1.1 || (tb > 1.6 && tb < 2.2)), seed = Math.floor((s.t0 + u) * 24);
+        words.forEach((w, i) => { w.style.opacity = clamp((tb - i * .06) / .1); });
+        for (const [n, i] of [[h2, 0], [aw, 1]]) {
+          const on = jit && (i === 0 || tb > 1.6);
+          n.style.textShadow = on ? `${-6 * rnd(seed + i)}px 0 #ff2a6d, ${6 * rnd(seed + i + 7)}px 0 #05d9e8` : '';
+          n.style.transform = on ? `translateX(${(rnd(seed * 3 + i) - .5) * 40}px) skewX(${(rnd(seed + 11) - .5) * 12}deg)` : '';
+          n.style.clipPath = on && rnd(seed + 5 + i) > .5 ? `inset(${rnd(seed + 2) * 60}% 0 ${rnd(seed + 3) * 30}% 0)` : '';
+        }
+        aw.style.opacity = tb > 1.6 ? 1 : 0;
+      } else if (style === 'mask') { // a bar of colour grows over each line, then gives it away
+        [h2, aw].forEach((line, i) => {
+          const t0 = i ? 1.4 : .2, grow = out((tb - t0) / .3), give = out((tb - t0 - .35) / .3);
+          bars[i].style.transform = give > 0 ? `scaleX(${1 - give})` : `scaleX(${grow})`;
+          bars[i].style.transformOrigin = give > 0 ? '100% 50%' : '0 50%';
+          [...line.childNodes].forEach((c) => c !== bars[i] && c.style && (c.style.opacity = give > 0 ? 1 : 0));
+          if (line === aw) ans.style.opacity = give > 0 ? 1 : 0;
+        });
+      } else if (style === 'pill') {
+        const k = spring(u - B(.2), 1.5, .6);
+        pill.style.width = `${lerp(150, pillW, k)}px`;
+        pill.style.opacity = clamp((u - B(.2)) / .1);
+        pill.style.color = `rgba(255, 255, 255, ${clamp((tb - .5) / .3)})`;
+        P(ans, u - B(1.5), POP);
+      }
+      if (!zoom) {
+        const e = inq((u - (s.dur - B(.5))) / B(.5));
+        box.style.transform = `scale(${1 + 1.6 * e})`;
+        box.style.opacity = 1 - e;
+        box.style.filter = e > .02 ? `blur(${e * 18}px)` : '';
+      }
+    };
+  });
+}
+
+// ---------- the stages: light with blobs of colour drifting; the coloured act's moving gradient; the dark act's grid
+// running towards the camera, its horizon and sparks. Each act's stage opens in an iris from the middle ----------
+const blobs = (n, colors, i0) => colors.map((c, i) => { const b = h('div', { class: 'blob', style: `background: ${c}` }); n.append(b); return { b, i: i + i0 }; });
+const light1 = h('div', { style: 'background: #f5f5f7' }), light2 = h('div', { style: 'background: #f5f5f7' });
+const color = h('div', { style: 'background: linear-gradient(120deg, #3b1f5e, #8e3f86 30%, #d0457f 55%, #3d8f9a 80%, #0e9474); background-size: 300% 300%' });
+const dark = h('div', { style: 'background: radial-gradient(1400px 700px at 50% 62%, #2a1236, #0b0812 60%, #050409)' });
+const LIGHT = ['rgba(179, 84, 143, .14)', 'rgba(14, 148, 116, .11)', 'rgba(113, 75, 103, .1)'];
+const allBlobs = [...blobs(light1, LIGHT, 0), ...blobs(light2, LIGHT, 3), ...blobs(color, ['rgba(255, 255, 255, .2)', 'rgba(255, 214, 236, .25)', 'rgba(184, 255, 233, .2)'], 6)];
+const grid = h('div', { class: 'grid' }), horizon = h('div', { class: 'abs', style: 'left: 0; right: 0; top: 450px; height: 240px; background: radial-gradient(1000px 120px at 50% 50%, rgba(255, 122, 195, .5), transparent 70%)' });
+dark.append(grid, horizon);
+const sparks = Array.from({ length: 70 }, (_, i) => { const n = h('i', { class: 'spark' }); dark.append(n); return { n, x: rnd(i + 300) * 1920, y: rnd(i + 400) * 1080, z: .25 + rnd(i + 500) * .75 }; });
+$('#bg').append(light1, color, dark, light2);
+const layerOf = { color, dark, light: light2 };
+const irises = ACTS.map(() => { const n = h('div', { class: 'iris' }); $('#fx').append(n); return n; });
+ACTS.forEach((a) => cue(B(a.b) - B(.2), 'whoosh', 1.2));
+function renderStage(T) {
+  const tb = T / BEAT, R = 1250;
+  ACTS.forEach((a, i) => {
+    const n = layerOf[a.look], k = out((tb - a.b + .2) / .9), next = ACTS[i + 1];
+    n.style.display = tb >= a.b - .2 && !(next && tb > next.b + .8) ? '' : 'none';
+    n.style.clipPath = k < 1 ? `circle(${k * R}px at 50% 50%)` : '';
+    const r = k * R, w = clamp((tb - a.b + .2) / 1);
+    Object.assign(irises[i].style, { left: `${960 - r}px`, top: `${540 - r}px`, width: `${2 * r}px`, height: `${2 * r}px`, opacity: tb > a.b - .2 && w < 1 ? (1 - w) * .9 : 0,
+      borderColor: a.look === 'dark' ? '#ff7ac3' : '#fff' });
+  });
+  for (const { b, i } of allBlobs) Object.assign(b.style, { left: `${[300, 1650, 950][i % 3] + 260 * Math.sin(T * .23 + i * 2)}px`, top: `${[230, 330, 900][i % 3] + 170 * Math.cos(T * .19 + i)}px` });
+  color.style.backgroundPosition = `${50 + 50 * Math.sin(T * .4)}% ${50 + 50 * Math.cos(T * .31)}%`;
+  color.style.filter = `brightness(${1 + .1 * pulse(T)})`;
+  grid.style.backgroundPosition = `0 ${(T * 300) % 140}px`;
+  grid.style.opacity = .55 + .45 * pulse(T);
+  horizon.style.opacity = .7 + .3 * pulse(T);
+  sparks.forEach((sp, i) => {
+    const y = ((sp.y - T * 70 * sp.z) % 1080 + 1080) % 1080, d = 2 + 5 * sp.z;
+    Object.assign(sp.n.style, { left: `${sp.x + 40 * Math.sin(T * .5 + i)}px`, top: `${y}px`, width: `${d}px`, height: `${d}px`, opacity: (.25 + .75 * sp.z) * (.55 + .45 * Math.sin(T * 3 + i)) });
+  });
+  for (const w of wipes) {
+    const k = (T - w.t) / B(1.1) + .5;
+    w.n.style.display = k > 0 && k < 1 ? '' : 'none';
+    if (k > 0 && k < 1) w.n.style.transform = `translateX(${lerp(-3000, 2400, ease(k))}px) skewX(-18deg)`;
+  }
+}
+
+// =====================================================================================================================
+// bars 0–4: the button beating; the logo; the name drafted, then clean; the tagline
+scene(0, 16.2, (root, s) => {
+  const m = mark(), rings = [0, 1, 2].map(() => h('div', { class: 'ripple' }));
+  const clean = h('h1');
+  const NAME = 'Odoo Debug';
+  const DRAFT = [['Georgia', 'italic', 700, '#ff3b30', 150, -9, 'outline'], ['Courier New', 'normal', 700, '#34c759', 140, 7], ['Marker Felt', 'normal', 400, '#ff9500', 146, -5, 'grid'],
+    ['Didot', 'italic', 400, '#af52de', 150, 10], null, ['American Typewriter', 'normal', 700, '#0a84ff', 146, -7, 'grad'], ['Chalkduster', 'normal', 400, '#ff2d55', 136, 6],
+    ['Futura', 'normal', 700, '#5ac8fa', 146, -10, 'outline'], ['Snell Roundhand', 'normal', 700, '#5856d6', 160, 8], ['Georgia', 'normal', 700, '#0e9474', 146, -4]];
+  const dl = [], cl = [];
+  clean.append(h('span', { class: 'slot' }));
+  [...NAME].forEach((ch, i) => {
+    const d = h('span', { text: ch === ' ' ? '\u00a0' : ch }), c = h('span', { text: ch === ' ' ? '\u00a0' : ch });
+    const st = DRAFT[i];
+    if (st) {
+      Object.assign(d.style, { fontFamily: `'${st[0]}'`, fontStyle: st[1], fontWeight: st[2], color: st[3], fontSize: `${st[4]}px` });
+      if (st[6] === 'outline') Object.assign(d.style, { color: 'transparent', webkitTextStroke: `4px ${st[3]}` });
+      if (st[6] === 'grid') Object.assign(d.style, { backgroundImage: `repeating-linear-gradient(0deg, ${st[3]} 0 3px, transparent 3px 12px), repeating-linear-gradient(90deg, ${st[3]} 0 3px, transparent 3px 12px)`, webkitBackgroundClip: 'text', color: 'transparent' });
+      if (st[6] === 'grad') Object.assign(d.style, { backgroundImage: 'linear-gradient(180deg, #0a84ff, #ff2d55)', webkitBackgroundClip: 'text', color: 'transparent' });
+      dl.push({ n: d, st }); cl.push(c);
+    }
+    clean.append(c);
+  });
+  const lockC = h('div', { class: 'lock' }, clean);
+  const sel = h('div', { class: 'sel' }, ...[0, 1, 2, 3].map(() => h('i')));
+  const tag = h('div', { class: 'tagline' }, ...'See *why* Odoo does what it does.'.split(' ').map((w) => (w.startsWith('*') ? h('span', { class: 'g', text: w.replaceAll('*', '') }) : h('span', { text: w }))));
+  root.append(...rings, lockC, sel, tag, m);
+  // each drafted letter where its clean one will be (it is cleaned up in place); anchors on some, like the points of a
+  // path being drawn
+  const rel = (n) => { const b = n.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, h: b.height }; };
+  dl.forEach((l, i) => {
+    l.c = rel(cl[i]);
+    Object.assign(l.n.style, { position: 'absolute', left: `${l.c.x + l.c.w / 2}px`, top: `${l.c.y + l.c.h / 2}px`, translate: '-50% -50%', lineHeight: 1, whiteSpace: 'nowrap' });
+    root.append(l.n);
+    const w = l.n.getBoundingClientRect().width; // no wider than its clean letter: it never touches its neighbours
+    if (w > .86 * l.c.w) l.n.style.fontSize = `${l.st[4] * .86 * l.c.w / w}px`;
+  });
+  dl.forEach((l, i) => { l.r = rel(l.n); l.at = 4.5 + i * .5; cue(s.at(l.at), 'tick', 1.2); });
+  const anchors = [0, 3, 7].flatMap((i) => [[.15, .2], [.85, .3], [.5, .95]].map(([fx, fy]) => {
+    const a = h('i', { class: 'anchor', style: `color: ${dl[i].st[3]}` }); root.append(a);
+    return { a, i, x: dl[i].r.x + dl[i].r.w * fx, y: dl[i].r.y + dl[i].r.h * fy };
+  }));
+  const slot = rel(clean.firstChild), home = { x: slot.x + 62, y: slot.y + 62 };
+  const word = { x: dl[0].r.x, y: Math.min(...dl.map((l) => l.r.y)), w: dl.at(-1).r.x + dl.at(-1).r.w - dl[0].r.x };
+  word.h = Math.max(...dl.map((l) => l.r.y + l.r.h)) - word.y;
+  const RES = 9, TAG = 11.2;
+  for (let k = 0; k < 4; k++) cue(s.at(k), 'blip', .9, [0, 2, 4, 7][k]);
+  cue(s.at(4), 'swish'); cue(s.at(RES), 'shine');
+  return (u) => {
+    const tb = u / BEAT;
+    // the button: pops, beats with a ripple; then moves into the logo's place, rounding into a square
+    const beatK = tb < 4 ? Math.exp(-(tb % 1) / .18) : 0, mv = ease((tb - 4) / .8);
+    const size = lerp(170, 124, mv) * (1 + .1 * beatK) * lerp(.2, 1, spring(u, 2.2, .45));
+    putMark(m, lerp(960, home.x, mv), lerp(470, home.y, mv), size, lerp(.5, .26, mv), clamp(u / .1));
+    rings.forEach((r, k) => {
+      const ph = tb - k * .33, local = ph % 1, live = tb < 4.6 && ph > 0;
+      const d = 170 + local * 380;
+      Object.assign(r.style, { left: `${960 - d / 2}px`, top: `${470 - d / 2}px`, width: `${d}px`, height: `${d}px`, opacity: live ? (1 - local) * .6 : 0 });
+    });
+    // the draft: each letter pops, tilted, on its half beat; the box on the newest, then on all; then each cleaned up
+    dl.forEach((l, i) => {
+      const a = spring(u - B(l.at), 2.4, .45), ck = ease((tb - RES - i * .22) / .3);
+      l.n.style.opacity = clamp((tb - l.at) / .1) * (1 - ck);
+      l.n.style.transform = `scale(${lerp(1.25, 1, a) * lerp(1, .9, ck)}) rotate(${l.st[5] * lerp(3, .6, a) * (1 - ck)}deg)`;
+      l.n.style.filter = ck > .05 ? `blur(${ck * 10}px)` : '';
+      cl[i].style.opacity = ck;
+      cl[i].style.transform = `scale(${lerp(1.15, 1, ck)})`;
+    });
+    for (const an of anchors) { const l = dl[an.i]; an.a.style.opacity = clamp((tb - l.at - .2) / .2) * (1 - clamp((tb - RES - an.i * .22) / .2)); Object.assign(an.a.style, { left: `${an.x}px`, top: `${an.y}px` }); }
+    const k = dl.findLastIndex((l) => tb >= l.at);
+    let r = null;
+    if (k >= 0 && tb < RES + .2) {
+      const a = out((tb - dl[k].at) / .25), p = dl[Math.max(0, k - 1)].r, c = dl[k].r;
+      r = { x: lerp(p.x, c.x, a), y: lerp(p.y, c.y, a), w: lerp(p.w, c.w, a), h: lerp(p.h, c.h, a) };
+      const all = out((tb - 8.75) / .25);
+      r = { x: lerp(r.x, word.x, all), y: lerp(r.y, word.y, all), w: lerp(r.w, word.w, all), h: lerp(r.h, word.h, all) };
+    }
+    sel.style.opacity = r ? 1 : 0;
+    if (r) {
+      Object.assign(sel.style, { left: `${r.x - 10}px`, top: `${r.y - 10}px`, width: `${r.w + 20}px`, height: `${r.h + 20}px` });
+      [...sel.children].forEach((hd, j) => Object.assign(hd.style, { left: `${(j % 2) * (r.w + 20) - 8}px`, top: `${(j >> 1) * (r.h + 20) - 8}px` }));
+    }
+    [...tag.children].forEach((w, i) => P(w, u - B(TAG + i * .25), RISE));
+    // out: all of it pulled in towards the drop
+    const e = inq((tb - 15) / 1.2);
+    root.style.transform = `scale(${1 + 2.2 * e})`;
+    root.style.filter = e > .02 ? `blur(${e * 20}px)` : '';
+    root.style.opacity = 1 - e;
+  };
+});
+
+// bars 4–6: the drop, a slide a beat: what an Odoo day throws at you
+scene(16, 24, (root, s) => {
+  const PAINS = ['Access Error', 'Traceback', 'Read-only?', 'Which view?', 'Slow screen', 'N+1 queries', 'Record rules', 'Missing module'];
+  const COLORS = ['#714b67', '#0e9474', '#e0457b', '#f08a24', '#3a5bd9', '#8e4f80', '#c5221f', '#1d1d1f'];
+  const slides = PAINS.map((p, i) => {
+    const n = h('div', { class: 'slide', style: `background: ${COLORS[i]}` });
+    const order = [...PAINS.slice(i), ...PAINS.slice(0, i)];
+    const seq = [...order.slice(4), ...order, ...order]; // the slide's word at index 4
+    const lanes = [300, 470, 640].map((y) => {
+      const lane = h('div', { class: 'lane', style: `top: ${y}px` }, ...seq.map((w) => h('span', { text: w })));
+      n.append(lane);
+      return lane;
+    });
+    root.append(n);
+    const key = lanes[1].children[4];
+    key.style.opacity = 1;
+    cue(s.at(i), 'swish', .6);
+    return { n, lanes, i, at: key.offsetLeft + key.offsetWidth / 2 };
+  });
+  return (u) => {
+    const cur = Math.min(slides.length - 1, Math.floor(u / BEAT));
+    slides.forEach((sl) => {
+      if (sl.i !== cur) { sl.n.style.display = 'none'; return; }
+      sl.n.style.display = '';
+      const v = u - B(sl.i), slam = (1 - out(v / .2)) * 500;
+      sl.lanes.forEach((ln, j) => {
+        const dir = j === 1 ? -1 : 1;
+        ln.style.transform = `translateX(${960 - sl.at + slam * (j === 1 ? 1 : -1) + dir * v * 340 + (j - 1) * 260}px)`;
+        ln.style.filter = mb(clamp(slam / 500));
+      });
+    });
+  };
+});
+
+// bars 6–8: a pill, rings flowing out of it, the nine tabs in it; it shrinks into a button
+scene(24, 32.2, (root, s) => {
+  const BANDS = ['#f6e9f1', '#e8cadd', '#d5a6c4', '#c086ad', '#a96b97'];
+  const bands = Array.from({ length: 11 }, () => h('div', { class: 'abs', style: 'border-radius: 999px' }));
+  const label = h('span', { style: 'display: flex; align-items: center; gap: 18px' });
+  const pill = h('div', { class: 'abs', style: 'display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 999px; background: linear-gradient(100deg, #b3548f, #714b67 60%, #0e9474 140%); color: #fff; font: 700 54px var(--font); white-space: nowrap; box-shadow: 0 20px 50px rgba(113, 75, 103, .35)' }, label);
+  const m = mark();
+  root.append(...bands.toReversed(), pill, m);
+  const NAMES = [['', 'Odoo Debug'], ...TABS];
+  const meas = h('span', { style: 'position: absolute; visibility: hidden; font: 700 54px var(--font); white-space: nowrap' });
+  root.append(meas);
+  const widths = NAMES.map(([, t]) => { meas.textContent = t; return meas.offsetWidth + (t === 'Odoo Debug' ? 140 : 210); });
+  const CYC = 2; // the tabs from this beat, half a beat each
+  TABS.forEach((t, i) => cue(s.at(CYC + i * .5), 'blip', .8, i));
+  cue(s.at(0), 'pop', 1, 7); cue(s.at(6.6), 'swish');
+  return (u) => {
+    const tb = u / BEAT;
+    const i = tb < CYC ? 0 : Math.min(NAMES.length - 1, 1 + Math.floor((tb - CYC) / .5));
+    label.replaceChildren(...(NAMES[i][0] ? [ico(NAMES[i][0])] : []), NAMES[i][1]);
+    const since = tb < CYC ? tb : (tb - CYC) % .5;
+    label.style.transform = `translateY(${(1 - out(since / .2)) * 70}px)`;
+    label.style.opacity = clamp((spring(u, 2, .5) - .85) / .15) * (1 - smooth(6.3, 6.6, tb)); // never cut by the pill opening or closing
+    label.style.filter = since < .12 && tb >= CYC ? 'url(#mv1)' : '';
+    const w = lerp(widths[Math.max(0, i - 1)], widths[i], out(since / .25));
+    const shrink = ease((tb - 6.5) / 1.2), fly = ease((tb - 7.2) / 1);
+    const pk = spring(u, 2, .5);
+    const W = lerp(w, 150, shrink) * pk, H = lerp(120, 150, shrink) * pk;
+    const cx = lerp(960, 1650, fly), cy = lerp(540, 910, fly);
+    Object.assign(pill.style, { left: `${cx - W / 2}px`, top: `${cy - H / 2}px`, width: `${W}px`, height: `${H}px` });
+    pill.style.opacity = 1 - smooth(6.9, 7.3, tb);
+    putMark(m, cx, cy, lerp(150, 64, fly), .5, smooth(6.9, 7.3, tb));
+    // the rings: bands growing out of the pill, flowing outwards, then drawn back in
+    const grow = out((tb - .8) / 1.6) * (1 - ease((tb - 6) / .9));
+    const flow = (u * 1.4) % 1;
+    bands.forEach((b, k) => {
+      const d = (k + flow) * 120 * grow;
+      Object.assign(b.style, { left: `${960 - w / 2 - d}px`, top: `${540 - 60 - d}px`, width: `${w + 2 * d}px`, height: `${120 + 2 * d}px`, background: BANDS[(k + 100 - Math.floor(u * 1.4)) % BANDS.length], opacity: grow > .01 ? 1 : 0 });
+    });
+  };
+});
+
+// bars 8–10: an Odoo page; one click on its button, the panel springs out of it
+const formPage = () => {
+  const card = h('div', { class: 'card', style: 'left: 210px; top: 110px; width: 1500px; height: 860px; border-radius: 22px; font-size: 24px' });
+  const nav = h('div', { style: 'display: flex; align-items: center; gap: 34px; height: 64px; padding: 0 30px; background: #71639e; color: #fff; font-size: 24px' },
+    h('b', { text: 'Sales', style: 'font-size: 28px; font-weight: 600' }), ...['Orders', 'To Invoice', 'Products', 'Reporting', 'Configuration'].map((t) => h('span', { text: t })));
+  const bc = h('div', { style: 'padding: 18px 30px 10px; color: #71639e; font-size: 22px' }, 'Sales Orders', h('div', { text: 'S00007', style: 'color: var(--fg)' }));
+  const acts = h('div', { style: 'display: flex; gap: 10px; padding: 8px 30px 18px' }, h('span', { class: 'btn', style: 'background: #714b67; color: #fff; border-color: #714b67', text: 'Create Invoice' }),
+    ...['Send by Email', 'Preview', 'Cancel'].map((t) => h('span', { class: 'btn', style: 'background: #e9e9ec; border-color: #e9e9ec', text: t })));
+  const sheet = h('div', { style: 'margin: 0 30px; padding: 26px 40px; border: 1px solid var(--line); border-radius: 6px; height: 560px' },
+    h('div', { text: 'S00007', style: 'font-size: 50px; font-weight: 600; margin-bottom: 20px' }),
+    h('div', { style: 'display: grid; grid-template-columns: 200px 1fr 220px 1fr; row-gap: 6px' },
+      h('span', { class: 'mut', text: 'Customer' }), h('span', { style: 'color: #71639e', text: 'Gemini Furniture' }), h('span', { class: 'mut', text: 'Order Date' }), h('span', { text: '10/10/2026 13:55' }),
+      h('span'), h('span', { text: '317 Fairchild Dr' }), h('span', { class: 'mut', text: 'Payment Terms' }), h('span', { class: 'mut', text: 'Immediate' }),
+      h('span'), h('span', { text: 'Fairfield CA 94535' })),
+    h('div', { style: 'margin-top: 30px; border-top: 1px solid var(--line)' }, ...[['[FURN_6667] Acoustic Bloc Screens', '5.00', '295.00', '$ 1,475.00'], ['[FURN_8999] Three-Seat Sofa', '1.00', '173.00', '$ 173.00'], ['[FURN_8888] Office Lamp', '1.00', '40.00', '$ 40.00'], ['[FURN_7777] Office Chair', '1.00', '18.00', '$ 18.00']]
+      .map((r) => h('div', { style: 'display: grid; grid-template-columns: 1fr 140px 160px 180px; padding: 12px 0; border-bottom: 1px solid var(--line)' }, ...r.map((c, j) => h('span', { text: c, style: j ? 'text-align: right' : '' }))))),
+  );
+  card.append(nav, bc, acts, sheet);
+  return card;
+};
+scene(32, 40, (root, s) => {
+  const page = formPage(), btn = mark();
+  putMark(btn, 1650, 910, 64);
+  const panel = h('div', { class: 'card', style: 'left: 1100px; top: 150px; width: 590px; height: 720px; transform-origin: 550px 760px' });
+  const sm = mark();
+  Object.assign(sm.style, { position: 'relative', width: '40px', height: '40px', borderRadius: '10px', boxShadow: 'none' });
+  const head = h('div', { style: 'display: flex; align-items: center; gap: 12px; padding: 22px 26px 6px' }, sm, h('b', { text: 'Odoo Debug', style: 'font-size: 26px' }), h('span', { class: 'pill', text: 'Odoo 18.0' }));
+  const model = h('div', { style: 'display: flex; gap: 10px; align-items: center; padding: 4px 26px 14px' }, h('b', { class: 'mono', text: 'sale.order' }), h('span', { class: 'pill acc', text: '#7' }), h('span', { class: 'pill', text: 'form' }));
+  const tabEls = TABS.map(([t, name]) => { const label = h('span', { text: name, style: 'font: 700 19px var(--font)' }); return { n: h('span', { style: 'display: flex; align-items: center; justify-content: center; gap: 7px; height: 52px; padding: 0 7px; border-radius: 12px' }, ico(t), label), label }; });
+  const tabs = h('div', { style: 'display: flex; gap: 2px; margin: 0 18px 14px; padding: 6px; border-radius: 16px; background: #f4f4f5; font-size: 26px; color: var(--mut)' }, ...tabEls.map((x) => x.n));
+  // what each tab shows, in short: the panel tours them, a half beat each, then dives into the record's fields
+  const box = (...k) => h('div', { style: 'display: flex; justify-content: space-between; align-items: center; margin: 10px 20px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 16px; font-weight: 600' }, ...k);
+  const line = (...k) => h('div', { style: 'display: flex; gap: 10px; align-items: center; padding: 8px 30px; white-space: nowrap' }, ...k);
+  const pill = (text, cls = '') => h('span', { class: `pill ${cls}`, text });
+  const mono = (text, cls = '') => h('span', { class: `mono ${cls}`, text });
+  const lab = (text) => h('div', { class: 'lab', text, style: 'padding: 14px 30px 4px' });
+  const fields = box('Fields', h('span', { class: 'mut', text: '⌄' }));
+  const previews = [
+    [box('Identity & metadata', h('span', { class: 'mut', text: '›' })), fields, box('Compare saved records', h('span', { class: 'mut', text: '›' })),
+      ...[['amount_total', 'monetary'], ['partner_id', 'many2one'], ['state', 'selection'], ['date_order', 'datetime']].map(([f, t]) => line(mono(f, 'b'), pill(t)))],
+    [lab('Now'), line(pill('readonly'), pill('yes', 'info')), line(mono("state in ['cancel', 'sale']")), lab('Its story through the views'), line(pill('sale', 'acc'), mono('view_order_form', 'b')), line(pill('sale_crm', 'acc'), mono('sale_view_inherit123', 'b'))],
+    [['/mail/thread/messages', '27 ms'], ['/mail/thread/data', '36 ms'], ['web_read · sale.order', '86 ms'], ['read · res.partner', '21 ms'], ['onchange · sale.order', '64 ms']]
+      .map(([c, ms]) => line(h('i', { style: 'width: 12px; height: 12px; border-radius: 50%; background: #188038' }), mono(c, 'b'), h('span', { class: 'sp' }), h('span', { class: 'mut', text: ms }))),
+    [line(h('span', { text: 'Rights of' }), pill('M', 'err'), h('b', { text: 'Marc Demo' })), ...[['Personal Orders', '✕ ✕ ✕ ✕', 'var(--err)'], ['All Orders', '✓ ✓ ✓ ✓', 'var(--mut)'], ['Result', '✕ ✕ ✕ ✕', 'var(--err)']]
+      .map(([r, m, c]) => line(h('b', { text: r, style: 'width: 220px' }), h('span', { text: m, style: `color: ${c}; letter-spacing: .3em; font-weight: 800` })))],
+    [line(h('b', { text: 'Order Date', style: 'color: #b3548f' }), h('span', { class: 'mut', text: '← picked on the page' })), line(pill('Field label', 'info'), mono('sale.order.date_order')), line(pill('View', 'ok'), mono('sale.view_order_form')),
+      line(h('span', { class: 'mut', text: 'Settings › Technical › Fields' }))],
+    [line(h('div', { class: 'input', style: 'flex: none; width: 300px; height: 50px' }, mono('website_sale'))), line(h('span', { class: 'lab', text: 'Also installs' }), h('b', { text: '9' }), h('span', { class: 'lab', text: 'Auto-installs', style: 'margin-left: 24px' }), h('b', { text: '5' })),
+      line(pill('website'), pill('website_payment'), pill('product')), line(pill('website_crm', 'ok'), pill('website_sale_autocomplete', 'ok'))],
+    [['Models', 'ir.model'], ['Fields', 'ir.model.fields'], ['Record Rules', 'ir.rule'], ['Views', 'ir.ui.view'], ['Crons', 'ir.cron'], ['Parameters', 'ir.config_parameter']].map(([a, b]) => line(h('b', { text: a, style: 'width: 190px' }), mono(b, 'mut'))),
+    [line(pill('RECORDING', 'ok'), h('span', { text: 'since 09:24:12' })), line(mono('get_views', 'b'), pill('92', 'err'), h('span', { class: 'mut', text: '126 ms' })), line(mono('web_read', 'b'), pill('72', 'err'), h('span', { class: 'mut', text: '69 ms' })),
+      h('div', { style: 'margin: 10px 24px; padding: 14px 18px; border-radius: 14px; background: var(--err-soft); color: var(--err); font-weight: 700' }, 'N+1 · one query runs 11×')],
+    [line(pill('Python', 'acc'), pill('Dry run', 'acc')), h('div', { style: 'margin: 10px 24px; padding: 16px 18px; border-radius: 14px; background: var(--sunk); font: 500 18px/1.7 var(--mono); white-space: nowrap' },
+      h('div', { html: 'record.order_line.<span class="fn">write</span>({<span class="s">\'discount\'</span>: <span class="n">10</span>})' }), h('div', { html: '<span class="kw">return</span> record.<span class="fn">read</span>([<span class="s">\'amount_total\'</span>])' })),
+      line(pill('ok', 'ok'), h('span', { class: 'mut', text: 'then rolled back' }))],
+  ].map((kids) => h('div', { style: 'position: absolute; left: 0; right: 0; top: 0' }, ...kids));
+  const body = h('div', { style: 'position: relative; height: 520px' }, ...previews);
+  panel.append(head, model, tabs, body);
+  root.append(page, btn, panel);
+  const fb = fields.getBoundingClientRect(), pb = panel.getBoundingClientRect();
+  const dive = `${fb.x + fb.width / 2 - pb.x}px ${fb.y + fb.height / 2 - pb.y}px`; // the camera dives into the record's fields
+  const TOUR = 2.5; // the tab i shows from TOUR + i / 2 (Record again at the end)
+  const cur = cursor(root, s, [[.4, 1240, 1080], [1.3, 1652, 912, 'c'], [2.2, 1500, 1000]]);
+  cue(s.at(1.4), 'pop', 1, 7);
+  for (let i = 1; i <= 9; i++) cue(s.at(TOUR + i / 2), 'blip', .7, i);
+  cue(s.at(7.1), 'whoosh');
+  caption(34.6, 38.4, 'One click. *Nine tabs, right on the Odoo page.*');
+  return (u) => {
+    const tb = u / BEAT;
+    const k = spring(u - B(1.35), 1.7, .5), d = inq((tb - 7) / 1);
+    panel.style.opacity = clamp((tb - 1.35) / .1) * (1 - smooth(.75, 1, d));
+    panel.style.transformOrigin = tb < 6 ? '550px 760px' : dive;
+    panel.style.transform = `scale(${lerp(.02, 1, k) * (1 + 7 * d)})`;
+    panel.style.filter = d > .3 ? `blur(${(d - .3) * 20}px)` : '';
+    btn.style.transform = `scale(${tb > 1.3 && tb < 1.5 ? .85 : 1})`;
+    const ti = tb < TOUR + .5 || tb >= TOUR + 4.5 ? 0 : Math.floor((tb - TOUR) * 2), since = tb - TOUR - Math.floor(Math.min(9, (tb - TOUR) * 2)) / 2; // the tour ends on Record
+    tabEls.forEach((x, i) => {
+      if (tb < 2.5) P(x.n, u - B(1.8 + i * .07), POP); else { x.n.style.opacity = 1; x.n.style.filter = ''; x.n.style.transform = i === ti && since < .2 ? `scale(${1 + .15 * Math.sin(Math.PI * since / .2)})` : ''; }
+      x.label.style.display = i === ti ? '' : 'none';
+      Object.assign(x.n.style, i === ti ? { background: '#fff', color: 'var(--fg)', boxShadow: '0 1px 3px rgba(0,0,0,.1)' } : { background: '', color: '', boxShadow: '' });
+    });
+    [head, model].forEach((n, i) => P(n, u - B(1.6 + i * .1), RISE));
+    previews.forEach((pv, i) => {
+      if (i !== ti) { pv.style.display = 'none'; return; }
+      pv.style.display = '';
+      if (tb < TOUR + .5) [...pv.children].forEach((n, j) => P(n, u - B(2.4 + j * .12), RISE));
+      else { pv.style.opacity = clamp(since / .12); pv.style.transform = `translateY(${(1 - out(since / .2)) * 26}px)`; [...pv.children].forEach((n) => { n.style.opacity = 1; n.style.transform = ''; n.style.filter = ''; }); }
+    });
+    P(page, u, { s: .94, f: 1.6, z: .7 });
+    page.style.opacity = 1 - smooth(7.2, 7.8, tb);
+    btn.style.opacity = 1 - smooth(7.2, 7.8, tb);
+    cur(u);
+    // the camera turns and leans in to the panel, for the tour
+    const c = ease((tb - 2) / 2.2);
+    root.style.transform = `perspective(2200px) translate(${-330 * c}px, ${-40 * c}px) rotateY(${-14 * c}deg) rotateX(${6 * c}deg) scale(${lerp(1, 1.3, c)})`;
+  };
+});
+
+// =====================================================================================================================
+// act one, light. Record: a field, what it is, what recomputes it; the fields it depends on fly in
+headline(40, 44, 'scatter', 'Where does this value come from?', 'Every field, explained.');
+ui(44, 52, {}, (root, s) => {
+  const card = h('div', { class: 'card mid', style: 'left: 460px; top: 500px; width: 1000px; transform-origin: 50% 80%' });
+  const q = h('span', { class: 'mono' });
+  const head = h('div', { class: 'row', style: 'height: 86px' }, h('span', { class: 'b', style: 'font-size: 30px', text: 'Fields' }), h('span', { class: 'pill', text: '100 fields' }));
+  const search = h('div', { class: 'row', style: 'height: 100px; gap: 12px' }, h('div', { class: 'input' }, q, h('i', { class: 'caret', style: 'height: 30px' })), ...['Stored', 'Computed', 'Relational'].map((t) => h('span', { class: 'pill', text: t })));
+  const FIELDS = [['access_token', 'char', 'Security Token'], ['amount_invoiced', 'monetary', 'Already invoiced'], ['amount_tax', 'monetary', 'Taxes'], ['amount_to_invoice', 'monetary', 'Amount to invoice'],
+    ['amount_total', 'monetary', 'Total'], ['amount_undiscounted', 'float', 'Amount Before Discount'], ['amount_untaxed', 'monetary', 'Untaxed Amount'], ['authorized_transaction_ids', 'many2many', 'Authorized Transactions']];
+  const Q = 'amount_total', T0 = .35, PER = B(1.7) / Q.length;
+  const rows = FIELDS.map(([f, t, l]) => {
+    const n = h('div', { class: 'row' }, h('span', { class: 'mono b', text: f }), h('span', { class: 'pill', text: t }), h('span', { class: 'mut', text: l }));
+    let c = 1; while (c <= Q.length && f.includes(Q.slice(0, c))) c++;
+    return { n, gone: c <= Q.length ? B(T0) + (c - 1) * PER : null };
+  });
+  const value = h('span', { class: 'mono n b', text: '0' });
+  const deps = ['order_line.price_subtotal', 'currency_id', 'company_id', 'payment_term_id'].map((d) => h('span', { class: 'pill acc mono', text: d }));
+  const ring = h('i', { class: 'ring' });
+  const detail = h('div', { style: 'position: relative; overflow: hidden; padding: 0 32px; background: var(--sunk)' },
+    h('div', { style: 'padding: 22px 0 6px; display: flex; gap: 14px; align-items: center' }, h('span', { class: 'mono b', text: 'amount_total' }), h('span', { class: 'pill', text: 'monetary' }), value),
+    h('div', { class: 'mut', text: 'Total · stored · computed · readonly' }),
+    h('div', { style: 'display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 10px 0' }, h('span', { class: 'mut', text: 'depends on' }), ...deps),
+    h('div', { style: 'padding-bottom: 22px; display: flex; gap: 12px; align-items: center' }, h('span', { class: 'mut', text: 'change → recomputes' }), h('span', { class: 'mono', text: 'partner_credit_warning' }), h('span', { class: 'sp' }), h('span', { class: 'pill acc', text: 'module sale' })),
+    ring);
+  card.append(head, search, ...rows.map((r) => r.n), detail);
+  root.append(card);
+  for (let i = 0; i < Q.length; i++) cue(s.t0 + B(T0) + i * PER, 'tick');
+  deps.forEach((d, i) => cue(s.at(3.6 + i * .25), 'pop', .7, i + 2));
+  cue(s.at(5.6), 'ding');
+  caption(45, 51.4, 'Its type, its module, *what recomputes it.*');
+  return (u) => {
+    const tb = u / BEAT;
+    q.textContent = Q.slice(0, clamp(Math.floor((u - B(T0)) / PER) + 1, 0, Q.length));
+    rows.forEach((r, i) => { if (r.gone != null && u > r.gone) collapse(r.n, 68, u - r.gone); else { r.n.style.height = '68px'; P(r.n, u - B(.1 + i * .06), RISE); } });
+    detail.style.height = `${290 * spring(u - B(2.6), 1.5, .7)}px`;
+    value.textContent = num(1706 * out((tb - 3) / .8));
+    deps.forEach((d, i) => P(d, u - B(3.6 + i * .25), { s: .5, x: (i % 2 ? 1 : -1) * 950, y: -320 + i * 90, r: i % 2 ? 30 : -30, f: 1.4, z: .72, b: 8 })); // gathered from afar
+    ring.style.opacity = smooth(5.5, 5.8, tb);
+    card.style.scale = `${1 + .2 * ease((tb - 5.4) / 1.6)}`; // and the camera leans into the answer
+  };
+});
+
+// ⌥ + click: a field's technical name, copied
+ui(52, 56, { ry0: 10, ry1: -6, rx: 4 }, (root, s) => {
+  const customer = h('span', { text: 'Gemini Furniture', style: 'color: #71639e; font-weight: 600; justify-self: start' });
+  const card = h('div', { class: 'card', style: 'left: 560px; top: 300px; width: 900px; height: 330px; padding: 50px 60px; box-sizing: border-box; font-size: 34px' },
+    h('div', { style: 'display: grid; grid-template-columns: 220px 1fr; row-gap: 8px' }, h('span', { class: 'mut', text: 'Customer' }), customer,
+      h('span'), h('span', { text: '317 Fairchild Dr' }), h('span'), h('span', { text: 'Fairfield CA 94535' })));
+  const key = h('div', { class: 'key', style: 'left: 300px; top: 560px', text: '⌥' });
+  const tip = h('div', { class: 'tip', style: 'left: 840px; top: 236px', text: 'partner_id' });
+  const ok = h('div', { class: 'pill ok', style: 'position: absolute; left: 1160px; top: 252px; font-size: 28px; padding: 8px 20px', text: '✓ Copied' });
+  const kw = h('div', { class: 'wave', style: 'left: 375px; top: 635px; width: 170px; height: 170px; margin: -85px; border: 5px solid #b3548f' });
+  root.append(kw, card, key, tip, ok);
+  const [cx, cy] = centre(customer, -20, 4);
+  const cur = cursor(root, s, [[.3, 1380, 900], [1, cx, cy], [1.2, cx, cy, 'c'], [3, cx + 50, cy + 100]]);
+  cue(s.at(.9), 'click', .8); cue(s.at(1.3), 'pop', 1, 5); cue(s.at(1.9), 'ding', .7);
+  caption(52.8, 55.6, '⌥ + click a field: *its technical name, copied.*');
+  return (u) => {
+    const tb = u / BEAT, down = tb > .9 && tb < 2.2, w = clamp((tb - .9) / .7);
+    P(key, u - B(.1), { s: .5, y: 80 });
+    key.style.translate = `0 ${down ? 12 : 0}px`;
+    key.style.boxShadow = down ? '0 0 0 1px rgba(0,0,0,.08), 0 2px 0 #d6d6dc, 0 10px 20px rgba(0,0,0,.15)' : '';
+    kw.style.opacity = tb > .9 ? (1 - w) * .9 : 0;
+    kw.style.transform = `scale(${lerp(1, 3.2, out(w))})`;
+    P(tip, u - B(1.3), { s: .3, y: 40, f: 2.6, z: .4 });
+    P(ok, u - B(1.9), { s: .5, x: -40 });
+    cur(u);
+  };
+});
+
+// View: why the field is read-only, and which view says so; a beam searches the views
+headline(56, 60, 'type', 'Why is this field read-only?', 'The view says so.');
+ui(60, 68, { ry0: 12, ry1: -8 }, (root, s) => {
+  const card = h('div', { class: 'card', style: 'left: 460px; top: 200px; width: 1000px; height: 640px' });
+  const clip = h('div', { style: 'padding: 34px 40px; font-size: 30px' });
+  const cond = h('span', { class: 'mono' }), badge = h('span', { class: 'pill', text: 'state = "sale"' });
+  const ring1 = h('i', { class: 'ring' }), ring2 = h('i', { class: 'ring' });
+  const beam = h('i', { class: 'beam', style: 'background: linear-gradient(90deg, transparent, #ff7ac3 20%, #b3548f 50%, #3ef0c0 80%, transparent); box-shadow: 0 0 24px 4px rgba(255, 122, 195, .7)' });
+  const line = (...k) => h('div', { style: 'display: flex; gap: 14px; align-items: center; padding: 9px 0; position: relative' }, ...k);
+  const now = [line(h('span', { class: 'pill', text: 'invisible' }), h('span', { class: 'pill', text: 'no' }), 'never'),
+    h('div', { style: 'position: relative; padding: 4px 22px; margin: 0 -22px' }, line(h('span', { class: 'pill', text: 'readonly' }), h('span', { class: 'pill info', text: 'yes' })), line(cond, badge), ring1),
+    line(h('span', { class: 'pill', text: 'required' }), h('span', { class: 'pill info', text: 'yes' }), 'True')];
+  const story = h('div', { style: 'position: relative; margin: 8px -22px 0; padding: 0 22px' },
+    line(h('span', { class: 'pill', text: '1' }), h('span', { class: 'pill acc', text: 'sale' }), h('span', { class: 'mono b', text: 'view_order_form' })),
+    ...[['L53', 'placed in group', 'partner_details'], ['L54', 'used in context of field', 'partner_invoice_id'], ['L55', 'used in context of field', 'partner_shipping_id']]
+      .map(([l, t, f]) => line(h('span', { class: 'mut mono', text: l, style: 'margin-left: 56px' }), t, h('span', { class: 'mono', text: f }))), ring2);
+  const story2 = [line(h('span', { class: 'pill', text: '2' }), h('span', { class: 'pill acc', text: 'sale_crm' }), h('span', { class: 'mono b', text: 'sale_view_inherit123' })),
+    line(h('span', { class: 'mut mono', text: 'L2', style: 'margin-left: 56px' }), 'used in context of field', h('span', { class: 'mono', text: 'opportunity_id' }))];
+  const lab2 = h('div', { class: 'lab', text: 'Its story through the views', style: 'margin-top: 30px' });
+  const lab1 = h('div', { class: 'lab', text: 'Now' });
+  const views = h('div', { style: 'position: relative' }, story, ...story2, beam);
+  clip.append(lab1, ...now, lab2, views);
+  card.append(clip);
+  root.append(card);
+  const C = "state in ['cancel', 'sale']";
+  for (let i = 0; i < C.length; i += 2) cue(s.at(1.3 + 1.1 * i / C.length), 'tick', .8);
+  cue(s.at(2.6), 'pop', 1, 4); cue(s.at(3), 'ding', .8); cue(s.at(4.9), 'scan'); cue(s.at(6.2), 'ding', .8);
+  caption(61.4, 67.4, 'The condition, its value, *the view that set it.*');
+  return (u) => {
+    const tb = u / BEAT;
+    [lab1, ...now].forEach((n, i) => P(n, u - B(.3 + i * .18), RISE));
+    cond.textContent = C.slice(0, Math.round(clamp((tb - 1.3) / 1.1) * C.length));
+    P(badge, u - B(2.6), POP);
+    ring1.style.opacity = smooth(3, 3.3, tb) * (1 - smooth(4.6, 4.9, tb));
+    clip.style.transform = `translateY(${-230 * ease((tb - 4) / 1)}px)`;
+    [lab2, story, ...story2].forEach((n, i) => P(n, u - B(4.3 + i * .25), RISE));
+    [...story.children].forEach((n, i) => i && i < 4 && P(n, u - B(4.6 + i * .2), { s: 1, x: -40, f: 2, z: .7 }));
+    const bk = (tb - 4.9) / 1.1; // the beam sweeps the views down, then back up to the one that set it
+    beam.style.opacity = bk > 0 && bk < 1.25 ? 1 - smooth(1.1, 1.25, bk) : 0;
+    beam.style.top = `${bk < 1 ? 100 * ease(bk) : 100 - 100 * ease((bk - 1) / .2)}%`;
+    ring2.style.opacity = smooth(6.2, 6.5, tb);
+  };
+});
+
+// i18n: a text picked on the page; its letters fly to where it comes from
+headline(68, 72, 'drop', 'Where does this text come from?', 'Pick it on the page.');
+ui(72, 80, { ry0: -10, ry1: 6 }, (root, s) => {
+  const label = h('span', { text: 'Order Date', style: 'font-weight: 600' });
+  const frag = h('div', { class: 'card', style: 'left: 130px; top: 450px; width: 560px; height: 190px; padding: 40px 44px; box-sizing: border-box; font-size: 34px' },
+    label, h('div', { class: 'mut', text: '10/10/2026 13:55', style: 'margin-top: 8px' }));
+  const ret = h('div', { class: 'abs', style: 'left: 160px; top: 476px; width: 210px; height: 66px' }, ...[0, 1, 2, 3].map((k) => h('i', { class: 'abs', style: `width: 26px; height: 26px; border: 5px solid #b3548f; ${k & 1 ? 'right: 0; border-left: 0' : 'left: 0; border-right: 0'}; ${k & 2 ? 'bottom: 0; border-top: 0' : 'top: 0; border-bottom: 0'}` })));
+  const tbl = h('div', { class: 'card', style: 'left: 760px; top: 340px; width: 1060px; font-size: 25px' });
+  const hdr = h('div', { class: 'row', style: 'background: var(--sunk); font-weight: 700' }, h('span', { text: 'Source', style: 'width: 400px' }), h('span', { text: 'English', style: 'width: 200px' }), h('span', { text: 'Where to change it' }));
+  const cell = h('span', { text: 'Order Date', style: 'width: 200px' });
+  const r1 = h('div', { class: 'row', style: 'height: 110px' }, h('div', { style: 'width: 400px' }, h('span', { class: 'pill info', text: 'Field label' }), h('div', { class: 'mono', text: 'sale.order.date_order' })), cell, h('span', { class: 'mut', text: 'Settings › Technical › Fields' }));
+  const r2 = h('div', { class: 'row', style: 'height: 110px' }, h('div', { style: 'width: 400px' }, h('span', { class: 'pill ok', text: 'View' }), h('div', { class: 'mono', text: 'sale.view_order_form' })), h('span', { text: 'Order Date', style: 'width: 200px' }), h('span', { class: 'mut', text: 'Translations › View' }));
+  const ring = h('i', { class: 'ring', style: 'top: 72px; bottom: 4px' });
+  tbl.append(hdr, r1, r2, ring);
+  root.append(frag, tbl, ret);
+  // the label's letters, laid over it; they fly to the table's cell, getting smaller
+  const flyBox = h('div', { class: 'abs', style: 'font: 600 34px var(--font); color: #b3548f; white-space: nowrap' }, ...[...'Order Date'].map((c) => h('span', { text: c === ' ' ? ' ' : c, style: 'display: inline-block; transform-origin: 0 0' })));
+  root.append(flyBox);
+  const lb = label.getBoundingClientRect(), cb = cell.getBoundingClientRect(), sc = 25 / 34;
+  Object.assign(flyBox.style, { left: `${lb.x}px`, top: `${lb.y}px` });
+  const fly = [...flyBox.children].map((n) => { const b = n.getBoundingClientRect(); return { n, dx: cb.x + (b.x - lb.x) * sc - b.x, dy: cb.y - b.y + 4 }; });
+  const [lx, ly] = centre(label, 0, 4);
+  const cur = cursor(root, s, [[.2, 600, 800], [.8, lx, ly], [.9, lx, ly, 'c'], [2.5, 520, 640]]);
+  cue(s.at(1), 'pop', .8, 3); cue(s.at(2.1), 'swish', .8); fly.forEach((f, i) => i % 3 || cue(s.at(2.7 + i * .04), 'blip', .5, i));
+  cue(s.at(4.4), 'ding', .8);
+  caption(73.4, 79.4, 'Its source, *and where to change it.*');
+  return (u) => {
+    const tb = u / BEAT;
+    P(frag, u, { s: .8, x: -200 });
+    const lock = ease((tb - .3) / .7);
+    ret.style.opacity = clamp((tb - .2) / .2);
+    ret.style.transform = `scale(${lerp(2.2, 1, lock)}) rotate(${lerp(45, 0, lock)}deg)`;
+    label.style.color = tb > 1 ? '#b3548f' : '';
+    P(tbl, u - B(1.6), { s: .7, x: 300, f: 1.8, z: .6 });
+    [hdr, r1, r2].forEach((n, i) => P(n, u - B(1.9 + i * .3), RISE));
+    fly.forEach((f, i) => {
+      const e = ease((tb - 2.1 - i * .04) / .6);
+      f.n.style.opacity = tb > 2.1 && e < 1 ? 1 : 0;
+      f.n.style.transform = `translate(${f.dx * e}px, ${f.dy * e - Math.sin(Math.PI * e) * (160 + i * 8)}px) scale(${lerp(1, sc, e)}) rotate(${Math.sin(Math.PI * e) * (i % 2 ? 25 : -25)}deg)`;
+    });
+    cell.style.opacity = tb > 2.75 ? 1 : 0;
+    ring.style.opacity = smooth(4.4, 4.7, tb);
+    cur(u);
+  };
+});
+
+// =====================================================================================================================
+// act two, a moving gradient. Compare: two orders slam; the fields that are the same are struck out
+headline(80, 84, 'slam', 'Two orders.', 'Only what differs.');
+ui(84, 92, { ry0: 8, ry1: -8 }, (root, s) => {
+  const mini = (name, x, lines) => h('div', { class: 'card', style: `left: ${x}px; top: 300px; width: 420px; padding: 34px 40px; box-sizing: border-box` }, h('div', { text: name, style: 'font-size: 46px; font-weight: 700; margin-bottom: 10px' }), ...lines.map((l) => h('div', { class: 'mut', text: l })));
+  const a = mini('S00007', 430, ['Gemini Furniture', 'Sales Order', '$ 1,706.00']), b = mini('S00006', 1070, ['Lumber Inc', 'Sales Order', 'Mitchell Admin']);
+  const tbl = h('div', { class: 'card mid', style: 'left: 300px; top: 520px; width: 1320px; font-size: 25px' });
+  const chip = h('span', { class: 'pill', text: 'Differences only', style: 'font-size: 22px' });
+  const hdr = h('div', { class: 'row', style: 'background: var(--sunk); font-weight: 700' }, h('span', { text: 'Field', style: 'width: 540px' }), h('span', { text: 'S00007 (#7)', style: 'width: 300px' }), h('span', { text: 'S00006 (#6)', style: 'width: 230px' }), h('span', { class: 'sp' }), chip);
+  const ROWS = [['access_token', 'eee0ea92-f79b-4d03…', '(unset)', 1], ['access_url', '/my/orders/7', '/my/orders/6', 1], ['activity_date_deadline', '2026-10-15', '(unset)', 1], ['company_id', 'YourCompany', 'YourCompany', 0],
+    ['currency_id', 'USD', 'USD', 0], ['invoice_status', 'to invoice', 'to invoice', 0], ['activity_ids', '[22]', '[]', 1], ['state', 'sale', 'sale', 0], ['team_id', 'Sales', 'Sales', 0]];
+  const rows = ROWS.map(([f, x, y, d]) => {
+    const badge = d ? h('span', { class: 'pill warn', text: 'Different' }) : null;
+    const strike = d ? null : h('i', { class: 'abs', style: 'left: 24px; right: 24px; top: 50%; height: 3px; margin-top: -1px; background: var(--err); transform-origin: 0 50%; transform: scaleX(0)' });
+    const n = h('div', { class: 'row' }, h('span', { style: 'width: 540px; flex: none; display: flex; gap: 12px; align-items: center' }, h('span', { class: 'mono b', text: f }), badge), h('span', { class: 'mono', text: x, style: 'width: 300px; flex: none; overflow: hidden; text-overflow: ellipsis' }), h('span', { class: 'mono mut', text: y }), strike);
+    return { n, d, badge, strike };
+  });
+  tbl.append(hdr, ...rows.map((r) => r.n));
+  const flash = h('div', { class: 'abs', style: 'left: 760px; top: 340px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(closest-side, #fff, rgba(255,255,255,0))' });
+  const shock = h('div', { class: 'wave', style: 'left: 960px; top: 540px; width: 240px; height: 240px; margin: -120px; border: 6px solid #fff; box-shadow: 0 0 40px #fff, inset 0 0 30px #fff' });
+  root.append(a, b, tbl, shock, flash);
+  const [hx, hy] = centre(chip);
+  const cur = cursor(root, s, [[2.2, 1300, 1000], [3, hx, hy], [3.2, hx, hy, 'c'], [4.5, 1500, 900]]);
+  cue(s.at(1.4), 'thud'); cue(s.at(3.3), 'swish', .6); rows.filter((r) => r.d).forEach((r, i) => cue(s.at(4.3 + i * .2), 'pop', .7, i + 3));
+  caption(85, 91.4, 'Side by side, *just the fields that differ.*');
+  return (u) => {
+    const tb = u / BEAT, meet = ease((tb - .9) / .5), w = clamp((tb - 1.4) / .8);
+    for (const [n, dir] of [[a, -1], [b, 1]]) {
+      const k = spring(u - B(.05), 1.4, .55);
+      n.style.opacity = clamp(u / .1) * (1 - smooth(1.4, 1.7, tb));
+      n.style.transform = `translateX(${dir * (1 - k) * 900 - dir * meet * 320}px) rotate(${dir * (1 - k) * 20}deg) scale(${1 - .1 * meet})`;
+    }
+    flash.style.opacity = tb > 1.35 ? Math.exp(-Math.max(0, tb - 1.4) / .12) : 0;
+    flash.style.transform = `scale(${1 + 2 * Math.max(0, tb - 1.4)})`;
+    shock.style.opacity = tb > 1.4 ? (1 - w) * .9 : 0;
+    shock.style.transform = `scale(${lerp(.4, 8, out(w))})`;
+    P(tbl, u - B(1.5), { s: .6, f: 1.8, z: .55 });
+    rows.forEach((r, i) => {
+      if (!r.d && tb > 3.75) collapse(r.n, 68, u - B(3.75 + i * .03)); else { r.n.style.height = '68px'; P(r.n, u - B(1.8 + i * .08), RISE); }
+      if (r.strike) r.strike.style.transform = `scaleX(${ease((tb - 3.3 - i * .04) / .3)})`;
+    });
+    rows.filter((r) => r.d).forEach((r, i) => P(r.badge, u - B(4.3 + i * .2), POP));
+    chip.className = tb > 3.2 ? 'pill acc' : 'pill';
+    cur(u);
+  };
+});
+
+// RPC: the calls arrive as packets; one edited, sent off and answered; copied as cURL
+headline(92, 96, 'pill', 'What did that call send?', 'Every call, live.');
+ui(96, 108, { ry0: -10, ry1: 8, push: 1.04 }, (root, s) => {
+  const card = h('div', { class: 'card', style: 'left: 720px; top: 150px; width: 1060px; height: 660px; font-size: 25px' });
+  const clip = h('div');
+  const bar = h('div', { class: 'row', style: 'gap: 12px; height: 92px' }, h('div', { class: 'input', style: 'border-color: var(--line); box-shadow: none; color: var(--mut)', text: 'Filter model / method' }), ...['Errors Only', 'Clear', 'New Request'].map((t) => h('span', { class: 'btn', text: t })));
+  const call = (name, model, ms) => h('div', { class: 'row' }, h('i', { style: 'width: 14px; height: 14px; border-radius: 50%; background: #188038' }), h('span', { class: 'mono b', text: name }), model ? h('span', { class: 'mut', text: model }) : null, h('span', { class: 'sp' }), h('span', { class: 'mut', text: ms }));
+  const calls = [call('/mail/thread/messages', '', '27 ms'), call('/mail/thread/data', '', '36 ms'), call('web_read', 'sale.order', '86 ms')];
+  const spec = h('span'), caret = h('i', { class: 'caret', style: 'height: 24px' });
+  const SPEC = '{"name": {}, "state": {}, "amount_total": {}},';
+  const J = (html) => h('div', { html });
+  const editor = h('div', { style: 'margin: 0 32px; padding: 18px 24px; border: 2px solid var(--acc); border-radius: 16px; background: var(--sunk); font: 500 23px/1.65 var(--mono)' },
+    J('<span class="k">"params"</span>: {'), J('&nbsp;&nbsp;<span class="k">"model"</span>: <span class="s">"sale.order"</span>,'), J('&nbsp;&nbsp;<span class="k">"method"</span>: <span class="s">"web_read"</span>,'),
+    J('&nbsp;&nbsp;<span class="k">"args"</span>: [[<span class="n">7</span>]],'), J('&nbsp;&nbsp;<span class="k">"kwargs"</span>: {'), h('div', { html: '&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"specification"</span>: ' }, spec, caret));
+  const send = h('span', { class: 'btn pri', text: 'Send' }), curlBtn = h('span', { class: 'btn', text: 'Copy as cURL' });
+  const acts = h('div', { style: 'display: flex; gap: 12px; padding: 20px 32px' }, send, curlBtn, h('span', { class: 'btn', text: '⏱ Profile → Perf' }));
+  const okLine = h('div', { style: 'display: flex; gap: 12px; align-items: center; padding: 0 32px 10px' }, h('span', { class: 'pill ok', text: 'ok' }), h('span', { class: 'mut', text: 'HTTP 200 · 14 ms' }));
+  const res = ['[ 1 items', '&nbsp;&nbsp;{ 4 keys', '&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"id"</span>: <span class="n">7</span>,', '&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"name"</span>: <span class="s">"S00007"</span>,',
+    '&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"state"</span>: <span class="s">"sale"</span>,', '&nbsp;&nbsp;&nbsp;&nbsp;<span class="k">"amount_total"</span>: <span class="n">1706</span>'].map((l) => h('div', { html: l, style: 'padding: 0 56px; font: 500 24px/1.65 var(--mono)' }));
+  const ring = h('i', { class: 'ring' });
+  const resBox = h('div', { style: 'position: relative; padding: 6px 0 16px' }, ...res, ring);
+  const detail = h('div', { style: 'overflow: hidden' }, h('div', { class: 'mut', text: '09:23:48 · /web/dataset/call_kw/sale.order/web_read', style: 'padding: 14px 32px; font-size: 22px' }), editor, acts, okLine, resBox);
+  clip.append(bar, ...calls, detail);
+  card.append(clip);
+  const pre = h('pre');
+  const term = h('div', { class: 'term', style: 'left: 130px; top: 360px; width: 540px; font-size: 19px' }, h('b', { text: 'COPIED AS CURL' }), pre);
+  root.append(card, term);
+  const CURL = "curl 'http://localhost:8069/web/dataset/call_kw/sale.order/web_read' \\\n  -H 'Content-Type: application/json' \\\n  --data-raw '{\"jsonrpc\":\"2.0\",\"method\":\"call\",\"params\":{\"model\":\"sale.order\",\"method\":\"web_read\",\"args\":[[7]],\"kwargs\":{\"specification\":{\"name\":{},\"state\":{},\"amount_total\":{}}}}}'";
+  // the panel scrolls: to the editor once the call is opened, to the answer once sent
+  const scroll = (tb) => -250 * ease((tb - 2) / .8) - 230 * ease((tb - 5.8) / .8);
+  const [wx, wy] = centre(calls[2].children[1]), [sx, sy] = centre(send, 0, scroll(5.2)), [kx, ky] = centre(curlBtn, 0, scroll(8.2));
+  const cur = cursor(root, s, [[.8, 1400, 980], [1.5, wx, wy], [1.6, wx, wy, 'c'], [4.4, 1100, 860], [5, sx, sy], [5.2, sx, sy, 'c'], [7.6, kx, ky], [8.2, kx, ky, 'c'], [10, 1000, 1000]]);
+  // packets: each call arriving at its dot; the request sent off the frame, the answer coming back to its line
+  const [ox, oy] = centre(okLine.firstChild, 0, scroll(5.7));
+  const flights = [...calls.map((c, i) => { const [x, y] = centre(c.firstChild); return { b: i * .4 - .25, d: .35, from: [-60, y - 240], to: [x, y] }; }),
+    { b: 5.25, d: .3, from: [sx, sy], to: [2000, 60] }, { b: 5.45, d: .3, from: [2000, 1000], to: [ox, oy] }];
+  const packets = flights.map(() => { const n = h('i', { class: 'packet' }); root.append(n); return n; });
+  calls.forEach((c, i) => cue(s.at(.1 + i * .4), 'blip', .7, [4, 6, 9][i]));
+  for (let i = 0; i < SPEC.length; i += 2) cue(s.at(2.8 + 1.8 * i / SPEC.length), 'tick', .8);
+  cue(s.at(5.25), 'zap'); cue(s.at(5.6), 'zap', .8);
+  res.forEach((r, i) => cue(s.at(6.3 + i * .15), 'pop', .5, i + 2));
+  cue(s.at(8.4), 'swish');
+  caption(97, 107.4, 'Edit it, send it again, *or copy it as cURL.*');
+  return (u) => {
+    const tb = u / BEAT;
+    P(bar, u, RISE);
+    calls.forEach((c, i) => { P(c, u - B(.1 + i * .4), { s: 1, x: 80, f: 2.2, z: .6 }); c.style.background = i === 2 && tb > 1.6 ? 'var(--acc-soft)' : ''; });
+    detail.style.height = `${720 * spring(u - B(1.7), 1.3, .75)}px`;
+    clip.style.transform = `translateY(${scroll(tb)}px)`;
+    spec.textContent = SPEC.slice(0, Math.round(clamp((tb - 2.8) / 1.8) * SPEC.length));
+    caret.style.opacity = tb < 4.7 && tb > 2.5 ? 1 : 0;
+    send.style.transform = `scale(${tb > 5.2 && tb < 5.4 ? .9 : 1})`;
+    P(okLine, u - B(5.7), RISE);
+    res.forEach((r, i) => P(r, u - B(6.3 + i * .15), { s: 1, x: -30, f: 2.4, z: .6 }));
+    ring.style.opacity = smooth(7.3, 7.6, tb);
+    P(term, u - B(8.4), { s: .6, x: -300, r: -8, f: 1.8, z: .6 });
+    pre.textContent = CURL.slice(0, Math.round(clamp((tb - 8.6) / 1.6) * CURL.length));
+    flights.forEach((f, i) => {
+      const k = (tb - f.b) / f.d, e = ease(k);
+      packets[i].style.opacity = k > 0 && k < 1 ? 1 : 0;
+      packets[i].style.transform = `translate(${lerp(f.from[0], f.to[0], e)}px, ${lerp(f.from[1], f.to[1], e) - Math.sin(Math.PI * e) * 120}px) scale(${1 + .6 * Math.sin(Math.PI * e)})`;
+    });
+    cur(u);
+  };
+});
+
+// Code: a change tried for real; the database's value, changed by the run, rewinds
+headline(108, 112, 'zoom', 'Try it on real data?', 'Then roll it back.');
+ui(112, 120, { ry0: 10, ry1: -8 }, (root, s) => {
+  const card = h('div', { class: 'card', style: 'left: 330px; top: 150px; width: 1040px; height: 700px' });
+  const top = h('div', { class: 'row', style: 'height: 96px; gap: 12px' }, h('span', { class: 'pill', text: 'JavaScript' }), h('span', { class: 'pill acc', text: 'Python' }), h('span', { class: 'sp' }), h('span', { class: 'pill acc', text: 'Dry run' }), h('span', { class: 'pill', text: 'Commit' }));
+  const L1 = "record.order_line.write({'discount': 10})", L2 = "return record.read(['amount_untaxed', 'amount_total'])";
+  const c1 = h('span'), c2 = h('span');
+  const code = h('div', { style: 'margin: 26px 32px; padding: 26px 28px; border-radius: 16px; background: var(--sunk); border: 1px solid var(--line); font: 500 25px/1.8 var(--mono); white-space: pre' },
+    h('div', {}, h('span', { class: 'mut', text: '1  ' }), c1), h('div', {}, h('span', { class: 'mut', text: '2  ' }), c2));
+  const run = h('span', { class: 'btn pri', text: '▶ Run' });
+  const totalN = h('b', { class: 'mono' });
+  const out1 = h('div', { style: 'display: flex; gap: 12px; align-items: center; padding: 10px 32px 6px' }, h('span', { class: 'pill ok', text: 'ok' }), h('span', { class: 'pill', text: 'Python' }), h('span', { class: 'pill acc', text: 'dry run' }), h('span', { class: 'mut', text: '122 ms' }));
+  const out2 = h('div', { class: 'mut', text: 'Dry run: the code really ran, then all its changes were rolled back.', style: 'padding: 6px 32px 18px; font-size: 24px' });
+  const tbl = h('div', { style: 'margin: 0 32px; border: 1px solid var(--line); border-radius: 14px; overflow: hidden' },
+    h('div', { class: 'row', style: 'background: var(--sunk); font-weight: 700; height: 60px' }, h('span', { text: 'id', style: 'width: 120px' }), h('span', { text: 'amount_total', style: 'width: 330px' }), h('span', { text: 'amount_untaxed' })),
+    h('div', { class: 'row', style: 'height: 70px; border: 0' }, h('span', { class: 'mono', text: '7', style: 'width: 120px' }), h('span', { style: 'width: 330px' }, totalN), h('span', { class: 'mono', text: '1,535.40' })));
+  card.append(top, code, h('div', { style: 'display: flex; justify-content: flex-end; padding: 0 32px' }, run), out1, out2, tbl);
+  // the database, beside: the run writes into it, the rollback rewinds it
+  const dbv = h('b', { class: 'mono', style: 'font-size: 44px; letter-spacing: -.02em' }), spin = h('span', { text: '↺', style: 'display: inline-block; font-size: 40px; color: var(--acc)' });
+  const streaks = [0, 1, 2, 3, 4].map((i) => h('i', { class: 'abs', style: `left: 0; top: ${44 + i * 26}px; height: 3px; width: 160px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--acc))` }));
+  const db = h('div', { class: 'card', style: 'left: 1420px; top: 330px; width: 380px; height: 220px; padding: 26px 30px; box-sizing: border-box' },
+    h('div', { class: 'lab', text: 'In the database' }), h('div', { class: 'mono mut', text: 'sale.order #7 · amount_total', style: 'font-size: 19px; margin: 8px 0 10px' }), h('div', { style: 'display: flex; gap: 16px; align-items: center' }, dbv, spin), ...streaks);
+  const stamp = h('div', { class: 'stamp', style: 'left: 1440px; top: 590px', text: '↺ Rolled back' });
+  root.append(card, db, stamp);
+  const hl = (t) => t.replace(/('[^']*'?)/g, '<span class="s">$1</span>').replace(/\b(\d+)\b/g, '<span class="n">$1</span>').replace(/^return/, '<span class="kw">return</span>').replace(/\b(write|read)\(/g, '<span class="fn">$1</span>(');
+  const [rx, ry] = centre(run);
+  const cur = cursor(root, s, [[2.6, 1300, 980], [3.4, rx, ry], [3.6, rx, ry, 'c'], [5.5, 1300, 900]]);
+  for (let i = 0; i < L1.length + L2.length; i += 3) cue(s.at(.4 + 2.4 * i / (L1.length + L2.length)), 'tick', .7);
+  cue(s.at(4), 'pop', .8, 5); cue(s.at(4.2), 'zap', .7); cue(s.at(5.4), 'rewind'); cue(s.at(6.3), 'thud');
+  caption(113, 119.4, 'A Python dry run: *the result, nothing kept.*');
+  return (u) => {
+    const tb = u / BEAT, n = Math.round(clamp((tb - .4) / 2.4) * (L1.length + L2.length));
+    c1.innerHTML = hl(L1.slice(0, n)); c2.innerHTML = hl(L2.slice(0, Math.max(0, n - L1.length)));
+    P(top, u, RISE); P(code, u - B(.1), RISE); P(run, u - B(2.4), POP);
+    run.style.scale = tb > 3.6 && tb < 3.8 ? '.9' : '';
+    [out1, out2, tbl].forEach((x, i) => P(x, u - B(4 + i * .2), RISE));
+    totalN.innerHTML = tb < 4.6 ? '1,706.00' : `<s class="mut">1,706.00</s> → <span class="n">${num(lerp(1706, 1535.4, out((tb - 4.6) / .9)), 2)}</span>`;
+    P(db, u - B(1), { s: .6, x: 260, f: 1.8, z: .6 });
+    const wrote = out((tb - 4.1) / .5), back = ease((tb - 5.4) / .8);
+    dbv.textContent = num(lerp(lerp(1706, 1535.4, wrote), 1706, back), 2);
+    dbv.style.color = wrote > 0 && back < 1 ? 'var(--err)' : '';
+    spin.style.transform = `rotate(${-720 * back}deg) scale(${1 + .4 * Math.sin(Math.PI * back)})`;
+    streaks.forEach((st, i) => { const k = (tb - 5.4 - i * .06) / .5; st.style.opacity = k > 0 && k < 1 ? .9 : 0; st.style.transform = `translateX(${lerp(330, -200, k)}px)`; });
+    P(stamp, u - B(6.3), { s: 2.6, r: -30, f: 2.2, z: .5 });
+    stamp.style.rotate = '-8deg';
+    cur(u);
+  };
+});
+
+// =====================================================================================================================
+// act three, dark. Security: a red beam reads the rules; the group tried turns them green
+headline(120, 124, 'giant', "Why can't Marc open this?", 'The rule that says no.');
+ui(124, 136, { ry0: -12, ry1: 8 }, (root, s) => {
+  const card = h('div', { class: 'card', style: 'left: 400px; top: 130px; width: 1120px; height: 730px; font-size: 25px' });
+  const clip = h('div');
+  const who = h('div', { class: 'row', style: 'height: 100px; gap: 14px' }, 'Rights of', h('span', { style: 'display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #e0457b; color: #fff; align-items: center; justify-content: center; font-weight: 700', text: 'M' }), h('b', { text: 'Marc Demo' }), h('span', { class: 'mut', text: 'on' }), h('b', { class: 'mono', text: 'sale.order #7' }));
+  const COLS = ['Read', 'Write', 'Create', 'Delete'];
+  const hdr = h('div', { class: 'row', style: 'background: var(--sunk); font-weight: 700' }, h('span', { text: 'Rule', style: 'width: 560px' }), ...COLS.map((c) => h('span', { class: 'flip', text: c })));
+  const marks = [];
+  const rule = (on, name, group, vals) => {
+    const cells = vals.map((v) => { const c = h('span', { class: 'flip', text: v, style: `color: ${v === '✕' ? 'var(--err)' : 'var(--mut)'}; ${v === '✕' ? 'text-shadow: 0 0 14px var(--err)' : ''}` }); marks.push(c); return c; });
+    return h('div', { class: 'row', style: 'height: 104px' }, h('div', { style: 'width: 560px; white-space: normal; line-height: 1.3' }, h('div', { style: 'display: flex; gap: 12px; align-items: center' }, h('i', { style: `width: 18px; height: 18px; border-radius: 50%; ${on ? 'background: var(--acc); box-shadow: 0 0 12px var(--acc)' : 'border: 2px solid var(--mut)'}` }), h('b', { text: name })), h('div', { class: 'mut', text: group, style: 'margin-left: 30px; font-size: 22px' })), ...cells);
+  };
+  const ring = h('i', { class: 'ring' });
+  const r1 = rule(false, 'Portal Personal Quotations', 'User types / Portal', ['✕', '✕', '·', '✕']);
+  const r2 = rule(true, 'Personal Orders', 'Sales / User: Own Documents Only', ['✕', '✕', '✕', '✕']);
+  const r3 = rule(false, 'All Orders', 'Sales / User: All Documents', ['✓', '✓', '✓', '✓']);
+  r2.append(ring);
+  const resCells = COLS.map(() => h('span', { class: 'flip', text: '✕', style: 'color: var(--err); font-size: 32px' }));
+  const badge = h('span', { class: 'pill ok', text: 'tried: allowed · nothing written', style: 'font-size: 22px' });
+  const result = h('div', { class: 'row', style: 'height: 84px; background: var(--acc-soft)' }, h('span', { style: 'width: 560px; flex: none; display: flex; gap: 16px; align-items: center' }, h('b', { text: 'Result' }), badge), ...resCells);
+  const tryBtn = h('span', { class: 'btn', text: 'Try' });
+  const allow = h('div', {}, h('div', { class: 'lab', text: 'To allow it', style: 'padding: 26px 32px 10px' }), h('div', { class: 'row', style: 'height: 90px' }, h('span', { style: 'width: 560px; display: flex; gap: 16px; align-items: center' }, h('b', { text: 'Sales / User: All Documents' }), tryBtn), ...['+✓', '+✓', '+✓', '·'].map((v) => h('span', { class: 'flip', text: v, style: 'color: var(--acc)' }))));
+  const laser = h('i', { class: 'beam', style: 'height: 6px; margin-top: -3px; background: linear-gradient(90deg, transparent, #ff2a55 15%, #ff6b81 50%, #ff2a55 85%, transparent); box-shadow: 0 0 30px 8px rgba(255, 42, 85, .7)' });
+  const rules = h('div', { style: 'position: relative' }, r1, r2, r3, laser);
+  clip.append(who, hdr, rules, result, allow);
+  card.append(clip);
+  const green = h('div', { class: 'wave', style: 'width: 200px; height: 200px; margin: -100px; border: 6px solid #4ade80; box-shadow: 0 0 50px #4ade80, inset 0 0 40px #4ade80' });
+  root.append(card, green);
+  const scroll = (tb) => -170 * ease((tb - 4.6) / .8);
+  const [gx, gy] = centre(result, 220, scroll(7.3));
+  Object.assign(green.style, { left: `${gx}px`, top: `${gy}px` });
+  const [tx, ty] = centre(tryBtn, 0, scroll(6.6)); // the panel scrolled by then
+  const cur = cursor(root, s, [[5.2, 1300, 1000], [6.4, tx, ty], [6.6, tx, ty, 'c'], [8.6, 1200, 1000]]);
+  cue(s.at(.8), 'scan'); marks.forEach((m, i) => i % 3 === 0 && cue(s.at(.9 + i * .1), 'pop', .5, i % 8));
+  cue(s.at(2.8), 'ding', .7);
+  resCells.forEach((c, i) => cue(s.at(7 + i * .22), 'pop', .8, 4 + i));
+  cue(s.at(7.2), 'zap'); cue(s.at(8.1), 'ding');
+  caption(125, 135.4, 'The rule that refuses, *the group that would allow.*');
+  return (u) => {
+    const tb = u / BEAT;
+    [who, hdr, r1, r2, r3, result].forEach((n, i) => P(n, u - B(.1 + i * .12), RISE));
+    marks.forEach((m, i) => P(m, u - B(.9 + i * .1), POP));
+    const lk = (tb - .8) / 1.4;
+    laser.style.opacity = lk > 0 && lk < 1 ? 1 : 0;
+    laser.style.top = `${100 * ease(lk)}%`;
+    resCells.forEach((c, i) => {
+      const k = ease((tb - 7 - i * .22) / .35), yes = k > .5;
+      c.textContent = yes ? '✓' : '✕';
+      c.style.color = yes ? 'var(--ok)' : 'var(--err)';
+      c.style.textShadow = `0 0 16px ${yes ? 'var(--ok)' : 'var(--err)'}`;
+      if (tb < 7) P(c, u - B(1.6 + i * .1), POP);
+      else { c.style.opacity = 1; c.style.filter = ''; c.style.transform = `rotateX(${k * 360}deg) scale(${1 + .3 * Math.sin(Math.PI * k)})`; }
+    });
+    result.style.background = tb > 7.8 ? 'var(--ok-soft)' : '';
+    ring.style.opacity = smooth(2.8, 3.1, tb) * (1 - smooth(4.6, 4.9, tb));
+    clip.style.transform = `translateY(${scroll(tb)}px)`;
+    P(allow, u - B(4.8), RISE);
+    tryBtn.style.scale = tb > 6.6 && tb < 6.8 ? '.9' : '';
+    const w = clamp((tb - 7.2) / .9);
+    green.style.opacity = tb > 7.2 ? (1 - w) * .9 : 0;
+    green.style.transform = `scale(${lerp(.4, 4.5, out(w))})`;
+    P(badge, u - B(8.1), { s: .4, x: -30 });
+    cur(u);
+  };
+});
+
+// Apps: what installing a module brings; data flows along the graph
+headline(136, 140, 'mask', 'What will this module bring?', 'Know before you install.');
+ui(140, 148, { ry0: 14, ry1: -12 }, (root, s) => {
+  const card = h('div', { class: 'card', style: 'left: 260px; top: 110px; width: 1400px; height: 780px' });
+  root.append(card); // laid out now: the labels are measured below
+  const top = h('div', { class: 'row', style: 'height: 96px; gap: 12px' }, h('div', { class: 'input', style: 'flex: none; width: 360px' }, h('span', { class: 'mono', text: 'website_sale' })), h('span', { class: 'sp' }), h('span', { class: 'pill', text: 'Needs' }), h('span', { class: 'pill acc', text: 'Install brings' }), h('span', { class: 'pill', text: 'Used by' }));
+  const C = [600, 430];
+  const LEFT = ['website', 'website_payment', 'website_mail', 'product', 'portal_rating', 'google_recaptcha'], RIGHT = ['website_sale_autocomplete', 'website_crm', 'website_sms', 'website_crm_sms', 'spreadsheet_dashboard_website_sale'];
+  const nodes = [...LEFT.map((t, i) => ({ t, x: 350, y: 220 + i * 92, auto: false })), ...RIGHT.map((t, i) => ({ t, x: 850, y: 250 + i * 104, auto: true }))]; // x: the edge facing the module
+  const center = h('div', { class: 'node c', text: 'website_sale', style: `left: ${C[0]}px; top: ${C[1]}px` });
+  const els = nodes.map((n) => h('div', { class: `node${n.auto ? ' auto' : ''}`, text: n.t, style: `left: ${n.x}px; top: ${n.y}px; translate: ${n.auto ? 0 : -100}% -50%` }));
+  card.append(...els, center);
+  // each link from the module's edge to the label's near edge, never through a name
+  const cw = center.offsetWidth / 2;
+  const svg = h('div', { class: 'abs', style: 'left: 0; top: 0; width: 1400px; height: 780px', html: `<svg width="1400" height="780">${nodes.map((n, i) => {
+    const x0 = C[0] + (n.auto ? cw : -cw), x1 = n.x + (n.auto ? -6 : 6);
+    return `<path d="M${x0} ${C[1]} C ${(x0 + x1) / 2} ${C[1]}, ${(x0 + x1) / 2} ${n.y}, ${x1} ${n.y}" fill="none" stroke="${n.auto ? '#3ef0c0' : '#ff7ac3'}" stroke-width="3" stroke-dasharray="1000" stroke-dashoffset="1000" opacity=".6"/>`;
+  }).join('')}${nodes.map((n) => [0, 1].map(() => `<circle r="6" fill="${n.auto ? '#8ff7da' : '#ffc2e6'}" style="filter: drop-shadow(0 0 8px ${n.auto ? '#3ef0c0' : '#ff7ac3'})"/>`).join('')).join('')}</svg>` });
+  const l1 = h('div', { class: 'abs lab', style: 'left: 90px; top: 126px; color: var(--acc)', html: 'Also installs <b style="font-size: 28px">9</b>' });
+  const l2 = h('div', { class: 'abs lab', style: 'left: 850px; top: 126px; color: var(--ok)', html: 'Auto-installs <b style="font-size: 28px">5</b>' });
+  card.prepend(top, svg); card.append(l1, l2);
+  const paths = [...svg.querySelectorAll('path')], dots = [...svg.querySelectorAll('circle')], lens = paths.map((p) => p.getTotalLength());
+  cue(s.at(.6), 'pop', 1, 0);
+  nodes.forEach((n, i) => cue(s.at(1.5 + i * .14), 'blip', .6, i));
+  cue(s.at(3.6), 'ding', .8);
+  caption(141, 147.4, "Odoo's own answer, *before you click Install.*");
+  return (u) => {
+    const tb = u / BEAT;
+    P(top, u, RISE);
+    P(center, u - B(.6), { s: .2, f: 2.4, z: .4 });
+    nodes.forEach((n, i) => {
+      paths[i].setAttribute('stroke-dashoffset', 1000 * (1 - ease((tb - 1 - i * .14) / .5)));
+      P(els[i], u - B(1.5 + i * .14), POP);
+      [0, 1].forEach((j) => { // two sparks a link, running out from the module
+        const d = dots[i * 2 + j], k = ((tb - 1.6 - i * .14) * .55 + j * .5) % 1, live = tb > 1.6 + i * .14;
+        const p = paths[i].getPointAtLength(Math.max(0, k) * lens[i]);
+        d.setAttribute('cx', p.x); d.setAttribute('cy', p.y); d.setAttribute('opacity', live ? Math.sin(Math.PI * k) : 0);
+      });
+    });
+    P(l1, u - B(3.6), RISE); P(l2, u - B(3.8), RISE);
+  };
+});
+
+// Perf: eleven times the same query rains down, then folds into its diagnosis; the session grouped by method
+headline(148, 152, 'glitch', 'Why is this screen slow?', 'The N+1, found.');
+ui(152, 164, { ry0: -8, ry1: 6, push: 1.03 }, (root, s) => {
+  const card = h('div', { class: 'card', style: 'left: 110px; top: 140px; width: 1700px; height: 720px; font-size: 24px' });
+  const dot = h('i', { style: 'width: 14px; height: 14px; border-radius: 50%; background: #ff2a55; box-shadow: 0 0 12px #ff2a55' });
+  const groupChip = h('span', { class: 'btn', text: 'Group by method' });
+  const top = h('div', { class: 'row', style: 'height: 92px; gap: 14px' }, h('span', { class: 'pill ok', text: 'RECORDING' }), dot, h('span', { text: 'since 09:24:12' }), h('span', { class: 'sp' }), groupChip, h('span', { class: 'btn', text: 'Static Files (3)' }));
+  const list = h('div', { style: 'position: absolute; left: 30px; top: 120px; width: 700px' });
+  const REQ = [['/mail/data', '', 62, '113 ms'], ['get_views', 'sale.order', 92, '126 ms'], ['web_read', 'sale.order', 72, '69 ms'], ['/web/action/load', '', 12, '51 ms'], ['/mail/thread/data', '', 44, '37 ms'], ['/odoo/orders/7', '', 23, '35 ms']];
+  const GRP = [['get_views', '1', '126 ms', '92'], ['/mail/data', '1', '83 ms', '62'], ['web_read', '1', '58 ms', '70'], ['read', '1', '68 ms', '2'], ['/mail/thread/data', '1', '47 ms', '44'], ['/web/action/load', '1', '39 ms', '12']];
+  const hdrA = h('div', { class: 'row', style: 'font-weight: 700; background: var(--sunk)' }, h('span', { text: 'Request', style: 'width: 400px' }), h('span', { text: 'SQL', style: 'width: 120px' }), h('span', { text: 'Time' }));
+  const hdrB = h('div', { class: 'row', style: 'font-weight: 700; background: var(--sunk); position: absolute; left: 0; right: 0; top: 0' }, h('span', { text: 'Method', style: 'width: 300px' }), h('span', { text: 'Calls', style: 'width: 100px' }), h('span', { text: 'Total', style: 'width: 140px' }), h('span', { text: 'SQL' }));
+  const sqlN = [];
+  const rowsA = REQ.map(([r, m, q, t]) => { const n = h('span', { class: `pill ${q > 50 ? 'err' : ''}` }); sqlN.push([n, q]); return h('div', { class: 'row', style: 'height: 78px' }, h('span', { style: 'width: 400px' }, h('span', { class: 'mono b', text: r }), m ? h('span', { class: 'mut', text: ` ${m}` }) : null), h('span', { style: 'width: 120px' }, n), h('span', { text: t })); });
+  const bars = GRP.map(([, , t]) => h('i', { class: 'abs', style: `left: 400px; top: 50%; height: 10px; margin-top: 20px; width: ${parseInt(t) * 1.6}px; border-radius: 5px; background: linear-gradient(90deg, #ff7ac3, #c38bff); transform-origin: 0 50%` }));
+  const rowsB = GRP.map(([r, c, t, q], i) => h('div', { class: 'row', style: `height: 78px; position: absolute; left: 0; right: 0; top: ${68 + i * 78}px` }, h('span', { class: 'mono b', text: r, style: 'width: 300px' }), h('span', { text: c, style: 'width: 100px' }), h('span', { text: t, style: 'width: 140px' }), h('span', { class: `pill ${+q > 50 ? 'err' : ''}`, text: q }), bars[i]));
+  list.append(hdrA, ...rowsA, hdrB, ...rowsB);
+  const n1 = h('b');
+  const ring = h('i', { class: 'ring' });
+  const diag = h('div', { style: 'position: relative; margin-top: 22px; padding: 22px 26px; border-radius: 16px; background: var(--err-soft); line-height: 1.55' },
+    h('div', { style: 'color: var(--err); font-weight: 700; font-size: 27px' }, 'N+1: one query runs ', n1, ' in this request'),
+    h('div', { class: 'mono', text: 'get_field_selection()  base/models/ir_model.py:1421' }),
+    h('div', { text: 'runs it once per record: read them all at once instead.' }),
+    h('div', { class: 'mono', text: 'return [(sel.value, sel.name) for sel in field.selection_ids]', style: 'margin-top: 10px; padding: 12px 16px; background: var(--sunk); border-radius: 10px; font-size: 22px' }), ring);
+  const stats = h('div', { style: 'display: flex; gap: 26px; font-size: 27px' }, ...[['92', 'queries'], ['81 ms', 'in SQL'], ['126 ms', 'total'], ['≈ 46 ms', 'Python']].map(([a, b]) => h('span', {}, h('b', { text: a }), h('span', { class: 'mut', text: ` ${b}` }))));
+  const fill = h('i', { style: 'display: block; height: 100%; background: linear-gradient(90deg, #7cb4ff 64%, #f0a6d8 64%)' });
+  const barEl = h('div', { style: 'height: 16px; margin-top: 22px; border-radius: 8px; background: var(--line); overflow: hidden' }, fill);
+  const det = h('div', { style: 'position: absolute; left: 770px; top: 120px; width: 900px' }, h('div', { style: 'font-size: 30px; margin-bottom: 10px' }, h('b', { class: 'mono', text: 'get_views' }), h('span', { class: 'mut', text: ' sale.order' })), stats, diag, barEl);
+  // the rain: the same query, eleven times, one under the other
+  const rain = h('div', { class: 'abs', style: 'left: 770px; top: 210px; width: 900px; height: 360px; overflow: hidden; transform-origin: 50% 0' },
+    ...Array.from({ length: 11 }, (_, k) => h('div', { class: 'sql', text: `SELECT id, value, name FROM ir_model_fields_selection WHERE field_id = ${4127 + k * 3}`, style: `position: absolute; left: 0; top: ${k * 32}px` })));
+  card.append(top, list, det, rain);
+  root.append(card);
+  const [gx, gy] = centre(rowsA[1].firstChild.firstChild), [cx, cy] = centre(groupChip);
+  const cur = cursor(root, s, [[2, 900, 1000], [2.8, gx, gy], [3, gx, gy, 'c'], [6.4, 1100, 260], [7.4, cx, cy], [7.6, cx, cy, 'c'], [9.5, 1200, 900]]);
+  rowsA.forEach((r, i) => cue(s.at(.4 + i * .2), 'blip', .5, i + 2));
+  for (let k = 0; k < 11; k++) cue(s.at(3.4 + k * .08), 'tick', 1.2);
+  cue(s.at(4.35), 'thud'); cue(s.at(4.4), 'pop', 1, 1); cue(s.at(5.4), 'ding', .8); cue(s.at(7.7), 'swish', .7);
+  caption(153, 159.6, 'The query that loops, *and the line running it.*');
+  caption(160, 163.4, 'Or the whole session, *grouped by method.*');
+  return (u) => {
+    const tb = u / BEAT, grp = tb > 7.7;
+    P(top, u, RISE);
+    dot.style.opacity = tb % 1 < .5 ? 1 : .25;
+    if (grp) hdrA.style.opacity = 0; else P(hdrA, u - B(.2), RISE);
+    hdrB.style.opacity = grp ? 1 : 0;
+    rowsA.forEach((r, i) => {
+      if (grp) { const k = ease((tb - 7.7 - i * .06) / .3); r.style.transform = `rotateX(${k * 90}deg)`; r.style.opacity = 1 - k; } else P(r, u - B(.4 + i * .2), { s: 1, y: -60, f: 2.2, z: .55 });
+      r.style.background = i === 1 && tb > 3 ? 'var(--acc-soft)' : '';
+    });
+    sqlN.forEach(([n, q], i) => (n.textContent = Math.round(q * out((tb - .5 - i * .2) / .8))));
+    rowsB.forEach((r, i) => { const k = ease((tb - 7.95 - i * .06) / .3); r.style.opacity = k; r.style.transform = `rotateX(${(1 - k) * -90}deg)`; bars[i].style.transform = `scaleX(${out((tb - 8.2 - i * .08) / .5)})`; });
+    P(det, u - B(3.2), { s: .8, x: 200, f: 1.8, z: .6 });
+    [...rain.children].forEach((l, k) => { const v = u - B(3.4 + k * .08); l.style.opacity = v > 0 ? 1 : 0; l.style.transform = `translateY(${(1 - out(v / .12)) * -60}px)`; l.style.filter = v > 0 && v < .1 ? 'url(#mv1)' : ''; });
+    const fold = ease((tb - 4.2) / .25); // the eleven fold into one line: the diagnosis
+    rain.style.opacity = tb < 4.45 ? 1 : 0;
+    rain.style.transform = `scaleY(${1 - .9 * fold})`;
+    diag.style.visibility = tb > 4.35 ? '' : 'hidden';
+    P(diag, u - B(4.35), { s: .7, y: -40, f: 2.2, z: .45 });
+    n1.textContent = '11×';
+    fill.style.width = `${100 * ease((tb - 4.8) / .8)}%`;
+    ring.style.opacity = smooth(5.4, 5.7, tb) * (1 - smooth(7.4, 7.7, tb));
+    groupChip.className = grp ? 'btn pri' : 'btn';
+    cur(u);
+  };
+});
+
+// Menus: the technical screens spin in like a reel and stop on one
+ui(164, 168, { ry0: 8, ry1: -8, rx: 5 }, (root, s) => {
+  const card = h('div', { class: 'card', style: 'left: 510px; top: 90px; width: 900px; height: 820px' });
+  const M = [['Models', 'ir.model'], ['Fields', 'ir.model.fields'], ['Record Rules', 'ir.rule'], ['Views', 'ir.ui.view'], ['Menus', 'ir.ui.menu'], ['Model Data', 'ir.model.data'], ['Crons', 'ir.cron'],
+    ['Actions Window', 'ir.actions.act_window'], ['Actions Server', 'ir.actions.server'], ['Reports', 'ir.actions.report'], ['Parameters', 'ir.config_parameter']];
+  const rows = M.map(([a, b]) => h('div', { class: 'row', style: 'height: 74px' }, h('b', { text: a, style: 'width: 300px' }), h('span', { class: 'mono mut', text: b }), h('span', { class: 'sp' }), h('span', { class: 'mut', text: '↗' })));
+  const reel = h('div', {}, ...rows);
+  card.append(reel);
+  root.append(card);
+  const [mx, my] = centre(rows[2].firstChild);
+  const cur = cursor(root, s, [[1.2, 1200, 950], [2, mx, my], [2.2, mx, my, 'c']]);
+  for (let k = 0; k < 10; k++) cue(s.at(1.5 * (1 - (1 - k / 10) ** 2)), 'tick', 1);
+  caption(164.6, 166.8, 'Every technical screen, *one click away.*');
+  return (u) => {
+    const tb = u / BEAT, k = out(tb / 1.5);
+    reel.style.transform = `translateY(${-2400 * (1 - k)}px)`;
+    reel.style.filter = k < .85 ? 'url(#mv1)' : '';
+    rows.forEach((r, i) => { r.style.background = i === 2 && tb > 2.2 ? 'var(--acc-soft)' : ''; });
+    const z = inq((tb - 2.9) / 1.1);
+    card.style.transformOrigin = '200px 185px';
+    card.style.transform = `scale(${1 + 5 * z})`;
+    card.style.opacity = 1 - smooth(.6, 1, z);
+    cur(u);
+  };
+});
+
+// Yours: the themes, a half beat each; the ten languages
+scene(168, 176, (root, s) => {
+  const THEMES = [['Light', '#f4f4f5', '#ffffff', '#18181b', '#71717a', '#e7e7ea', '#714b67'], ['Dracula', '#21222c', '#282a36', '#f8f8f2', '#8b95c2', '#44475a', '#bd93f9'],
+    ['Nord', '#2a303b', '#2e3440', '#eceff4', '#9aa3b5', '#434c5e', '#88c0d0'], ['GitHub Light', '#f6f8fa', '#ffffff', '#1f2328', '#59636e', '#d1d9e0', '#0969da'],
+    ['One Dark', '#21252b', '#282c34', '#abb2bf', '#7f848e', '#3e4451', '#61afef'], ['Solarized Light', '#eee8d5', '#fdf6e3', '#073642', '#657b83', '#e0d9c3', '#268bd2'],
+    ['Catppuccin', '#181825', '#1e1e2e', '#cdd6f4', '#9399b2', '#313244', '#cba6f7']];
+  const left = h('div', { class: 'abs', style: 'left: 170px; top: 420px; font-size: 110px; font-weight: 750; letter-spacing: -.045em', text: 'Your theme.' });
+  const name = h('div', { class: 'abs pill acc', style: 'left: 180px; top: 580px; font-size: 30px; padding: 8px 24px' });
+  const layers = THEMES.map(([, bg, sf, fg, mu, li, ac]) => {
+    const n = h('div', { class: 'card', style: `left: 1010px; top: 240px; width: 700px; height: 600px; background: ${sf}; color: ${fg}; box-shadow: 0 50px 110px rgba(30,15,30,.25)` },
+      h('div', { style: 'display: flex; gap: 12px; align-items: center; padding: 26px 30px 12px; font-size: 28px' }, h('b', { text: 'Odoo Debug' }), h('span', { text: 'sale.order', style: `color: ${mu}; font-family: var(--mono)` })),
+      h('div', { style: `display: flex; gap: 12px; margin: 6px 24px 18px; padding: 8px; border-radius: 16px; background: ${bg}; font-size: 30px; color: ${mu}` }, ...TABS.map(([t], i) => h('span', { style: `display: flex; padding: 10px; border-radius: 10px; ${i === 0 ? `background: ${sf}; color: ${ac}` : ''}` }, ico(t)))),
+      ...[['amount_total', 'monetary', '1706'], ['state', 'selection', 'sale'], ['partner_id', 'many2one', 'Gemini Furniture'], ['date_order', 'datetime', '2026-10-10'], ['user_id', 'many2one', 'Mitchell Admin']]
+        .map(([f, t, v]) => h('div', { style: `display: flex; gap: 14px; align-items: center; height: 76px; padding: 0 30px; border-top: 1px solid ${li}; font-size: 25px` }, h('span', { text: f, style: 'font-family: var(--mono); font-weight: 700; width: 220px' }), h('span', { text: t, style: `padding: 2px 14px; border-radius: 99px; background: color-mix(in srgb, ${ac} 20%, ${sf}); color: ${ac}; font-size: 21px` }), h('span', { text: v, style: `color: ${mu}` }))));
+    root.append(n);
+    return n;
+  });
+  root.append(left, name);
+  THEMES.forEach((t, i) => cue(s.at(.5 + i * .5), 'blip', .7, i));
+  // the languages: the line in each, one after the other; the others drifting around it
+  const LANGS = ['Your language.', 'Votre langue.', 'Ihre Sprache.', 'Tu idioma.', 'Seu idioma.', 'Bahasa Anda.', 'Ngôn ngữ của bạn.', 'あなたの言語。', '你的语言。', 'لغتك.', 'Your language.'];
+  const center = h('div', { class: 'abs', style: 'left: 0; right: 0; top: 440px; text-align: center; font-size: 120px; font-weight: 800; letter-spacing: -.04em' });
+  const SPOTS = [[180, 170], [720, 110], [1260, 160], [1560, 300], [160, 760], [620, 830], [1120, 780], [1540, 700], [300, 330]];
+  const floaters = LANGS.slice(1, 10).map((t, i) => h('div', { class: 'abs', text: t, style: `left: ${SPOTS[i][0]}px; top: ${SPOTS[i][1]}px; font-size: ${48 + rnd(i) * 26}px; font-weight: 750; color: var(--ink)` }));
+  root.append(center, ...floaters);
+  const L0 = 4; // the languages from this beat, a sixteenth each: on the grid
+  LANGS.forEach((t, i) => cue(s.at(L0 + .25 + i * .25), 'tick', 1.2));
+  cue(s.at(L0 + .25 + 10 * .25), 'pop', 1, 7);
+  return (u) => {
+    const tb = u / BEAT, part2 = tb >= L0;
+    P(left, u, { s: 1, x: -200, f: 1.8, z: .6, b: 10 });
+    name.textContent = THEMES[clamp(Math.floor((tb - .5) / .5), 0, THEMES.length - 1)][0];
+    P(name, u - B(.4), POP);
+    const away = inq((tb - L0 + .4) / .4);
+    layers.forEach((n, i) => {
+      const k = i === 0 ? spring(u, 1.4, .6) : out((tb - .5 - i * .5) / .2);
+      n.style.opacity = i === 0 ? clamp(u / .15) : tb > .5 + i * .5 ? 1 : 0;
+      n.style.clipPath = i === 0 ? '' : `inset(0 0 ${(1 - k) * 100}% 0 round 26px)`;
+      n.style.transform = `perspective(2000px) translate(${1500 * away}px, ${i === 0 ? (1 - k) * 200 : 0}px) rotateY(${i === 0 ? lerp(-40, -14, k) : -14}deg)`;
+      n.style.display = part2 ? 'none' : '';
+    });
+    for (const n of [left, name]) { n.style.translate = `${-1500 * away}px 0`; n.style.display = part2 ? 'none' : ''; }
+    // part two
+    const li = clamp(Math.floor((tb - L0 - .25) / .25), 0, LANGS.length - 1), since = (tb - L0 - .25) - li * .25;
+    center.style.display = part2 ? '' : 'none';
+    center.textContent = LANGS[li];
+    center.className = `abs${li === LANGS.length - 1 ? ' g' : ''}`;
+    center.style.filter = since < .12 && li < LANGS.length - 1 ? 'url(#mv1)' : '';
+    center.style.transform = `scale(${1 + .06 * Math.exp(-since / .1)})`;
+    floaters.forEach((f, i) => {
+      f.style.display = part2 ? '' : 'none';
+      const t = u - B(L0), dir = i % 2 ? 1 : -1;
+      f.style.opacity = clamp(t / .4) * .22;
+      f.style.transform = `perspective(900px) translate(${dir * t * 60}px, ${Math.sin(t * 2 + i) * 20}px) rotateY(${dir * (20 + t * 10)}deg) rotate(${(rnd(i + 5) - .5) * 30}deg)`;
+    });
+    const e = inq((tb - 7.5) / .5);
+    root.style.transform = `scale(${1 + 1.5 * e})`; root.style.opacity = 1 - e; root.style.filter = e > .02 ? `blur(${e * 18}px)` : '';
+  };
+});
+
+// =====================================================================================================================
+// the end: and everything else, in one panel; dots into the button, the answers out of it as tiles, back in; the logo
+scene(176, 202, (root, s) => {
+  const words = ['And', 'everything', 'else,'].map((w) => h('span', { text: w, style: 'display: inline-block; margin-right: .25em' }));
+  const l1 = h('div', { class: 'abs', style: 'left: 240px; top: 330px; font-size: 92px; font-weight: 750; letter-spacing: -.04em' }, ...words);
+  const w2 = ['in', 'one'].map((w) => h('span', { text: w, style: 'display: inline-block; margin-right: .25em' }));
+  const panelW = h('span', { text: 'panel.', style: 'display: inline-block; position: relative' });
+  const echoes = [1, 2, 3, 4, 5].map(() => h('span', { text: 'panel.', style: 'position: absolute; left: 0; top: 0' }));
+  panelW.append(...echoes);
+  const l2 = h('div', { class: 'abs', style: 'left: 240px; top: 470px; font-size: 92px; font-weight: 750; letter-spacing: -.04em' }, ...w2, panelW);
+  const btn = mark();
+  const DOTS = ['#714b67', '#0e9474', '#e0457b', '#f08a24', '#3a5bd9', '#b3548f', '#188038', '#c5221f', '#5856d6', '#1a5fb4', '#a626a4', '#ff9500'];
+  const dots = Array.from({ length: 18 }, (_, i) => h('div', { class: 'abs', style: `width: 26px; height: 26px; border-radius: 50%; background: ${DOTS[i % DOTS.length]}` }));
+  const wave = h('div', { class: 'abs', style: 'border-radius: 50%; border: 4px solid #b3548f' });
+  // the tiles: the film's answers
+  const T = (cls, tab, text) => h('div', { class: `tile ${cls}` }, ico(tab), text);
+  const big = (tab, a, b, cls = '') => h('div', { class: `tile big ${cls}` }, h('div', { style: 'display: flex; gap: 12px; align-items: center' }, ico(tab), h('span', { text: b })), h('strong', { text: a }));
+  const ROWS = [
+    [T('', 'record', 'amount_total · computed'), T('dark', 'view', 'readonly: state = "sale"'), T('', 'translations', 'Order Date ← date_order'), T('grad', 'menus', 'Record Rules')],
+    [big('perf', 'N+1 · 11×', 'get_field_selection()', 'dark'), big('rpc', '200 · 14 ms', 'web_read sale.order'), big('code', '↺ Rolled back', 'Python dry run', 'grad'), big('security', 'Personal Orders ✕', 'Marc Demo')],
+    [big('apps', '+9 · +5', 'website_sale'), big('security', 'Try → ✓', 'Sales / User: All Documents', 'grad'), big('record', '4 fields differ', 'S00007 ≠ S00006', 'dark'), big('rpc', 'Copy as cURL', 'external API')],
+    [T('dark', 'perf', 'Grouped by method'), T('', 'apps', 'Dependency diagram'), T('grad', 'translations', '10 languages · あなたの言語'), T('', 'view', 'view_order_form · L53')],
+  ];
+  const tiles = ROWS.flat();
+  root.append(l1, l2, wave, ...dots, ...tiles, btn);
+  const HS = [86, 160, 160, 86], GAP = 30;
+  const top0 = (1080 - HS.reduce((a, b) => a + b) - GAP * 3) / 2;
+  const place = [];
+  const natural = ROWS.map((row, ri) => row.map((n) => Math.max(n.offsetWidth, ri % 3 ? 330 : 0)));
+  const ROW_W = Math.max(...natural.map((ws, ri) => ws.reduce((a, b) => a + b) + GAP * (ROWS[ri].length - 1))); // every row as wide: straight edges
+  ROWS.forEach((row, ri) => {
+    const extra = (ROW_W - natural[ri].reduce((a, b) => a + b) - GAP * (row.length - 1)) / row.length, ws = natural[ri].map((w) => w + extra);
+    let x = (1920 - ROW_W) / 2;
+    const y = top0 + HS.slice(0, ri).reduce((a, b) => a + b, 0) + GAP * ri;
+    row.forEach((n, j) => { Object.assign(n.style, { left: `${x}px`, top: `${y}px`, width: `${ws[j]}px`, height: `${HS[ri]}px` }); place.push({ n, x: x + ws[j] / 2, y: y + HS[ri] / 2, row: ri }); x += ws[j] + GAP; });
+  });
+  // the closing title
+  const name = h('div', { class: 'abs', style: 'left: 0; right: 0; top: 340px; text-align: center; white-space: nowrap; font-size: 140px; font-weight: 750; letter-spacing: -.05em; line-height: 1' }, h('span', { style: 'display: inline-block; width: 128px; height: 128px; margin-right: 36px; vertical-align: -16px' }), ...[...'Odoo Debug'].map((c) => h('span', { text: c === ' ' ? '\u00a0' : c, style: 'display: inline-block' })));
+  const sub = marked('div', 'Stop guessing. *See why.*');
+  Object.assign(sub.style, { position: 'absolute', left: 0, right: 0, top: '530px', textAlign: 'center', fontSize: '56px', fontWeight: 700, letterSpacing: '-.03em' });
+  const cta = h('div', { class: 'cta', style: 'top: 650px', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>Add to Chrome' });
+  const url = h('div', { class: 'abs', style: 'left: 0; right: 0; top: 790px; text-align: center; font-size: 28px; font-weight: 550; color: var(--muted)', text: 'Odoo 18 · 19 · 20  ·  odoo-debug.unclecatvn.com' });
+  const free = h('div', { class: 'free', text: 'Free' });
+  root.append(name, sub, cta, url, free);
+  const letters = [...name.children].slice(1);
+  const slot = name.firstChild.getBoundingClientRect(), last = letters.at(-1).getBoundingClientRect();
+  const LOGO = { x: slot.x + 64, y: slot.y + slot.height / 2 };
+  Object.assign(free.style, { left: `${last.right - 6}px`, top: `${last.top - 62}px` });
+  cta.style.translate = '-50% 0';
+  // the cues: the words, the dots, the burst, the pull, the logo, the sticker
+  [0, .5, 1, 2, 2.5].forEach((b) => cue(s.at(b), 'tick', 1.3));
+  cue(s.at(3.4), 'whoosh');
+  dots.forEach((d, i) => cue(s.at(5.2 + i * .1), 'blip', .5, i % 8));
+  const BURST = 8, PULL = 14, LAND = 16;
+  cue(s.at(PULL), 'whoosh');
+  [...'Odoo Debug'].forEach((c, i) => i % 2 || cue(s.at(LAND + .2 + i * .1), 'tick', .9));
+  cue(s.at(LAND + 2.6), 'pop', 1, 4); cue(s.at(LAND + 3.6), 'ding');
+  return (u) => {
+    const tb = u / BEAT;
+    // the words, then "panel." echoing, growing until it fills the frame
+    words.forEach((w, i) => P(w, u - B(i * .5), RISE));
+    w2.forEach((w, i) => P(w, u - B(2 + i * .5), RISE));
+    const g = inq((tb - 3.4) / 1.4);
+    if (g > 0) { panelW.style.opacity = 1; panelW.style.filter = ''; panelW.style.transform = `scale(${1 + 14 * g})`; } else P(panelW, u - B(2.5), { ...POP, b: 8 });
+    panelW.style.transformOrigin = '30% 55%';
+    panelW.style.color = g > .02 ? 'transparent' : '';
+    echoes.forEach((e, k) => { const gk = inq((tb - 3.4 - (k + 1) * .07) / 1.4); e.style.transform = `scale(${(1 + 14 * gk) / (1 + 14 * g)})`; e.style.color = `rgba(29, 29, 31, ${g > .02 ? .55 - k * .09 : 0})`; e.style.transformOrigin = '30% 55%'; });
+    l1.style.opacity = 1 - smooth(3.4, 4.4, tb);
+    l2.style.opacity = 1 - smooth(4.2, 4.8, tb);
+    l2.style.display = l1.style.display = tb > 4.9 ? 'none' : '';
+    // the button: pops in the middle, the dots spiral into it, it beats; the tiles burst out of it, then back
+    const pulse = tb > 5 && tb < BURST ? Math.exp(-((tb - 5) % .5) / .12) : 0;
+    const bk = spring(u - B(4.8), 2.2, .45), toLogo = ease((tb - LAND) / .6);
+    const held = smooth(BURST + .3, BURST + .9, tb) * (1 - smooth(PULL - .2, PULL + .3, tb)); // out of the tiles' way while they are held
+    const bsize = 140 * bk * (1 + .12 * pulse) * lerp(1, 128 / 140, toLogo) * (1 - held);
+    putMark(btn, lerp(960, LOGO.x, toLogo), lerp(540, LOGO.y, toLogo), bsize, lerp(.5, .26, toLogo), tb > 4.8 ? 1 : 0);
+    dots.forEach((d, i) => {
+      const t0 = 4.2 + i * .1, k = ease((tb - t0) / 1);
+      const a0 = rnd(i + 7) * Math.PI * 2, r = lerp(900, 0, k), a = a0 + k * 2.4;
+      Object.assign(d.style, { left: `${960 + Math.cos(a) * r - 13}px`, top: `${540 + Math.sin(a) * r * .6 - 13}px`, opacity: tb > t0 && k < 1 ? clamp((tb - t0) / .2) : 0 });
+    });
+    const w = clamp((tb - BURST) / 1.6), wd = lerp(140, 2600, out(w));
+    Object.assign(wave.style, { left: `${960 - wd / 2}px`, top: `${540 - wd / 2}px`, width: `${wd}px`, height: `${wd}px`, opacity: tb > BURST ? (1 - w) * .8 : 0 });
+    place.forEach((p, i) => {
+      const t0 = BURST + i * .05, k = spring(u - B(t0), 1.3, .6), pull = inq((tb - PULL - (place.length - i) * .03) / .9);
+      const x = lerp(960, p.x, k) + Math.max(0, tb - BURST) * 5, // the grid drifts as one: its edges stay straight
+        y = lerp(540, p.y, k) - Math.sin(Math.PI * clamp(k)) * 160;
+      const cx = lerp(x, 960, pull), cy = lerp(y, 540, pull);
+      p.n.style.opacity = tb < t0 || pull >= 1 ? 0 : clamp((tb - t0) / .15) * (1 - smooth(.7, 1, pull));
+      p.n.style.transform = `translate(${cx - p.x}px, ${cy - p.y}px) scale(${lerp(.2, 1, clamp(k * 1.2)) * lerp(1, .1, pull)}) rotate(${(1 - clamp(k)) * (i % 2 ? 30 : -30) + pull * (i % 2 ? 40 : -40)}deg)`;
+    });
+    // the closing title: the name letter by letter out of a blur, the tagline, the button, the sticker
+    letters.forEach((l, i) => { const k = out((tb - LAND - .2 - i * .1) / .4); l.style.opacity = k; l.style.filter = k < 1 ? `blur(${(1 - k) * 14}px)` : ''; l.style.transform = `translateX(${(1 - k) * -30}px)`; });
+    P(sub, u - B(LAND + 1.7), RISE);
+    P(cta, u - B(LAND + 2.6), { s: .6, y: 40, f: 2, z: .5 });
+    P(url, u - B(LAND + 3.2), RISE);
+    P(free, u - B(LAND + 3.6), { s: .1, r: -60, f: 2.4, z: .42 });
+    free.style.rotate = '-10deg';
+  };
+});
+
+// ---------------------------------------------------------------------------------------------------------------------
+const DURATION = B(202);
+window.renderAt = async (T) => {
+  renderStage(T);
+  for (const sc of scenes) {
+    const live = T >= sc.t0 && T < sc.t1;
+    sc.root.style.display = live ? '' : 'none';
+    if (live) sc.render(T - sc.t0);
+  }
   for (const c of caps) {
-    const live = T > c.o - .1 && T < c.until + .5;
-    if (!live) { c.n.style.opacity = 0; continue; }
-    rise(c.n, T, c.o, c.until, 26, c.n.firstChild);
+    if (T < c.t0 - .05 || T > c.t1 + .4) { c.n.style.opacity = 0; continue; }
+    const a = spring(T - c.t0, 2, .6), b = smooth(c.t1, c.t1 + .3, T);
+    c.n.style.opacity = clamp((T - c.t0) / .12) * (1 - b);
+    c.n.style.transform = `translateY(${(1 - a) * 60 + b * 20}px) scale(${lerp(.9, 1, a)})`;
   }
-
-  $('#fade').style.opacity = smooth(DURATION - .8, DURATION, T);
+  $('#fade').style.opacity = smooth(DURATION - .6, DURATION, T); // to the stage's colour: the film loops on its first frame
 };
 window.DURATION = DURATION;
-window.CAPS = caps.map((c) => [c.title, +c.o.toFixed(2)]);
-window.SPOTS = spots.map((sp) => [sp.label, +sp.o.toFixed(2)]).concat(notes.map((nt) => [nt.title, +nt.o.toFixed(2)]));
-window.POSTER_AT = IMPACT + 1.9; // the title, the tagline and the tabs in
-window.MUSIC = { duration: DURATION, beat: BEAT, questions: QUESTIONS, montage: MONTAGE, riser: RISER, impact: IMPACT, main: OPEN, captions: caps.map((c) => c.o), end: BODY_END };
+window.POSTER_AT = B(199);
+window.MUSIC = { duration: DURATION, beat: BEAT, sfx: SFX.sort((a, b) => a.t - b.t),
+  marks: { riser: [B(12), B(16)], drop: B(16), A: [B(40), B(80)], B: [B(80), B(120)], C: [B(120), B(168)], D: [B(168), B(176)],
+    break: [B(176), B(184)], riser2: [B(180), B(184)], drop2: B(184), land: B(192), end: DURATION, heads: [40, 56, 68, 80, 92, 108, 120, 136, 148, 168].map(B) } };
 await Promise.all([...document.images].map((i) => i.decode().catch(() => {})));
-await show($('#a'), take.frames[0].f);
-await document.fonts.ready;
+await window.renderAt(0);
 window.ready = true;
 </script>
 </body>

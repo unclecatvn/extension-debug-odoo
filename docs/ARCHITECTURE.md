@@ -88,7 +88,7 @@ An MV3 extension runs in several contexts, each with its own APIs. Each is a Typ
 extension against an isolated in-memory HTTP fixture, not a real database. Run `npm run build && npm run test:browser`.
 Puppeteer needs Chrome for Testing; `PUPPETEER_EXECUTABLE_PATH` can select an existing compatible binary. It uses a
 fresh temporary browser profile, checks RPC pending lifecycle, Code history, Record comparison and Perf drilldown,
-and never sends calls to a user Odoo instance. Existing `tools/screenshots.mjs` / `tools/intro.mjs` use throwaway Odoo.
+and never sends calls to a user Odoo instance. `tools/screenshots.mjs` uses a throwaway Odoo; `tools/intro.mjs` needs none (the film is drawn).
 
 ### Debug workflow state
 

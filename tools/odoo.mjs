@@ -1,4 +1,4 @@
-// Shared by tools/intro.mjs and tools/screenshots.mjs: the Odoo of tools/compose.yml (Sales + CRM with demo data),
+// Used by tools/screenshots.mjs: the Odoo of tools/compose.yml (Sales + CRM with demo data),
 // driven from Puppeteer with the built extension (dist/: npm run build first).
 // ODOO_URL (default http://localhost:8069), ODOO_DB / ODOO_LOGIN / ODOO_PASSWORD (default e2e / admin / admin).
 export const ODOO = process.env.ODOO_URL || 'http://localhost:8069';
