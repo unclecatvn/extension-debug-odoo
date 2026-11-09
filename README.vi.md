@@ -10,6 +10,8 @@ Extension Chrome miễn phí để debug Odoo 18, 19 và 20, với bảng debug 
 
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white&color=714b67)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) [![License](https://img.shields.io/badge/license-Sustainable%20Use-714b67)](LICENSE)
 
+<a href="https://www.producthunt.com/products/odoo-debug-2?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-odoo-debug-2" target="_blank" rel="noopener noreferrer"><img alt="Odoo Debug - Chrome extension to debug Odoo | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1310085&amp;theme=light&amp;t=1794232824071"></a>
+
 **[Thêm vào Chrome](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk)** · [Website](https://odoo-debug.unclecatvn.com/) · [Tính năng](#tính-năng) · [English](README.md)
 
 </div>
