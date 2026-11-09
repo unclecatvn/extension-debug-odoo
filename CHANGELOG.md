@@ -2,6 +2,16 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
+## [Unreleased]
+
+### Added
+
+- **Security policy**: [SECURITY.md](SECURITY.md) says how to report a vulnerability privately and what it covers.
+
+### Changed
+
+- **License: the Apache License 2.0**, in place of the Sustainable Use License: free to use, modify and share, commercially too. Releases before this change keep the license they came with.
+
 ## [2.2.0] - 2026-10-09
 
 ### Added

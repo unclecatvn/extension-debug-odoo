@@ -8,7 +8,7 @@
 
 A free Chrome extension to debug Odoo 18, 19 and 20, with its panel right on the Odoo page.
 
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white&color=714b67)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) [![License](https://img.shields.io/badge/license-Sustainable%20Use-714b67)](LICENSE)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white&color=714b67)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) [![License](https://img.shields.io/badge/license-Apache--2.0-714b67)](LICENSE)
 
 <a href="https://www.producthunt.com/products/odoo-debug-2?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-odoo-debug-2" target="_blank" rel="noopener noreferrer"><img alt="Odoo Debug - Chrome extension to debug Odoo | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1310085&amp;theme=light&amp;t=1794232824071"></a>
 
@@ -87,6 +87,10 @@ Download `odoo-debug-v<version>.zip` from the [Releases](https://github.com/uncl
 
 Every permission and what it is for: [odoo-debug.unclecatvn.com/#privacy](https://odoo-debug.unclecatvn.com/#privacy).
 
+## Security
+
+Found a vulnerability? Please report it privately, not in an issue: see [SECURITY.md](SECURITY.md).
+
 ## Contributing
 
 Bug reports and pull requests are welcome.
@@ -97,10 +101,6 @@ Bug reports and pull requests are welcome.
 
 ## License
 
-[Sustainable Use License](LICENSE) © 2026 UncleCat.
+[Apache License 2.0](LICENSE) © 2026 UncleCat.
 
-- **Free to use and modify** for personal or non-commercial use, or for your own company's internal work: an Odoo partner's developers can use it on their clients' projects.
-- **Free to share, only free of charge and for non-commercial purposes**, with the license and copyright notices kept.
-- **Not to sell**: no paid build of it on a store, no hosting or reselling it, no product or service built on it for a fee.
-
-For a commercial license, [open an issue](https://github.com/unclecatvn/extension-debug-odoo/issues) or write via [unclecatvn.com](https://unclecatvn.com/).
+Free to use, modify and share, commercially too, as long as the license and notices are kept and the files you change say so.

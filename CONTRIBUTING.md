@@ -36,7 +36,7 @@ Bump `version` in `static/manifest.json`, add its section to [CHANGELOG.md](CHAN
 
 ## Contributor License Agreement
 
-Odoo Debug is released under the [Sustainable Use License](LICENSE), and only its licensor, UncleCat, may offer it on other terms. So that contributions can be accepted into it, opening a pull request means agreeing to the following, for that contribution and every later one:
+Odoo Debug is released under the [Apache License 2.0](LICENSE). So that contributions can be accepted into it, opening a pull request means agreeing to the following, for that contribution and every later one:
 
 > I give UncleCat permission to license my contributions on any terms they like. I am giving them this license in order to make it possible for them to accept my contributions into their project.
 >

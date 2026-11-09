@@ -8,7 +8,7 @@
 
 Extension Chrome miễn phí để debug Odoo 18, 19 và 20, với bảng debug ngay trên trang Odoo.
 
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white&color=714b67)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) [![License](https://img.shields.io/badge/license-Sustainable%20Use-714b67)](LICENSE)
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/mfmamdbagelffoedimmjpolhalmngcjk?label=Chrome%20Web%20Store&logo=googlechrome&logoColor=white&color=714b67)](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk) [![License](https://img.shields.io/badge/license-Apache--2.0-714b67)](LICENSE)
 
 <a href="https://www.producthunt.com/products/odoo-debug-2?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-odoo-debug-2" target="_blank" rel="noopener noreferrer"><img alt="Odoo Debug - Chrome extension to debug Odoo | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1310085&amp;theme=light&amp;t=1794232824071"></a>
 
@@ -85,6 +85,10 @@ Tải `odoo-debug-v<phiên bản>.zip` ở trang [Releases](https://github.com/u
 
 Từng quyền extension xin và để làm gì: [odoo-debug.unclecatvn.com/#privacy](https://odoo-debug.unclecatvn.com/#privacy).
 
+## Bảo mật
+
+Phát hiện lỗ hổng? Vui lòng báo riêng, đừng mở issue: xem [SECURITY.md](SECURITY.md).
+
 ## Đóng góp
 
 Rất hoan nghênh báo lỗi và pull request.
@@ -95,10 +99,6 @@ Rất hoan nghênh báo lỗi và pull request.
 
 ## Giấy phép
 
-[Sustainable Use License](LICENSE) © 2026 UncleCat.
+[Apache License 2.0](LICENSE) © 2026 UncleCat.
 
-- **Được dùng và sửa miễn phí** cho mục đích cá nhân, phi thương mại, hoặc cho công việc nội bộ của chính công ty bạn: lập trình viên của một đối tác Odoo dùng trên dự án của khách hàng vẫn được.
-- **Được chia sẻ, nhưng chỉ miễn phí và cho mục đích phi thương mại**, giữ nguyên thông báo license và bản quyền.
-- **Không được bán**: không đưa bản thu phí lên store, không host hay bán lại, không làm sản phẩm hay dịch vụ thu phí dựa trên nó.
-
-Cần license thương mại: [mở issue](https://github.com/unclecatvn/extension-debug-odoo/issues) hoặc liên hệ qua [unclecatvn.com](https://unclecatvn.com/).
+Được dùng, sửa và chia sẻ miễn phí, kể cả cho mục đích thương mại, miễn là giữ nguyên license cùng các thông báo và ghi rõ những file bạn đã sửa.
