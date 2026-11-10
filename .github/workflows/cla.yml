@@ -8,7 +8,8 @@ permissions: {}
 
 jobs:
   agreed:
-    if: github.event.pull_request.user.login != github.repository_owner
+    # not the owner's own, nor Dependabot's (.github/dependabot.yml): version bumps, and a bot ticks no box
+    if: github.event.pull_request.user.login != github.repository_owner && github.event.pull_request.user.login != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:
       - env:
