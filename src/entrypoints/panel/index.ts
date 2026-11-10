@@ -24,8 +24,8 @@ Object.assign(document.documentElement, { lang, dir: RTL.has(lang) ? 'rtl' : 'lt
 translateDom();
 startTooltips();
 const tpl = templates(html, translateDom);
-/** In its own window: the tab it inspects (?tab=), else null (in the page). */
-const ownWindowOf = Number(new URLSearchParams(location.search).get('tab')) || null;
+/** In its own window: the tab it inspects (?tab=), else null (in the page; a page framing it never picks the tab: web-accessible). */
+const ownWindowOf = (window.top === window && Number(new URLSearchParams(location.search).get('tab'))) || null;
 for (const b of document.querySelectorAll<HTMLButtonElement>('.tabs button')) b.title = b.firstChild?.textContent?.trim() || ''; // narrow panel: icons only, the name on hover
 
 let state: PageState = { url: '', origin: '', loadedAt: 0, odoo: false, debug: '' };

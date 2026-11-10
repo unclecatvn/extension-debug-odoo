@@ -42,6 +42,7 @@ export function parsePo(text: string): Map<string, string> {
 export async function loadLang(code?: string): Promise<void> {
   const ui = chrome.i18n.getUILanguage().toLowerCase().split('-')[0];
   lang = isLang(code) ? code : isLang(ui) ? ui : 'en';
+  if (lang === 'en') { catalog = new Map(); return; } // msgids are the English: en.po is not shipped (scripts/build.ts)
   try {
     const r = await fetch(chrome.runtime.getURL(`i18n/${lang}.po`));
     catalog = r.ok ? parsePo(await r.text()) : new Map();

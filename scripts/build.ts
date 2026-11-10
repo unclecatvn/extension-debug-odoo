@@ -2,7 +2,7 @@
 // Every output is listed here by name, as the manifest refers to it (static/manifest.json):
 //   SCRIPTS  content scripts + service worker: one self-contained IIFE each (not modules; rpc-recorder runs on every site)
 //   PAGES    panel + popup: ES modules with shared chunks (top-level await), their index.html and the stylesheet
-//   static/  manifest, icons, .po: copied as is
+//   static/  manifest, icons, .po: copied as is (but the .pot and en.po, read by nothing at run time)
 // *.tpl.html and the launcher's shadow-root CSS are imported by code: inlined as text, never copied.
 // keepNames stays off: esbuild would call a __name() helper inside the injected functions, which only their own source
 // text reaches (scripts/check-page-fns.ts guards that).
@@ -50,7 +50,8 @@ const scripts: BuildOptions = { ...common, entryPoints: SCRIPTS, format: 'iife' 
 const pages: BuildOptions = { ...common, entryPoints: PAGES, format: 'esm', splitting: true, chunkNames: 'chunks/[name]-[hash]' };
 
 async function copyFiles() {
-  await cp('static', OUT, { recursive: true });
+  // not shipped: the template, and en.po (msgstr = msgid: i18n.ts → loadLang reads nothing for English)
+  await cp('static', OUT, { recursive: true, filter: (src) => !/(\.pot|[\\/]en\.po)$/.test(src) });
   for (const [from, to] of COPIES) {
     await mkdir(join(OUT, dirname(to)), { recursive: true });
     await cp(from, join(OUT, to));
