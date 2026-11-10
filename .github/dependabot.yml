@@ -5,3 +5,11 @@ updates:
     directory: /
     schedule:
       interval: monthly
+  # Build and test tools only (nothing of npm's is shipped): one pull request a month for all of them.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      dev:
+        patterns: ["*"]

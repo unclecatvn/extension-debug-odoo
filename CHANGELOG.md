@@ -11,6 +11,11 @@ All notable changes to this project are documented here. Format: [Keep a Changel
 ### Changed
 
 - **License: the Apache License 2.0**, in place of the Sustainable Use License: free to use, modify and share, commercially too. Releases before this change keep the license they came with.
+- **Package**: the English catalog and the translation template are no longer shipped (English is the source text, read from the code); Chrome 120 or later is asked for, what the build targets.
+
+### Security
+
+- **Panel**: only the panel in its own window takes the tab it inspects from its address; embedded in a page, it is bound to that page's tab whatever the address says.
 
 ## [2.2.0] - 2026-10-09
 

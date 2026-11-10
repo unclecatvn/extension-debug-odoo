@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "license": "Apache-2.0",
-  "description": "Odoo Debug, an in-page debug panel for Odoo 18 / 19 (Chrome extension, Manifest V3).",
+  "description": "Odoo Debug, an in-page debug panel for Odoo 18 / 19 / 20 (Chrome extension, Manifest V3).",
   "engines": {
     "node": ">=22.18"
   },
