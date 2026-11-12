@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Odoo Debug panel (demo)</title>
+<!-- The website's demo of the panel. The stylesheet is the extension's own (panel.css, a copy of src/ui/panel.css: copy it
+     again when the panel's look changes). The markup follows what the built panel draws, tab by tab (taken from its DOM
+     on a sale order of a real Odoo 18), filled with the sample of the screenshots: sale.order #7 of Odoo's demo
+     data. Nothing here talks to an Odoo; only the tabs are wired. -->
+<link rel="stylesheet" href="panel.css">
+<style>
+  .card > summary, .list > li, .copy, .chip, .btn, .icon-btn, .line-link, .seg button, label.check, .matrix tr.opens, .facet-x { cursor: default; }
+  .tabs button { cursor: pointer; }
+  main { scrollbar-width: thin; }
+  input, textarea, select { pointer-events: none; }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="brand-row">
+      <div class="brand"><img src="icon-32.png" width="20" height="20" alt=""><strong>Odoo Debug</strong></div>
+      <div id="status" class="context"><button type="button" class="copy model" tabindex="-1">sale.order</button><span class="pill accent">#7</span><span class="pill">form</span></div>
+      <span id="odoo-version"><span class="pill">Odoo 18.0</span></span>
+      <span class="spacer"></span>
+      <button id="refresh" class="icon-btn" tabindex="-1" aria-label="Reload Data">⟳</button>
+      <span class="win-btns">
+        <button id="detach" class="icon-btn" tabindex="-1" aria-label="Open in Its Own Window">⧉</button>
+        <button id="full" class="icon-btn" tabindex="-1" aria-label="Full Screen" aria-pressed="false">⤢</button>
+        <button id="minimize" class="icon-btn" tabindex="-1" aria-label="Minimize">−</button>
+      </span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="record" class="active" aria-selected="true"><span>Record</span></button>
+      <button role="tab" data-tab="view" aria-selected="false"><span>View</span></button>
+      <button role="tab" data-tab="rpc" aria-selected="false"><span>RPC</span></button>
+      <button role="tab" data-tab="security" aria-selected="false"><span>Security</span></button>
+      <button role="tab" data-tab="translations" aria-selected="false"><span>Translations</span></button>
+      <button role="tab" data-tab="apps" aria-selected="false"><span>Apps</span></button>
+      <button role="tab" data-tab="menus" aria-selected="false"><span>Menus</span></button>
+      <button role="tab" data-tab="perf" aria-selected="false"><span>Perf</span></button>
+      <button role="tab" data-tab="code" aria-selected="false"><span>Code</span></button>
+    </nav>
+  </header>
+  <main>
+    <section id="record" class="tab active" role="tabpanel">
+      <details class="card" data-key="identity" open><summary><span class="part-no" hidden></span><h3>Identity &amp; metadata</h3></summary><div class="card-body">
+        <dl class="kv">
+          <div class="kv-row"><dt>model</dt><dd>sale.order</dd></div>
+          <div class="kv-row"><dt>id</dt><dd>7</dd></div>
+          <div class="kv-row"><dt>xmlid</dt><dd>sale.sale_order_7 (noupdate)</dd></div>
+          <div class="kv-row"><dt>created by</dt><dd>OdooBot (#1) · 2026-09-30 00:23:44</dd></div>
+          <div class="kv-row"><dt>last updated by</dt><dd>OdooBot (#1) · 2026-09-30 00:23:44</dd></div>
+        </dl>
+      </div></details>
+      <details class="card" data-key="fields" open><summary><span class="part-no" hidden></span><h3>Fields</h3></summary><div class="card-body">
+        <div class="toolbar">
+          <input type="search" value="amount_total" placeholder="Filter name / label / value / type / module" tabindex="-1">
+          <span class="row chips">
+            <button type="button" class="chip" aria-pressed="false" tabindex="-1">Stored</button>
+            <button type="button" class="chip" aria-pressed="false" tabindex="-1">Computed</button>
+            <button type="button" class="chip" aria-pressed="false" tabindex="-1">Relational</button>
+            <button type="button" class="chip" aria-pressed="false" tabindex="-1">Required</button>
+            <button type="button" class="chip" aria-pressed="false" tabindex="-1">groups</button>
+          </span>
+          <button type="button" class="chip" tabindex="-1">Copy as JSON</button>
+          <span class="muted">1/100 fields</span>
+        </div>
+        <ul class="list">
+          <li class="open" tabindex="-1">
+            <div class="row"><button type="button" class="copy name" tabindex="-1">amount_total</button><span class="pill">monetary</span><button type="button" class="copy grow val" tabindex="-1">1706</button></div>
+            <div class="meta">Total · stored · ƒ order_line.price_subtotal, currency_id, company_id, payment_term_id · readonly · [sale] · change → recomputes partner_credit_warning</div>
+            <div class="detail"><div class="json"><div class="json-leaf"><span class="tok-number">1706</span></div></div></div>
+          </li>
+        </ul>
+      </div></details>
+      <details class="card" data-key="compare" open><summary><span class="part-no" hidden></span><h3>Compare saved records</h3></summary><div class="card-body"><div class="compare">
+        <div class="toolbar compare-bar pad-x"><button type="button" tabindex="-1" class="chip">Pin current record</button></div>
+        <p class="note compare-intro pad-x">Select 2–5 saved records in a list or kanban, or pin one and open another. Unsaved edits are not compared; Reload Data clears the pin.</p>
+      </div></div></details>
+    </section>
+
+    <section id="view" class="tab" role="tabpanel">
+      <details class="card part" data-key="overview"><summary class="part-head"><span class="part-no">1</span><h3>Overview</h3><span class="muted part-sub"></span><span class="spacer"></span><span class="part-tools"></span></summary></details>
+      <details class="card part" data-key="composition"><summary class="part-head"><span class="part-no">2</span><h3>How the view is built</h3><span class="muted part-sub"></span><span class="spacer"></span><span class="part-tools"><div class="seg" role="radiogroup"><button type="button" tabindex="-1" role="radio" aria-checked="true" class="on">form</button><button type="button" tabindex="-1" role="radio" aria-checked="false">search</button></div></span></summary></details>
+      <details class="card part" data-key="field" open><summary class="part-head"><span class="part-no">3</span><h3>One field</h3><span class="muted part-sub"></span><span class="spacer"></span><span class="part-tools"><span class="row field-tools">
+          <input type="search" value="partner_id" tabindex="-1">
+          <button type="button" tabindex="-1" class="chip">⌖ Pick on Page</button>
+        </span></span></summary><div class="card-body">
+        <div class="padded"><div class="inspection">
+          <div class="row field-id"><button type="button" tabindex="-1" class="copy name">partner_id</button><span class="pill">many2one</span>Customer→ res.partner<span class="pill">res_partner_many2one</span></div>
+          <h4 class="story-title">Now</h4>
+          <div>
+            <div class="row modifier"><span class="pill">invisible</span><span class="pill">no</span><span class="grow">never</span></div>
+            <div class="row modifier"><span class="pill">readonly</span><span class="pill info">yes</span><span class="grow"><code class="code-inline">state in ['cancel', 'sale']</code>  <span class="pill">state = "sale"</span></span></div>
+            <div class="row modifier"><span class="pill">required</span><span class="pill info">yes</span><span class="grow"><code class="code-inline">True</code></span></div>
+          </div>
+          <h4 class="story-title">Its story through the views</h4>
+          <ol class="story">
+            <li class="story-view">
+              <div class="row"><span class="story-no">1</span><span class="row grow"><span class="pill">sale</span>view_order_form</span></div>
+              <ul class="story-steps">
+                <li class="row"><button type="button" tabindex="-1" class="ms line-link">L53</button><span class="grow">placed in <code class="code-inline">group[partner_details]</code></span></li>
+                <li class="row"><button type="button" tabindex="-1" class="ms line-link">L54</button><span class="grow">used in <code class="code-inline">context</code> of <code class="code-inline">field partner_invoice_id</code></span></li>
+                <li class="row"><button type="button" tabindex="-1" class="ms line-link">L55</button><span class="grow">used in <code class="code-inline">context</code> of <code class="code-inline">field partner_shipping_id</code></span></li>
+              </ul>
+            </li>
+            <li class="story-view">
+              <div class="row"><span class="story-no">2</span><span class="row grow"><span class="pill">sale_crm</span>sale_view_inherit123</span></div>
+              <ul class="story-steps">
+                <li class="row"><button type="button" tabindex="-1" class="ms line-link">L2</button><span class="grow">used in <code class="code-inline">context</code> of <code class="code-inline">field opportunity_id</code></span></li>
+              </ul>
+            </li>
+            <li class="story-view">
+              <div class="row"><span class="story-no">3</span><span class="row grow"><span class="pill">sale_pdf_quote_builder</span>sale_order_form_inherit_sale_pdf_quote_builder</span></div>
+              <ul class="story-steps">
+                <li class="row"><button type="button" tabindex="-1" class="ms line-link">L11</button><span class="grow">used in <code class="code-inline">invisible</code> of <code class="code-inline">page[pdf_quote_builder]</code></span></li>
+              </ul>
+            </li>
+            <li class="story-view">
+              <div class="row"><span class="story-no">4</span><span class="row grow"><span class="pill">sale</span>view_sales_order_filter<span class="pill">search</span></span></div>
+              <ul class="story-steps">
+                <li class="row"><button type="button" tabindex="-1" class="ms line-link">L3</button><span class="grow">placed in <code class="code-inline">search[Search Sales Order]</code></span></li>
+              </ul>
+            </li>
+          </ol>
+          <h4 class="story-title">Groups</h4>
+          <div><div class="note">None: every user who sees the view sees it.</div></div>
+        </div></div>
+        <div>
+          <div class="toolbar">
+            <input type="search" tabindex="-1">
+            <span class="row chips"><button type="button" tabindex="-1" class="chip" aria-pressed="false">Hidden</button><button type="button" tabindex="-1" class="chip" aria-pressed="false">Not shown</button><button type="button" tabindex="-1" class="chip" aria-pressed="false">Read-only</button><button type="button" tabindex="-1" class="chip" aria-pressed="false">Required</button><button type="button" tabindex="-1" class="chip" aria-pressed="false">Expression error</button></span>
+            <span class="muted">50 fields</span>
+          </div>
+          <ul class="list">
+            <li tabindex="-1"><div class="row"><button type="button" tabindex="-1" class="copy name">locked</button><span class="pill">BooleanField</span><span class="grow muted">Locked</span><span class="pill err">hidden</span></div><div class="meta mono">invisible="1"</div></li>
+          </ul>
+        </div>
+      </div></details>
+      <details class="card" data-key="action"><summary><span class="part-no">4</span><h3>Action &amp; context</h3></summary></details>
+      <details class="card" data-key="arch"><summary><span class="part-no">5</span><h3>Combined arch</h3></summary></details>
+    </section>
+
+    <section id="rpc" class="tab" role="tabpanel">
+      <div class="toolbar">
+        <input type="search" placeholder="Filter model / method" tabindex="-1">
+        <div class="seg" role="radiogroup"><button type="button" role="radio" aria-checked="true" class="on" tabindex="-1">All</button><button type="button" role="radio" aria-checked="false" tabindex="-1">Pending</button><button type="button" role="radio" aria-checked="false" tabindex="-1">Slow (≥ 1 s)</button><button type="button" role="radio" aria-checked="false" tabindex="-1">Errors</button></div>
+        <button type="button" class="chip" tabindex="-1">Clear</button>
+        <button type="button" class="chip" aria-pressed="false" tabindex="-1">New Request</button>
+      </div>
+      <div class="master-detail"><ul class="list">
+        <li tabindex="-1"><div class="row"><span class="dot"></span><span class="name">/mail/thread/messages</span><span class="grow muted"></span><span></span><span class="ms">27 ms</span></div></li>
+        <li tabindex="-1"><div class="row"><span class="dot"></span><span class="name">/mail/thread/data</span><span class="grow muted"></span><span></span><span class="ms">36 ms</span></div></li>
+        <li tabindex="-1" class="open">
+          <div class="row"><span class="dot"></span><span class="name">web_read</span><span class="grow muted">sale.order</span><span></span><span class="ms">86 ms</span></div>
+          <div class="meta">09:23:48 · /web/dataset/call_kw/sale.order/web_read</div>
+          <div class="detail"><form class="composer">
+            <input type="text" value="/web/dataset/call_kw/sale.order/web_read" spellcheck="false" tabindex="-1">
+            <div class="editor"><div class="editor-body" style="--digits: 2">
+              <pre class="hl" aria-hidden="true"><div><span class="tok-punct">{</span></div><div>  <span class="tok-fn">"id"</span><span class="tok-punct">:</span> <span class="tok-number">3</span><span class="tok-punct">,</span></div><div>  <span class="tok-fn">"jsonrpc"</span><span class="tok-punct">:</span> <span class="tok-string">"2.0"</span><span class="tok-punct">,</span></div><div>  <span class="tok-fn">"method"</span><span class="tok-punct">:</span> <span class="tok-string">"call"</span><span class="tok-punct">,</span></div><div>  <span class="tok-fn">"params"</span><span class="tok-punct">:</span> <span class="tok-punct">{</span></div><div>    <span class="tok-fn">"model"</span><span class="tok-punct">:</span> <span class="tok-string">"sale.order"</span><span class="tok-punct">,</span></div><div>    <span class="tok-fn">"method"</span><span class="tok-punct">:</span> <span class="tok-string">"web_read"</span><span class="tok-punct">,</span></div><div>    <span class="tok-fn">"args"</span><span class="tok-punct">:</span> <span class="tok-punct">[</span></div><div>      <span class="tok-punct">[</span></div><div>        <span class="tok-number">7</span></div><div>      <span class="tok-punct">]</span></div><div>    <span class="tok-punct">]</span><span class="tok-punct">,</span></div></pre>
+              <textarea class="code" rows="12" spellcheck="false" readonly tabindex="-1"></textarea>
+            </div></div>
+            <div class="row actions-bar"><button type="button" class="btn primary" tabindex="-1">Send</button><button type="button" class="btn" tabindex="-1">Copy as cURL</button><button type="button" class="btn" tabindex="-1">⏱ Profile → Perf</button><span class="muted">Ctrl/⌘ + Enter</span></div>
+            <div class="answer">
+              <div class="row"><span class="pill ok">ok</span><span class="muted">Recorded at 09:23:48 · 86 ms</span></div>
+              <div class="json">
+                <details class="json-branch" open><summary><span></span><span class="tok-punct">[</span><span class="json-count">1 items</span><span class="json-preview json-folded"></span><span class="tok-punct json-folded">…]</span></summary><div class="json-children">
+                  <details class="json-branch" open><summary><span></span><span class="tok-punct">{</span><span class="json-count">5 keys</span><span class="json-preview json-folded">id: 7, name: "S00007", state: "sale"</span><span class="tok-punct json-folded">…}</span></summary><div class="json-children">
+                    <div class="json-leaf"><span class="tok-fn">"id"</span><span class="tok-punct">: </span><span class="tok-number">7</span><span class="tok-punct">,</span></div>
+                    <div class="json-leaf"><span class="tok-fn">"name"</span><span class="tok-punct">: </span><span class="tok-string">"S00007"</span><span class="tok-punct">,</span></div>
+                    <div class="json-leaf"><span class="tok-fn">"state"</span><span class="tok-punct">: </span><span class="tok-string">"sale"</span><span class="tok-punct">,</span></div>
+                    <div class="json-leaf"><span class="tok-fn">"amount_total"</span><span class="tok-punct">: </span><span class="tok-number">1706</span><span class="tok-punct">,</span></div>
+                    <details class="json-branch"><summary><span><span class="tok-fn">"partner_id"</span><span class="tok-punct">: </span></span><span class="tok-punct">{</span><span class="json-count">2 keys</span><span class="json-preview json-folded">id: 11, display_name: "Gemini Furniture"</span><span class="tok-punct json-folded">…}</span></summary></details>
+                  </div><div class="json-close"><span class="tok-punct">}</span></div></details>
+                </div><div class="json-close"><span class="tok-punct">]</span></div></details>
+              </div>
+            </div>
+          </form></div>
+        </li>
+      </ul><aside class="pane"></aside></div>
+    </section>
+
+    <section id="security" class="tab" role="tabpanel">
+      <div class="sec-bar card">
+        <dl class="facts">
+          <div class="fact"><dt>User</dt><dd class="row"><span class="row who"><span class="strong">Marc Demo</span><span class="muted">demo · #6</span></span><span class="row user-pick"><span class="user-search"><input type="search" tabindex="-1" placeholder="Search a user by name or login…"></span></span></dd></div>
+          <div class="fact"><dt>Companies</dt><dd class="row"><button type="button" tabindex="-1" class="chip" aria-pressed="true">★ YourCompany</button></dd></div>
+          <div class="fact"><dt>Compare with</dt><dd class="row"><span class="row user-pick"><span class="user-search"><input type="search" tabindex="-1" placeholder="Another user, to compare…"></span></span></dd></div>
+          <div class="fact"><dt></dt><dd class="row"><label class="check archived-box"><input type="checkbox" tabindex="-1"> <span>Archived too</span></label></dd></div>
+        </dl>
+      </div>
+      <div class="subview">
+        <div class="row subview-head"><div class="seg" role="radiogroup"><button type="button" tabindex="-1" role="radio" aria-checked="true" class="on">Record #7</button><button type="button" tabindex="-1" role="radio" aria-checked="false">By model</button><button type="button" tabindex="-1" role="radio" aria-checked="false">sale.order</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Groups</button><button type="button" tabindex="-1" role="radio" aria-checked="false">System</button></div></div>
+        <div class="subview-body">
+          <div class="subject"><div class="row"><span class="pill accent">This page</span><button type="button" tabindex="-1" class="copy name">sale.order</button>#7</div></div>
+          <div>
+          <table class="matrix">
+            <thead><tr><th>sale.order #7</th><th class="c">Read</th><th class="c">Write</th><th class="c">Create</th><th class="c">Delete</th></tr></thead>
+            <tbody>
+              <tr class="mx-section"><th colspan="5"><span>Access rights (ACL)</span><span class="mx-note">one is enough</span></th></tr>
+              <tr class=""><td class="mx-label"><div class="row"><span class="mark has">●</span>Sales / User: Own Documents Only</div><div class="meta">sale.order</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym na">·</span></td></tr>
+              <tr class="off"><td class="mx-label"><div class="row"><span class="mark no">○</span>Sales / Administrator</div><div class="meta">sale.order.manager</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td></tr>
+              <tr class="off"><td class="mx-label"><div class="row"><span class="mark no">○</span>Invoicing / Invoicing</div><div class="meta">sale.order</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym na">·</span></td><td class="c"><span class="sym na">·</span></td></tr>
+              <tr class="off"><td class="mx-label"><div class="row"><span class="mark no">○</span>Technical / Show Full Accounting Features</div><div class="meta">sale.order.accountant</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym na">·</span></td><td class="c"><span class="sym na">·</span></td></tr>
+              <tr class="off"><td class="mx-label"><div class="row"><span class="mark no">○</span>Technical / Show Accounting Features - Readonly</div><div class="meta">sale.order.accountant</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym na">·</span></td><td class="c"><span class="sym na">·</span></td><td class="c"><span class="sym na">·</span></td></tr>
+              <tr class="off"><td class="mx-label"><div class="row"><span class="mark no">○</span>User types / Portal</div><div class="meta">sale.order.portal</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym na">·</span></td><td class="c"><span class="sym na">·</span></td><td class="c"><span class="sym na">·</span></td></tr>
+            </tbody>
+            <tbody>
+              <tr class="mx-section"><th colspan="5"><span>Global rules</span><span class="mx-note">the record must match every one</span></th></tr>
+              <tr class="opens"><td class="mx-label"><div class="row">Sales Order multi-company</div><div class="meta">every user</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td></tr>
+            </tbody>
+            <tbody data-focus>
+              <tr class="mx-section"><th colspan="5"><span>Group rules</span><span class="mx-note">the record must match one of the user's</span></th></tr>
+              <tr class="off opens"><td class="mx-label"><div class="row"><span class="mark no">○</span>Portal Personal Quotations/Sales Orders</div><div class="meta">User types / Portal</div></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym na">·</span></td><td class="c"><span class="sym no">✗</span></td></tr>
+              <tr class="opens"><td class="mx-label"><div class="row"><span class="mark has">●</span>Personal Orders</div><div class="meta">Sales / User: Own Documents Only</div></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym no">✗</span></td></tr>
+              <tr class="off opens"><td class="mx-label"><div class="row"><span class="mark no">○</span>All Orders</div><div class="meta">Sales / User: All Documents</div></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td><td class="c"><span class="sym yes">✓</span></td></tr>
+            </tbody>
+            <tbody>
+              <tr class="mx-section"><th colspan="5"><span>Result</span><span class="mx-note"></span></th></tr>
+              <tr class="result"><td class="mx-label"><div class="row">Result</div></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym no">✗</span></td><td class="c"><span class="sym no">✗</span></td></tr>
+            </tbody>
+          </table>
+          <div class="note legend">✓ allowed / matches · ✗ refused / no match · · does not apply · ? unknown · ● the user has the group · ○ not. Click a rule for its domain.</div>
+          </div>
+          <h4 class="story-title">To allow it</h4>
+          <table class="matrix">
+            <thead><tr><th>Group to add</th><th class="c">Read</th><th class="c">Write</th><th class="c">Create</th><th class="c">Delete</th></tr></thead>
+            <tbody>
+              <tr><td class="mx-label"><div class="row">Sales / User: All Documents<button type="button" tabindex="-1" class="chip">Try</button></div></td><td class="c"><span class="sym plus">+✓</span></td><td class="c"><span class="sym plus">+✓</span></td><td class="c"><span class="sym plus">+✓</span></td><td class="c"><span class="sym na">·</span></td></tr>
+            </tbody>
+          </table>
+          <details class="paste"><summary>Diagnose an access error message</summary></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="translations" class="tab" role="tabpanel">
+      <div class="subview">
+        <div class="row subview-head"><div class="seg" role="radiogroup"><button type="button" tabindex="-1" role="radio" aria-checked="true" class="on">Find a Text</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Record #7</button><button type="button" tabindex="-1" role="radio" aria-checked="false">View (form)</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Modules (.po)</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Languages</button></div></div>
+        <div class="subview-body">
+          <form class="row find-bar">
+            <input type="search" value="Order Date" tabindex="-1">
+            <button type="button" tabindex="-1" class="btn">Find</button>
+            <button type="button" tabindex="-1" class="chip">⌖ Pick on Page</button>
+          </form>
+          <div>
+            <table class="matrix wide">
+              <thead><tr><th>Source</th><th class="c">English (source)</th><th class="c">Where to change it</th></tr></thead>
+              <tbody>
+                <tr><td class="mx-label"><div class="row"><span class="pill info">Field label</span>sale.order.date_order</div></td><td class="c act">Order Date</td><td class="c act">Field date_order: its module's .po (model:ir.model.fields…), or Settings › Technical › Fields</td></tr>
+                <tr><td class="mx-label"><div class="row"><span class="pill ok">View</span>sale.view_order_form</div></td><td class="c act">Order Date</td><td class="c act">Translations › View: edit it there</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="apps" class="tab" role="tabpanel">
+      <div class="subview">
+        <div class="row subview-head"><div class="seg" role="radiogroup"><button type="button" tabindex="-1" role="radio" aria-checked="true" class="on">Modules</button><button type="button" tabindex="-1" role="radio" aria-checked="false">Pending</button></div></div>
+        <div class="subview-body"><div class="subview-body"><div>
+          <div class="toolbar"><div class="searchbar">
+            <span class="facets"></span>
+            <input type="text" value="website_sale;" tabindex="-1">
+            <span class="muted count-note"></span>
+            <button type="button" tabindex="-1" class="search-toggle" aria-expanded="false">▾</button>
+          </div></div>
+          <div class="groups-md"><div class="groups-list">
+            <table class="matrix">
+              <thead><tr><th>Module</th><th class="c">State</th><th class="c">Version</th><th class="c"></th></tr></thead>
+              <tbody>
+                <tr class="off opens open"><td class="mx-label"><div class="row"><input type="checkbox" class="pick-box" tabindex="-1">eCommerce</div><div class="meta">website_sale · Odoo S.A.</div></td><td class="c act"><span class="pill">Not installed</span></td><td class="c"></td><td class="c act"><a class="btn">↗</a></td></tr>
+                <tr class="mx-detail"><td colspan="4"><div>
+                  <div class="group-head module-head">
+                    <div class="row module-title"><h3>eCommerce</h3></div>
+                    <div class="row"><button type="button" tabindex="-1" class="copy name">website_sale</button><span class="pill">Not installed</span><span class="pill accent">App</span><span class="pill">Website</span></div>
+                    <div class="muted">Sell your products online</div>
+                    <div class="row"><button type="button" tabindex="-1" class="btn">Install</button><button type="button" tabindex="-1" class="chip">Pick</button><a class="btn">Form ↗</a></div>
+                  </div>
+                  <details class="fold"><summary><span>Description</span><span class="muted"></span></summary></details>
+                  <details class="fold"><summary><span>Manifest</span><span class="muted"></span></summary></details>
+                  <details class="fold" open><summary><span>Depends</span><span class="muted"> · 7 declared</span></summary><div class="fold-body"><div>
+                    <h4 class="story-title">Declared in its manifest</h4>
+                    <div><button type="button" tabindex="-1" class="chip">○ delivery</button><button type="button" tabindex="-1" class="chip">● digest</button><button type="button" tabindex="-1" class="chip">○ portal_rating</button><button type="button" tabindex="-1" class="chip">● sale</button><button type="button" tabindex="-1" class="chip">○ website</button><button type="button" tabindex="-1" class="chip">○ website_mail</button><button type="button" tabindex="-1" class="chip">○ website_payment</button></div>
+                    <h4 class="story-title">Needs in all (31)</h4>
+                    <div><button type="button" tabindex="-1" class="chip">○ delivery</button><button type="button" tabindex="-1" class="chip">● digest</button><button type="button" tabindex="-1" class="chip">○ portal_rating</button><button type="button" tabindex="-1" class="chip">● sale</button><button type="button" tabindex="-1" class="chip">○ website</button><button type="button" tabindex="-1" class="chip">○ website_mail</button><button type="button" tabindex="-1" class="chip">○ website_payment</button><button type="button" tabindex="-1" class="chip">● mail</button><button type="button" tabindex="-1" class="chip">● portal</button><button type="button" tabindex="-1" class="chip">● resource</button><button type="button" tabindex="-1" class="chip">○ rating</button><button type="button" tabindex="-1" class="chip">● account_payment</button><button type="button" tabindex="-1" class="chip">● sales_team</button><button type="button" tabindex="-1" class="chip">● utm</button><button type="button" tabindex="-1" class="chip">● auth_signup</button><button type="button" tabindex="-1" class="chip">○ google_recaptcha</button><button type="button" tabindex="-1" class="chip">● html_editor</button><button type="button" tabindex="-1" class="chip">● http_routing</button><button type="button" tabindex="-1" class="chip">○ social_media</button><button type="button" tabindex="-1" class="chip">● web</button><button type="button" tabindex="-1" class="chip">● web_editor</button><button type="button" tabindex="-1" class="chip">● base</button><button type="button" tabindex="-1" class="chip">● base_setup</button><button type="button" tabindex="-1" class="chip">● bus</button><button type="button" tabindex="-1" class="chip">● web_tour</button><button type="button" tabindex="-1" class="chip">● account</button><button type="button" tabindex="-1" class="chip">● payment</button><button type="button" tabindex="-1" class="chip">● analytic</button><button type="button" tabindex="-1" class="chip">● onboarding</button><button type="button" tabindex="-1" class="chip">● product</button><button type="button" tabindex="-1" class="chip">● uom</button></div>
+                    <h4 class="story-title" data-focus>Installing it also installs (8)</h4>
+                    <div><button type="button" tabindex="-1" class="chip">○ social_media</button><button type="button" tabindex="-1" class="chip">○ google_recaptcha</button><button type="button" tabindex="-1" class="chip">○ website</button><button type="button" tabindex="-1" class="chip">○ website_payment</button><button type="button" tabindex="-1" class="chip">○ website_mail</button><button type="button" tabindex="-1" class="chip">○ rating</button><button type="button" tabindex="-1" class="chip">○ portal_rating</button><button type="button" tabindex="-1" class="chip">○ delivery</button></div>
+                    <h4 class="story-title">And auto-installs (5)</h4>
+                    <div><button type="button" tabindex="-1" class="chip">○ spreadsheet_dashboard_website_sale</button><button type="button" tabindex="-1" class="chip">○ website_crm</button><button type="button" tabindex="-1" class="chip">○ website_sale_autocomplete</button><button type="button" tabindex="-1" class="chip">○ website_sms</button><button type="button" tabindex="-1" class="chip">○ website_crm_sms</button></div>
+                    <div class="note">Computed like Odoo's button_install: an auto_install module joins once all its triggers are installed; a localization also needs a company in its country.</div>
+                    <div class="note legend">● installed · ○ not installed · ✗ not on this server. Click a module to open it.</div>
+                  </div></div></details>
+                  <details class="fold"><summary><span>Dependency diagram</span><span class="muted"></span></summary></details>
+                </div></td></tr>
+              </tbody>
+            </table>
+          </div><aside class="groups-pane"><div class="note">Choose a module: its description, dependencies and data show here.</div></aside></div>
+          <div class="pickbar">
+            <div class="row chips"><span class="muted">Tick modules, or type names then Enter, to act on them.</span></div>
+            <div class="row"><button type="button" tabindex="-1" class="btn">Activate</button><button type="button" tabindex="-1" class="btn">Upgrade</button><button type="button" tabindex="-1" class="btn">Open Forms ↗</button></div>
+          </div>
+        </div></div></div>
+      </div>
+    </section>
+
+    <section id="menus" class="tab" role="tabpanel">
+      <div class="card"><div class="card-body"><div><ul class="list menus">
+        <li tabindex="-1"><div class="row"><span>Models</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.model</button></span><span class="grow"></span><a class="btn">↗</a></div><div class="meta mono"><button type="button" tabindex="-1" class="copy">base.action_model_model</button></div></li>
+        <li tabindex="-1"><div class="row"><span>Fields</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.model.fields</button></span><span class="grow"></span><a class="btn">↗</a></div><div class="meta mono"><button type="button" tabindex="-1" class="copy">base.action_model_fields</button></div></li>
+        <li tabindex="-1"><div class="row"><span>Record Rules</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.rule</button></span><span class="grow"></span><a class="btn">↗</a></div><div class="meta mono"><button type="button" tabindex="-1" class="copy">base.action_rule</button></div></li>
+        <li tabindex="-1"><div class="row"><span>Views</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.ui.view</button></span><span class="grow"></span><a class="btn">↗</a></div><div class="meta mono"><button type="button" tabindex="-1" class="copy">base.action_ui_view</button></div></li>
+        <li tabindex="-1"><div class="row"><span>Menus</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.ui.menu</button></span><span class="grow"></span><a class="btn">↗</a></div><div class="meta mono"><button type="button" tabindex="-1" class="copy">base.grant_menu_access</button></div></li>
+        <li tabindex="-1"><div class="row"><span>Model Data</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.model.data</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+        <li tabindex="-1"><div class="row"><span>Crons</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.cron</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+        <li tabindex="-1"><div class="row"><span>Actions Window</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.actions.act_window</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+        <li tabindex="-1"><div class="row"><span>Actions Server</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.actions.server</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+        <li tabindex="-1"><div class="row"><span>Reports</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.actions.report</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+        <li tabindex="-1"><div class="row"><span>Parameters</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.config_parameter</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+        <li tabindex="-1"><div class="row"><span>Sequences</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">ir.sequence</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+        <li tabindex="-1"><div class="row"><span>Mail Templates</span><span class="muted"><button type="button" tabindex="-1" class="copy mono">mail.template</button></span><span class="grow"></span><a class="btn">↗</a></div></li>
+      </ul></div></div></div>
+    </section>
+
+    <section id="perf" class="tab" role="tabpanel">
+      <div class="subview"><div class="subview-body">
+        <div class="card perf-recorder">
+          <div class="row"><span class="pill">off</span><span class="grow"></span><span><button type="button" tabindex="-1" class="btn">Start Profiling</button></span></div>
+          <div class="row perf-collectors"><span class="muted">Collect:</span><button type="button" tabindex="-1" class="chip" aria-pressed="true" disabled>SQL</button><button type="button" tabindex="-1" class="chip" aria-pressed="true">Python stacks</button><button type="button" tabindex="-1" class="chip" aria-pressed="false">QWeb</button></div>
+          <div class="muted perf-note">Odoo's built-in profiler: the SQL and Python of each request in this session (Settings rights). Not allowed on this database yet: Start Profiling asks for how long.</div>
+          <ol class="perf-steps">
+            <li>Start profiling (Odoo's built-in profiler, administrators only).</li>
+            <li>Do the slow action on the Odoo page: open the record, save, confirm…</li>
+            <li>Come back and refresh (⟳): slowest requests first; click one to see why.</li>
+          </ol>
+        </div>
+        <div class="toolbar">
+          <select class="perf-select" tabindex="-1"><option>2026-10-05 09:24:12 · Mitchell Admin (1)</option></select>
+          <input type="search" tabindex="-1">
+          <span class="muted"></span>
+          <button type="button" tabindex="-1" class="chip reload">⟳</button>
+          <button type="button" tabindex="-1" class="chip" aria-pressed="false">Group by method</button>
+        </div>
+        <div class="groups-md"><div class="groups-list">
+          <table class="matrix">
+            <thead><tr><th>Request</th><th class="c">SQL</th><th class="c">Time</th><th class="c">At</th></tr></thead>
+            <tbody>
+              <tr class="opens open" tabindex="-1" data-focus><td class="mx-label"><div class="row"><span class="name">web_read</span><span class="muted"> sale.order</span></div><div class="meta">#1377</div></td><td class="c">72</td><td class="c">69 ms</td><td class="c">09:24:13</td></tr>
+              <tr class="mx-detail"><td colspan="4">
+                <div class="row"><a class="btn">Flame Graph ↗</a><button type="button" tabindex="-1" class="chip">Set as Baseline</button><button type="button" tabindex="-1" class="chip">Delete</button></div>
+                <div class="row perf-totals mt"><span class="perf-total"><b>72</b><span class="muted">queries</span></span><span class="perf-total"><b>28 ms</b><span class="muted">in SQL</span></span><span class="perf-total"><b>69 ms</b><span class="muted">total</span></span><span class="perf-total"><b>≈ 41 ms</b><span class="muted">Python</span></span></div>
+                <div class="perf-diag err mt"><span class="strong">N+1: one query runs 10× in this request</span>
+                  <div class="row"><span class="perf-loc">_get_rules() base/models/ir_rule.py:134</span></div>
+                  <div>runs it once per record: read them all at once instead (a recordset, mapped(), read_group…).</div>
+                  <div class="row"><div class="perf-code">return self.browse(v for v, in self.env.execute_query(sql))</div></div>
+                </div>
+                <div class="row perf-time mt"><span class="perf-key sql">SQL 28 ms</span><span class="perf-split grow"><span class="sql" style="width: 41%"></span><span class="py" style="flex: 1"></span></span><span class="perf-key py">Python ≈ 41 ms</span></div>
+              </td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </div>
+      <div><div class="row perf-cleanup"><span class="muted">Clean up:</span><button type="button" tabindex="-1" class="chip">This session (1)</button><button type="button" tabindex="-1" class="chip">Mine</button><button type="button" tabindex="-1" class="chip">All</button></div></div>
+      </div>
+    </section>
+
+    <section id="code" class="tab" role="tabpanel">
+      <div class="card console-card"><div class="card-body"><div class="console">
+        <div class="row console-bar">
+          <span class="console-lang"><div class="seg" role="radiogroup"><button type="button" role="radio" aria-checked="false" tabindex="-1">JavaScript</button><button type="button" role="radio" aria-checked="true" class="on" tabindex="-1">Python</button></div></span>
+          <span class="console-mode"><div class="seg" role="radiogroup"><button type="button" role="radio" aria-checked="false" tabindex="-1">Read-only</button><button type="button" role="radio" aria-checked="true" class="on" tabindex="-1">Dry run</button><button type="button" role="radio" aria-checked="false" tabindex="-1">Allow writes</button></div></span>
+          <div class="row console-acts"><button type="button" class="chip aside-btn" data-aside="snippets" aria-pressed="false" tabindex="-1"><span>Snippets</span></button><button type="button" class="chip aside-btn" data-aside="history" aria-pressed="false" tabindex="-1"><span>History</span></button><button type="button" class="chip aside-btn" data-aside="guide" aria-pressed="false" tabindex="-1"><span>?</span></button><button type="button" class="btn primary" tabindex="-1">▶ Run</button></div>
+        </div>
+        <div class="row console-screen muted"><span>Runs on:</span><span class="mono">sale.order</span><span class="muted">record #7</span><button type="button" class="chip reload" tabindex="-1">⟳</button><span class="muted who">admin · uid 2</span></div>
+        <div class="editor"><div class="editor-body" style="--digits: 2">
+          <pre class="hl" aria-hidden="true"><div><span class="tok-builtin">record</span>.order_line.<span class="tok-fn">write</span>({<span class="tok-string">'discount'</span>: <span class="tok-number">10</span>})</div><div><span class="tok-kw">return</span> <span class="tok-builtin">record</span>.<span class="tok-fn">read</span>([<span class="tok-string">'amount_untaxed'</span>, <span class="tok-string">'amount_total'</span>])</div></pre>
+          <textarea class="code" rows="10" spellcheck="false" readonly tabindex="-1"></textarea>
+        </div></div>
+        <div class="output">
+          <div class="row"><span class="pill ok">ok</span><span class="pill">Python</span><span class="pill info">dry run</span><span class="ms">73 ms</span></div>
+          <span class="note dry-note">Dry run: the code ran for real, then everything it changed was rolled back.</span>
+          <div class="value-box">
+            <div class="row value-head"><span class="pill accent">table</span><span class="muted">1 rows</span><span class="row value-tools"><span class="muted">Copy</span><button type="button" class="chip" tabindex="-1">CSV</button><button type="button" class="chip" tabindex="-1">Markdown</button><button type="button" class="chip" tabindex="-1">JSON</button><button type="button" class="chip" tabindex="-1">↓ CSV</button></span></div>
+            <div class="table-wrap"><table class="result-table">
+              <thead><tr><th>id<span class="muted col-type">id</span></th><th class="num">amount_total<span class="muted col-type">float</span></th><th class="num">amount_untaxed<span class="muted col-type">float</span></th></tr></thead>
+              <tbody><tr><td>7</td><td class="num">1,535.4</td><td class="num">1,535.4</td></tr></tbody>
+            </table></div>
+          </div>
+        </div>
+      </div></div></div>
+    </section>
+  </main>
+  <script>
+    // The demo's only wiring: a tab shows its section; the page that embeds the panel is told (and can ask for one).
+    const tabs = [...document.querySelectorAll('.tabs button')];
+    function show(tab, tell) {
+      for (const b of tabs) { const on = b.dataset.tab === tab; b.classList.toggle('active', on); b.setAttribute('aria-selected', on); }
+      for (const s of document.querySelectorAll('main > .tab')) s.classList.toggle('active', s.id === tab);
+      const main = document.querySelector('main'), focus = document.querySelector(`#${tab} [data-focus]`);
+      // what the tab is shown for comes into sight, clear of the table's sticky head. Not scrollIntoView(): it would also scroll the page that embeds the panel
+      main.scrollTop = focus ? focus.getBoundingClientRect().top - main.getBoundingClientRect().top + main.scrollTop - 44 : 0;
+      if (tell) parent.postMessage({ odooDebugTab: tab }, '*');
+    }
+    for (const b of tabs) b.onclick = () => show(b.dataset.tab, true);
+    for (const d of document.querySelectorAll('details')) d.addEventListener('click', (e) => { if (e.target.closest('summary')) e.preventDefault(); }); // cards stay as drawn
+    addEventListener('message', (e) => {
+      if (e.source !== parent || !e.data) return;
+      if (e.data.tab) show(e.data.tab);
+      if (e.data.theme) document.documentElement.dataset.theme = e.data.theme;
+    });
+    const q = new URLSearchParams(location.search);
+    if (q.get('theme')) document.documentElement.dataset.theme = q.get('theme');
+    if (q.get('tab')) show(q.get('tab'));
+  </script>
+</body>
+</html>
