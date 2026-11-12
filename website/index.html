@@ -7,7 +7,7 @@
 <meta name="author" content="UncleCat">
 <meta name="description" content="Odoo Debug, the free Chrome extension to debug Odoo: toggle debug mode, see which module adds a field, view inheritance, a live RPC log with tracebacks, why a record rule blocks a user, N+1 SQL queries. Right on the Odoo page.">
 <link rel="canonical" href="https://odoo-debug.unclecatvn.com/">
-<meta name="theme-color" content="#0b0a0d">
+<meta name="theme-color" content="#0b0910">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Odoo Debug">
 <meta property="og:title" content="Odoo Debug: Chrome extension to debug Odoo">
@@ -37,142 +37,243 @@
 <script>/* saved theme before first paint: no flash */ try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0a0d; --surface: #121015; --surface-2: #18151c; --line: rgba(255, 255, 255, .08); --line-strong: rgba(255, 255, 255, .14);
-    --text: #ededf0; --muted: #9a95a3; --faint: #6c6773;
-    --brand: #c58fb7; --brand-deep: #714b67; --accent: #5fd4b4; --star: #f5c451;
-    --header: rgba(11, 10, 13, .72); --hover-line: rgba(255, 255, 255, .3); --hover-fill: rgba(255, 255, 255, .05);
-    --btn-bg: #f4f2f6; --btn-bg-hover: #fff; --btn-text: #0b0a0d; --glow: rgba(113, 75, 103, .55); --dot: #3a3540;
-    --grad: linear-gradient(100deg, #f0c6e4 10%, #c58fb7 45%, #5fd4b4 95%); --shadow: 0 0 0 1px rgba(0, 0, 0, .4), 0 30px 80px -20px rgba(113, 75, 103, .45);
-    --sans: Geist, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --bg: #0b0910; --surface: #15121c; --surface-2: #1d1926; --line: rgba(255, 255, 255, .08); --line-strong: rgba(255, 255, 255, .16);
+    --text: #f3f0f6; --muted: #a9a1b5; --faint: #7b7388;
+    --brand: #e29ad3; --teal: #3ddbb6; --star: #f5c451;
+    --grad: linear-gradient(95deg, #f6bde7 0%, #c98be6 42%, #3ddbb6 100%);
+    --glow-a: rgba(176, 84, 164, .46); --glow-b: rgba(40, 200, 165, .2);
+    --btn-bg: #f6f3f8; --btn-hover: #fff; --btn-text: #0b0910; --header: rgba(11, 9, 16, .72); --band: #110e17;
+    --sans: "Be Vietnam Pro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     color-scheme: dark;
   }
   /* Light theme: the visitor's system setting, unless they picked one with the ☀ / ☾ button (html[data-theme]) */
   @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
-    --bg: #fbfafc; --surface: #ffffff; --surface-2: #f4f1f4; --line: rgba(30, 15, 30, .09); --line-strong: rgba(30, 15, 30, .16);
-    --text: #17151b; --muted: #5d5864; --faint: #87828e; --brand: #8e4f80; --accent: #0e9474; --star: #d99a00;
-    --header: rgba(251, 250, 252, .78); --hover-line: rgba(30, 15, 30, .32); --hover-fill: rgba(30, 15, 30, .04);
-    --btn-bg: #17151b; --btn-bg-hover: #2c2832; --btn-text: #fff; --glow: rgba(197, 143, 183, .32); --dot: #d9d3da;
-    --grad: linear-gradient(100deg, #b3548f 10%, #714b67 50%, #0e9474 95%); --shadow: 0 0 0 1px rgba(30, 15, 30, .04), 0 30px 70px -24px rgba(113, 75, 103, .35);
+    --bg: #fbf9fc; --surface: #fff; --surface-2: #f4f0f6; --line: rgba(40, 20, 40, .1); --line-strong: rgba(40, 20, 40, .2);
+    --text: #18131d; --muted: #5d5568; --faint: #857c90;
+    --brand: #93407f; --teal: #0b8f72; --star: #d99a00;
+    --grad: linear-gradient(95deg, #b03a93 0%, #7a41a8 42%, #0b8f72 100%);
+    --glow-a: rgba(205, 125, 190, .34); --glow-b: rgba(60, 200, 170, .22);
+    --btn-bg: #18131d; --btn-hover: #2f2738; --btn-text: #fff; --header: rgba(251, 249, 252, .78); --band: #f5f1f7;
     color-scheme: light;
   } }
   :root[data-theme="light"] {
-    --bg: #fbfafc; --surface: #ffffff; --surface-2: #f4f1f4; --line: rgba(30, 15, 30, .09); --line-strong: rgba(30, 15, 30, .16);
-    --text: #17151b; --muted: #5d5864; --faint: #87828e; --brand: #8e4f80; --accent: #0e9474; --star: #d99a00;
-    --header: rgba(251, 250, 252, .78); --hover-line: rgba(30, 15, 30, .32); --hover-fill: rgba(30, 15, 30, .04);
-    --btn-bg: #17151b; --btn-bg-hover: #2c2832; --btn-text: #fff; --glow: rgba(197, 143, 183, .32); --dot: #d9d3da;
-    --grad: linear-gradient(100deg, #b3548f 10%, #714b67 50%, #0e9474 95%); --shadow: 0 0 0 1px rgba(30, 15, 30, .04), 0 30px 70px -24px rgba(113, 75, 103, .35);
+    --bg: #fbf9fc; --surface: #fff; --surface-2: #f4f0f6; --line: rgba(40, 20, 40, .1); --line-strong: rgba(40, 20, 40, .2);
+    --text: #18131d; --muted: #5d5568; --faint: #857c90;
+    --brand: #93407f; --teal: #0b8f72; --star: #d99a00;
+    --grad: linear-gradient(95deg, #b03a93 0%, #7a41a8 42%, #0b8f72 100%);
+    --glow-a: rgba(205, 125, 190, .34); --glow-b: rgba(60, 200, 170, .22);
+    --btn-bg: #18131d; --btn-hover: #2f2738; --btn-text: #fff; --header: rgba(251, 249, 252, .78); --band: #f5f1f7;
     color-scheme: light;
   }
+  @property --mx { syntax: "<length-percentage>"; inherits: true; initial-value: 50%; }
+  @property --my { syntax: "<length-percentage>"; inherits: true; initial-value: 30%; }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
-  html:not([lang="vi"]) [data-l="vi"], html[lang="vi"] [data-l="en"] { display: none; }
+  @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+  @media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation: none !important; transition: none !important; } }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
   a { color: inherit; }
   img, video { max-width: 100%; height: auto; display: block; }
-  code { white-space: nowrap; font: .86em var(--mono); background: var(--surface-2); border: 1px solid var(--line); padding: .1em .4em; border-radius: 5px; }
-  ::selection { background: var(--brand-deep); }
+  button { font: inherit; }
+  code { white-space: nowrap; font: .86em var(--mono); color: var(--teal); background: var(--surface-2); border: 1px solid var(--line); padding: .1em .4em; border-radius: 6px; }
+  kbd { white-space: nowrap; font: 500 .8em var(--mono); color: var(--text); background: var(--surface-2); border: 1px solid var(--line-strong); border-bottom-width: 2px; padding: .15em .5em; border-radius: 6px; }
+  ::selection { background: color-mix(in srgb, var(--brand) 40%, transparent); }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
-  /* Page frame: vertical guide lines, sections separated by hairlines */
-  .frame { max-width: 1200px; margin: 0 auto; border-inline: 1px solid var(--line); }
-  .sec { border-top: 1px solid var(--line); padding: 88px 48px; }
-  @media (max-width: 760px) { .frame { border-inline: 0; } .sec { padding: 64px 16px; } }
-  .label { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--brand); margin-bottom: 16px; display: block; }
-  h2 { font-size: clamp(28px, 4vw, 44px); line-height: 1.1; letter-spacing: -.035em; font-weight: 600; margin: 0 0 14px; }
-  .sub { color: var(--muted); font-size: 18px; max-width: 38em; margin: 0; }
+  /* Sections */
+  .sec { max-width: 1208px; margin: 0 auto; padding: 120px 24px 0; scroll-margin-top: -40px; }
+  .eyebrow { display: block; margin-bottom: 14px; font: 500 13px var(--mono); color: var(--brand); }
+  h2 { margin: 0 0 16px; font-size: clamp(30px, 4.2vw, 50px); line-height: 1.08; letter-spacing: -.04em; font-weight: 700; text-wrap: balance; }
+  html:is([lang="vi"], [lang="ja"], [lang="zh-CN"], [lang="ar"]) :is(h1, h2) { line-height: 1.2; } /* tall marks, tall glyphs */
+  [dir="rtl"] :is(code, kbd) { direction: ltr; unicode-bidi: isolate; }
+  .sub { color: var(--muted); font-size: 18px; max-width: 40em; margin: 0; text-wrap: pretty; }
+  .sub a, .steps a { color: var(--text); text-decoration-color: var(--brand); text-underline-offset: 3px; }
+  .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-  /* Nav */
-  header { position: sticky; top: 0; z-index: 10; background: var(--header); backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--line); }
-  .nav { display: flex; align-items: center; gap: 28px; height: 60px; padding: 0 24px; }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 600; text-decoration: none; letter-spacing: -.01em; }
-  .logo svg { width: 26px; height: 26px; }
-  .nav nav { display: flex; gap: 24px; }
-  .nav nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
-  .nav nav a:hover { color: var(--text); }
-  .nav .end { margin-left: auto; display: flex; gap: 8px; align-items: center; }
-  .icon-btn { display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid var(--line-strong); background: transparent; color: var(--muted); border-radius: 8px; cursor: pointer; }
+  /* Nav: clear over the hero while the page is at its top, a frosted bar once it scrolls (.stuck, set on scroll) */
+  header { position: fixed; inset: 0 0 auto; z-index: 20; border-bottom: 1px solid transparent; transition: background-color .25s, border-color .25s; }
+  header.stuck { background: var(--header); backdrop-filter: saturate(160%) blur(16px); -webkit-backdrop-filter: saturate(160%) blur(16px); border-bottom-color: var(--line); }
+  .top { display: flex; align-items: center; gap: 28px; height: 64px; max-width: 1208px; margin: 0 auto; padding: 0 24px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.02em; white-space: nowrap; text-decoration: none; }
+  .logo .mark { display: flex; }
+  .logo svg { width: 28px; height: 28px; }
+  header nav { display: flex; gap: 26px; }
+  header nav a { color: var(--muted); text-decoration: none; font-size: 14.5px; }
+  header nav a:hover { color: var(--text); }
+  .end { margin-inline-start: auto; display: flex; gap: 8px; align-items: center; }
+  .icon-btn, .lang-btn, .gh { height: 36px; border: 1px solid var(--line-strong); border-radius: 10px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 500; }
+  .icon-btn { display: grid; place-items: center; width: 36px; padding: 0; cursor: pointer; }
   .icon-btn svg { width: 16px; height: 16px; }
   .icon-btn .moon { display: none; }
   @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .icon-btn .sun { display: none; } :root:not([data-theme="dark"]) .icon-btn .moon { display: block; } }
   :root[data-theme="light"] .icon-btn .sun { display: none; }
   :root[data-theme="light"] .icon-btn .moon { display: block; }
-  .lang { border: 1px solid var(--line-strong); background: transparent; color: var(--muted); border-radius: 8px; height: 32px; padding: 0 10px; font: 500 12px var(--mono); cursor: pointer; }
-  .lang:hover { color: var(--text); }
-  @media (max-width: 760px) { .nav { padding: 0 16px; gap: 12px; } .nav nav { display: none; } }
-
-  /* Buttons */
-  .btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 10px; font-weight: 500; font-size: 15px; text-decoration: none; border: 1px solid transparent; transition: background .15s, border-color .15s; white-space: nowrap; }
-  .btn.primary { background: var(--btn-bg); color: var(--btn-text); }
-  .btn.primary:hover { background: var(--btn-bg-hover); }
-  .btn.ghost { border-color: var(--line-strong); background: transparent; }
-  .btn.ghost:hover { border-color: var(--hover-line); background: var(--hover-fill); }
-  .btn svg { width: 17px; height: 17px; flex: none; }
-  .gh { display: inline-flex; align-items: stretch; height: 32px; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; font-size: 13px; font-weight: 500; text-decoration: none; }
-  .gh > span { display: inline-flex; align-items: center; gap: 6px; padding: 0 10px; }
-  .gh svg { width: 15px; height: 15px; }
-  .gh .stars { border-left: 1px solid var(--line-strong); background: var(--surface-2); font-family: var(--mono); }
-  .gh:hover, .icon-btn:hover { border-color: var(--hover-line); color: var(--text); }
+  /* Language: a button and its own list under it (no native <select>). The button shows the language picked, its code when space is short */
+  .lang { position: relative; }
+  .lang-btn { display: inline-flex; align-items: center; gap: 7px; padding: 0 11px; white-space: nowrap; cursor: pointer; }
+  .lang-btn svg { width: 15px; height: 15px; flex: none; }
+  .lang-btn .code { display: none; font-family: var(--mono); }
+  .lang-btn::after { content: ""; width: 6px; height: 6px; margin-inline-start: 2px; border: solid currentColor; border-width: 0 1.5px 1.5px 0; rotate: 45deg; translate: 0 -2px; transition: rotate .2s, translate .2s; }
+  .lang-btn[aria-expanded="true"]::after { rotate: 225deg; translate: 0 2px; }
+  .lang-menu { position: absolute; inset-inline-end: 0; top: calc(100% + 8px); z-index: 30; min-width: 212px; margin: 0; padding: 6px; list-style: none; border: 1px solid var(--line-strong); border-radius: 14px; background: var(--surface); box-shadow: 0 24px 60px -12px rgba(0, 0, 0, .45); }
+  .lang-menu li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 12px; border-radius: 9px; font-size: 14px; color: var(--muted); cursor: pointer; }
+  .lang-menu li:hover, .lang-menu li:focus-visible { background: var(--surface-2); color: var(--text); outline: 0; }
+  .lang-menu li[aria-selected="true"] { color: var(--text); }
+  .lang-menu li[aria-selected="true"]::after { content: "✓"; color: var(--brand); font-weight: 700; }
+  .gh { display: inline-flex; align-items: stretch; overflow: hidden; color: var(--text); text-decoration: none; }
+  .gh > span { display: inline-flex; align-items: center; gap: 7px; padding: 0 11px; }
+  .gh svg { width: 16px; height: 16px; }
+  .gh .stars { border-inline-start: 1px solid var(--line-strong); background: var(--surface-2); font-family: var(--mono); }
+  .gh:hover, .icon-btn:hover, .lang-btn:hover, .lang-btn[aria-expanded="true"] { border-color: var(--faint); color: var(--text); }
   .stars[hidden] { display: none !important; }
   .star-ic { color: var(--star); }
 
-  /* Hero */
-  .hero { position: relative; padding: 96px 48px 0; text-align: center; overflow: hidden; isolation: isolate; }
-  .hero::before { content: ""; position: absolute; inset: -40% -20% auto; height: 900px; z-index: -1;
-    background: radial-gradient(50% 50% at 50% 50%, var(--glow), transparent 70%); pointer-events: none; }
-  .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size: 56px 56px; mask-image: radial-gradient(60% 55% at 50% 20%, #000, transparent 75%); }
-  @media (max-width: 760px) { .hero { padding: 64px 16px 0; } }
-  .announce { display: inline-flex; align-items: center; gap: 10px; height: 32px; padding: 0 6px; border: 1px solid var(--line-strong); border-radius: 99px; background: var(--surface); font-size: 13px; color: var(--muted); text-decoration: none; max-width: 100%; }
-  .announce b { font: 500 12px var(--mono); color: #fff; background: var(--brand-deep); border-radius: 99px; padding: 3px 9px; white-space: nowrap; }
-  .announce:hover { border-color: var(--hover-line); color: var(--text); }
-  .announce .arrow { padding-right: 8px; }
-  .hero h1 { font-size: clamp(40px, 7vw, 76px); line-height: 1.02; letter-spacing: -.045em; font-weight: 700; margin: 28px auto 20px; max-width: 13em; }
-  .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .hero .lead { font-size: clamp(17px, 2vw, 19px); color: var(--muted); max-width: 36em; margin: 0 auto 32px; }
+  /* Buttons */
+  .btn { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; border: 1px solid transparent; border-radius: 12px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap; transition: transform .15s, background-color .15s, border-color .15s, box-shadow .2s; }
+  .btn.primary { background: var(--btn-bg); color: var(--btn-text); box-shadow: 0 10px 36px -10px var(--glow-a); }
+  .btn.primary:hover { background: var(--btn-hover); transform: translateY(-1px); box-shadow: 0 16px 44px -10px var(--glow-a); }
+  .btn.ghost { border-color: var(--line-strong); background: color-mix(in srgb, var(--surface) 60%, transparent); }
+  .btn.ghost:hover { border-color: var(--faint); transform: translateY(-1px); }
+  .btn.big { height: 56px; padding: 0 24px; font-size: 16.5px; border-radius: 14px; }
+  .btn.sm { height: 36px; padding: 0 14px; font-size: 13.5px; border-radius: 10px; box-shadow: none; }
+  .btn svg { width: 17px; height: 17px; flex: none; }
+  .btn .stars { font-family: var(--mono); padding-inline-start: 11px; margin-inline-start: 1px; border-inline-start: 1px solid color-mix(in srgb, currentColor 28%, transparent); }
+  .btn .free { font: 600 11.5px var(--mono); padding: 3px 8px; border-radius: 99px; background: color-mix(in srgb, var(--teal) 22%, transparent); color: color-mix(in srgb, var(--teal) 55%, var(--btn-text)); }
+
+  /* Hero: a wall of Odoo's technical names, lit where the pointer is; under it, the live demo */
+  .hero { position: relative; isolation: isolate; overflow: clip; padding: 140px 24px 84px; text-align: center; animation: drift 16s ease-in-out infinite alternate; }
+  .hero.live { animation: none; }
+  @keyframes drift { from { --mx: 20%; --my: 90px; } to { --mx: 80%; --my: 300px; } }
+  .hero::before { content: ""; position: absolute; z-index: -3; inset: -120px 0 auto; height: 1100px; pointer-events: none;
+    background: radial-gradient(38% 34% at 50% 26%, var(--glow-a), transparent 72%), radial-gradient(26% 26% at 82% 62%, var(--glow-b), transparent 72%), radial-gradient(26% 26% at 16% 66%, var(--glow-b), transparent 72%); }
+  .wall { direction: ltr; position: absolute; z-index: -2; inset: 64px 0 auto; height: 560px; padding: 6px 10px; overflow: hidden; font: 500 12px/2.15 var(--mono); word-spacing: 16px; text-align: justify; color: var(--text); opacity: .055;
+    pointer-events: none; user-select: none; -webkit-mask-image: linear-gradient(#000 50%, transparent); mask-image: linear-gradient(#000 50%, transparent); }
+  .wall.lit { z-index: -1; opacity: .7; color: transparent; background: var(--grad); -webkit-background-clip: text; background-clip: text;
+    -webkit-mask-image: radial-gradient(300px circle at var(--mx) var(--my), #000, transparent 72%); mask-image: radial-gradient(300px circle at var(--mx) var(--my), #000, transparent 72%); }
+  .pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 34px; padding: 0 14px 0 5px; border: 1px solid var(--line-strong); border-radius: 99px; background: color-mix(in srgb, var(--surface) 70%, transparent); backdrop-filter: blur(8px); font-size: 13.5px; color: var(--muted); text-decoration: none; }
+  .pill b { font: 600 12px var(--mono); color: #fff; background: linear-gradient(120deg, #9a4f8c, #5f3d82); border-radius: 99px; padding: 4px 10px; white-space: nowrap; }
+  .pill:hover { border-color: var(--faint); color: var(--text); }
+  h1 { margin: 26px auto 22px; font-size: clamp(36px, 5.4vw, 70px); line-height: 1.06; letter-spacing: -.05em; font-weight: 700; text-wrap: balance; }
+  h1 .grad { display: block; }
+  .lead { max-width: 41em; margin: 0 auto 32px; font-size: clamp(16px, 1.6vw, 19px); color: var(--muted); text-wrap: balance; }
   .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-  .meta { margin-top: 20px; font: 13px var(--mono); color: var(--faint); }
-  .meta span + span::before { content: "·"; margin: 0 10px; }
+  .trust { display: flex; gap: 8px 24px; justify-content: center; flex-wrap: wrap; margin: 24px 0 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--muted); }
+  .trust li::before { content: "✓"; margin-inline-end: 7px; color: var(--teal); font-weight: 700; }
 
-  /* Window frame around screenshots */
-  .window { border: 1px solid var(--line-strong); border-radius: 12px; background: var(--surface); overflow: hidden; box-shadow: var(--shadow); }
-  .window .bar { display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
-  .window .bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--dot); }
-  .window .bar span { margin: 0 auto; font: 12px var(--mono); color: var(--faint); transform: translateX(-24px); }
-  .hero .window { margin: 64px auto 0; max-width: 1080px; border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: 0; }
+  /* The demo: questions on top, a drawn Odoo page with the panel answering. Its own fixed colours: Odoo is light, the panel dark */
+  .demo { max-width: 1160px; margin: 60px auto 0; text-align: start; }
+  .asks { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .asks button { position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: 8px; flex: none; height: 38px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 99px;
+    background: color-mix(in srgb, var(--surface) 75%, transparent); backdrop-filter: blur(8px); color: var(--muted); font-size: 13px; font-weight: 500; cursor: pointer; transition: color .2s, border-color .2s, background-color .2s; }
+  .asks button:hover { color: var(--text); border-color: var(--faint); }
+  .asks button[aria-pressed="true"] { color: var(--text); border-color: color-mix(in srgb, var(--brand) 65%, transparent); background: color-mix(in srgb, var(--brand) 16%, var(--surface)); }
+  .asks i, .q-ic i { flex: none; width: 15px; height: 15px; background: currentColor; mask: var(--icon) center / contain no-repeat; -webkit-mask: var(--icon) center / contain no-repeat; }
+  .demo.auto .asks button[aria-pressed="true"]::after { content: ""; position: absolute; inset: auto 0 0; height: 2px; background: var(--grad); transform-origin: left; animation: fill 4.4s linear; }
+  .demo:hover .asks button::after { animation-play-state: paused; } /* reading: the questions wait */
+  @keyframes fill { from { transform: scaleX(0); } }
+  .win { position: relative; overflow: hidden; padding: 1.5px; border-radius: 18px; background: var(--line-strong); box-shadow: 0 60px 160px -50px var(--glow-a), 0 30px 60px -30px rgba(0, 0, 0, .5); }
+  .win::before { content: ""; position: absolute; left: 50%; top: 50%; width: 150%; aspect-ratio: 1; translate: -50% -50%; background: conic-gradient(transparent 0 58%, #f0a8de 76%, #3ddbb6 92%, transparent); animation: spin 9s linear infinite; }
+  @keyframes spin { to { rotate: 1turn; } }
+  .win-in { position: relative; border-radius: 16.5px; overflow: hidden; background: #f4f3f6; }
+  .chrome { display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; background: #1b1722; }
+  .chrome i { width: 11px; height: 11px; border-radius: 50%; background: #3b3445; }
+  .chrome .url { flex: 1; max-width: 440px; margin: 0 auto; height: 27px; display: grid; place-items: center; border-radius: 8px; background: #0f0c14; color: #a9a1b5; font: 12px var(--mono); }
+  .chrome svg { width: 22px; height: 22px; }
+  .scene { position: relative; height: 680px; color: #2b2630; font-size: 13px; line-height: 1.45; overflow: hidden; }
+  .odoo { position: absolute; inset: 0; }
+  .o-nav { display: flex; align-items: center; gap: 18px; height: 42px; padding: 0 16px; background: #714b67; color: rgba(255, 255, 255, .86); white-space: nowrap; }
+  .o-nav b { margin-right: 4px; color: #fff; font-size: 15px; font-weight: 600; }
+  .o-crumb { display: flex; align-items: center; gap: 10px; padding: 9px 16px; background: #fff; border-bottom: 1px solid #e3e1e6; color: #714b67; line-height: 1.3; }
+  .o-crumb b { display: block; color: #2b2630; font-weight: 500; }
+  .o-new { border: 1px solid #714b67; border-radius: 4px; padding: 5px 10px; font-weight: 500; }
+  .o-body { padding: 12px 448px 0 16px; }
+  .o-bar { display: flex; gap: 6px; align-items: center; margin-bottom: 22px; white-space: nowrap; }
+  .o-btn { padding: 6px 11px; border-radius: 4px; background: #e4e2e8; font-weight: 500; }
+  .o-btn.p { background: #714b67; color: #fff; }
+  .o-status { display: flex; margin-left: auto; color: #77717e; }
+  .o-status i { padding: 6px 11px; background: #e4e2e8; border-right: 1px solid #f4f3f6; font-style: normal; }
+  .o-status .on { background: #fff; color: #2b2630; font-weight: 600; box-shadow: inset 0 0 0 1px #714b67; }
+  .o-sheet { padding: 18px 20px 14px; background: #fff; border: 1px solid #e3e1e6; border-radius: 4px; }
+  .o-sheet h4 { width: max-content; margin: 0 0 26px; font-size: 27px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; }
+  .o-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 8px 24px; align-items: start; }
+  .o-f { display: grid; grid-template-columns: 112px 1fr; gap: 8px; }
+  .o-f label { justify-self: start; font-weight: 600; }
+  .o-f span { color: #4a4552; }
+  .o-f a { color: #017e84; }
+  .o-tabs { display: flex; gap: 18px; margin-top: 14px; border-bottom: 1px solid #e3e1e6; color: #714b67; }
+  .o-tabs b { margin-bottom: -1px; padding: 7px 12px; border: 1px solid #e3e1e6; border-bottom-color: #fff; border-radius: 4px 4px 0 0; color: #2b2630; font-weight: 500; }
+  .o-tabs span { padding: 8px 0; }
+  .o-sheet table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+  .o-sheet th { padding: 8px 6px; border-bottom: 1px solid #d5d2d9; text-align: left; font-weight: 600; }
+  .o-sheet td { padding: 6px 6px; border-bottom: 1px solid #eceaee; }
+  .o-sheet .num { text-align: right; }
+  .o-total { display: flex; gap: 14px; align-items: baseline; width: max-content; margin: 24px 0 0 auto; padding: 2px 6px; font-size: 14px; }
+  .o-total b { font-size: 18px; }
+  .odoo [data-t] { cursor: pointer; }
+  /* The element picker: glides to whatever the question is about, tagged with its technical name */
+  .pick { position: absolute; border: 2px solid #b0489d; border-radius: 7px; box-shadow: 0 0 0 4px rgba(176, 72, 157, .18), 0 0 28px rgba(176, 72, 157, .45); pointer-events: none;
+    transition: left .5s cubic-bezier(.2, .8, .2, 1), top .5s cubic-bezier(.2, .8, .2, 1), width .5s cubic-bezier(.2, .8, .2, 1), height .5s cubic-bezier(.2, .8, .2, 1); }
+  .pick::after { content: attr(data-n); position: absolute; left: -2px; bottom: 100%; padding: 2px 8px; border-radius: 6px 6px 6px 0; background: #b0489d; color: #fff; font: 600 11px/1.5 var(--mono); white-space: nowrap; }
+  /* The panel: panel/index.html in an iframe, as on a real Odoo page, with the frame and the round button the launcher draws */
+  .dbg { position: absolute; top: 52px; right: 14px; width: 420px; height: calc(100% - 118px); border: 0; border-radius: 14px; background: #fff; box-shadow: 0 0 0 1px rgba(0, 0, 0, .08), 0 12px 40px rgba(0, 0, 0, .22); }
+  .o-launch { position: absolute; right: 14px; bottom: 12px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #714b67; box-shadow: 0 2px 8px rgba(0, 0, 0, .35); }
+  .o-launch img { width: 24px; height: 24px; }
+  .demo-note { margin: 16px 0 0; text-align: center; font-size: 13px; color: var(--faint); }
 
-  /* Feature strip */
-  .strip { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
-  .strip > div { padding: 32px 28px; border-left: 1px solid var(--line); }
-  .strip > div:first-child { border-left: 0; }
-  .strip b { display: block; font-weight: 600; margin-bottom: 6px; }
-  .strip span { color: var(--muted); font-size: 15px; }
-  @media (max-width: 900px) { .strip { grid-template-columns: 1fr 1fr; } .strip > div:nth-child(3) { border-left: 0; } .strip > div:nth-child(n+3) { border-top: 1px solid var(--line); } }
-  @media (max-width: 560px) { .strip { grid-template-columns: 1fr; } .strip > div { border-left: 0; border-top: 1px solid var(--line); padding: 24px 16px; } .strip > div:first-child { border-top: 0; } }
+  /* Layout: backgrounds span the window (header, hero, bands, closing, footer); content sits in one 1160px container.
+     A band is a tinted strip from edge to edge: the four facts under the hero, and Install */
+  .band { border-block: 1px solid var(--line); background: var(--band); }
+  .band:has(> .sec) { margin-top: 112px; }
+  .band > .sec { padding-top: 104px; padding-bottom: 112px; scroll-margin-top: -24px; }
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); max-width: 1208px; margin: 0 auto; padding: 0 24px; }
+  .facts > div { padding: 30px 28px; border-inline-start: 1px solid var(--line); }
+  .facts > div:first-child { padding-inline-start: 0; border-inline-start: 0; }
+  .facts > div:last-child { padding-inline-end: 0; }
+  .facts b { display: block; margin-bottom: 6px; font-size: 16px; font-weight: 600; letter-spacing: -.01em; }
+  .facts span { color: var(--muted); font-size: 14.5px; line-height: 1.55; }
+  @media (max-width: 900px) {
+    .facts { grid-template-columns: 1fr 1fr; }
+    .facts > div { padding: 22px 20px; }
+    .facts > div:nth-child(odd) { padding-inline-start: 0; border-inline-start: 0; }
+    .facts > div:nth-child(even) { padding-inline-end: 0; }
+    .facts > div:nth-child(n+3) { border-top: 1px solid var(--line); }
+  }
+  @media (max-width: 560px) { .facts { grid-template-columns: 1fr; padding: 0 16px; } .facts > div { padding: 18px 0; border-inline-start: 0; } .facts > div + div { border-top: 1px solid var(--line); } }
 
-  /* Features: a bento of the nine tabs, each the question it answers and a close-up of the answer (click: the whole screen) */
-  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px;
-    grid-template-areas: "perf perf sec" "view rpc sec" "apps apps menus" "record code menus" "i18n i18n i18n"; }
-  .tile { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); overflow: hidden;
-    transition: border-color .2s, transform .2s, box-shadow .2s; }
-  .tile:hover { border-color: var(--hover-line); transform: translateY(-2px); box-shadow: var(--shadow); }
-  .tile-text { padding: 22px 24px 16px; }
-  .tile-tab { display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
-  .tile-tab i { width: 16px; height: 16px; background: currentColor; mask: var(--icon) center / contain no-repeat; -webkit-mask: var(--icon) center / contain no-repeat; }
-  .tile h3 { margin: 10px 0 6px; font-size: 21px; font-weight: 600; letter-spacing: -.02em; line-height: 1.25; text-wrap: balance; }
-  .tile p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; text-wrap: pretty; }
-  .tile-shot { position: relative; flex: 1; display: block; min-height: 200px; margin: 0 16px 16px; padding: 0; border: 1px solid var(--line); border-radius: 12px;
-    overflow: hidden; background: #fff; cursor: zoom-in; }
-  .tile-shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: left top; transition: transform .4s; }
-  .tile:hover .tile-shot img { transform: scale(1.02); }
-  .tile-shot::after { content: ""; position: absolute; inset: auto 0 0; height: 48px; background: linear-gradient(transparent, rgba(255, 255, 255, .95)); pointer-events: none; }
-  .tile-shot:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-  [style*="grid-area: i18n"] .tile-shot { min-height: 130px; }
-  :is([style*="grid-area: sec"], [style*="grid-area: menus"], [style*="grid-area: apps"], [style*="grid-area: perf"]) .tile-shot img { object-fit: contain; object-position: left top; } /* whole, never enlarged */
-  [style*="grid-area: i18n"] .tile-shot img { object-fit: contain; object-position: left top; }
+  /* The film */
+  .film { margin-top: 40px; padding: 8px; border: 1px solid var(--line-strong); border-radius: 20px; background: color-mix(in srgb, var(--surface) 80%, transparent); box-shadow: 0 50px 140px -50px var(--glow-a); }
+  .film video { width: 100%; border-radius: 13px; }
+  .steps li, .card { border: 1px solid var(--line); border-radius: 18px; background: var(--surface); }
+
+  /* Features: nine questions; the one picked shows in the panel beside it (the same replica as the hero's, tab by tab) */
+  .explore { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 80px; align-items: center; margin-top: 48px; }
+  .q-list { display: grid; gap: 2px; }
+  .q { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; width: 100%; padding: 11px 16px 11px 11px; border: 1px solid transparent; border-radius: 16px; background: none; color: inherit; text-align: start; cursor: pointer; transition: background-color .2s, border-color .2s; }
+  .q:hover { background: color-mix(in srgb, var(--surface) 60%, transparent); }
+  .q[aria-pressed="true"] { background: var(--surface); border-color: var(--line-strong); }
+  .q-ic { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: var(--surface-2); color: var(--muted); transition: background-color .2s, color .2s; }
+  .q-ic i { width: 19px; height: 19px; }
+  .q[aria-pressed="true"] .q-ic { background: color-mix(in srgb, var(--brand) 18%, transparent); color: var(--brand); }
+  .q-text { display: grid; gap: 1px; min-width: 0; }
+  .q b { font-size: 16.5px; font-weight: 600; letter-spacing: -.02em; }
+  .q-a { color: var(--muted); font-size: 14px; line-height: 1.45; }
+  .q-tab { font: 500 12px var(--mono); color: var(--faint); }
+  .q[aria-pressed="true"] .q-tab { color: var(--brand); }
+  .stage { position: relative; isolation: isolate; }
+  .stage::before { content: ""; position: absolute; inset: -6% -10%; z-index: -1; background: radial-gradient(60% 55% at 50% 50%, var(--glow-a), transparent 72%); pointer-events: none; }
+  #features { overflow-x: clip; } /* the glow never widens the page */
+  .panel-frame { display: block; width: 100%; height: 660px; border: 0; border-radius: 14px; background: var(--surface); box-shadow: 0 0 0 1px var(--line-strong), 0 30px 80px -20px rgba(0, 0, 0, .5); }
+  @media (max-width: 1000px) { /* the questions become a row to swipe, the panel under it */
+    .explore { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+    .q-list { display: flex; gap: 8px; overflow-x: auto; margin-inline: -24px; padding-inline: 24px; scrollbar-width: none; scroll-snap-type: x mandatory; }
+    .q { flex: none; width: min(300px, 78vw); align-items: start; border-color: var(--line); scroll-snap-align: center; }
+    .q-tab { display: none; }
+    .stage { width: 100%; max-width: 460px; margin: 0 auto; }
+    .panel-frame { height: 600px; }
+  }
   .ic-record { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'/><path d='M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8M10 9H8'/></svg>"); }
   .ic-view { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='18' height='18' x='3' y='3' rx='2'/><path d='M3 9h18M9 21V9'/></svg>"); }
   .ic-rpc { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M8 3 4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4'/></svg>"); }
@@ -182,69 +283,72 @@
   .ic-menus { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 12h16M4 6h16M4 18h16'/></svg>"); }
   .ic-perf { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>"); }
   .ic-code { --icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m4 17 6-6-6-6M12 19h8'/></svg>"); }
-  @media (max-width: 900px) { .tiles { grid-template-columns: 1fr 1fr; grid-template-areas: "perf perf" "view rpc" "sec menus" "apps apps" "record code" "i18n i18n"; } }
-  @media (max-width: 600px) { .tiles { grid-template-columns: 1fr; grid-template-areas: "record" "view" "rpc" "sec" "i18n" "apps" "menus" "perf" "code"; } .tile-shot { min-height: 240px; } }
-  /* Install */
-  .steps { display: grid; grid-template-columns: repeat(4, 1fr); margin: 40px 0 0; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-  .steps li { padding: 24px; border-left: 1px solid var(--line); background: var(--surface); font-size: 15px; color: var(--muted); }
-  .steps li:first-child { border-left: 0; }
-  .steps li b { color: var(--text); font-weight: 600; }
-  .steps .n { display: block; font: 500 13px var(--mono); color: var(--brand); margin-bottom: 14px; }
-  .steps a { color: var(--text); }
-  @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } .steps li:nth-child(3) { border-left: 0; } .steps li:nth-child(n+3) { border-top: 1px solid var(--line); } }
-  @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } .steps li { border-left: 0; border-top: 1px solid var(--line); } .steps li:first-child { border-top: 0; } }
 
-  /* Bento */
-  .bento { display: grid; grid-template-columns: 7fr 5fr; gap: 16px; margin-top: 40px; }
-  .card { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 28px; }
-  .card h3 { margin: 0 0 18px; font-size: 18px; font-weight: 600; letter-spacing: -.02em; }
+  /* Install: four steps, numbered by the list itself */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 44px 0 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li { counter-increment: step; padding: 22px; font-size: 15px; color: var(--muted); }
+  .steps li::before { content: counter(step, decimal-leading-zero); display: block; width: max-content; margin-bottom: 14px; font: 600 14px var(--mono); background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .steps li b { color: var(--text); font-weight: 600; }
+  @media (max-width: 900px) { .steps { grid-template-columns: 1fr; } }
+
+  /* Privacy */
+  .bento { display: grid; grid-template-columns: 7fr 5fr; gap: 16px; margin-top: 44px; }
+  .card { padding: 28px; }
+  .card h3 { margin: 0 0 16px; font-size: 19px; font-weight: 600; letter-spacing: -.02em; }
   .check { list-style: none; padding: 0; margin: 0; }
-  .check li { padding: 9px 0 9px 28px; position: relative; color: var(--muted); font-size: 15px; border-top: 1px solid var(--line); }
+  .check li { padding: 9px 0; padding-inline-start: 28px; position: relative; color: var(--muted); font-size: 15px; border-top: 1px solid var(--line); }
   .check li:first-child { border-top: 0; }
-  .check li::before { content: "✓"; position: absolute; left: 2px; color: var(--accent); font-weight: 700; }
+  .check li::before { content: "✓"; position: absolute; inset-inline-start: 2px; color: var(--teal); font-weight: 700; }
   dl { margin: 0; display: grid; grid-template-columns: auto 1fr; }
   dt, dd { margin: 0; padding: 10px 0; border-top: 1px solid var(--line); font-size: 15px; }
-  dt { color: var(--faint); font: 13px/1.9 var(--mono); padding-right: 20px; }
-  dl > :nth-child(-n+3) { border-top: 0; }
+  dt { color: var(--brand); font: 13px/1.85 var(--mono); padding-inline-end: 20px; }
+  dl > :nth-child(-n+2) { border-top: 0; }
   @media (max-width: 900px) { .bento { grid-template-columns: 1fr; } }
-  /* FAQ: native <details>, no script */
-  .faq { margin-top: 40px; border-top: 1px solid var(--line); }
-  .faq details { border-bottom: 1px solid var(--line); }
-  .faq summary { cursor: pointer; padding: 20px 0; font-weight: 600; font-size: 17px; letter-spacing: -.01em; }
-  .faq details p { margin: 0 0 20px; color: var(--muted); max-width: 46em; }
   @media (max-width: 560px) { .card { padding: 20px; } }
 
-  /* Closing */
-  .closing { text-align: center; position: relative; overflow: hidden; isolation: isolate; }
-  .closing::before { content: ""; position: absolute; inset: auto -20% -60%; height: 600px; z-index: -1; background: radial-gradient(50% 50% at 50% 50%, var(--glow), transparent 70%); }
-  .closing .sub { margin: 0 auto 32px; }
-  .big-star .stars { font-family: var(--mono); padding-left: 10px; margin-left: 2px; border-left: 1px solid color-mix(in srgb, var(--btn-text) 25%, transparent); }
+  /* FAQ: native <details>, no script */
+  .faq { display: grid; gap: 10px; margin-top: 40px; }
+  .faq details { padding: 0 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+  .faq details[open] { border-color: var(--line-strong); }
+  .faq summary { position: relative; padding: 19px 0; padding-inline-end: 32px; list-style: none; cursor: pointer; font-weight: 600; font-size: 16.5px; letter-spacing: -.01em; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; position: absolute; inset-inline-end: 0; top: 50%; translate: 0 -50%; font: 400 22px/1 var(--mono); color: var(--brand); transition: rotate .2s; }
+  .faq details[open] summary::after { rotate: 45deg; }
+  .faq details p { margin: 0 0 20px; color: var(--muted); text-wrap: pretty; }
 
-  footer .row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 28px 48px; border-top: 1px solid var(--line); color: var(--faint); font-size: 14px; }
+  /* Closing: full width, glowing from below, straight into the footer */
+  .closing { position: relative; isolation: isolate; overflow: clip; margin-top: 120px; padding: 112px 24px; border-top: 1px solid var(--line); text-align: center; }
+  .closing::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(40% 80% at 50% 115%, var(--glow-a), transparent 72%), radial-gradient(24% 50% at 14% 0%, var(--glow-b), transparent 72%), radial-gradient(24% 50% at 86% 0%, var(--glow-b), transparent 72%); }
+  .closing .sub { margin: 0 auto 32px; }
+
+  footer { border-top: 1px solid var(--line); }
+  footer .row { display: flex; gap: 12px 16px; flex-wrap: wrap; justify-content: space-between; align-items: center; max-width: 1208px; margin: 0 auto; padding: 26px 24px; color: var(--faint); font-size: 14px; }
   footer a { color: var(--muted); text-decoration: none; }
   footer a:hover { color: var(--text); }
   footer .links { display: flex; gap: 20px; flex-wrap: wrap; }
 
-  /* Zoomable screenshots: click → fit to screen, click again → actual size (pan by scrolling), Esc / ✕ / backdrop → close */
-  .window { position: relative; }
-  .window img { cursor: zoom-in; }
-  .zoom-hint { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 8px;
-    background: rgba(11, 10, 13, .82); border: 1px solid rgba(255, 255, 255, .14); color: #ededf0; font: 500 12px var(--mono); pointer-events: none; opacity: 0; transition: opacity .15s; }
-  .window:hover .zoom-hint { opacity: 1; }
-  @media (hover: none) { .zoom-hint { opacity: 1; } }
-  html:has(#zoom[open]) { overflow: hidden; }
-  #zoom { --text: #ededf0; --muted: #9a95a3; --line: rgba(255, 255, 255, .08); --line-strong: rgba(255, 255, 255, .14); --hover-line: rgba(255, 255, 255, .3); color-scheme: dark; color: var(--text); width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: #08070a; overflow: auto; overscroll-behavior: contain; }
-  #zoom::backdrop { background: transparent; }
-  #zoom .stage { min-width: 100%; min-height: 100%; display: grid; place-items: center; padding: 56px 16px 16px; }
-  #zoom img { max-width: 100%; max-height: calc(100dvh - 72px); width: auto; border-radius: 8px; cursor: zoom-in; box-shadow: 0 20px 60px rgba(0, 0, 0, .6); }
-  #zoom.full .stage { place-items: start; }
-  #zoom.full img { max-width: none; max-height: none; width: calc(var(--w) * 1px); cursor: zoom-out; }
-  #zoom .bar { position: fixed; top: 0; inset-inline: 0; display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 16px; background: rgba(11, 10, 13, .85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); font: 13px var(--mono); color: var(--muted); z-index: 1; }
-  #zoom .bar b { color: var(--text); font-weight: 500; }
-  #zoom .bar button { margin-left: auto; height: 32px; min-width: 32px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 8px; background: transparent; color: var(--text); font: 500 13px var(--mono); cursor: pointer; }
-  #zoom .bar button + button { margin-left: 0; }
-  #zoom .bar button:hover { border-color: var(--hover-line); }
-  @media (max-width: 760px) { footer .row { padding: 24px 16px; } }
+  @media (max-width: 1000px) { header nav, .top .btn { display: none; } }
+  /* Narrow screens: the drawn Odoo page goes, the panel's answers stay */
+  @media (max-width: 1100px) {
+    .demo { max-width: 600px; }
+    .scene { height: auto; }
+    .odoo { display: none; }
+    .dbg { position: static; display: block; width: 100%; height: 600px; border-radius: 0; box-shadow: none; }
+    .o-launch { display: none; }
+    #lang-name { display: none; }
+    .lang .code { display: inline; }
+  }
+  @media (max-width: 900px) {
+    .sec { padding-top: 88px; }
+    .hero { padding-top: 112px; }
+    .demo { margin-top: 44px; }
+    .wall { height: 420px; opacity: .04; }
+    .wall.lit { opacity: .5; }
+    .band:has(> .sec), .closing { margin-top: 88px; }
+    .band > .sec, .closing { padding-block: 72px; }
+  }
+  @media (max-width: 560px) { .top { padding: 0 16px; gap: 12px; } .sub { font-size: 16.5px; } .sec, .hero, .closing { padding-inline: 16px; } .asks { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin-inline: -16px; padding-inline: 16px; scrollbar-width: none; } .q-list { margin-inline: -16px; padding-inline: 16px; } .btn.big { height: 52px; padding: 0 20px; font-size: 16px; } footer .row { padding: 24px 16px; } }
+  @media (max-width: 420px) { .gh .w { display: none; } }
 </style>
 </head>
 <body>
@@ -254,267 +358,308 @@
   <symbol id="sun" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06"/></g></symbol>
   <symbol id="moon" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1Z"/></symbol>
   <symbol id="dl" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M2.5 13.5h11"/></symbol>
+  <symbol id="globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
+  <symbol id="logo" viewBox="0 0 128 128"><rect x="4" y="4" width="120" height="120" rx="28" fill="#714b67"/><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="30" r="12" fill="#21B799" stroke="#fff" stroke-width="5"/></symbol>
 </svg>
 
 <header>
-  <div class="frame nav">
+  <div class="top">
     <a class="logo" href="#top">
-      <svg viewBox="0 0 128 128" aria-hidden="true"><rect x="4" y="4" width="120" height="120" rx="28" fill="#714b67"/><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="30" r="12" fill="#21B799" stroke="#fff" stroke-width="5"/></svg>
+      <span class="mark"><svg viewBox="0 0 128 128" aria-hidden="true"><rect x="4" y="4" width="120" height="120" rx="28" fill="#714b67"/><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="30" r="12" fill="#21B799" stroke="#fff" stroke-width="5"/></svg></span>
       Odoo Debug
     </a>
     <nav>
-      <a href="#features"><span data-l="en">Features</span><span data-l="vi">Tính năng</span></a>
-      <a href="#install"><span data-l="en">Install</span><span data-l="vi">Cài đặt</span></a>
-      <a href="#privacy"><span data-l="en">Privacy</span><span data-l="vi">Quyền riêng tư</span></a>
+      <a href="#features"><span data-i18n>Features</span></a>
+      <a href="#install"><span data-i18n>Install</span></a>
+      <a href="#privacy"><span data-i18n>Privacy</span></a>
       <a href="#faq">FAQ</a>
       <a href="https://github.com/unclecatvn/extension-debug-odoo/blob/main/CHANGELOG.md">Changelog</a>
     </nav>
     <div class="end">
-      <a class="gh" href="https://github.com/unclecatvn/extension-debug-odoo" aria-label="Star on GitHub"><span><svg><use href="#gh"/></svg>Star</span><span class="stars" hidden></span></a>
+      <a class="gh" href="https://github.com/unclecatvn/extension-debug-odoo" aria-label="Star on GitHub"><span><svg><use href="#gh"/></svg><span class="w">Star</span></span><span class="stars" hidden></span></a>
       <button class="icon-btn" type="button" id="theme" aria-label="Toggle light / dark theme" title="Light / dark"><svg class="sun"><use href="#sun"/></svg><svg class="moon"><use href="#moon"/></svg></button>
-      <button class="lang" type="button" id="lang" aria-label="Language / Ngôn ngữ"><span data-l="en">VI</span><span data-l="vi">EN</span></button>
+      <div class="lang" id="lang">
+        <button type="button" class="lang-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Language"><svg aria-hidden="true"><use href="#globe"/></svg><span id="lang-name">English</span><span class="code">EN</span></button>
+        <ul class="lang-menu" role="listbox" aria-label="Language" hidden>
+          <li role="option" tabindex="-1" data-lang="ar" lang="ar">العربية</li>
+          <li role="option" tabindex="-1" data-lang="de" lang="de">Deutsch</li>
+          <li role="option" tabindex="-1" data-lang="en" lang="en" aria-selected="true">English</li>
+          <li role="option" tabindex="-1" data-lang="es" lang="es">Español</li>
+          <li role="option" tabindex="-1" data-lang="fr" lang="fr">Français</li>
+          <li role="option" tabindex="-1" data-lang="id" lang="id">Bahasa Indonesia</li>
+          <li role="option" tabindex="-1" data-lang="ja" lang="ja">日本語</li>
+          <li role="option" tabindex="-1" data-lang="pt-BR" lang="pt-BR">Português (Brasil)</li>
+          <li role="option" tabindex="-1" data-lang="vi" lang="vi">Tiếng Việt</li>
+          <li role="option" tabindex="-1" data-lang="zh-CN" lang="zh-CN">简体中文</li>
+        </ul>
+      </div>
+      <a class="btn primary sm" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><span data-i18n>Add to Chrome</span></a>
     </div>
   </div>
 </header>
 
-<main id="top" class="frame">
-  <div class="hero">
-    <a class="announce" id="release" href="https://github.com/unclecatvn/extension-debug-odoo/releases/latest">
-      <b data-l="en">Free to use</b><b data-l="vi">Miễn phí</b>
-      <span data-l="en">See the latest release</span><span data-l="vi">Xem bản phát hành mới nhất</span>
-      <span class="arrow">→</span>
+<main id="top">
+  <section class="hero">
+    <div class="wall" aria-hidden="true"></div><div class="wall lit" aria-hidden="true"></div>
+    <a class="pill" id="release" href="https://github.com/unclecatvn/extension-debug-odoo/releases/latest">
+      <b data-i18n>Free to use</b>
+      <span data-i18n>See the latest release</span>
     </a>
-    <h1 data-l="en">Stop guessing. See <span class="grad">why</span> Odoo does what it does.</h1>
-    <h1 data-l="vi">Đừng đoán nữa. Thấy ngay <span class="grad">vì sao</span> Odoo chạy như vậy.</h1>
-    <p class="lead" data-l="en">Odoo Debug is a free Chrome extension to debug Odoo, with its panel right on the Odoo page: which module adds a field, which inherited view changed the form, which RPC failed, which record rule blocks a user, which request fires 50 SQL queries.</p>
-    <p class="lead" data-l="vi">Odoo Debug là extension Chrome miễn phí để debug Odoo, với bảng debug ngay trên trang Odoo: module nào thêm field, view kế thừa nào sửa form, RPC nào lỗi, record rule nào chặn user, request nào bắn ra 50 câu SQL.</p>
+    <h1><span data-i18n>Stop guessing.</span><br><span class="grad" data-i18n>See why Odoo does what it does.</span></h1>
+    <p class="lead" data-i18n>A free Chrome extension to debug Odoo 18, 19 and 20, with its panel right on the Odoo page.</p>
     <div class="ctas">
-      <a class="btn primary" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><svg><use href="#dl"/></svg><span data-l="en">Add to Chrome</span><span data-l="vi">Thêm vào Chrome</span></a>
-      <a class="btn ghost" href="https://github.com/unclecatvn/extension-debug-odoo"><svg class="star-ic"><use href="#star"/></svg><span data-l="en">Star on GitHub</span><span data-l="vi">Star trên GitHub</span><span class="stars" hidden></span></a>
+      <a class="btn primary big" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><svg><use href="#dl"/></svg><span data-i18n>Add to Chrome</span><span class="free" data-i18n>Free</span></a>
+      <a class="btn ghost big" href="https://github.com/unclecatvn/extension-debug-odoo"><svg class="star-ic"><use href="#star"/></svg><span data-i18n>Star on GitHub</span><span class="stars" hidden></span></a>
     </div>
-    <div class="meta"><span>Chrome · Edge · Brave</span><span data-l="en">no backend</span><span data-l="vi">không backend</span><span data-l="en">no analytics</span><span data-l="vi">không analytics</span></div>
-    <div class="window">
-      <div class="bar"><i></i><i></i><i></i><span>odoo debug · intro</span></div>
+    <ul class="trust">
+      <li>Chrome, Edge, Brave</li>
+      <li data-i18n>No backend, no analytics</li>
+      <li data-i18n>Source available</li>
+    </ul>
+
+    <!-- The demo. The Odoo page is drawn (decorative); the panel is panel/index.html: the extension's own stylesheet over static markup. -->
+    <div class="demo auto" id="demo">
+      <div class="asks">
+        <button type="button" data-s="view" aria-pressed="true"><i class="ic-view"></i><span data-i18n>Why is this field read-only?</span></button>
+        <button type="button" data-s="record" aria-pressed="false"><i class="ic-record"></i><span data-i18n>What is this field?</span></button>
+        <button type="button" data-s="rpc" aria-pressed="false"><i class="ic-rpc"></i><span data-i18n>What did that call send?</span></button>
+        <button type="button" data-s="security" aria-pressed="false"><i class="ic-security"></i><span data-i18n>Why can't Marc open this order?</span></button>
+        <button type="button" data-s="perf" aria-pressed="false"><i class="ic-perf"></i><span data-i18n>Why is this screen slow?</span></button>
+      </div>
+      <div class="win" dir="ltr"><div class="win-in">
+        <div class="chrome" aria-hidden="true"><i></i><i></i><i></i><span class="url">localhost:8069/odoo/sales/7</span><svg><use href="#logo"/></svg></div>
+        <div class="scene">
+          <div class="odoo" aria-hidden="true">
+            <div class="o-nav"><b>Sales</b><span>Orders</span><span>To Invoice</span><span>Products</span><span>Reporting</span><span>Configuration</span></div>
+            <div class="o-crumb"><span class="o-new">New</span><span>Sales Orders<b>S00007</b></span></div>
+            <div class="o-body">
+              <div class="o-bar"><span class="o-btn p">Create Invoice</span><span class="o-btn">Send by Email</span><span class="o-btn">Cancel</span><span class="o-status"><i>Quotation</i><i>Quotation Sent</i><i class="on">Sales Order</i></span></div>
+              <div class="o-sheet" data-t="rpc" data-n="web_read">
+                <h4 data-t="security" data-n="sale.order #7">S00007</h4>
+                <div class="o-grid">
+                  <div class="o-f" data-t="view" data-n="partner_id"><label>Customer</label><span><a>Gemini Furniture</a><br>317 Fairchild Dr<br>Fairfield CA 94535</span></div>
+                  <div class="o-f"><label data-t="translations" data-n="date_order">Order Date</label><span>09/30/2026</span></div>
+                  <div class="o-f"><label>Invoice Address</label><span>Gemini Furniture, Soham Palmer</span></div>
+                  <div class="o-f"><label>Payment Terms</label><span>Immediate</span></div>
+                </div>
+                <div class="o-tabs"><b>Order Lines</b><span>Quote Builder</span><span>Other Info</span></div>
+                <table data-t="perf" data-n="order_line">
+                  <tr><th>Product</th><th class="num">Quantity</th><th class="num">Delivered</th><th class="num">Invoiced</th></tr>
+                  <tr><td>[FURN_6667] Acoustic Bloc Screens (White)</td><td class="num">5.00</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+                  <tr><td>[FURN_8999] Three-Seat Sofa</td><td class="num">1.00</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+                  <tr><td>[FURN_8888] Office Lamp</td><td class="num">1.00</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+                  <tr><td>[FURN_7777] Office Chair</td><td class="num">1.00</td><td class="num">0.00</td><td class="num">0.00</td></tr>
+                </table>
+                <div class="o-total" data-t="record" data-n="amount_total"><span>Total:</span><b>$ 1,706.00</b></div>
+              </div>
+            </div>
+            <div class="pick"></div>
+          </div>
+          <iframe class="dbg" src="panel/?tab=view" title="Odoo Debug panel (demo)"></iframe>
+          <span class="o-launch" aria-hidden="true"><img src="panel/icon-48.png" alt=""></span>
+        </div>
+      </div></div>
+      <p class="demo-note" data-i18n>The panel's real interface, with sample data. Pick a question, or click the page.</p>
+    </div>
+  </section>
+
+  <div class="band">
+    <div class="facts">
+      <div><b data-i18n>Right on the page</b><span data-i18n>No DevTools, no window switching.</span></div>
+      <div><b data-i18n>Isolated</b><span data-i18n>Its CSS never touches Odoo's.</span></div>
+      <div><b data-i18n>Odoo 18, 19 and 20</b><span data-i18n>Detected on each page.</span></div>
+      <div><b data-i18n>Private</b><span data-i18n>Talks only to your Odoo server.</span></div>
+    </div>
+  </div>
+
+  <section class="sec" id="film">
+    <span class="eyebrow">// demo</span>
+    <h2 data-i18n>All nine tabs in 98 seconds</h2>
+    <div class="film">
       <video src="intro.mp4" poster="intro-poster.jpg" width="1920" height="1080" autoplay muted loop playsinline controls preload="auto" aria-label="98-second motion film, scored: the logo drawn; what an Odoo day throws at you; then each feature as a question and its answer, the panel drawn and animated, in three acts (light, a moving gradient, dark): a field and what recomputes it; a technical name copied; why a field is read-only and which view set it; where a text comes from; two orders compared; an RPC call edited, sent again and copied as cURL; a Python dry run rolled back; why a user can&#39;t open an order and the group that would let him; what installing a module brings; an N+1 found; the technical screens; themes and ten languages. Free, for Odoo 18, 19 and 20."></video>
     </div>
-  </div>
-
-  <div class="strip">
-    <div><b data-l="en">Right on the page</b><b data-l="vi">Ngay trên trang</b><span data-l="en">A draggable button on every Odoo page. No DevTools, no window switching.</span><span data-l="vi">Nút kéo thả trên mọi trang Odoo. Không cần DevTools, không chuyển cửa sổ.</span></div>
-    <div><b data-l="en">Isolated</b><b data-l="vi">Cô lập</b><span data-l="en">Shadow DOM + iframe: Odoo's CSS and the panel's never mix.</span><span data-l="vi">Shadow DOM + iframe: CSS của Odoo và của bảng không bao giờ lẫn nhau.</span></div>
-    <div><b data-l="en">Odoo 18, 19 and 20</b><b data-l="vi">Odoo 18, 19 và 20</b><span data-l="en">One adapter per version, checked against your database on every page.</span><span data-l="vi">Mỗi phiên bản một adapter, đối chiếu với database của bạn trên từng trang.</span></div>
-    <div><b data-l="en">Private</b><b data-l="vi">Riêng tư</b><span data-l="en">Talks only to your Odoo server, with your session.</span><span data-l="vi">Chỉ nói chuyện với server Odoo của bạn, bằng phiên của bạn.</span></div>
-  </div>
+  </section>
 
   <section class="sec" id="features">
-    <span class="label" data-l="en">Features</span><span class="label" data-l="vi">Tính năng</span>
-    <h2 data-l="en">Developer mode shows what.<br>Odoo Debug shows why.</h2>
-    <h2 data-l="vi">Developer mode cho thấy cái gì.<br>Odoo Debug cho thấy vì sao.</h2>
-    <p class="sub" data-l="en">Nine tabs, each answering a question you would otherwise dig out of the source code, the database or the server log. Click a picture for the whole screen.</p>
-    <p class="sub" data-l="vi">Chín tab, mỗi tab trả lời một câu hỏi bạn thường phải lục trong source code, database hay log server. Bấm vào ảnh để xem cả màn hình.</p>
-    <div class="tiles">
-      <article class="tile" style="grid-area: record">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-record"></i>Record</span>
-          <h3 data-l="en">What is this field?</h3><h3 data-l="vi">Field này là gì?</h3>
-          <p data-l="en">Its type, value and module, and what recomputes it.</p><p data-l="vi">Kiểu, giá trị, module, và field nào khiến nó tính lại.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/full-record.png" data-title="Record" aria-label="Record: full screenshot"><img src="screenshots/card-record.png" loading="lazy" alt="Record tab: Its type, value and module, and what recomputes it."></button>
-      </article>
-      <article class="tile" style="grid-area: view">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-view"></i>View</span>
-          <h3 data-l="en">Why is this field read-only?</h3><h3 data-l="vi">Vì sao field này chỉ đọc?</h3>
-          <p data-l="en">The condition, its value right now, and the view that set it.</p><p data-l="vi">Điều kiện, giá trị lúc này, và view nào đặt ra.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/side-view.png" data-title="View" aria-label="View: full screenshot"><img src="screenshots/card-view.png" loading="lazy" alt="View tab: The condition, its value right now, and the view that set it."></button>
-      </article>
-      <article class="tile" style="grid-area: rpc">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-rpc"></i>RPC</span>
-          <h3 data-l="en">What did that call send?</h3><h3 data-l="vi">Lời gọi đó gửi gì?</h3>
-          <p data-l="en">Edit it and send it again right there, or copy it as cURL.</p><p data-l="vi">Sửa và gửi lại ngay tại chỗ, hoặc copy thành cURL.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/side-rpc.png" data-title="RPC" aria-label="RPC: full screenshot"><img src="screenshots/card-rpc.png" loading="lazy" alt="RPC tab: Edit it and send it again right there, or copy it as cURL."></button>
-      </article>
-      <article class="tile" style="grid-area: sec">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-security"></i>Security</span>
-          <h3 data-l="en">Why can't Marc open this order?</h3><h3 data-l="vi">Vì sao Marc không mở được đơn này?</h3>
-          <p data-l="en">The rule that refuses, and the group that would let him, tried before it is granted.</p><p data-l="vi">Rule nào chặn, nhóm nào sẽ cho phép, thử trước khi cấp thật.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/full-security.png" data-title="Security" aria-label="Security: full screenshot"><img src="screenshots/card-security.png" loading="lazy" alt="Security tab: The rule that refuses, and the group that would let him, tried before it is granted."></button>
-      </article>
-      <article class="tile" style="grid-area: i18n">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-translations"></i>i18n</span>
-          <h3 data-l="en">Where does this text come from?</h3><h3 data-l="vi">Chữ này lấy từ đâu?</h3>
-          <p data-l="en">Pick it on the page: its source, and where to change it.</p><p data-l="vi">Chọn nó trên trang: nguồn gốc, và chỗ để sửa.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/full-i18n.png" data-title="i18n" aria-label="i18n: full screenshot"><img src="screenshots/card-i18n.png" loading="lazy" alt="i18n tab: Pick it on the page: its source, and where to change it."></button>
-      </article>
-      <article class="tile" style="grid-area: apps">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-apps"></i>Apps</span>
-          <h3 data-l="en">What will this install bring?</h3><h3 data-l="vi">Cài cái này sẽ kéo theo gì?</h3>
-          <p data-l="en">Every module it installs and auto-installs, as Odoo computes it.</p><p data-l="vi">Mọi module sẽ được cài và tự cài, tính đúng như Odoo.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/full-apps.png" data-title="Apps" aria-label="Apps: full screenshot"><img src="screenshots/card-apps.png" loading="lazy" alt="Apps tab: Every module it installs and auto-installs, as Odoo computes it."></button>
-      </article>
-      <article class="tile" style="grid-area: menus">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-menus"></i>Menus</span>
-          <h3 data-l="en">Where is that technical screen?</h3><h3 data-l="vi">Màn hình kỹ thuật kia ở đâu?</h3>
-          <p data-l="en">Models, views, rules, crons… one click, no debug mode.</p><p data-l="vi">Models, views, rules, crons… một cú bấm, không cần debug mode.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/side-menus.png" data-title="Menus" aria-label="Menus: full screenshot"><img src="screenshots/card-menus.png" loading="lazy" alt="Menus tab: Models, views, rules, crons… one click, no debug mode."></button>
-      </article>
-      <article class="tile" style="grid-area: perf">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-perf"></i>Perf</span>
-          <h3 data-l="en">Why is this screen slow?</h3><h3 data-l="vi">Vì sao màn hình chậm?</h3>
-          <p data-l="en">An N+1 and the line running it, and where the time goes.</p><p data-l="vi">N+1 và dòng code gây ra, thời gian đi đâu.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/full-perf.png" data-title="Perf" aria-label="Perf: full screenshot"><img src="screenshots/card-perf.png" loading="lazy" alt="Perf tab: An N+1 and the line running it, and where the time goes."></button>
-      </article>
-      <article class="tile" style="grid-area: code">
-        <div class="tile-text"><span class="tile-tab"><i class="ic-code"></i>Code</span>
-          <h3 data-l="en">What would this change do?</h3><h3 data-l="vi">Đổi thế này thì ra sao?</h3>
-          <p data-l="en">Run it in a Python dry run: see the result, nothing is saved.</p><p data-l="vi">Chạy thử bằng Python dry run: thấy kết quả, không lưu gì.</p></div>
-        <button type="button" class="tile-shot" data-full="screenshots/side-code.png" data-title="Code" aria-label="Code: full screenshot"><img src="screenshots/card-code.png" loading="lazy" alt="Code tab: Run it in a Python dry run: see the result, nothing is saved."></button>
-      </article>
+    <span class="eyebrow" data-i18n>// features</span>
+    <h2 data-i18n>Developer mode shows what.<br>Odoo Debug shows why.</h2>
+    <p class="sub" data-i18n>Nine tabs, one question each. Pick one to see its answer.</p>
+    <div class="explore">
+      <div class="q-list">
+        <button type="button" class="q" data-tab="record" aria-pressed="true"><span class="q-ic"><i class="ic-record"></i></span><span class="q-text"><b data-i18n>What is this field?</b><span class="q-a" data-i18n>Type, value, module, and what recomputes it.</span></span><span class="q-tab">Record</span></button>
+        <button type="button" class="q" data-tab="view" aria-pressed="false"><span class="q-ic"><i class="ic-view"></i></span><span class="q-text"><b data-i18n>Why is this field read-only?</b><span class="q-a" data-i18n>The condition, its value now, and the view that set it.</span></span><span class="q-tab">View</span></button>
+        <button type="button" class="q" data-tab="rpc" aria-pressed="false"><span class="q-ic"><i class="ic-rpc"></i></span><span class="q-text"><b data-i18n>What did that call send?</b><span class="q-a" data-i18n>Payload, timing and error. Edit and resend, or copy as cURL.</span></span><span class="q-tab">RPC</span></button>
+        <button type="button" class="q" data-tab="security" aria-pressed="false"><span class="q-ic"><i class="ic-security"></i></span><span class="q-text"><b data-i18n>Why can't Marc open this order?</b><span class="q-a" data-i18n>The rule that refuses, and the group that would allow it.</span></span><span class="q-tab">Security</span></button>
+        <button type="button" class="q" data-tab="translations" aria-pressed="false"><span class="q-ic"><i class="ic-translations"></i></span><span class="q-text"><b data-i18n>Where does this text come from?</b><span class="q-a" data-i18n>Pick it on the page: its source, and where to change it.</span></span><span class="q-tab">Translations</span></button>
+        <button type="button" class="q" data-tab="apps" aria-pressed="false"><span class="q-ic"><i class="ic-apps"></i></span><span class="q-text"><b data-i18n>What will this install bring?</b><span class="q-a" data-i18n>Every module it installs and auto-installs.</span></span><span class="q-tab">Apps</span></button>
+        <button type="button" class="q" data-tab="menus" aria-pressed="false"><span class="q-ic"><i class="ic-menus"></i></span><span class="q-text"><b data-i18n>Where is that technical screen?</b><span class="q-a" data-i18n>Models, views, rules, crons: one click away.</span></span><span class="q-tab">Menus</span></button>
+        <button type="button" class="q" data-tab="perf" aria-pressed="false"><span class="q-ic"><i class="ic-perf"></i></span><span class="q-text"><b data-i18n>Why is this screen slow?</b><span class="q-a" data-i18n>N+1 queries, the line running them, where the time goes.</span></span><span class="q-tab">Perf</span></button>
+        <button type="button" class="q" data-tab="code" aria-pressed="false"><span class="q-ic"><i class="ic-code"></i></span><span class="q-text"><b data-i18n>What would this change do?</b><span class="q-a" data-i18n>Dry-run Python or JavaScript. Nothing is saved.</span></span><span class="q-tab">Code</span></button>
+      </div>
+      <div class="stage"><iframe class="panel-frame" src="panel/?tab=record" title="Odoo Debug panel, tab by tab (demo)" loading="lazy"></iframe></div>
     </div>
   </section>
 
+  <div class="band">
   <section class="sec" id="install">
-    <span class="label" data-l="en">Install</span><span class="label" data-l="vi">Cài đặt</span>
-    <h2 data-l="en">Up and running in a minute</h2>
-    <h2 data-l="vi">Chạy được sau một phút</h2>
-    <p class="sub" data-l="en">From the Chrome Web Store, in Chrome, Edge, Brave or any Chromium browser. It updates itself. A version not on the store yet: its zip from the <a href="https://github.com/unclecatvn/extension-debug-odoo/releases">Releases</a>, loaded unpacked.</p>
-    <p class="sub" data-l="vi">Từ Chrome Web Store, trên Chrome, Edge, Brave hoặc trình duyệt nhân Chromium bất kỳ. Tự cập nhật. Bản chưa lên store: tải zip ở trang <a href="https://github.com/unclecatvn/extension-debug-odoo/releases">Releases</a> rồi nạp dạng giải nén.</p>
+    <span class="eyebrow" data-i18n>// install</span>
+    <h2 data-i18n>Up and running in a minute</h2>
+    <p class="sub" data-i18n>For Chrome, Edge, Brave and other Chromium browsers. It updates itself.</p>
     <ol class="steps">
-      <li><span class="n">01</span><span data-l="en">Open <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Odoo Debug on the Chrome Web Store</a>.</span><span data-l="vi">Mở <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Odoo Debug trên Chrome Web Store</a>.</span></li>
-      <li><span class="n">02</span><span data-l="en">Click <b>Add to Chrome</b> (Edge: allow extensions from other stores first).</span><span data-l="vi">Bấm <b>Thêm vào Chrome</b> (Edge: cho phép extension từ store khác trước).</span></li>
-      <li><span class="n">03</span><span data-l="en">Open a page of an Odoo 18, 19 or 20 database, logged in, and click the round button at the bottom right, or press <b>Alt+Shift+O</b>.</span><span data-l="vi">Mở một trang của database Odoo 18, 19 hoặc 20 (đã đăng nhập), bấm nút tròn ở góc dưới bên phải, hoặc nhấn <b>Alt+Shift+O</b>.</span></li>
-      <li><span class="n">04</span><span data-l="en">The toolbar icon: Odoo's debug mode (Off / Debug / Assets), the panel in its own window, language and theme. <b>Alt+Shift+D</b> turns debug mode on or off.</span><span data-l="vi">Icon trên thanh công cụ: chế độ debug của Odoo (Off / Debug / Assets), panel trong cửa sổ riêng, ngôn ngữ và giao diện. <b>Alt+Shift+D</b> bật / tắt debug mode.</span></li>
+      <li><span data-i18n>Add <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Odoo Debug from the Chrome Web Store</a>. On Edge, allow other stores first.</span></li>
+      <li><span data-i18n>Open any Odoo 18, 19 or 20 page, logged in.</span></li>
+      <li><span data-i18n>Click the round button at the bottom right, or press <kbd>Alt+Shift+O</kbd>.</span></li>
     </ol>
   </section>
+  </div>
 
   <section class="sec" id="privacy">
-    <span class="label" data-l="en">Privacy</span><span class="label" data-l="vi">Quyền riêng tư</span>
-    <h2 data-l="en">Your data stays in your Odoo</h2>
-    <h2 data-l="vi">Dữ liệu của bạn nằm yên trong Odoo</h2>
+    <span class="eyebrow" data-i18n>// privacy</span>
+    <h2 data-i18n>Your data stays in your Odoo</h2>
     <div class="bento">
       <div class="card">
-        <h3 data-l="en">Private by design</h3><h3 data-l="vi">Riêng tư từ thiết kế</h3>
-        <ul class="check" data-l="en">
-          <li>Talks only to the Odoo server of the tab you are on, with your own session: no backend, no analytics, no tracking</li>
-          <li>Active on Odoo pages only: elsewhere nothing shows and the toolbar icon is greyed out</li>
-          <li>The session cookie's value is never read, only its flags</li>
-          <li>Odoo data reaches the panel as text only; a module's description shows in a sandboxed frame where nothing runs</li>
-          <li>Source available: read every line on GitHub</li>
-        </ul>
-        <ul class="check" data-l="vi">
-          <li>Chỉ nói chuyện với server Odoo của tab đang mở, bằng chính phiên của bạn: không backend, không analytics, không theo dõi</li>
-          <li>Chỉ hoạt động trên trang Odoo: ở trang khác không hiện gì và icon trên thanh công cụ bị làm mờ</li>
-          <li>Không bao giờ đọc giá trị cookie phiên, chỉ đọc các cờ của nó</li>
-          <li>Dữ liệu Odoo chỉ vào panel dưới dạng chữ; mô tả của module hiện trong một khung sandbox, không chạy được gì</li>
-          <li>Mã nguồn công khai: đọc từng dòng trên GitHub</li>
+        <h3 data-i18n>Private by design</h3>
+        <ul class="check">
+          <li data-i18n>No backend, no analytics, no tracking</li>
+          <li data-i18n>Talks only to the Odoo server of the current tab, with your session</li>
+          <li data-i18n>Active on Odoo pages only</li>
+          <li data-i18n>Reads the session cookie's flags, never its value</li>
+          <li data-i18n>Source available on GitHub</li>
         </ul>
       </div>
       <div class="card">
-        <h3 data-l="en">Compatibility</h3><h3 data-l="vi">Tương thích</h3>
+        <h3 data-i18n>Compatibility</h3>
         <dl>
-          <dt>browser</dt><dd>Chrome, Edge, Brave <span data-l="en">and other Chromium browsers</span><span data-l="vi">và các trình duyệt nhân Chromium</span></dd>
+          <dt>browser</dt><dd>Chrome, Edge, Brave <span data-i18n>and other Chromium browsers</span></dd>
           <dt>manifest</dt><dd>V3</dd>
-          <dt>languages</dt><dd>العربية, Deutsch, English, Español, Français, Bahasa Indonesia, 日本語, Português (Brasil), Tiếng Việt, 简体中文</dd>
-          <dt>themes</dt><dd><span data-l="en">System, light, dark, and 9 editor themes (Dracula, Monokai, Nord…)</span><span data-l="vi">Theo hệ thống, sáng, tối, và 9 theme kiểu editor (Dracula, Monokai, Nord…)</span></dd>
+          <dt>languages</dt><dd>ar, de, en, es, fr, id, ja, pt-BR, vi, zh-CN</dd>
+          <dt>themes</dt><dd><span data-i18n>System, light, dark, and 9 editor themes</span></dd>
           <dt>odoo</dt><dd>18.0, 19.0, 20.0</dd>
         </dl>
       </div>
       <div class="card">
-        <h3 data-l="en">It writes only when you ask</h3><h3 data-l="vi">Chỉ ghi khi bạn yêu cầu</h3>
-        <ul class="check" data-l="en">
-          <li>Every tab reads; nothing is written behind your back</li>
-          <li>Code: read-only by default; a dry run lists the writes (JavaScript) or rolls them back for real (Python); writes in its writes mode only</li>
-          <li>Security: groups tried are simulated, written only on Apply</li>
-          <li>On your click, as your user: Apps operations, translations edited, Perf's profiles (Odoo deletes them after 30 days)</li>
-          <li>Python runs as a temporary server action, deleted after the run</li>
-        </ul>
-        <ul class="check" data-l="vi">
-          <li>Mọi tab chỉ đọc; không có gì được ghi sau lưng bạn</li>
-          <li>Code: mặc định chỉ đọc; chạy thử thì liệt kê các lệnh ghi (JavaScript) hoặc rollback thật (Python); chỉ ghi ở chế độ ghi</li>
-          <li>Security: nhóm đang thử chỉ được giả lập, chỉ ghi khi bấm Apply</li>
-          <li>Theo cú bấm của bạn, dưới quyền của bạn: thao tác trong Apps, sửa bản dịch, profile của Perf (Odoo tự xoá sau 30 ngày)</li>
-          <li>Python chạy dưới dạng một server action tạm, xoá ngay sau khi chạy</li>
+        <h3 data-i18n>Writes only when you ask</h3>
+        <ul class="check">
+          <li data-i18n>Every tab only reads</li>
+          <li data-i18n>Code: read-only by default; a dry run saves nothing</li>
+          <li data-i18n>Security: a group is simulated until you click Apply</li>
+          <li data-i18n>Apps, translations and Perf profiles: written only on your click</li>
+          <li data-i18n>Python runs as a temporary server action, deleted after the run</li>
         </ul>
       </div>
       <div class="card">
-        <h3 data-l="en">Permissions, and what for</h3><h3 data-l="vi">Các quyền, và để làm gì</h3>
+        <h3 data-i18n>Permissions and why</h3>
         <dl>
-          <dt>all sites</dt><dd><span data-l="en">Odoo runs on any domain; the panel turns on where the page is Odoo</span><span data-l="vi">Odoo chạy trên mọi domain; panel chỉ bật ở trang là Odoo</span></dd>
-          <dt>scripting</dt><dd><span data-l="en">Read the webclient's state: record, view, action</span><span data-l="vi">Đọc trạng thái webclient: record, view, action</span></dd>
-          <dt>cookies</dt><dd><span data-l="en">The session cookie's flags, never its value</span><span data-l="vi">Các cờ của cookie phiên, không bao giờ đọc giá trị</span></dd>
-          <dt>storage</dt><dd><span data-l="en">Settings, snippets, forms</span><span data-l="vi">Cài đặt, snippet, biểu mẫu</span></dd>
-          <dt>clipboard</dt><dd><span data-l="en">Copy names, values, cURL</span><span data-l="vi">Copy tên, giá trị, cURL</span></dd>
-          <dt>downloads</dt><dd><span data-l="en">Exported <code>.pot</code> / <code>.po</code></span><span data-l="vi"><code>.pot</code> / <code>.po</code> đã xuất</span></dd>
-          <dt>toolbar</dt><dd><span data-l="en">The icon lit on Odoo pages only (declarativeContent)</span><span data-l="vi">Icon chỉ sáng trên trang Odoo (declarativeContent)</span></dd>
+          <dt>all sites</dt><dd><span data-i18n>Odoo runs on any domain</span></dd>
+          <dt>scripting</dt><dd><span data-i18n>Reads the webclient's state</span></dd>
+          <dt>cookies</dt><dd><span data-i18n>Session cookie flags, never its value</span></dd>
+          <dt>storage</dt><dd><span data-i18n>Settings, snippets, forms</span></dd>
+          <dt>clipboard</dt><dd><span data-i18n>Copy names, values, cURL</span></dd>
+          <dt>downloads</dt><dd><span data-i18n>Exported <code>.pot</code> / <code>.po</code></span></dd>
+          <dt>toolbar</dt><dd><span data-i18n>Icon lit on Odoo pages only</span></dd>
         </dl>
       </div>
     </div>
   </section>
 
   <section class="sec" id="faq">
-    <span class="label">FAQ</span>
-    <h2 data-l="en">Debugging Odoo, answered</h2>
-    <h2 data-l="vi">Debug Odoo: hỏi và đáp</h2>
+    <span class="eyebrow">// faq</span>
+    <h2 data-i18n>Debugging Odoo, answered</h2>
     <div class="faq">
-      <details data-l="en"><summary>How do I turn on debug mode (developer mode) in Odoo?</summary><p>Add <code>?debug=1</code> to the URL (<code>?debug=assets</code> for unminified assets), or go to Settings → Activate the developer mode. With Odoo Debug, pick Off / Debug / Assets from the toolbar icon, or press <b>Alt+Shift+D</b>.</p></details>
-      <details data-l="vi"><summary>Làm sao bật debug mode (chế độ nhà phát triển) trong Odoo?</summary><p>Thêm <code>?debug=1</code> vào URL (<code>?debug=assets</code> để tải assets chưa nén), hoặc vào Settings → Activate the developer mode. Với Odoo Debug, chọn Off / Debug / Assets từ icon trên thanh công cụ, hoặc nhấn <b>Alt+Shift+D</b>.</p></details>
-      <details data-l="en"><summary>Is there a Chrome extension to debug Odoo?</summary><p>Yes: Odoo Debug, free on the Chrome Web Store, for Chrome, Edge, Brave and other Chromium browsers. It adds a debug panel to every Odoo 18, 19 and 20 page, beyond what developer mode shows.</p></details>
-      <details data-l="vi"><summary>Có extension Chrome nào để debug Odoo không?</summary><p>Có: Odoo Debug, miễn phí trên Chrome Web Store, dùng được trên Chrome, Edge, Brave và trình duyệt nhân Chromium khác. Nó thêm bảng debug vào mọi trang Odoo 18, 19 và 20, sâu hơn những gì developer mode cho thấy.</p></details>
-      <details data-l="en"><summary>How do I find which module adds a field or changes a view in Odoo?</summary><p>Open the Record tab: each field shows its type, value, the module that defines it and what recomputes it. The View tab shows the inherited views that changed the form, and which one made a field read-only or invisible.</p></details>
-      <details data-l="vi"><summary>Làm sao biết module nào thêm field hay sửa view trong Odoo?</summary><p>Mở tab Record: mỗi field hiện kiểu, giá trị, module định nghĩa nó và cái gì tính lại nó. Tab View hiện các view kế thừa đã sửa form, và view nào làm field chỉ đọc hay ẩn đi.</p></details>
-      <details data-l="en"><summary>How do I debug RPC calls and errors in Odoo?</summary><p>The RPC tab logs every JSON-RPC call the page makes, with its parameters, result and Python traceback. Edit a call and send it again, or copy it as cURL.</p></details>
-      <details data-l="vi"><summary>Làm sao debug lời gọi RPC và lỗi trong Odoo?</summary><p>Tab RPC ghi lại mọi lời gọi JSON-RPC của trang, kèm tham số, kết quả và traceback Python. Sửa lời gọi rồi gửi lại, hoặc copy dưới dạng cURL.</p></details>
-      <details data-l="en"><summary>Why can't a user access a record in Odoo?</summary><p>The Security tab names the access right or record rule that refuses, and the group that would allow it. Try that group in a simulation before granting it.</p></details>
-      <details data-l="vi"><summary>Vì sao user không truy cập được record trong Odoo?</summary><p>Tab Security chỉ ra access right hoặc record rule đang từ chối, và group nào sẽ cho phép. Thử group đó ở chế độ giả lập trước khi cấp thật.</p></details>
-      <details data-l="en"><summary>How do I find slow SQL queries or N+1 problems in Odoo?</summary><p>The Perf tab profiles a request with Odoo's profiler, flags N+1 queries and points to the line running them.</p></details>
-      <details data-l="vi"><summary>Làm sao tìm câu SQL chậm hay lỗi N+1 trong Odoo?</summary><p>Tab Perf profile một request bằng profiler của Odoo, đánh dấu truy vấn N+1 và chỉ ra dòng code chạy chúng.</p></details>
+      <details><summary data-i18n>How do I turn on debug mode (developer mode) in Odoo?</summary><p data-i18n>Add <code>?debug=1</code> to the URL (<code>?debug=assets</code> for unminified assets), or go to Settings → Activate the developer mode. With Odoo Debug, pick Off / Debug / Assets from the toolbar icon, or press <kbd>Alt+Shift+D</kbd>.</p></details>
+      <details><summary data-i18n>Is there a Chrome extension to debug Odoo?</summary><p data-i18n>Yes: Odoo Debug, free on the Chrome Web Store, for Chrome, Edge, Brave and other Chromium browsers. It adds a debug panel to every Odoo 18, 19 and 20 page, beyond what developer mode shows.</p></details>
+      <details><summary data-i18n>How do I find which module adds a field or changes a view in Odoo?</summary><p data-i18n>Open the Record tab: each field shows its type, value, the module that defines it and what recomputes it. The View tab shows the inherited views that changed the form, and which one made a field read-only or invisible.</p></details>
+      <details><summary data-i18n>How do I debug RPC calls and errors in Odoo?</summary><p data-i18n>The RPC tab logs every JSON-RPC call the page makes, with its parameters, result and Python traceback. Edit a call and send it again, or copy it as cURL.</p></details>
+      <details><summary data-i18n>Why can't a user access a record in Odoo?</summary><p data-i18n>The Security tab names the access right or record rule that refuses, and the group that would allow it. Try that group in a simulation before granting it.</p></details>
+      <details><summary data-i18n>How do I find slow SQL queries or N+1 problems in Odoo?</summary><p data-i18n>The Perf tab profiles a request with Odoo's profiler, flags N+1 queries and points to the line running them.</p></details>
     </div>
   </section>
 
-  <section class="sec closing">
-    <span class="label" data-l="en">Source available</span><span class="label" data-l="vi">Mã nguồn công khai</span>
-    <h2 data-l="en">Free, and built in the open</h2>
-    <h2 data-l="vi">Miễn phí, phát triển công khai</h2>
-    <p class="sub" data-l="en">Read the code, report issues, send pull requests. A star is the easiest way to say thanks, and it helps other Odoo developers find the project.</p>
-    <p class="sub" data-l="vi">Đọc code, báo lỗi, gửi pull request. Một ngôi sao là cách cảm ơn đơn giản nhất, và giúp các lập trình viên Odoo khác tìm thấy dự án.</p>
+  <section class="closing">
+    <span class="eyebrow" data-i18n>// source available</span>
+    <h2 data-i18n>Free, and built in the open</h2>
+    <p class="sub" data-i18n>Read the code, report an issue, or leave a star.</p>
     <div class="ctas">
-      <a class="btn primary big-star" href="https://github.com/unclecatvn/extension-debug-odoo"><svg style="color:#d99a00"><use href="#star"/></svg><span data-l="en">Star on GitHub</span><span data-l="vi">Star trên GitHub</span><span class="stars" hidden></span></a>
-      <a class="btn ghost" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><svg><use href="#dl"/></svg><span data-l="en">Add to Chrome</span><span data-l="vi">Thêm vào Chrome</span></a>
+      <a class="btn primary big" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><svg><use href="#dl"/></svg><span data-i18n>Add to Chrome</span><span class="free" data-i18n>Free</span></a>
+      <a class="btn ghost big" href="https://github.com/unclecatvn/extension-debug-odoo"><svg class="star-ic"><use href="#star"/></svg><span data-i18n>Star on GitHub</span><span class="stars" hidden></span></a>
     </div>
   </section>
 </main>
 
-<dialog id="zoom" aria-label="Screenshot">
-  <div class="bar">
-    <b id="zoom-title"></b>
-    <span data-l="en">click the image to zoom</span><span data-l="vi">bấm vào ảnh để phóng to</span>
-    <button type="button" id="zoom-toggle" aria-label="Zoom">+</button>
-    <button type="button" id="zoom-close" aria-label="Close">✕</button>
-  </div>
-  <div class="stage"><img alt=""></div>
-</dialog>
-
 <footer>
-  <div class="frame row">
-    <span><span data-l="en">Made by</span><span data-l="vi">Phát triển bởi</span> <a href="https://unclecatvn.com/" rel="author">UncleCat</a></span>
+  <div class="row">
+    <span><span data-i18n>Made by</span> <a href="https://unclecatvn.com/" rel="author">UncleCat</a></span>
     <span class="links">
       <a href="https://github.com/unclecatvn/extension-debug-odoo">GitHub</a>
       <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Chrome Web Store</a>
       <a href="https://github.com/unclecatvn/extension-debug-odoo/blob/main/CHANGELOG.md">Changelog</a>
-      <a href="https://github.com/unclecatvn/extension-debug-odoo/issues"><span data-l="en">Issues</span><span data-l="vi">Báo lỗi</span></a>
+      <a href="https://github.com/unclecatvn/extension-debug-odoo/issues"><span data-i18n>Issues</span></a>
     </span>
   </div>
 </footer>
 
 <script>
-  // Language: saved choice, else the browser's. Storage can be blocked: the page still works.
+  // Language: the saved choice, else the browser's, among the extension's ten. The page is written in English; the
+  // English of every [data-i18n] element is its key in i18n/<lang>.json (as a msgid in the extension's .po files).
+  // A missing file or key leaves the English. Storage can be blocked: the page still works.
   const root = document.documentElement;
-  const setLang = (l) => { root.lang = l; try { localStorage.setItem('lang', l); } catch {} };
+  const langBox = document.getElementById('lang'), langBtn = langBox.querySelector('button'), langMenu = langBox.querySelector('ul');
+  const langs = [...langMenu.children];
+  const texts = [...document.querySelectorAll('[data-i18n]')].map((el) => [el, el.innerHTML.replace(/\s+/g, ' ').trim()]);
+  let dict = {};
+  const paint = () => { for (const [el, en] of texts) el.innerHTML = dict[en] ?? en; };
+  const retext = (el, en) => { texts.find((t) => t[0] === el)[1] = en; el.innerHTML = dict[en] ?? en; }; // an element whose English changes (the release line)
+  async function setLang(lang) {
+    const picked = langs.find((o) => o.dataset.lang === lang) || langs.find((o) => o.dataset.lang === 'en');
+    lang = picked.dataset.lang;
+    dict = lang === 'en' ? {} : await fetch(`i18n/${lang}.json`).then((r) => r.ok ? r.json() : {}).catch(() => ({}));
+    root.lang = lang;
+    root.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    for (const o of langs) o.setAttribute('aria-selected', o === picked);
+    document.getElementById('lang-name').textContent = picked.textContent;
+    langBtn.querySelector('.code').textContent = lang.slice(0, 2).toUpperCase();
+    paint();
+    try { localStorage.setItem('lang', lang); } catch {}
+    dispatchEvent(new Event('resize')); // the demo's picker box follows the text
+  }
   let saved = null;
   try { saved = localStorage.getItem('lang'); } catch {}
-  setLang(saved || (navigator.language.toLowerCase().startsWith('vi') ? 'vi' : 'en'));
-  document.getElementById('lang').onclick = () => setLang(root.lang === 'vi' ? 'en' : 'vi');
+  const browserLang = () => {
+    for (const l of navigator.languages || [navigator.language]) for (const o of langs) if (l.toLowerCase().split('-')[0] === o.dataset.lang.toLowerCase().split('-')[0]) return o.dataset.lang;
+    return 'en';
+  };
+  // The list: a click or Enter picks, arrows move, Escape or a click elsewhere closes.
+  const openLangs = (on) => { langMenu.hidden = !on; langBtn.setAttribute('aria-expanded', on); if (on) langs.find((o) => o.getAttribute('aria-selected') === 'true').focus(); };
+  langBtn.onclick = () => openLangs(langMenu.hidden);
+  langMenu.onclick = (e) => { const o = e.target.closest('[data-lang]'); if (!o) return; setLang(o.dataset.lang); openLangs(false); langBtn.focus(); };
+  langMenu.onkeydown = (e) => {
+    const i = langs.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); langs[(i + (e.key === 'ArrowDown' ? 1 : langs.length - 1)) % langs.length].focus(); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.activeElement.click(); }
+    else if (e.key === 'Escape') { openLangs(false); langBtn.focus(); }
+  };
+  addEventListener('pointerdown', (e) => { if (!langBox.contains(e.target)) openLangs(false); });
+  setLang(saved || browserLang());
+
+  // The panel demos (panel/index.html in iframes) take the page's theme and the tab to show; each tells the tab clicked in it.
+  const frames = [...document.querySelectorAll('iframe[src^="panel/"]')];
+  const wanted = new Map(); // frame → tab, sent again when the frame (re)loads
+  const tell = (f, msg) => f.contentWindow?.postMessage(msg, '*');
+  const setTab = (f, tab) => { wanted.set(f, tab); tell(f, { tab }); };
+
+  // The top bar: clear over the hero, frosted once the page scrolls.
+  const bar = document.querySelector('header');
+  const stick = () => bar.classList.toggle('stuck', scrollY > 8);
+  addEventListener('scroll', stick, { passive: true });
+  stick();
 
   // Theme: system by default; the button flips the current one and remembers the choice.
   const dark = () => root.dataset.theme ? root.dataset.theme === 'dark' : !matchMedia('(prefers-color-scheme: light)').matches;
-  const showTheme = () => document.querySelector('meta[name=theme-color]').content = dark() ? '#0b0a0d' : '#fbfafc';
+  const showTheme = () => {
+    document.querySelector('meta[name=theme-color]').content = dark() ? '#0b0910' : '#fbf9fc';
+    for (const f of frames) tell(f, { theme: dark() ? 'dark' : 'light' });
+  };
+  for (const f of frames) f.addEventListener('load', () => tell(f, { theme: dark() ? 'dark' : 'light', tab: wanted.get(f) }));
   showTheme();
   matchMedia('(prefers-color-scheme: light)').addEventListener('change', showTheme);
   document.getElementById('theme').onclick = () => {
@@ -531,56 +676,64 @@
   })).catch(() => {});
   api('/releases/latest').then(({ tag_name: tag }) => {
     const a = document.getElementById('release');
-    a.querySelectorAll('b').forEach((b) => { b.textContent = tag; });
-    a.querySelector('span[data-l="en"]').textContent = 'is out · see what\'s new';
-    a.querySelector('span[data-l="vi"]').textContent = 'đã phát hành · xem có gì mới';
+    retext(a.querySelector('b'), tag);
+    retext(a.querySelector('span'), 'is out: see what\'s new');
   }).catch(() => {});
 
   // The hero's film: still for people who ask for less motion (its controls play it).
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) for (const v of document.querySelectorAll('video[autoplay]')) { v.autoplay = false; v.pause(); }
-  // Zoomable screenshots. ponytail: native <dialog>, one zoom step + scroll to pan; pinch-zoom on phones comes from the browser.
-  const zoom = document.getElementById('zoom');
-  const zimg = zoom.querySelector('img');
-  const toggle = (e) => {
-    const r = zimg.getBoundingClientRect();
-    const fx = e ? (e.clientX - r.left) / r.width : .5; // keep the clicked spot under the cursor
-    const fy = e ? (e.clientY - r.top) / r.height : .5;
-    // zoomed width: 2× the fitted size, at least the screenshot's sharp 1:1 (they are 2x images)
-    if (!zoom.classList.contains('full')) zimg.style.setProperty('--w', Math.max(zimg.naturalWidth / 2, r.width * 2));
-    zoom.classList.toggle('full');
-    const full = zoom.classList.contains('full');
-    document.getElementById('zoom-toggle').textContent = full ? '−' : '+';
-    if (full) zoom.scrollTo(fx * zimg.offsetWidth - zoom.clientWidth / 2, fy * zimg.offsetHeight - zoom.clientHeight / 2 + 56);
+  // Hero backdrop: Odoo's technical names, lit where the pointer is (the light drifts on its own until then). Decorative.
+  const hero = document.querySelector('.hero');
+  const names = 'sale.order ir.rule ir.ui.view res.partner amount_total partner_id web_read ir.model.access @api.depends _compute_amounts xpath readonly invisible domain groups call_kw web_search_read ir.actions.act_window noupdate _inherit ir.model.fields res.groups search_count ir.cron __manifest__.py order_line ir.config_parameter mail.thread ir.model.data'.split(' ');
+  const wall = Array.from({ length: 900 }, (_, i) => names[(i * 7 + (i >> 4)) % names.length]).join(' ');
+  for (const w of hero.querySelectorAll('.wall')) w.textContent = wall;
+  hero.onpointermove = (e) => {
+    const r = hero.getBoundingClientRect();
+    hero.classList.add('live');
+    hero.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    hero.style.setProperty('--my', `${e.clientY - r.top}px`);
   };
-  const openZoom = (src, alt, title) => {
-    zimg.src = src;
-    zimg.alt = alt;
-    document.getElementById('zoom-title').textContent = title;
-    zoom.classList.remove('full');
-    document.getElementById('zoom-toggle').textContent = '+';
-    zoom.showModal();
-    zoom.scrollTo(0, 0);
-  };
-  document.querySelectorAll('.tile-shot').forEach((b) => { b.onclick = () => openZoom(b.dataset.full, b.querySelector('img').alt, b.dataset.title); });
-  document.querySelectorAll('.window').forEach((w) => {
-    const img = w.querySelector('img');
-    if (!img) return; // the hero's video
-    w.insertAdjacentHTML('beforeend', '<span class="zoom-hint">⤢ <span data-l="en">Click to zoom</span><span data-l="vi">Bấm để phóng to</span></span>');
-    img.onclick = () => {
-      zimg.src = img.currentSrc || img.src;
-      zimg.alt = img.alt;
-      document.getElementById('zoom-title').textContent = w.querySelector('.bar span').textContent;
-      zoom.classList.remove('full');
-      document.getElementById('zoom-toggle').textContent = '+';
-      zoom.showModal();
-      zoom.scrollTo(0, 0);
-    };
-  });
-  zimg.onclick = toggle;
-  document.getElementById('zoom-toggle').onclick = () => toggle();
-  document.getElementById('zoom-close').onclick = () => zoom.close();
-  zoom.onclick = (e) => { if (e.target === zoom || e.target.classList.contains('stage')) zoom.close(); };
 
+  // Hero demo: a question picks a spot on the drawn Odoo page and the panel's tab that answers it. It cycles until you choose.
+  const demo = document.getElementById('demo');
+  const asks = [...demo.querySelectorAll('.asks button')];
+  const pick = demo.querySelector('.pick');
+  const panel = demo.querySelector('iframe');
+  let shown = 'view';
+  const show = (tab) => {
+    shown = tab;
+    for (const b of asks) b.setAttribute('aria-pressed', b.dataset.s === tab);
+    setTab(panel, tab);
+    const t = demo.querySelector(`[data-t="${tab}"]`);
+    pick.hidden = !t; // Apps, Menus, Code: nothing on the page to point at
+    if (!t) return;
+    const o = pick.parentNode.getBoundingClientRect(), r = t.getBoundingClientRect();
+    Object.assign(pick.style, { left: `${r.left - o.left - 4}px`, top: `${r.top - o.top - 4}px`, width: `${r.width + 8}px`, height: `${r.height + 8}px` });
+    pick.dataset.n = t.dataset.n;
+  };
+  const choose = (tab) => { demo.classList.remove('auto'); show(tab); };
+  asks.forEach((b) => { b.onclick = () => choose(b.dataset.s); });
+  demo.querySelector('.odoo').onclick = (e) => { const t = e.target.closest('[data-t]'); if (t) choose(t.dataset.t); };
+  // The clock is the pressed chip's progress bar (CSS): hovering pauses it, reduced motion has none.
+  demo.addEventListener('animationend', (e) => { if (e.animationName === 'fill') show(asks[(asks.findIndex((b) => b.dataset.s === shown) + 1) % asks.length].dataset.s); });
+  show(shown);
+  document.fonts.ready.then(() => show(shown)); // the picker's box depends on the text's size
+  addEventListener('resize', () => show(shown));
+
+  // Features: a question shows its tab in the panel beside it; the panel's own tabs pick the question back.
+  const explore = document.querySelector('.explore');
+  const stage = explore.querySelector('iframe');
+  const qs = [...explore.querySelectorAll('.q')];
+  const ask = (tab) => { for (const q of qs) q.setAttribute('aria-pressed', q.dataset.tab === tab); setTab(stage, tab); };
+  for (const q of qs) {
+    q.onclick = () => ask(q.dataset.tab);
+    q.onpointerenter = (e) => { if (e.pointerType === 'mouse') ask(q.dataset.tab); };
+  }
+  addEventListener('message', (e) => {
+    const tab = e.data?.odooDebugTab;
+    if (tab && e.source === panel.contentWindow) choose(tab);
+    if (tab && e.source === stage.contentWindow) ask(tab);
+  });
 </script>
 </body>
 </html>
