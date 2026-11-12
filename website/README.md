@@ -9,3 +9,5 @@ Static files only (`index.html`, no build step). `.github/workflows/pages.yml` p
 `panel/` is the demo of the panel the page embeds in iframes: static markup with the panel's own classes, under `panel/panel.css`, a copy of `src/ui/panel.css`. When the panel's look changes, copy it again: `cp src/ui/panel.css website/panel/panel.css`.
 
 `i18n/` holds one JSON file per language (the extension's ten, English excepted: it is the page itself). Each key is the English text of a `data-i18n` element of `index.html`, exactly as written there, HTML included; a missing key shows the English.
+
+`llms.txt` says what the page says, as plain text for AI assistants that read it (llmstxt.org). When the page's facts change (versions, browsers, tabs), change it too.

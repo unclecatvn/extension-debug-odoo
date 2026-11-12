@@ -1,0 +1,32 @@
+# Odoo Debug
+
+> Odoo Debug is a free Chrome extension to debug Odoo 18, 19 and 20. It adds a debug panel to the Odoo page itself: debug mode toggle, record and field inspector, view inheritance, RPC log, access rights and record rules, translations, server profiler, code dry runs.
+
+Odoo's developer mode shows what is on the screen. Odoo Debug shows why: which module adds a field, which inherited view made it read-only, which RPC call failed and with what traceback, which record rule blocks a user, which request fires N+1 SQL queries. Made for Odoo developers, functional consultants and administrators.
+
+- Price: free. License: Apache-2.0, source on GitHub. Author: UncleCat (https://unclecatvn.com/).
+- Odoo versions: 18, 19 and 20, detected on each page, on any domain (Odoo.sh, on-premise, localhost). Odoo 17 and earlier are not supported.
+- Browsers: Chrome, Edge, Brave and other Chromium browsers (Manifest V3). Firefox and Safari are not supported.
+- Languages: Arabic, German, English, Spanish, French, Indonesian, Japanese, Portuguese (Brazil), Vietnamese, Simplified Chinese.
+- Privacy: no backend, no analytics, no tracking. It talks only to the Odoo server of the current tab, with the user's own session. Every tab only reads unless the user asks for a write.
+- Install: add it from the Chrome Web Store, open an Odoo page while logged in, click the round button at the bottom right or press Alt+Shift+O. Alt+Shift+D turns Odoo's debug mode on or off.
+
+## The nine tabs
+
+- Record: each field's type, value, defining module, and what recomputes it.
+- View: why a field is read-only or invisible: the condition, its value now, and the inherited view that set it.
+- RPC: every JSON-RPC call of the page with payload, timing, result and Python traceback; edit and resend, or copy as cURL.
+- Security: the access right or record rule that refuses a user, and the group that would allow it, tried in a simulation first.
+- Translations: pick a text on the page to see its source and where to change it; export .pot / .po.
+- Apps: every module an install would bring, auto-installs included.
+- Menus: technical screens (models, views, rules, crons) one click away.
+- Perf: profiles a request with Odoo's profiler, flags N+1 queries and the line running them.
+- Code: dry-run Python or JavaScript; nothing is saved.
+
+## Links
+
+- [Website](https://odoo-debug.unclecatvn.com/): live demo of the panel, FAQ
+- [Chrome Web Store](https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk): install
+- [Source code](https://github.com/unclecatvn/extension-debug-odoo): README, issues
+- [README](https://raw.githubusercontent.com/unclecatvn/extension-debug-odoo/main/README.md): full feature list
+- [Changelog](https://raw.githubusercontent.com/unclecatvn/extension-debug-odoo/main/CHANGELOG.md): what each release changed
