@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Odoo Debug: Chrome extension to debug Odoo 18, 19, 20</title>
 <meta name="author" content="UncleCat">
-<meta name="description" content="Odoo Debug, the free Chrome extension to debug Odoo: toggle debug mode, see which module adds a field, view inheritance, a live RPC log with tracebacks, why a record rule blocks a user, N+1 SQL queries. Right on the Odoo page.">
+<meta name="description" content="Odoo Debug is a free Chrome extension to debug Odoo 18, 19 and 20: debug mode toggle, field and view inspector, RPC log, record rules, SQL profiler.">
 <link rel="canonical" href="https://odoo-debug.unclecatvn.com/">
 <meta name="theme-color" content="#0b0910">
 <meta property="og:type" content="website">
@@ -87,7 +87,7 @@
   .sec { max-width: 1208px; margin: 0 auto; padding: 120px 24px 0; scroll-margin-top: -40px; }
   .eyebrow { display: block; margin-bottom: 14px; font: 500 13px var(--mono); color: var(--brand); }
   h2 { margin: 0 0 16px; font-size: clamp(30px, 4.2vw, 50px); line-height: 1.08; letter-spacing: -.04em; font-weight: 700; text-wrap: balance; }
-  html:is([lang="vi"], [lang="ja"], [lang="zh-CN"], [lang="ar"]) :is(h1, h2) { line-height: 1.2; } /* tall marks, tall glyphs */
+  html:is([lang="vi"], [lang="ja"], [lang="zh-CN"], [lang="ar"]) :is(.tagline, h2) { line-height: 1.2; } /* tall marks, tall glyphs */
   [dir="rtl"] :is(code, kbd) { direction: ltr; unicode-bidi: isolate; }
   .sub { color: var(--muted); font-size: 18px; max-width: 40em; margin: 0; text-wrap: pretty; }
   .sub a, .steps a { color: var(--text); text-decoration-color: var(--brand); text-underline-offset: 3px; }
@@ -156,9 +156,9 @@
   .pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; height: 34px; padding: 0 14px 0 5px; border: 1px solid var(--line-strong); border-radius: 99px; background: color-mix(in srgb, var(--surface) 70%, transparent); backdrop-filter: blur(8px); font-size: 13.5px; color: var(--muted); text-decoration: none; }
   .pill b { font: 600 12px var(--mono); color: #fff; background: linear-gradient(120deg, #9a4f8c, #5f3d82); border-radius: 99px; padding: 4px 10px; white-space: nowrap; }
   .pill:hover { border-color: var(--faint); color: var(--text); }
-  h1 { margin: 26px auto 22px; font-size: clamp(36px, 5.4vw, 70px); line-height: 1.06; letter-spacing: -.05em; font-weight: 700; text-wrap: balance; }
-  h1 .grad { display: block; }
-  .lead { max-width: 41em; margin: 0 auto 32px; font-size: clamp(16px, 1.6vw, 19px); color: var(--muted); text-wrap: balance; }
+  .tagline { margin: 26px auto 22px; font-size: clamp(36px, 5.4vw, 70px); line-height: 1.06; letter-spacing: -.05em; font-weight: 700; text-wrap: balance; }
+  .tagline .grad { display: block; }
+  .lead { max-width: 41em; margin: 0 auto 32px; font: 400 clamp(16px, 1.6vw, 19px)/1.6 var(--sans); color: var(--muted); text-wrap: balance; }
   .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .trust { display: flex; gap: 8px 24px; justify-content: center; flex-wrap: wrap; margin: 24px 0 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--muted); }
   .trust li::before { content: "✓"; margin-inline-end: 7px; color: var(--teal); font-weight: 700; }
@@ -405,8 +405,8 @@
       <b data-i18n>Free to use</b>
       <span data-i18n>See the latest release</span>
     </a>
-    <h1><span data-i18n>Stop guessing.</span><br><span class="grad" data-i18n>See why Odoo does what it does.</span></h1>
-    <p class="lead" data-i18n>A free Chrome extension to debug Odoo 18, 19 and 20, with its panel right on the Odoo page.</p>
+    <p class="tagline"><span data-i18n>Stop guessing.</span><br><span class="grad" data-i18n>See why Odoo does what it does.</span></p>
+    <h1 class="lead" data-i18n>A free Chrome extension to debug Odoo 18, 19 and 20, with its panel right on the Odoo page.</h1>
     <div class="ctas">
       <a class="btn primary big" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><svg><use href="#dl"/></svg><span data-i18n>Add to Chrome</span><span class="free" data-i18n>Free</span></a>
       <a class="btn ghost big" href="https://github.com/unclecatvn/extension-debug-odoo"><svg class="star-ic"><use href="#star"/></svg><span data-i18n>Star on GitHub</span><span class="stars" hidden></span></a>
@@ -568,10 +568,12 @@
     <div class="faq">
       <details><summary data-i18n>How do I turn on debug mode (developer mode) in Odoo?</summary><p data-i18n>Add <code>?debug=1</code> to the URL (<code>?debug=assets</code> for unminified assets), or go to Settings → Activate the developer mode. With Odoo Debug, pick Off / Debug / Assets from the toolbar icon, or press <kbd>Alt+Shift+D</kbd>.</p></details>
       <details><summary data-i18n>Is there a Chrome extension to debug Odoo?</summary><p data-i18n>Yes: Odoo Debug, free on the Chrome Web Store, for Chrome, Edge, Brave and other Chromium browsers. It adds a debug panel to every Odoo 18, 19 and 20 page, beyond what developer mode shows.</p></details>
+      <details><summary data-i18n>How is Odoo Debug different from Odoo's developer mode?</summary><p data-i18n>Developer mode shows what is on the screen. Odoo Debug shows why: which module adds a field, which inherited view made it read-only, which RPC call failed and with what traceback, which record rule blocks a user.</p></details>
       <details><summary data-i18n>How do I find which module adds a field or changes a view in Odoo?</summary><p data-i18n>Open the Record tab: each field shows its type, value, the module that defines it and what recomputes it. The View tab shows the inherited views that changed the form, and which one made a field read-only or invisible.</p></details>
       <details><summary data-i18n>How do I debug RPC calls and errors in Odoo?</summary><p data-i18n>The RPC tab logs every JSON-RPC call the page makes, with its parameters, result and Python traceback. Edit a call and send it again, or copy it as cURL.</p></details>
       <details><summary data-i18n>Why can't a user access a record in Odoo?</summary><p data-i18n>The Security tab names the access right or record rule that refuses, and the group that would allow it. Try that group in a simulation before granting it.</p></details>
       <details><summary data-i18n>How do I find slow SQL queries or N+1 problems in Odoo?</summary><p data-i18n>The Perf tab profiles a request with Odoo's profiler, flags N+1 queries and points to the line running them.</p></details>
+      <details><summary data-i18n>Does Odoo Debug work on Odoo.sh and on-premise?</summary><p data-i18n>Yes: on any domain that runs Odoo 18, 19 or 20, whether Odoo.sh, on-premise or localhost. Odoo 17 and earlier, Firefox and Safari are not supported.</p></details>
     </div>
   </section>
 
