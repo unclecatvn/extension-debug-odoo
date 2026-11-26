@@ -10,7 +10,9 @@ Static files, and one step: `npm run website` (`scripts/website.ts`) writes the 
 
 `i18n/` holds one JSON file per language (the extension's ten, English excepted: it is the page itself). Each key is the English text of a `data-i18n` element of `index.html`, exactly as written there, HTML included; a missing key shows the English. Two more keys are the page's `<title>` and its meta description. Each language has its own URL so that search engines index it: a new language is a JSON file here, a `hreflang` link and a line of the language list in `index.html`, and a line of `sitemap.xml`.
 
-`debug-mode/` is a guide to Odoo's debug mode (English), for people who search how to turn it on. It copies the theme variables of `index.html`.
+`site.css` is the stylesheet of every page: the landing page and the guides.
+
+`debug-mode/` is a guide to Odoo's debug mode (English), for people who search how to turn it on. It is built from the landing page's parts: `site.css`, the same top bar (without the language list: the guide is English only) and footer, and a small script for the top bar, the theme and the stars. A change to the top bar or the footer of `index.html` is made here too.
 
 `<key>.txt` is the IndexNow key: the Pages workflow sends the sitemap's URLs to IndexNow after each publish, which is how Bing learns of them.
 

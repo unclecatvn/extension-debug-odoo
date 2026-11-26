@@ -7,6 +7,7 @@
 <meta name="author" content="UncleCat">
 <meta name="description" content="Turn on Odoo debug mode (developer mode) with ?debug=1, Settings, the command palette or the Odoo Debug extension. What assets and tests modes do, and how to turn it off.">
 <link rel="canonical" href="https://odoo-debug.unclecatvn.com/debug-mode/">
+<meta name="theme-color" content="#0b0910">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Odoo Debug">
 <meta property="og:title" content="Odoo debug mode: 4 ways to turn on developer mode">
@@ -28,164 +29,201 @@
 }
 </script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Crect x='4' y='4' width='120' height='120' rx='28' fill='%23714b67'/%3E%3Cg stroke='%23fff' stroke-width='8' stroke-linecap='round' fill='none'%3E%3Cpath d='M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25'/%3E%3C/g%3E%3Cpath d='M44 46 a20 17 0 0 1 40 0 z' fill='%23fff'/%3E%3Crect x='36' y='50' width='56' height='60' rx='28' fill='%23fff'/%3E%3Cpath d='M64 60 V100' stroke='%23553250' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='98' cy='30' r='12' fill='%2321B799' stroke='%23fff' stroke-width='5'/%3E%3C/svg%3E">
-<script>/* the theme picked on the home page, before first paint */ try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+<script>/* saved theme before first paint: no flash */ try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site.css">
 <style>
-  /* The home page's themes (index.html), copied: change them there first */
-  :root {
-    --bg: #0b0910; --surface: #15121c; --surface-2: #1d1926; --line: rgba(255, 255, 255, .08); --line-strong: rgba(255, 255, 255, .16);
-    --text: #f3f0f6; --muted: #a9a1b5; --faint: #7b7388;
-    --brand: #e29ad3; --teal: #3ddbb6; --star: #f5c451;
-    --grad: linear-gradient(95deg, #f6bde7 0%, #c98be6 42%, #3ddbb6 100%);
-    --glow-a: rgba(176, 84, 164, .46); --glow-b: rgba(40, 200, 165, .2);
-    --btn-bg: #f6f3f8; --btn-hover: #fff; --btn-text: #0b0910; --header: rgba(11, 9, 16, .72); --band: #110e17;
-    --sans: "Be Vietnam Pro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    color-scheme: dark;
-  }
-  /* Light theme: the visitor's system setting, unless they picked one with the ☀ / ☾ button (html[data-theme]) */
-  @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
-    --bg: #fbf9fc; --surface: #fff; --surface-2: #f4f0f6; --line: rgba(40, 20, 40, .1); --line-strong: rgba(40, 20, 40, .2);
-    --text: #18131d; --muted: #5d5568; --faint: #857c90;
-    --brand: #93407f; --teal: #0b8f72; --star: #d99a00;
-    --grad: linear-gradient(95deg, #b03a93 0%, #7a41a8 42%, #0b8f72 100%);
-    --glow-a: rgba(205, 125, 190, .34); --glow-b: rgba(60, 200, 170, .22);
-    --btn-bg: #18131d; --btn-hover: #2f2738; --btn-text: #fff; --header: rgba(251, 249, 252, .78); --band: #f5f1f7;
-    color-scheme: light;
-  } }
-  :root[data-theme="light"] {
-    --bg: #fbf9fc; --surface: #fff; --surface-2: #f4f0f6; --line: rgba(40, 20, 40, .1); --line-strong: rgba(40, 20, 40, .2);
-    --text: #18131d; --muted: #5d5568; --faint: #857c90;
-    --brand: #93407f; --teal: #0b8f72; --star: #d99a00;
-    --grad: linear-gradient(95deg, #b03a93 0%, #7a41a8 42%, #0b8f72 100%);
-    --glow-a: rgba(205, 125, 190, .34); --glow-b: rgba(60, 200, 170, .22);
-    --btn-bg: #18131d; --btn-hover: #2f2738; --btn-text: #fff; --header: rgba(251, 249, 252, .78); --band: #f5f1f7;
-    color-scheme: light;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.7 var(--sans); -webkit-font-smoothing: antialiased; }
-  a { color: inherit; text-decoration-color: var(--brand); text-underline-offset: 3px; }
-  code { font: .86em var(--mono); color: var(--teal); background: var(--surface-2); border: 1px solid var(--line); padding: .1em .4em; border-radius: 6px; overflow-wrap: anywhere; }
-  kbd { white-space: nowrap; font: 500 .8em var(--mono); background: var(--surface-2); border: 1px solid var(--line-strong); border-bottom-width: 2px; padding: .15em .5em; border-radius: 6px; }
-  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-  .top, article, footer .row { max-width: 808px; margin: 0 auto; padding-inline: 24px; }
-  header { border-bottom: 1px solid var(--line); }
-  .top { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.02em; text-decoration: none; }
-  .logo svg { width: 28px; height: 28px; }
-  .btn { display: inline-flex; align-items: center; height: 46px; padding: 0 18px; border-radius: 12px; font-size: 15px; font-weight: 600; text-decoration: none; white-space: nowrap; background: var(--btn-bg); color: var(--btn-text); }
-  .btn:hover { background: var(--btn-hover); }
-  .btn.sm { height: 36px; padding: 0 14px; font-size: 13.5px; border-radius: 10px; }
-  article { padding-block: 56px 88px; }
-  .eyebrow { font: 500 13px var(--mono); color: var(--brand); }
-  h1 { margin: 10px 0 18px; font-size: clamp(32px, 5vw, 46px); line-height: 1.1; letter-spacing: -.04em; text-wrap: balance; }
-  h2 { margin: 56px 0 12px; font-size: 26px; line-height: 1.2; letter-spacing: -.03em; }
-  h3 { margin: 28px 0 6px; font-size: 18px; }
-  p, li { color: var(--muted); }
-  p { margin: 0 0 14px; }
-  .lead { font-size: 19px; }
-  b, strong, th { color: var(--text); font-weight: 600; }
-  ol, ul { margin: 0 0 14px; padding-inline-start: 22px; }
-  table { width: 100%; border-collapse: collapse; margin: 0 0 14px; font-size: 15.5px; }
-  th, td { text-align: start; vertical-align: top; padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
-  td { color: var(--muted); }
-  .cta { margin-top: 56px; padding: 26px 28px; border: 1px solid var(--line-strong); border-radius: 18px; background: var(--surface); }
-  .cta h2 { margin-top: 0; }
-  .cta p:last-child { margin: 18px 0 0; }
-  footer { border-top: 1px solid var(--line); }
-  footer .row { display: flex; gap: 12px 20px; flex-wrap: wrap; justify-content: space-between; padding-block: 26px; color: var(--faint); font-size: 14px; }
-  footer a { color: var(--muted); text-decoration: none; }
-  footer a:hover { color: var(--text); }
-  footer .links { display: flex; gap: 20px; flex-wrap: wrap; }
+  /* The guide: the home page's parts (site.css), and these */
+  .hero.guide { padding-bottom: 96px; }
+  .guide .tagline .grad { display: block; }
+  .hero + .band { margin-top: 0; }
+  .ways { grid-template-columns: 1fr 1fr; }
+  .ways h3 { margin: 0 0 8px; font-size: 18px; font-weight: 600; letter-spacing: -.02em; color: var(--text); }
+  .ways p { margin: 0 0 10px; }
+  .ways p:last-child { margin-bottom: 0; }
+  .ways b, .card b { color: var(--text); font-weight: 600; }
+  .check.no li::before { content: "?"; color: var(--brand); }
+  .card > p { margin: 16px 0 0; color: var(--muted); font-size: 15px; }
+  footer a[aria-current] { color: var(--text); }
+  @media (max-width: 900px) { .ways { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="gh" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></symbol>
+  <symbol id="star" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></symbol>
+  <symbol id="sun" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06"/></g></symbol>
+  <symbol id="moon" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1Z"/></symbol>
+  <symbol id="dl" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" d="M8 2v8m0 0L4.5 6.5M8 10l3.5-3.5M2.5 13.5h11"/></symbol>
+  <symbol id="globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></g></symbol>
+  <symbol id="logo" viewBox="0 0 128 128"><rect x="4" y="4" width="120" height="120" rx="28" fill="#714b67"/><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="30" r="12" fill="#21B799" stroke="#fff" stroke-width="5"/></symbol>
+</svg>
+
 <header>
   <div class="top">
-    <a class="logo" href="/"><svg viewBox="0 0 128 128" aria-hidden="true"><rect x="4" y="4" width="120" height="120" rx="28" fill="#714b67"/><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="30" r="12" fill="#21B799" stroke="#fff" stroke-width="5"/></svg>Odoo Debug</a>
-    <a class="btn sm" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Add to Chrome</a>
+    <a class="logo" href="/">
+      <span class="mark"><svg viewBox="0 0 128 128" aria-hidden="true"><rect x="4" y="4" width="120" height="120" rx="28" fill="#714b67"/><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106 M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/><circle cx="98" cy="30" r="12" fill="#21B799" stroke="#fff" stroke-width="5"/></svg></span>
+      Odoo Debug
+    </a>
+    <nav>
+      <a href="/#features">Features</a>
+      <a href="/#install">Install</a>
+      <a href="/#privacy">Privacy</a>
+      <a href="/#faq">FAQ</a>
+      <a href="https://github.com/unclecatvn/extension-debug-odoo/blob/main/CHANGELOG.md">Changelog</a>
+    </nav>
+    <div class="end">
+      <a class="gh" href="https://github.com/unclecatvn/extension-debug-odoo" aria-label="Star on GitHub"><span><svg><use href="#gh"/></svg><span class="w">Star</span></span><span class="stars" hidden></span></a>
+      <button class="icon-btn" type="button" id="theme" aria-label="Toggle light / dark theme" title="Light / dark"><svg class="sun"><use href="#sun"/></svg><svg class="moon"><use href="#moon"/></svg></button>
+      <a class="btn primary sm" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Add to Chrome</a>
+    </div>
   </div>
 </header>
 
-<main>
-<article>
-  <span class="eyebrow">// guide · Odoo 18, 19, 20</span>
-  <h1>Odoo debug mode: 4 ways to turn on developer mode</h1>
-  <p class="lead">Odoo debug mode, which Odoo's own menus call <b>developer mode</b>, adds the technical tools to the page: the bug menu in the top bar, the Technical menu in Settings, and the field names in every tooltip. The shortest way in is to add <code>?debug=1</code> to the URL. Here are all four ways, what the <code>assets</code> and <code>tests</code> variants do, how to turn it off, and what debug mode still does not tell you.</p>
+<main id="top">
+  <section class="hero guide">
+    <span class="pill"><b>Guide</b><span>Odoo 18, 19 and 20</span></span>
+    <h1 class="tagline">Odoo debug mode:<span class="grad">4 ways to turn it on</span></h1>
+    <p class="lead">Debug mode, which Odoo's own menus call developer mode, adds the technical tools to the page: the bug menu, the Technical menu in Settings, field names in every tooltip. The shortest way in: add <code>?debug=1</code> to the URL.</p>
+  </section>
 
-  <h2 id="turn-on">Turn on Odoo debug mode</h2>
-
-  <h3>1. In the URL: <code>?debug=1</code></h3>
-  <p>Add <code>?debug=1</code> right after <code>/odoo</code> in the address bar and press Enter:</p>
-  <p><code>https://example.odoo.com/odoo?debug=1</code></p>
-  <p>It works from any screen of the backend, and Odoo keeps it for the rest of the session: you do not add it again on the next page.</p>
-
-  <h3>2. In Settings</h3>
-  <p>Open <b>Settings</b>, scroll to <b>Developer Tools</b> at the bottom of the page and click <b>Activate the developer mode</b>. The two links beside it turn on the assets and tests variants. The section shows once at least one app is installed.</p>
-
-  <h3>3. In the command palette</h3>
-  <p>Press <kbd>Ctrl+K</kbd> (<kbd>Cmd+K</kbd> on a Mac), type <code>debug</code> and pick <b>Activate debug mode</b>. The palette offers the command only when the word is typed in full.</p>
-
-  <h3>4. With a browser extension</h3>
-  <p><a href="/">Odoo Debug</a>, a free extension for Chrome, Edge and Brave, switches between Off, Debug and Assets from its toolbar icon, or with <kbd>Alt+Shift+D</kbd> on any Odoo page. No URL to edit, and it works the same on Odoo.sh, on-premise and localhost.</p>
-
-  <h2 id="modes">The modes: debug, assets, tests</h2>
-  <table>
-    <tr><th>URL</th><th>What it does</th></tr>
-    <tr><td><code>?debug=1</code></td><td>Developer mode: the bug menu, the Technical menu, field names in tooltips.</td></tr>
-    <tr><td><code>?debug=assets</code></td><td>The same, with the JavaScript and CSS served unminified and file by file, to read and debug front-end code. Pages load slower.</td></tr>
-    <tr><td><code>?debug=tests</code></td><td>The same, with the test assets loaded, to run test tours from the browser.</td></tr>
-    <tr><td><code>?debug=0</code></td><td>Developer mode off.</td></tr>
-  </table>
-
-  <h2 id="turn-off">Turn off debug mode</h2>
-  <p>Any of these: put <code>?debug=0</code> in the URL, pick <b>Leave Debug Mode</b> in the bug menu, click <b>Deactivate the developer mode</b> in Settings, or run <b>Deactivate debug mode</b> from the command palette.</p>
-
-  <h2 id="what-it-shows">What debug mode shows</h2>
-  <ul>
-    <li><b>The bug menu</b> in the top bar. On a record: Metadata (its ID, XML ID, who created it), Data (the raw values), Set Default Values. On a view: the view's own form to edit it, and its Computed Arch after inheritance. Anywhere: Open View, Regenerate Assets and, for administrators, Become Superuser.</li>
-    <li><b>Settings → Technical</b>: models, fields, views, actions, record rules, scheduled actions, system parameters.</li>
-    <li><b>Field tooltips</b>: hover a field label to see its technical name, model, type and widget.</li>
-  </ul>
-  <p>Debug mode gives no extra rights. Access rights and record rules apply as before; it only shows the tools that the user's groups already allow.</p>
-
-  <h2 id="what-it-does-not-show">What debug mode does not show</h2>
-  <p>Developer mode shows what is on the screen. The questions that take the time are about why:</p>
-  <ul>
-    <li>Which module adds this field, and which inherited view made it read-only or invisible?</li>
-    <li>Which RPC call failed, with what payload and what Python traceback?</li>
-    <li>Which access right or record rule refuses this user, and which group would allow it?</li>
-    <li>Which request fires the same SQL query two hundred times?</li>
-  </ul>
-  <p>Answering those from developer mode means opening views one by one, reading the server log and testing rules by hand.</p>
-
-  <div class="cta">
-    <h2>Odoo Debug answers them on the page</h2>
-    <p>A panel on the Odoo page itself, in nine tabs: record and field inspector, view inheritance, RPC log, access rights and record rules, translations, SQL profiler. Free, source on GitHub, no tracking. For Odoo 18, 19 and 20.</p>
-    <p><a class="btn" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Add to Chrome</a> &nbsp; <a href="/#features">See the nine tabs</a></p>
+  <div class="band">
+  <section class="sec" id="turn-on">
+    <span class="eyebrow">// turn it on</span>
+    <h2>Turn on Odoo debug mode</h2>
+    <p class="sub">Pick one, once: Odoo keeps the mode for the rest of the session, page after page.</p>
+    <ol class="steps ways">
+      <li>
+        <h3>In the URL</h3>
+        <p>Add <code>?debug=1</code> to the end of the address and press Enter, from any backend page. If the address already has a <code>?</code>, add <code>&amp;debug=1</code> instead.</p>
+        <p><code>example.odoo.com/odoo/sales?debug=1</code></p>
+      </li>
+      <li>
+        <h3>In Settings</h3>
+        <p>Open <b>Settings</b>, scroll to <b>Developer Tools</b> at the bottom and click <b>Activate the developer mode</b>. The links under it turn on the assets and tests modes. The section shows once at least one app is installed.</p>
+      </li>
+      <li>
+        <h3>In the command palette</h3>
+        <p>Press <kbd>Ctrl+K</kbd> (<kbd>Cmd+K</kbd> on a Mac), type <code>debug</code> and pick <b>Activate debug mode</b>. The command shows only when the whole word is typed.</p>
+      </li>
+      <li>
+        <h3>With a browser extension</h3>
+        <p><a href="/">Odoo Debug</a> switches between Off, Debug and Assets from its toolbar icon, or with <kbd>Alt+Shift+D</kbd> on any Odoo page: Odoo.sh, on-premise or localhost. Free, for Chrome, Edge and Brave.</p>
+      </li>
+    </ol>
+  </section>
   </div>
 
-  <h2 id="faq">Questions</h2>
-  <h3>Is Odoo debug mode the same as developer mode?</h3>
-  <p>Yes. The URL parameter is <code>debug</code>, Settings says "developer mode", the command palette says "debug mode": one feature, three names.</p>
-  <h3>Does debug mode slow Odoo down?</h3>
-  <p>Plain <code>?debug=1</code> barely does. <code>?debug=assets</code> does: the browser fetches every JavaScript and CSS file on its own, unminified. Use it while debugging front-end code, then go back to <code>?debug=1</code>.</p>
-  <h3>Can every user turn on debug mode?</h3>
-  <p>Any internal user can add <code>?debug=1</code> to the URL. What they see in the menus still depends on their groups: the Technical menu and Become Superuser are for administrators.</p>
-</article>
+  <section class="sec" id="modes">
+    <span class="eyebrow">// modes</span>
+    <h2>Debug, assets, tests</h2>
+    <p class="sub">The value of <code>debug</code> in the URL picks the mode, and the same parameter turns it off.</p>
+    <div class="bento">
+      <div class="card">
+        <h3>The modes</h3>
+        <dl>
+          <dt>?debug=1</dt><dd>Developer mode: the bug menu, the Technical menu, field names in tooltips.</dd>
+          <dt>?debug=assets</dt><dd>The same, with the JavaScript and CSS served unminified, file by file, to debug front-end code. Pages load slower.</dd>
+          <dt>?debug=tests</dt><dd>The test assets, to run test tours from the browser.</dd>
+          <dt>?debug=0</dt><dd>Off.</dd>
+        </dl>
+      </div>
+      <div class="card" id="turn-off">
+        <h3>Turn it off</h3>
+        <ul class="check">
+          <li><code>?debug=0</code> in the URL</li>
+          <li><b>Leave Debug Mode</b> in the bug menu</li>
+          <li><b>Deactivate the developer mode</b> in Settings</li>
+          <li><b>Deactivate debug mode</b> in the command palette</li>
+          <li>Off from the Odoo Debug icon, or <kbd>Alt+Shift+D</kbd></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="what-it-shows">
+    <span class="eyebrow">// what you get</span>
+    <h2>What debug mode shows, and what it does not</h2>
+    <div class="bento">
+      <div class="card">
+        <h3>What it shows</h3>
+        <ul class="check">
+          <li>The bug menu in the top bar. On a record: Metadata, Data, Set Default Values. On a view: the view itself, and its Computed Arch after inheritance</li>
+          <li>Open View, Regenerate Assets and, for administrators, Become Superuser</li>
+          <li>Settings → Technical: models, fields, views, actions, record rules, scheduled actions, system parameters</li>
+          <li>Field names in tooltips: hover a label for its technical name, model, type and widget</li>
+        </ul>
+        <p>No extra rights: access rights and record rules apply as before.</p>
+      </div>
+      <div class="card">
+        <h3>What it does not</h3>
+        <ul class="check no">
+          <li>Which module adds this field, and which inherited view made it read-only?</li>
+          <li>Which RPC call failed, with what payload and what Python traceback?</li>
+          <li>Which access right or record rule refuses this user?</li>
+          <li>Which request runs the same SQL query two hundred times?</li>
+        </ul>
+        <p>Developer mode shows what is on the screen; those are about why. Without a tool, they mean opening views one by one, reading the server log and testing rules by hand.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <span class="eyebrow">// faq</span>
+    <h2>Questions</h2>
+    <div class="faq">
+      <details><summary>Is Odoo debug mode the same as developer mode?</summary><p>Yes. The URL parameter is <code>debug</code>, Settings says "developer mode", the command palette says "debug mode": one feature, three names.</p></details>
+      <details><summary>Does debug mode slow Odoo down?</summary><p>Plain <code>?debug=1</code> barely does. <code>?debug=assets</code> does: the browser fetches every JavaScript and CSS file on its own, unminified. Use it while debugging front-end code, then go back to <code>?debug=1</code>.</p></details>
+      <details><summary>Can every user turn on debug mode?</summary><p>Any internal user can add <code>?debug=1</code> to the URL. What they see in the menus still depends on their groups: the Technical menu and Become Superuser are for administrators.</p></details>
+      <details><summary>Does it work the same on Odoo.sh and on-premise?</summary><p>Yes: the parameter, the Settings link and the command palette are part of Odoo itself, wherever it runs.</p></details>
+    </div>
+  </section>
+
+  <section class="closing">
+    <span class="eyebrow">// odoo debug</span>
+    <h2>The why, right on the Odoo page</h2>
+    <p class="sub">Odoo Debug adds a panel to every Odoo 18, 19 and 20 page: fields and their modules, view inheritance, RPC log, record rules, SQL profiler. Free, no tracking.</p>
+    <div class="ctas">
+      <a class="btn primary big" href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk"><svg><use href="#dl"/></svg>Add to Chrome<span class="free">Free</span></a>
+      <a class="btn ghost big" href="/#features">See the nine tabs</a>
+    </div>
+  </section>
 </main>
 
 <footer>
   <div class="row">
     <span>Made by <a href="https://unclecatvn.com/" rel="author">UncleCat</a></span>
     <span class="links">
-      <a href="/">Odoo Debug</a>
+      <a href="/debug-mode/" aria-current="page">Odoo debug mode guide</a>
       <a href="https://github.com/unclecatvn/extension-debug-odoo">GitHub</a>
       <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Chrome Web Store</a>
+      <a href="https://github.com/unclecatvn/extension-debug-odoo/blob/main/CHANGELOG.md">Changelog</a>
+      <a href="https://github.com/unclecatvn/extension-debug-odoo/issues">Issues</a>
     </span>
   </div>
 </footer>
+
+<script>
+  // As on the home page: the top bar frosts once the page scrolls; the theme button flips the theme and remembers it; the stars come from GitHub.
+  const root = document.documentElement, bar = document.querySelector('header');
+  const stick = () => bar.classList.toggle('stuck', scrollY > 8);
+  addEventListener('scroll', stick, { passive: true });
+  stick();
+  const dark = () => root.dataset.theme ? root.dataset.theme === 'dark' : !matchMedia('(prefers-color-scheme: light)').matches;
+  const showTheme = () => { document.querySelector('meta[name=theme-color]').content = dark() ? '#0b0910' : '#fbf9fc'; };
+  showTheme();
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', showTheme);
+  document.getElementById('theme').onclick = () => {
+    root.dataset.theme = dark() ? 'light' : 'dark';
+    try { localStorage.setItem('theme', root.dataset.theme); } catch {}
+    showTheme();
+  };
+  fetch('https://api.github.com/repos/unclecatvn/extension-debug-odoo').then((r) => r.ok ? r.json() : Promise.reject(r.status)).then(({ stargazers_count: n }) => document.querySelectorAll('.stars').forEach((e) => {
+    e.textContent = n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, '')}k` : n;
+    e.hidden = !n;
+  })).catch(() => {});
+</script>
 </body>
 </html>
