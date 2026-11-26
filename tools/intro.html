@@ -1,6 +1,14 @@
 <!doctype html>
 <!-- The intro film, a motion piece rendered frame by frame by tools/intro.mjs (render): no screen recording, the panel's
-     answers drawn here and set in motion, on the beat of the score (tools/score.mjs, 124 BPM, every cue in window.MUSIC).
+     answers drawn here and set in motion, on the beat of a song (window.SONG, 122 BPM): "Touch" by Neon NiteClub,
+     CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/), from https://www.jamendo.com/track/1331966, shortened. It is
+     the kind of music of the film this one was modelled on (128 BPM, G major, a man's voice singing a phrase and resting,
+     the drums dropping out and coming back): the same key and voice, 122 BPM. Played: its bars 4–47 (three of bass alone
+     under the logo, the drums in on the fourth, the voice on the drop), then bars 86–87 (the drums held back, a fill:
+     "and everything else"), then from bar 95 (its last chorus, its loudest: the tiles, the logo). Each cut is a beat
+     before the bar, where the voice rests before its upbeat. CC BY asks for the credit
+     wherever the film is shown: it is on the last frame. Without window.SONG the film is scored by tools/score.mjs on its
+     cues (window.MUSIC), as it was.
        bars 0–4    the panel's button beating, rippling; it becomes the logo; the name drafted letter by letter in other
                    types, then cleaned up left to right; the tagline
        bars 4–6    the drop: what an Odoo day throws at you, a coloured slide a beat
@@ -28,8 +36,8 @@
   .abs { position: absolute; }
   .g { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .ico { display: inline-block; width: 1em; height: 1em; flex: none; background: currentColor; mask: var(--icon) center / contain no-repeat; }
-  .mark { position: absolute; border-radius: 50%; background: linear-gradient(135deg, #9a6690, #553250); box-shadow: 0 18px 40px rgba(85, 50, 80, .35); }
-  .mark svg { position: absolute; inset: 6%; width: 88%; height: 88%; }
+  .mark { position: absolute; border-radius: 50%; background: #714B67; box-shadow: 0 18px 40px rgba(85, 50, 80, .35); }
+  .mark svg { position: absolute; inset: -3.33%; width: 106.67%; height: 106.67%; } /* the icon's tile is 120 of its 128 */
 
   /* the opening */
   .lock { position: absolute; left: 0; right: 0; top: 400px; text-align: center; white-space: nowrap; }
@@ -184,8 +192,11 @@ const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return 
 const num = (v, d = 0) => v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const mb = (q) => (q < .04 ? '' : `url(#mb${q < .25 ? 1 : q < .55 ? 2 : 3})`); // a horizontal motion blur, by speed
 
-// ---------- the beat (124 BPM): every scene starts on one; the score follows the cues ----------
-const BPM = 124, BEAT = 60 / BPM, B = (n) => n * BEAT;
+// ---------- the beat, the song's: every scene starts on one ----------
+// parts: the song's seconds played, one after the other ([from, to]; the last to the film's end), each from a bar's downbeat
+const SONG = { file: 'tools/intro.mp3', parts: [[8.6316, 94.7027], [169.4616, 173.3963], [187.1677]],
+  credit: 'Music: “Touch” by Neon NiteClub, shortened · CC BY 3.0 · jamendo.com/track/1331966' };
+const BPM = 122, BEAT = 60 / BPM, B = (n) => n * BEAT;
 const SFX = [];
 /** A sound at t s: tick, click, pop, blip (p: its pitch, a step of the scale), swish, whoosh, ding, thud, shine. */
 const cue = (t, k, g = 1, p = 0) => SFX.push({ t: +t.toFixed(4), k, g, p });
@@ -224,7 +235,8 @@ const css = await (await fetch('/src/ui/panel.css')).text();
 const ICON = Object.fromEntries([...css.matchAll(/\[data-tab=(\w+)\] \{ --icon: (url\("data:image\/svg\+xml,[^"]+"\))/g)].map((m) => [m[1], m[2]]));
 const ico = (tab) => { const i = h('i', { class: 'ico' }); i.style.setProperty('--icon', ICON[tab] ?? 'none'); return i; };
 const TABS = [['record', 'Record'], ['view', 'View'], ['rpc', 'RPC'], ['security', 'Security'], ['translations', 'Translations'], ['apps', 'Apps'], ['menus', 'Menus'], ['perf', 'Perf'], ['code', 'Code']];
-const BUG = '<svg viewBox="0 0 128 128"><g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"><path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106"/><path d="M54 38 L46 25 M74 38 L82 25"/></g><path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/><rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/><path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/></svg>';
+// Bọ Đô, as assets/brand/make-brand.py draws it on the icon (without its tile: .mark is the tile)
+const BUG = '<svg viewBox="0 0 128 128"><g transform="translate(64 65) scale(.88) translate(-64 -65)"><path d="M53 40 Q47 24 39 21 M75 40 Q81 24 89 21 M29 76 H18 M99 76 H110 M52 104 V112 M76 104 V112" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><circle cx="39" cy="21" r="7.5" fill="#21B799"/><circle cx="89" cy="21" r="7.5" fill="#21B799"/><circle cx="64" cy="70" r="36" fill="#fff"/><circle cx="51" cy="65" r="11" fill="#553250"/><circle cx="77" cy="65" r="11" fill="#553250"/><circle cx="54.5" cy="61" r="4" fill="#fff"/><circle cx="80.5" cy="61" r="4" fill="#fff"/><path d="M55 84 Q64 92 73 84" fill="none" stroke="#553250" stroke-width="5" stroke-linecap="round"/></g></svg>';
 const mark = () => h('div', { class: 'mark', html: BUG });
 /** Places a mark: its centre x, y, its size, its roundness (.5: a circle). */
 const putMark = (n, x, y, size, round = .5, o = 1) => Object.assign(n.style, { left: `${x - size / 2}px`, top: `${y - size / 2}px`, width: `${size}px`, height: `${size}px`, borderRadius: `${round * 100}%`, opacity: o });
@@ -528,7 +540,7 @@ scene(0, 16.2, (root, s) => {
     // the button: pops, beats with a ripple; then moves into the logo's place, rounding into a square
     const beatK = tb < 4 ? Math.exp(-(tb % 1) / .18) : 0, mv = ease((tb - 4) / .8);
     const size = lerp(170, 124, mv) * (1 + .1 * beatK) * lerp(.2, 1, spring(u, 2.2, .45));
-    putMark(m, lerp(960, home.x, mv), lerp(470, home.y, mv), size, lerp(.5, .26, mv), clamp(u / .1));
+    putMark(m, lerp(960, home.x, mv), lerp(470, home.y, mv), size, lerp(.5, .233, mv), clamp(u / .1));
     rings.forEach((r, k) => {
       const ph = tb - k * .33, local = ph % 1, live = tb < 4.6 && ph > 0;
       const d = 170 + local * 380;
@@ -1369,7 +1381,8 @@ scene(176, 202, (root, s) => {
   const cta = h('div', { class: 'cta', style: 'top: 650px', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 11l6 6 6-6M5 20h14"/></svg>Add to Chrome' });
   const url = h('div', { class: 'abs', style: 'left: 0; right: 0; top: 790px; text-align: center; font-size: 28px; font-weight: 550; color: var(--muted)', text: 'Odoo 18 · 19 · 20  ·  odoo-debug.unclecatvn.com' });
   const free = h('div', { class: 'free', text: 'Free' });
-  root.append(name, sub, cta, url, free);
+  const credit = h('div', { class: 'abs', style: 'left: 0; right: 0; top: 1016px; text-align: center; font-size: 21px; font-weight: 500; color: var(--muted)', text: SONG.credit });
+  root.append(name, sub, cta, url, free, credit);
   const letters = [...name.children].slice(1);
   const slot = name.firstChild.getBoundingClientRect(), last = letters.at(-1).getBoundingClientRect();
   const LOGO = { x: slot.x + 64, y: slot.y + slot.height / 2 };
@@ -1401,7 +1414,7 @@ scene(176, 202, (root, s) => {
     const bk = spring(u - B(4.8), 2.2, .45), toLogo = ease((tb - LAND) / .6);
     const held = smooth(BURST + .3, BURST + .9, tb) * (1 - smooth(PULL - .2, PULL + .3, tb)); // out of the tiles' way while they are held
     const bsize = 140 * bk * (1 + .12 * pulse) * lerp(1, 128 / 140, toLogo) * (1 - held);
-    putMark(btn, lerp(960, LOGO.x, toLogo), lerp(540, LOGO.y, toLogo), bsize, lerp(.5, .26, toLogo), tb > 4.8 ? 1 : 0);
+    putMark(btn, lerp(960, LOGO.x, toLogo), lerp(540, LOGO.y, toLogo), bsize, lerp(.5, .233, toLogo), tb > 4.8 ? 1 : 0);
     dots.forEach((d, i) => {
       const t0 = 4.2 + i * .1, k = ease((tb - t0) / 1);
       const a0 = rnd(i + 7) * Math.PI * 2, r = lerp(900, 0, k), a = a0 + k * 2.4;
@@ -1424,6 +1437,7 @@ scene(176, 202, (root, s) => {
     P(url, u - B(LAND + 3.2), RISE);
     P(free, u - B(LAND + 3.6), { s: .1, r: -60, f: 2.4, z: .42 });
     free.style.rotate = '-10deg';
+    credit.style.opacity = smooth(LAND + 4, LAND + 5, tb);
   };
 });
 
@@ -1446,6 +1460,7 @@ window.renderAt = async (T) => {
 };
 window.DURATION = DURATION;
 window.POSTER_AT = B(199);
+window.SONG = SONG;
 window.MUSIC = { duration: DURATION, beat: BEAT, sfx: SFX.sort((a, b) => a.t - b.t),
   marks: { riser: [B(12), B(16)], drop: B(16), A: [B(40), B(80)], B: [B(80), B(120)], C: [B(120), B(168)], D: [B(168), B(176)],
     break: [B(176), B(184)], riser2: [B(180), B(184)], drop2: B(184), land: B(192), end: DURATION, heads: [40, 56, 68, 80, 92, 108, 120, 136, 148, 168].map(B) } };

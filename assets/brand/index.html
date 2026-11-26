@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bộ nhận diện Odoo Debug</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday reference: a brand book page the owner and contributors keep open
+   IDEA the printed brand book of a small studio, with Bọ Đô as the cover star
+   PICTURE Bọ Đô large on the purple cover, then every logo version shown at real size on real grounds
+   COLOUR Odoo purple #714B67 cover and bands, teal #21B799 only where Bọ Đô has it, white ground; night #140d13
+   TYPE Be Vietnam Pro 800 titles + Be Vietnam Pro text + JetBrains Mono for hex and file names (the website's own fonts)
+   LAYOUT cover band: copy left, Bọ Đô right; sections stacked, each a grid of specimens; phone stacks to one column */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#140d13);--ink:light-dark(#1d1420,#f3eaf1);--mute:light-dark(#6b5d68,#b3a3af);--line:light-dark(#e9e0e7,#33242f);--soft:light-dark(#f6f2f5,#1c131a);--purple:#714B67;--deep:#553250;--teal:#21B799}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Be Vietnam Pro",system-ui,sans-serif;overflow-x:clip}
+img{max-width:100%;display:block}
+.band{padding:clamp(28px,4vw,60px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.cover{background:var(--purple);color:#fff;overflow:hidden}
+.cover .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;align-items:center}
+.cover h1{font-size:clamp(36px,5.5vw,56px);line-height:1.05;letter-spacing:-.02em;margin:0 0 14px;font-weight:800;text-wrap:balance}
+.cover p{margin:0 0 12px;color:#f1e4ee;max-width:56ch;font-size:17px}
+.stage{position:relative;display:grid;place-items:center;min-height:300px}
+.stage::before{content:"";position:absolute;width:min(380px,90%);aspect-ratio:1;border-radius:50%;background:var(--deep)}
+.stage img{position:relative;width:min(300px,80%)}
+h2{font-size:32px;line-height:1.1;letter-spacing:-.02em;margin:0 0 8px;font-weight:800}
+.lead{margin:0 0 24px;color:var(--mute);max-width:70ch}
+section+section{border-top:1px solid var(--line)}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.tile{border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.tile .show{display:flex;align-items:center;justify-content:center;gap:18px;padding:26px 16px;min-height:170px;flex-wrap:wrap}
+.tile .cap{padding:12px 14px;border-top:1px solid var(--line);font-size:15px}
+.tile .cap b{display:block}
+.tile .cap span{color:var(--mute)}
+.on-light{background:#ffffff}.on-soft{background:#f6f2f5}.on-dark{background:#1e1e1e}.on-purple{background:var(--purple)}
+.sizes img:nth-child(1){width:128px}.sizes img:nth-child(2){width:48px}.sizes img:nth-child(3){width:32px}.sizes img:nth-child(4){width:16px}
+.lockups{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));margin-top:16px}
+.lockups .show img{width:min(360px,100%)}
+.mascot img{width:130px}
+.swatches{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.sw{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.sw i{display:block;height:96px}
+.sw div{padding:10px 12px}
+.sw b{display:block}
+.sw small{color:var(--mute);font-size:14px;display:block}
+.sw button{margin-top:8px;min-height:44px;width:100%;border-radius:10px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font:500 15px "JetBrains Mono",ui-monospace,monospace;cursor:pointer}
+.sw button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.type{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+.spec{border:1px solid var(--line);border-radius:16px;padding:22px}
+.spec .big{font-size:44px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.spec .mono{font:500 22px "JetBrains Mono",ui-monospace,monospace}
+.spec p{margin:10px 0 0;color:var(--mute)}
+.rules{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+.dont .show{position:relative}
+.dont .show::after{content:"";position:absolute;inset:14px auto auto 14px;width:26px;height:26px;border-radius:50%;background:#d93f3f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 26'%3E%3Cpath d='M8 8l10 10M18 8L8 18' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E")}
+.dont img{width:100px}
+.squash{transform:scaleX(1.5)}
+.recolor{filter:hue-rotate(150deg) saturate(1.6)}
+.shadow{filter:drop-shadow(6px 8px 0 #000) blur(.4px)}
+.do{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-bottom:16px}
+.do .show{justify-content:flex-start;gap:0}
+.clear{position:relative;padding:28px;outline:2px dashed var(--teal);outline-offset:-2px;border-radius:10px}
+.clear img{width:96px}
+.store{display:grid;gap:16px;grid-template-columns:minmax(0,1fr) minmax(0,2.4fr);align-items:start}
+.store figure{margin:0}
+.store figcaption{font-size:14px;color:var(--mute);margin-top:6px}
+.store img{border-radius:10px;border:1px solid var(--line)}
+.files{width:100%;border-collapse:collapse;font-size:15px}
+.files th,.files td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.files code{font:500 14px "JetBrains Mono",ui-monospace,monospace;overflow-wrap:anywhere}
+.scroll{overflow-x:auto}
+pre{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:14px;font:500 14px/1.6 "JetBrains Mono",ui-monospace,monospace;overflow-x:auto;margin:16px 0 0}
+@media(max-width:700px){.cover .wrap{grid-template-columns:1fr}.stage{min-height:240px;order:-1}.store{grid-template-columns:1fr}}
+@media(max-width:600px){.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{border:0;padding:3px 0}}
+</style>
+</head>
+<body>
+<header class="band cover">
+  <div class="wrap">
+    <div>
+      <h1>Bộ nhận diện Odoo Debug</h1>
+      <p>Bọ Đô là logo và linh vật của Odoo Debug: một chú bọ tròn, mắt to, hai râu đầu xanh. Hai đầu râu chính là hai điểm breakpoint, màu xanh duy nhất trên người Bọ Đô.</p>
+      <p>Người dùng nhớ Odoo Debug qua một nhân vật, không phải một biểu tượng. Mọi chỗ có logo, từ thanh công cụ Chrome đến website, đều là cùng một Bọ Đô.</p>
+    </div>
+    <div class="stage"><img src="bo-do-white.svg" alt="Bọ Đô"></div>
+  </div>
+</header>
+
+<section class="band"><div class="wrap">
+  <h2>Logo</h2>
+  <p class="lead">Icon là Bọ Đô trắng trên ô tím bo góc. Dùng icon cho extension, favicon và ảnh đại diện; dùng logo kèm chữ ở đầu website, README và slide.</p>
+  <div class="grid">
+    <div class="tile"><div class="show sizes on-light"><img src="bo-do-icon.svg" alt=""><img src="bo-do-icon.svg" alt=""><img src="bo-do-icon.svg" alt=""><img src="bo-do-icon.svg" alt=""></div><div class="cap"><b>Icon trên nền sáng</b><span>128, 48, 32, 16px</span></div></div>
+    <div class="tile"><div class="show sizes on-dark"><img src="bo-do-icon.svg" alt=""><img src="bo-do-icon.svg" alt=""><img src="bo-do-icon.svg" alt=""><img src="bo-do-icon.svg" alt=""></div><div class="cap"><b>Icon trên nền tối</b><span>Ô tím giữ icon nổi trên mọi nền</span></div></div>
+  </div>
+  <div class="lockups">
+    <div class="tile"><div class="show on-light"><img src="png/lockup.png" alt="Odoo Debug"></div><div class="cap"><b>Logo kèm chữ, nền sáng</b><span>lockup.svg, chữ màu mực #1d1420</span></div></div>
+    <div class="tile"><div class="show on-dark"><img src="png/lockup-white.png" alt="Odoo Debug"></div><div class="cap"><b>Logo kèm chữ, nền tối</b><span>lockup-white.svg, chữ trắng</span></div></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2>Bọ Đô</h2>
+  <p class="lead">Khi đứng một mình, Bọ Đô đổi màu thân theo nền: thân tím trên nền sáng, thân trắng trên nền tối hoặc nền tím. Hai tư thế dùng cho những lúc cần cảm xúc: vẫy tay để chào, cầm kính lúp khi tìm ra lỗi.</p>
+  <div class="grid mascot">
+    <div class="tile"><div class="show on-light"><img src="bo-do.svg" alt=""></div><div class="cap"><b>Thân tím</b><span>Trên nền sáng. bo-do.svg</span></div></div>
+    <div class="tile"><div class="show on-purple"><img src="bo-do-white.svg" alt=""></div><div class="cap"><b>Thân trắng</b><span>Trên nền tím hoặc tối. bo-do-white.svg</span></div></div>
+    <div class="tile"><div class="show on-light"><img src="bo-do-wave.svg" alt=""></div><div class="cap"><b>Vẫy tay</b><span>Màn hình chào, trang trống. bo-do-wave.svg</span></div></div>
+    <div class="tile"><div class="show on-light"><img src="bo-do-inspect.svg" alt="" style="width:158px"></div><div class="cap"><b>Cầm kính lúp</b><span>Tìm thấy lỗi, tìm kiếm. bo-do-inspect.svg</span></div></div>
+    <div class="tile"><div class="show on-soft"><img src="bo-do-mono.svg" alt=""></div><div class="cap"><b>Một màu</b><span>In ấn, khắc, con dấu. bo-do-mono.svg</span></div></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2>Màu</h2>
+  <p class="lead">Tím Odoo giữ vai trò chính để người dùng Odoo thấy quen. Xanh breakpoint là màu riêng của Odoo Debug: chỉ dùng cho râu Bọ Đô và một điểm nhấn trên mỗi màn hình.</p>
+  <div class="swatches" id="swatches"></div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2>Chữ</h2>
+  <p class="lead">Hai font của website, đều miễn phí trên Google Fonts và có đủ dấu tiếng Việt.</p>
+  <div class="type">
+    <div class="spec"><div class="big">Odoo Debug</div><p>Be Vietnam Pro, đậm 700 đến 800 cho tiêu đề và tên; 400 đến 500 cho chữ thường.</p></div>
+    <div class="spec"><div class="mono">sale.order #7</div><p>JetBrains Mono cho tên model, mã, số liệu và mọi thứ người dùng sẽ copy.</p></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2>Quy tắc dùng logo</h2>
+  <p class="lead">Chừa khoảng trống quanh logo bằng một phần tư chiều rộng icon. Icon không nhỏ hơn 16px; logo kèm chữ không hẹp hơn 120px.</p>
+  <div class="do">
+    <div class="tile"><div class="show on-light"><div class="clear"><img src="bo-do-icon.svg" alt=""></div></div><div class="cap"><b>Khoảng trống tối thiểu</b><span>Đường nét đứt: không đặt chữ hay hình nào vào đây</span></div></div>
+  </div>
+  <div class="rules">
+    <div class="tile dont"><div class="show on-light"><img class="squash" src="bo-do-icon.svg" alt=""></div><div class="cap"><b>Không kéo méo</b><span>Luôn giữ tỉ lệ vuông</span></div></div>
+    <div class="tile dont"><div class="show on-light"><img class="recolor" src="bo-do-icon.svg" alt=""></div><div class="cap"><b>Không đổi màu</b><span>Ô tím, thân trắng, râu xanh</span></div></div>
+    <div class="tile dont"><div class="show on-light"><img src="bo-do-white.svg" alt=""></div><div class="cap"><b>Không đặt Bọ Đô trắng trên nền sáng</b><span>Dùng bản thân tím</span></div></div>
+    <div class="tile dont"><div class="show on-light"><img class="shadow" src="bo-do-icon.svg" alt=""></div><div class="cap"><b>Không thêm hiệu ứng</b><span>Không đổ bóng, không viền, không dải màu</span></div></div>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2>Ảnh cho Chrome Web Store</h2>
+  <p class="lead">Hai ảnh quảng bá đúng kích thước store yêu cầu, ảnh 24-bit không có nền trong suốt. Ảnh lớn dùng ảnh chụp thật của bảng debug.</p>
+  <div class="store">
+    <figure><img src="store/promo-small-440x280.png" alt="Ảnh nhỏ 440x280"><figcaption>Ảnh nhỏ 440 × 280</figcaption></figure>
+    <figure><img src="store/promo-marquee-1400x560.png" alt="Ảnh lớn 1400x560"><figcaption>Ảnh lớn 1400 × 560</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="band"><div class="wrap">
+  <h2>File và cách vẽ lại</h2>
+  <p class="lead">Mọi hình Bọ Đô sinh ra từ một bản vẽ trong make-brand.py, nên sửa một chỗ là mọi phiên bản cùng đổi.</p>
+  <div class="scroll"><table class="files stack">
+    <thead><tr><th>File</th><th>Dùng cho</th></tr></thead>
+    <tbody id="files"></tbody>
+  </table></div>
+  <pre>python3 assets/brand/make-brand.py   # vẽ lại mọi SVG
+sh assets/icons/make-icons.sh         # icon PNG cho extension
+sh assets/brand/render.sh             # ảnh store, logo kèm chữ, PNG 512px</pre>
+</div></section>
+
+<script>
+{
+const colors = [
+  ['#714B67', 'Tím Odoo', 'Màu chính: ô icon, dải màu lớn'],
+  ['#553250', 'Tím đậm', 'Mắt Bọ Đô, mảng nền phụ'],
+  ['#9A6690', 'Tím nhạt', 'Viền, trạng thái hover'],
+  ['#21B799', 'Xanh breakpoint', 'Chỉ râu Bọ Đô và một điểm nhấn'],
+  ['#1D1420', 'Mực', 'Chữ trên nền sáng'],
+  ['#FFFFFF', 'Trắng', 'Thân Bọ Đô, chữ trên nền tím']
+];
+const files = [
+  ['assets/brand/bo-do-icon.svg', 'Icon gốc; assets/icons/icon.svg là bản sao để xuất PNG'],
+  ['static/icons/icon-16/32/48/128.png', 'Icon của extension trên Chrome'],
+  ['assets/brand/lockup.svg, lockup-white.svg', 'Logo kèm chữ; bản PNG trong png/'],
+  ['assets/brand/bo-do.svg, bo-do-white.svg', 'Bọ Đô đứng một mình, nền sáng và nền tối'],
+  ['assets/brand/bo-do-wave.svg, bo-do-inspect.svg', 'Hai tư thế: vẫy tay, cầm kính lúp'],
+  ['assets/brand/bo-do-mono.svg', 'Bản một màu'],
+  ['assets/brand/png/*-512.png', 'Ảnh 512px cho mạng xã hội, ảnh đại diện'],
+  ['assets/brand/store/promo-*.png', 'Ảnh quảng bá trên Chrome Web Store'],
+  ['assets/brand/store.html', 'Nguồn của hai ảnh store'],
+  ['website/index.html, debug-mode/index.html', 'Favicon và logo đầu trang đã đổi sang Bọ Đô']
+];
+document.getElementById('swatches').innerHTML = colors.map(([hex, name, use]) =>
+  `<div class="sw"><i style="background:${hex}"></i><div><b>${name}</b><small>${use}</small><button type="button" data-hex="${hex}">${hex}</button></div></div>`).join('');
+document.getElementById('files').innerHTML = files.map(([f, u]) => `<tr><td><code>${f}</code></td><td>${u}</td></tr>`).join('');
+document.getElementById('swatches').addEventListener('click', async e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  try { await navigator.clipboard.writeText(b.dataset.hex); b.textContent = 'Đã copy'; } catch (err) { b.textContent = b.dataset.hex; }
+  setTimeout(() => { b.textContent = b.dataset.hex; }, 1500);
+});
+}
+</script>
+</body>
+</html>
