@@ -1,4 +1,6 @@
 {
+  "Odoo Debug: Chrome extension to debug Odoo 18, 19, 20": "Odoo Debug: Odoo 18・19・20 をデバッグする Chrome 拡張機能",
+  "Odoo Debug is a free Chrome extension to debug Odoo 18, 19 and 20: debug mode toggle, field and view inspector, RPC log, record rules, SQL profiler.": "Odoo Debug は Odoo 18・19・20 をデバッグする無料の Chrome 拡張機能です。デバッグモードの切り替え、フィールドとビューのインスペクター、RPC ログ、レコードルール、SQL プロファイラー。",
   "How do I turn on debug mode (developer mode) in Odoo?": "Odoo でデバッグモード（開発者モード）を有効にするには？",
   "Add <code>?debug=1</code> to the URL (<code>?debug=assets</code> for unminified assets), or go to Settings → Activate the developer mode. With Odoo Debug, pick Off / Debug / Assets from the toolbar icon, or press <kbd>Alt+Shift+D</kbd>.": "URL に <code>?debug=1</code> を付けます（圧縮されていないアセットは <code>?debug=assets</code>）。または Settings → Activate the developer mode から有効にできます。Odoo Debug では、ツールバーのアイコンから Off / Debug / Assets を選ぶか、<kbd>Alt+Shift+D</kbd> を押します。",
   "Is there a Chrome extension to debug Odoo?": "Odoo をデバッグできる Chrome 拡張機能はありますか？",
