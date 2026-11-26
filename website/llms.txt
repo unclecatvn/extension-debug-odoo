@@ -30,3 +30,7 @@ Odoo's developer mode shows what is on the screen. Odoo Debug shows why: which m
 - [Source code](https://github.com/unclecatvn/extension-debug-odoo): README, issues
 - [README](https://raw.githubusercontent.com/unclecatvn/extension-debug-odoo/main/README.md): full feature list
 - [Changelog](https://raw.githubusercontent.com/unclecatvn/extension-debug-odoo/main/CHANGELOG.md): what each release changed
+
+## Guides
+
+- [Odoo debug mode: 4 ways to turn on developer mode](https://odoo-debug.unclecatvn.com/debug-mode/): ?debug=1, Settings, the command palette, the extension; the assets and tests modes; how to turn it off.

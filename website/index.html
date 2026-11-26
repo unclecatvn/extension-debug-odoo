@@ -7,6 +7,17 @@
 <meta name="author" content="UncleCat">
 <meta name="description" content="Odoo Debug is a free Chrome extension to debug Odoo 18, 19 and 20: debug mode toggle, field and view inspector, RPC log, record rules, SQL profiler.">
 <link rel="canonical" href="https://odoo-debug.unclecatvn.com/">
+<link rel="alternate" hreflang="en" href="https://odoo-debug.unclecatvn.com/">
+<link rel="alternate" hreflang="ar" href="https://odoo-debug.unclecatvn.com/ar/">
+<link rel="alternate" hreflang="de" href="https://odoo-debug.unclecatvn.com/de/">
+<link rel="alternate" hreflang="es" href="https://odoo-debug.unclecatvn.com/es/">
+<link rel="alternate" hreflang="fr" href="https://odoo-debug.unclecatvn.com/fr/">
+<link rel="alternate" hreflang="id" href="https://odoo-debug.unclecatvn.com/id/">
+<link rel="alternate" hreflang="ja" href="https://odoo-debug.unclecatvn.com/ja/">
+<link rel="alternate" hreflang="pt-BR" href="https://odoo-debug.unclecatvn.com/pt-BR/">
+<link rel="alternate" hreflang="vi" href="https://odoo-debug.unclecatvn.com/vi/">
+<link rel="alternate" hreflang="zh-CN" href="https://odoo-debug.unclecatvn.com/zh-CN/">
+<link rel="alternate" hreflang="x-default" href="https://odoo-debug.unclecatvn.com/">
 <meta name="theme-color" content="#0b0910">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Odoo Debug">
@@ -455,8 +466,8 @@
             </div>
             <div class="pick"></div>
           </div>
-          <iframe class="dbg" src="panel/?tab=view" title="Odoo Debug panel (demo)"></iframe>
-          <span class="o-launch" aria-hidden="true"><img src="panel/icon-48.png" alt=""></span>
+          <iframe class="dbg" src="/panel/?tab=view" title="Odoo Debug panel (demo)"></iframe>
+          <span class="o-launch" aria-hidden="true"><img src="/panel/icon-48.png" alt=""></span>
         </div>
       </div></div>
       <p class="demo-note" data-i18n>The panel's real interface, with sample data. Pick a question, or click the page.</p>
@@ -476,7 +487,7 @@
     <span class="eyebrow">// demo</span>
     <h2 data-i18n>All nine tabs in 98 seconds</h2>
     <div class="film">
-      <video src="intro.mp4" poster="intro-poster.jpg" width="1920" height="1080" autoplay muted loop playsinline controls preload="auto" aria-label="98-second motion film, scored: the logo drawn; what an Odoo day throws at you; then each feature as a question and its answer, the panel drawn and animated, in three acts (light, a moving gradient, dark): a field and what recomputes it; a technical name copied; why a field is read-only and which view set it; where a text comes from; two orders compared; an RPC call edited, sent again and copied as cURL; a Python dry run rolled back; why a user can&#39;t open an order and the group that would let him; what installing a module brings; an N+1 found; the technical screens; themes and ten languages. Free, for Odoo 18, 19 and 20."></video>
+      <video src="/intro.mp4" poster="/intro-poster.jpg" width="1920" height="1080" autoplay muted loop playsinline controls preload="auto" aria-label="98-second motion film, scored: the logo drawn; what an Odoo day throws at you; then each feature as a question and its answer, the panel drawn and animated, in three acts (light, a moving gradient, dark): a field and what recomputes it; a technical name copied; why a field is read-only and which view set it; where a text comes from; two orders compared; an RPC call edited, sent again and copied as cURL; a Python dry run rolled back; why a user can&#39;t open an order and the group that would let him; what installing a module brings; an N+1 found; the technical screens; themes and ten languages. Free, for Odoo 18, 19 and 20."></video>
     </div>
   </section>
 
@@ -496,7 +507,7 @@
         <button type="button" class="q" data-tab="perf" aria-pressed="false"><span class="q-ic"><i class="ic-perf"></i></span><span class="q-text"><b data-i18n>Why is this screen slow?</b><span class="q-a" data-i18n>N+1 queries, the line running them, where the time goes.</span></span><span class="q-tab">Perf</span></button>
         <button type="button" class="q" data-tab="code" aria-pressed="false"><span class="q-ic"><i class="ic-code"></i></span><span class="q-text"><b data-i18n>What would this change do?</b><span class="q-a" data-i18n>Dry-run Python or JavaScript. Nothing is saved.</span></span><span class="q-tab">Code</span></button>
       </div>
-      <div class="stage"><iframe class="panel-frame" src="panel/?tab=record" title="Odoo Debug panel, tab by tab (demo)" loading="lazy"></iframe></div>
+      <div class="stage"><iframe class="panel-frame" src="/panel/?tab=record" title="Odoo Debug panel, tab by tab (demo)" loading="lazy"></iframe></div>
     </div>
   </section>
 
@@ -592,6 +603,7 @@
   <div class="row">
     <span><span data-i18n>Made by</span> <a href="https://unclecatvn.com/" rel="author">UncleCat</a></span>
     <span class="links">
+      <a href="/debug-mode/">Odoo debug mode guide</a>
       <a href="https://github.com/unclecatvn/extension-debug-odoo">GitHub</a>
       <a href="https://chromewebstore.google.com/detail/odoo-debug/mfmamdbagelffoedimmjpolhalmngcjk">Chrome Web Store</a>
       <a href="https://github.com/unclecatvn/extension-debug-odoo/blob/main/CHANGELOG.md">Changelog</a>
@@ -601,29 +613,23 @@
 </footer>
 
 <script>
-  // Language: the saved choice, else the browser's, among the extension's ten. The page is written in English; the
-  // English of every [data-i18n] element is its key in i18n/<lang>.json (as a msgid in the extension's .po files).
-  // A missing file or key leaves the English. Storage can be blocked: the page still works.
+  // Language: each of the extension's ten has its own page for search engines to index, English at / and the others at
+  // /<lang>/ (npm run website writes them from this file and i18n/<lang>.json). The page's language is <html lang>;
+  // picking another goes to its page. Storage can be blocked: the page still works.
   const root = document.documentElement;
   const langBox = document.getElementById('lang'), langBtn = langBox.querySelector('button'), langMenu = langBox.querySelector('ul');
   const langs = [...langMenu.children];
-  const texts = [...document.querySelectorAll('[data-i18n]')].map((el) => [el, el.innerHTML.replace(/\s+/g, ' ').trim()]);
+  const here = langs.find((o) => o.dataset.lang === root.lang);
+  const pageOf = (lang) => lang === 'en' ? '/' : `/${lang}/`;
+  for (const o of langs) o.setAttribute('aria-selected', o === here);
+  document.getElementById('lang-name').textContent = here.textContent;
+  langBtn.querySelector('.code').textContent = root.lang.slice(0, 2).toUpperCase();
+  // Text set after load (the release line) is English: its translation is in the page's i18n/<lang>.json, a missing key stays English.
+  const later = []; // [element, its English]
   let dict = {};
-  const paint = () => { for (const [el, en] of texts) el.innerHTML = dict[en] ?? en; };
-  const retext = (el, en) => { texts.find((t) => t[0] === el)[1] = en; el.innerHTML = dict[en] ?? en; }; // an element whose English changes (the release line)
-  async function setLang(lang) {
-    const picked = langs.find((o) => o.dataset.lang === lang) || langs.find((o) => o.dataset.lang === 'en');
-    lang = picked.dataset.lang;
-    dict = lang === 'en' ? {} : await fetch(`i18n/${lang}.json`).then((r) => r.ok ? r.json() : {}).catch(() => ({}));
-    root.lang = lang;
-    root.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    for (const o of langs) o.setAttribute('aria-selected', o === picked);
-    document.getElementById('lang-name').textContent = picked.textContent;
-    langBtn.querySelector('.code').textContent = lang.slice(0, 2).toUpperCase();
-    paint();
-    try { localStorage.setItem('lang', lang); } catch {}
-    dispatchEvent(new Event('resize')); // the demo's picker box follows the text
-  }
+  const retext = (el, en) => { later.push([el, en]); el.innerHTML = dict[en] ?? en; };
+  if (root.lang !== 'en') fetch(`/i18n/${root.lang}.json`).then((r) => r.ok ? r.json() : {}).catch(() => ({})).then((d) => { dict = d; for (const [el, en] of later) el.innerHTML = dict[en] ?? en; });
+  const setLang = (lang) => { try { localStorage.setItem('lang', lang); } catch {} if (lang !== root.lang) location.href = pageOf(lang); };
   let saved = null;
   try { saved = localStorage.getItem('lang'); } catch {}
   const browserLang = () => {
@@ -641,10 +647,12 @@
     else if (e.key === 'Escape') { openLangs(false); langBtn.focus(); }
   };
   addEventListener('pointerdown', (e) => { if (!langBox.contains(e.target)) openLangs(false); });
-  setLang(saved || browserLang());
+  // A first visit to the English page goes to the saved choice, else the browser's language. The other pages stay: a link to one means that one.
+  const want = saved || browserLang();
+  if (root.lang === 'en' && want !== 'en' && langs.some((o) => o.dataset.lang === want)) location.replace(pageOf(want) + location.hash);
 
   // The panel demos (panel/index.html in iframes) take the page's theme and the tab to show; each tells the tab clicked in it.
-  const frames = [...document.querySelectorAll('iframe[src^="panel/"]')];
+  const frames = [...document.querySelectorAll('iframe[src^="/panel/"]')];
   const wanted = new Map(); // frame → tab, sent again when the frame (re)loads
   const tell = (f, msg) => f.contentWindow?.postMessage(msg, '*');
   const setTab = (f, tab) => { wanted.set(f, tab); tell(f, { tab }); };

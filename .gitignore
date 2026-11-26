@@ -19,3 +19,8 @@ store/
 
 # tsc -b: declarations between projects (tsconfig.*.json), never shipped
 .tsbuild/
+
+# The landing page in each language (npm run website): written from website/index.html and website/i18n/ when the site is published
+website/*/index.html
+!website/panel/index.html
+!website/debug-mode/index.html

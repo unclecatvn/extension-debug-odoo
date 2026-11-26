@@ -3,7 +3,7 @@ name: Website
 on:
   push:
     branches: [main]
-    paths: ['website/**', '.github/workflows/pages.yml']
+    paths: ['website/**', 'scripts/website.ts', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -23,8 +23,20 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # The page in each language, website/<lang>/index.html: no dependency to install
+      - run: node scripts/website.ts
       - uses: actions/upload-pages-artifact@v5
         with:
           path: website
       - id: deploy
         uses: actions/deploy-pages@v5
+      # IndexNow: tells Bing (and the engines that share its index) the pages of the sitemap, which they would otherwise
+      # find late or never. The key is public by design: website/<key>.txt proves the site sent the request.
+      - name: IndexNow
+        continue-on-error: true
+        run: |
+          grep -o '<loc>[^<]*' website/sitemap.xml | cut -c6- | jq -R . | jq -sc '{host: "odoo-debug.unclecatvn.com", key: "7cf7999a027f3dd06ae48731e99f4107", urlList: .}' |
+            curl -sS -o /dev/null -w 'IndexNow: HTTP %{http_code}\n' https://api.indexnow.org/indexnow -H 'Content-Type: application/json; charset=utf-8' -d @-

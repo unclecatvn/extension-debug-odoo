@@ -14,6 +14,7 @@
     "test": "node --test \"tests/unit/**/*.test.ts\"",
     "check:page": "node scripts/check-page-fns.ts",
     "i18n": "node scripts/i18n.ts",
+    "website": "node scripts/website.ts",
     "check": "npm run typecheck && npm test && npm run build && npm run check:page && npm run check:markup && npm run check:imports",
     "check:markup": "node scripts/check-markup.ts",
     "check:imports": "node scripts/check-imports.ts",
