@@ -1,17 +1,2 @@
-<!-- Source for icon-*.png. Regenerate: see make-icons.sh -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#9A6690"/>
-      <stop offset="1" stop-color="#553250"/>
-    </linearGradient>
-  </defs>
-  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)"/>
-  <g stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none">
-    <path d="M36 62 H22 M36 80 H20 M40 96 L27 106 M92 62 H106 M92 80 H108 M88 96 L101 106"/>
-    <path d="M54 38 L46 25 M74 38 L82 25"/>
-  </g>
-  <path d="M44 46 a20 17 0 0 1 40 0 z" fill="#fff"/>
-  <rect x="36" y="50" width="56" height="60" rx="28" fill="#fff"/>
-  <path d="M64 60 V100" stroke="#553250" stroke-width="6" stroke-linecap="round"/>
-</svg>
+<!-- Source for icon-*.png. Regenerate: see make-icons.sh. Drawn by assets/brand/make-brand.py -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128"><rect x="4" y="4" width="120" height="120" rx="28" fill="#714B67"/><g transform="translate(64 65) scale(.88) translate(-64 -65)"><path d="M53 40 Q47 24 39 21 M75 40 Q81 24 89 21 M29 76 H18 M99 76 H110 M52 104 V112 M76 104 V112" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/><circle cx="39" cy="21" r="7.5" fill="#21B799"/><circle cx="89" cy="21" r="7.5" fill="#21B799"/><circle cx="64" cy="70" r="36" fill="#fff"/><circle cx="51" cy="65" r="11" fill="#553250"/><circle cx="77" cy="65" r="11" fill="#553250"/><circle cx="54.5" cy="61" r="4" fill="#fff"/><circle cx="80.5" cy="61" r="4" fill="#fff"/><path d="M55 84 Q64 92 73 84" fill="none" stroke="#553250" stroke-width="5" stroke-linecap="round"/></g></svg>

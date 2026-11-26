@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!-- Chrome Web Store promo images. Render: sh assets/brand/render.sh  (#small = 440x280, #marquee = 1400x560) -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+html, body { margin: 0; overflow: hidden; }
+body { font-family: "Be Vietnam Pro", system-ui, -apple-system, sans-serif; color: #fff; background: #714B67; }
+.art { position: relative; display: none; overflow: hidden; background: #714B67; }
+.art::before { content: ""; position: absolute; border-radius: 50%; background: #553250; }
+h1 { margin: 0; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+p { margin: 0; color: #f1e4ee; font-weight: 500; }
+.dot { color: #21B799; }
+
+#small { width: 440px; height: 280px; display: none; align-items: center; gap: 22px; padding: 0 34px; }
+#small::before { width: 300px; height: 300px; left: -70px; top: -10px; }
+#small img { position: relative; width: 150px; }
+#small h1 { font-size: 40px; }
+#small p { font-size: 16px; margin-top: 10px; line-height: 1.35; }
+#small div { position: relative; }
+
+#marquee { width: 1400px; height: 560px; }
+#marquee::before { width: 760px; height: 760px; left: -230px; top: -100px; }
+#marquee .copy { position: absolute; left: 90px; top: 0; bottom: 0; width: 520px; display: flex; flex-direction: column; justify-content: center; }
+#marquee .copy img { width: 230px; margin: 0 0 26px -12px; }
+#marquee h1 { font-size: 76px; }
+#marquee p { font-size: 26px; margin-top: 18px; line-height: 1.35; }
+#marquee .shot { position: absolute; left: 660px; top: 70px; width: 900px; border-radius: 16px; box-shadow: 0 30px 80px rgba(20, 8, 18, .45); }
+</style>
+</head>
+<body>
+<section class="art" id="small">
+  <img src="bo-do-white.svg" alt="">
+  <div><h1>Odoo Debug</h1><p>The debug panel for Odoo<br>18 <span class="dot">·</span> 19 <span class="dot">·</span> 20</p></div>
+</section>
+<section class="art" id="marquee">
+  <div class="copy">
+    <img src="bo-do-inspect-white.svg" alt="">
+    <h1>Odoo Debug</h1>
+    <p>See why Odoo does what it does, right on the page.</p>
+  </div>
+  <img class="shot" src="../../website/screenshots/overview.png" alt="">
+</section>
+<script>
+  const el = document.getElementById(location.hash.slice(1) || 'small');
+  el.style.display = el.id === 'small' ? 'flex' : 'block';
+</script>
+</body>
+</html>
