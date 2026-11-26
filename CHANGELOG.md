@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions: [Semantic Versioning](https://semver.org/). Each release on GitHub uses its section below as release notes.
 
+## [2.3.1] - 2026-11-26
+
+### Changed
+
+- **Icon**: Bọ Đô, the extension's new logo: a round bug with two teal-tipped antennae, white on the purple tile. In the toolbar, on the extensions page and in the stores.
+
 ## [2.3.0] - 2026-11-10
 
 ### Added
